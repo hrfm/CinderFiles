@@ -1,67 +1,274 @@
 #pragma once
 
-#include "cinder/audio/FftProcessor.h"
-#include "cinder/audio/Input.h"
 #include "cinder/gl/Fbo.h"
 #include "cinder/gl/GlslProg.h"
 
 #include "cinder/app/AppBasic.h"
 #include "OscInput.h"
 
+#include "cinder/audio/Context.h"
+#include "cinder/audio/MonitorNode.h"
+#include "cinder/audio/Utilities.h"
+
 using namespace ci;
+using namespace ci::app;
 using namespace std;
 
-namespace sgmnt {
-	
-    namespace io{
+float ___fftAverage___ = 0.0f;
+float ___audioGain___  = 0.0f;
+
+void ___onFFTAverage___( const sgmnt::Event &event){
+    ___fftAverage___ = event.message.getArgAsFloat(0);
+}
+
+void ___onAudioGain___( const sgmnt::Event &event){
+    ___audioGain___  = event.message.getArgAsFloat(0);
+}
+
+namespace sgmnt{ namespace io{
+    
+    class AudioInput {
+    public:
         
-        class AudioInput {
-        public:
+        AudioInput(){};
+        
+        void setup( uint16_t count ){
             
-            AudioInput();
+            bandCount = count;
             
-            void setup( uint16_t count );
+            value = 0.0f;
+            fft   = new float[bandCount];
+            fft2  = new float[bandCount];
+            for( int i = 0; i < bandCount; i++ ){
+                fft[i]  = 0;
+                fft2[i] = 0;
+            }
             
-            void update();
+            // --- Create Sound Context.
             
-            gl::Texture getAudioTexture();
+            /*
+             auto ctx = audio::Context::master();
+             
+             // The InputDeviceNode is platform-specific, so you create it using a special method on the Context:
+             mInputDeviceNode = ctx->createInputDeviceNode();
+             
+             // By providing an FFT size double that of the window size, we 'zero-pad' the analysis data, which gives
+             // an increase in resolution of the resulting spectrum data.
+             auto monitorFormat = audio::MonitorSpectralNode::Format().fftSize( bandCount ).windowSize( bandCount / 2.0 );
+             mMonitorSpectralNode = ctx->makeNode( new audio::MonitorSpectralNode( monitorFormat ) );
+             
+             mInputDeviceNode >> mMonitorSpectralNode;
+             
+             // InputDeviceNode (and all InputNode subclasses) need to be enabled()'s to process audio. So does the Context:
+             mInputDeviceNode->enable();
+             ctx->enable();
+             
+             //*/
             
-            void  useAudioManager( OscInput &oscInput );
-            float getAudioManagerGain();
-            float getAudioManagerFFTAverage();
+            // ----------
             
-            void drawFFT( Rectf bounds );
-            void drawFFT( Rectf bounds, ColorA color0, ColorA color1 );
-            void drawFFT( Rectf bounds, ColorA color0, ColorA color1, int length );
-            void drawWave( Rectf bounds );
-            void drawWave( Rectf bounds, Color color );
+            gl::Fbo::Format format;
+            soundTexture = gl::Fbo( count * 10, count * 10, format );
             
-            float getLeftBufferAt( int index );
-            float getRightBufferAt( int index );
+            try {
+                soundTexShader = gl::GlslProg(
+                                              loadResource("../resources/simple_vert.glsl"),
+                                              loadResource("../resources/audio_frag.glsl")
+                                              );
+            }catch( ci::gl::GlslProgCompileExc &exc ) {
+                cout << "Shader compile error: " << endl;
+                cout << exc.what();
+            }catch( ... ) {
+                cout << "Unable to load shader" << endl;
+            }
             
-            uint16_t bandCount;
-            bool bufferAvailable;
+        }
+        
+        void update(){
             
-            float value;
-            float * fftBuffer;
-            float * fft;
+            // --- Audio
             
-            float * fft2;
+            /*
+             // We copy the magnitude spectrum out from the Node on the main thread, once per update:
+             mMagSpectrum = mMonitorSpectralNode->getMagSpectrum();
+             
+             for( int i = 0; i < ( bandCount ); i++ ) {
+             fft2[i] *= 0.68;
+             }
+             
+             float maxValue = 0.0f;
+             
+             for( auto spectrum = mMagSpectrum.begin(); spectrum != mMagSpectrum.end(); ++spectrum ) {
+             maxValue = max( maxValue, *spectrum );
+             }
+             
+             if( 1.0f < maxValue ){
+             value = 1.0f;
+             int i = 0;
+             for( auto spectrum = mMagSpectrum.begin(); spectrum != mMagSpectrum.end(); ++spectrum ) {
+             fft[i] = ( *spectrum / maxValue );
+             if( fft2[i] < fft[i] ){
+             fft2[i] = fft[i];
+             }
+             if( bandCount <= ++i ){
+             break;
+             }
+             }
+             }else{
+             value = 0.0f;
+             int i = 0;
+             for( auto spectrum = mMagSpectrum.begin(); spectrum != mMagSpectrum.end(); ++spectrum ) {
+             fft[i] = ( *spectrum / 1.0f );
+             value = max(value,fft[i]);
+             if( bandCount <= ++i ){
+             break;
+             }
+             }
+             }
+             
+             soundTexture.bindFramebuffer();
+             gl::pushMatrices();
+             gl::setMatricesWindow( soundTexture.getSize(), false );
+             gl::clear();
+             gl::color( ColorA( 1.0, 1.0, 1.0, 1.0 ) );
+             soundTexShader.bind();
+             soundTexShader.uniform( "iResolution", Vec2f( soundTexture.getWidth(), soundTexture.getHeight() ) );
+             soundTexShader.uniform( "iFFT", fft2, 64 );
+             gl::drawSolidRect( soundTexture.getBounds() );
+             soundTexShader.unbind();
+             gl::popMatrices();
+             soundTexture.unbindFramebuffer();
+             */
             
-        private:
+        }
+        
+        gl::Texture getAudioTexture(){
+            return soundTexture.getTexture();
+        }
+        
+        void  useAudioManager( OscInput &oscInput ){
+            oscInput.addEventListener( "/audio/gain", &___onAudioGain___ );
+            oscInput.addEventListener( "/audio/fft/average", &___onFFTAverage___ );
+        }
+        
+        float getAudioManagerGain(){
+            return ___audioGain___;
+        }
+        
+        float getAudioManagerFFTAverage(){
+            return ___fftAverage___;
+        }
+        
+        void drawFFT( Rectf bounds ){
+            drawFFT(bounds, ColorA(1.0,1.0,1.0,1.0), ColorA(1.0,1.0,1.0,1.0), bandCount);
+        }
+        
+        void drawFFT( Rectf bounds, ColorA color0, ColorA color1 ){
+            drawFFT( bounds, color0, color1, bandCount );
+        }
+        
+        void drawFFT( Rectf bounds, ColorA color0, ColorA color1, int length ){
             
-            audio::Input           _mInput;
-            audio::PcmBuffer32fRef _mPcmBuffer;
-            std::shared_ptr<float> _mFftDataRef;
+            glPushMatrix();
+            glTranslatef( bounds.x1, bounds.y1, 0.0f );
             
-            audio::Buffer32fRef mLeftBuffer;
-            audio::Buffer32fRef mRightBuffer;
+            float width  = bounds.getWidth() / length;
+            float height = bounds.getHeight();
             
-            gl::Fbo      soundTexture;
-            gl::GlslProg soundTexShader;
+            for( int i = 1; i < (length); i++ ) {
+                
+                float barY = fft2[i] * height;
+                
+                color1.a = barY / height;
+                
+                cout << barY << endl;
+                
+                //*
+                glBegin( GL_QUADS );
+                gl::color( color0 );
+                glVertex2f( i * width, height );
+                glVertex2f( i * width + width, height );
+                gl::color( color1 );
+                glVertex2f( i * width + width, height - barY );
+                glVertex2f( i * width, height - barY );
+                glEnd();
+                /*/
+                 gl::color( color1 );
+                 gl::drawLine(
+                 Vec2f( i * width + width, height - barY ),
+                 Vec2f( (i-1) * width + width, height - barY )
+                 );
+                 //*/
+                
+            }
             
+            glPopMatrix();
+            
+        }
+        
+        void drawWave( Rectf bounds ){
+            drawWave(bounds, Color(1.0,1.0,1.0) );
+        }
+        
+        void drawWave( Rectf bounds, Color color ){
+            
+            /*
+             #if defined( CINDER_MAC )
+             
+             if( !_mPcmBuffer ){
+             return;
+             }
+             
+             uint32_t bufferLength = _mPcmBuffer->getSampleCount();
+             audio::Buffer32fRef leftBuffer = _mPcmBuffer->getChannelData( audio::CHANNEL_FRONT_LEFT );
+             audio::Buffer32fRef rightBuffer = _mPcmBuffer->getChannelData( audio::CHANNEL_FRONT_RIGHT );
+             
+             float width  = bounds.getWidth() / (float)bufferLength;
+             float height = bounds.getHeight();
+             
+             PolyLine<Vec2f>	leftBufferLine;
+             PolyLine<Vec2f>	rightBufferLine;
+             
+             glPushMatrix();
+             glTranslatef( bounds.x1, bounds.y1, 0.0f );
+             
+             for( int i = 0; i < bufferLength; i++ ) {
+             float x = ( i * width );
+             //get the PCM value from the left channel buffer
+             float y = ( ( leftBuffer->mData[i] - 1 ) * - height / 3 );
+             leftBufferLine.push_back( Vec2f( x , y) );
+             y = ( ( rightBuffer->mData[i] - 1 ) * - height / 3 );
+             rightBufferLine.push_back( Vec2f( x , y) );
+             }
+             
+             gl::color( color );
+             gl::draw( leftBufferLine );
+             gl::draw( rightBufferLine );
+             
+             glPopMatrix();
+             
+             #endif
+             */
+
         };
         
-    }
-
-}
+        uint16_t bandCount;
+        bool bufferAvailable;
+        
+        float value;
+        float * fftBuffer;
+        float * fft;
+        float * fft2;
+        
+    private:
+        
+        gl::Fbo      soundTexture;
+        gl::GlslProg soundTexShader;
+        
+        audio::InputDeviceNodeRef		mInputDeviceNode;
+        audio::MonitorSpectralNodeRef	mMonitorSpectralNode;
+        vector<float>					mMagSpectrum;
+        
+    };
+    
+}}
