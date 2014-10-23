@@ -14,23 +14,26 @@ using namespace ci;
 using namespace ci::app;
 using namespace std;
 
-float ___fftAverage___ = 0.0f;
-float ___audioGain___  = 0.0f;
-
-void ___onFFTAverage___( const sgmnt::Event &event){
-    ___fftAverage___ = event.message.getArgAsFloat(0);
-}
-
-void ___onAudioGain___( const sgmnt::Event &event){
-    ___audioGain___  = event.message.getArgAsFloat(0);
-}
-
 namespace sgmnt{ namespace io{
     
     class AudioInput {
     public:
         
-        AudioInput(){};
+        AudioInput(){
+            fftAverage = 0.0f;
+            audioGain  = 0.0f;
+        };
+        
+        float fftAverage;
+        float audioGain;
+        
+        void onFFTAverage( sgmnt::io::OscInputEvent * event){
+            fftAverage = event->message.getArgAsFloat(0);
+        }
+        
+        void onAudioGain( sgmnt::io::OscInputEvent * event){
+            audioGain  = event->message.getArgAsFloat(0);
+        }
         
         void setup( uint16_t count ){
             
@@ -147,16 +150,16 @@ namespace sgmnt{ namespace io{
         }
         
         void  useAudioManager( OscInput &oscInput ){
-            oscInput.addEventListener( "/audio/gain", &___onAudioGain___ );
-            oscInput.addEventListener( "/audio/fft/average", &___onFFTAverage___ );
+            //oscInput.addEventListener( "/audio/gain", this, onAudioGain );
+            //oscInput.addEventListener( "/audio/fft/average", this, onFFTAverage );
         }
         
         float getAudioManagerGain(){
-            return ___audioGain___;
+            return audioGain;
         }
         
         float getAudioManagerFFTAverage(){
-            return ___fftAverage___;
+            return fftAverage;
         }
         
         void drawFFT( Rectf bounds ){

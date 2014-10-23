@@ -1,6 +1,8 @@
 #pragma once
 
-// === INCLUDE ====================================================================================================
+
+
+
 
 #include "cinder/app/AppNative.h"
 #include "Cinder/Camera.h"
@@ -15,77 +17,60 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/date_time/c_local_time_adjustor.hpp>
 
+#include "cinder/Rand.h"
+
 // --- Inputs ---
 #include "OscInput.h"
 #include "AudioInput.h"
 #include "CaptureInput.h"
 #include "Utils.h"
 
-// === NAMESPACE ===================================================================================================
-
-using namespace std;
-
-// === GLOBAL PROPERTY =============================================================================================
-
-int * ___fader___ = new int[16];
-
-void ___onNanokontrolMessage___( const sgmnt::Event &event){
-    for( int i = 0; i < event.message.getNumArgs(); i++ ){
-        ___fader___[i] = event.message.getArgAsInt32(i);
-    }
-}
-
-Font ___font___ = Font("Helvetica",12);
-
-// === AppBase =====================================================================================================
+using namespace sgmnt;
+using namespace sgmnt::io;
 
 namespace sgmnt{ namespace app{
     
-    class AppBase : public ci::app::AppNative{
+    /*
+     
+     Extended Cinder AppNative Class.
+     Setup general behavior I always using.
+     And capable configured by settings xml files.
+     
+     */
+    class AppBase : public ci::app::AppNative, public sgmnt::EventDispatcher{
         
+        public :
         
-        
-    // ===========================================================================================================
-    // === PUBLIC
-    // ===========================================================================================================
-    public :
-        
-        /**
-         * @constructor
-         */
         AppBase(){
             ci::app::AppNative();
+            sgmnt::EventDispatcher();
         }
+        ~AppBase(){}
         
         // ===========================================================================
-        // === Member. ===============================================================
+        // === PROPERTY. =============================================================
         
         // --- Common.
         
-        XmlTree                 settingXml;
-        gl::Texture             backgroundTex;
-        CameraPersp             camera;
+        XmlTree settingXml;
         
-        struct tm *             timeinfo;
+        gl::Texture backgroundTex;
         
-        // --- Osc
+        CameraPersp camera;
         
-        bool                    useOsc;
+        struct tm * timeinfo;
+        
+        bool useOsc;
+        bool useAudio;
+        bool useCapture;
+        bool doUpdateCapture;
+        
         sgmnt::io::OscInput     oscInput;
-        
-        // --- Audio
-        
-        bool                    useAudio;
         sgmnt::io::AudioInput   audioInput;
-        
-        // --- Capture
-        
-        bool                    useCapture;
-        bool                    doUpdateCapture;
         sgmnt::io::CaptureInput captureInput;
         
         // ===========================================================================
-        // === For Setup =============================================================
+        // === METHOD. ===============================================================
         
         /**
          * ローカルにおいてある設定ファイル resoureces/setting.xml を読み込み
@@ -93,282 +78,63 @@ namespace sgmnt{ namespace app{
          * @virtual
          * @override
          */
-        virtual void prepareSettings( Settings *settings ){
-            
-            cout << "--- AppBase::prepareSettings()" << endl;
-            
-            // --- Load XML for Settings.
-            
-            settingXml = XmlTree( loadResource( "../resources/setting.xml" ) );
-            settingXml = loadXml( "setting_xml", "../resources/setting.xml" );
-            
-            cout << settingXml << endl;
-            cout << endl;
-            
-            // --- Prepare settings from XML.
-            XmlTree prepare = settingXml.getChild("setting/prepare");
-            
-            // Set this app's FrameRate from xml.
-            settings->setFrameRate( prepare.getAttributeValue<float>("frameRate") );
-            cout << "FrameRate  : " << settings->getFrameRate() << endl;
-            
-            // Set this app's WindowSize from xml.
-            mWindowSize = Vec2i( prepare.getAttributeValue<int>("windowWidth"), prepare.getAttributeValue<int>("windowHeight") );
-            settings->setWindowSize( mWindowSize.x, mWindowSize.y );
-            cout << "WindowSize : " << settings->getWindowSize() << endl;
-            
-            cout << endl;
-            
-        }
-    
-        /**
-         * @virtual
-         */
-        virtual void initFader(){
-            // --- init ___fader___.
-            for( int i=0; i< 16;i++ ){
-                ___fader___[i] = 0;
-            }
-        }
-    
-        /**
-         * @virtual
-         */
-        virtual void initWindow( XmlTree &xml ){
-            if( xml.hasChild("window") ){
-                XmlTree window = xml.getChild("window");
-                if( window.hasAttribute("fullScreen") && window.getAttributeValue<string>("fullScreen") == "true" ){
-                    ci::app::setFullScreen(true);
-                    system( ("open -a "+ci::app::getAppPath().string()).c_str() );
-                }
-                if( window.hasAttribute("hideCursor") && window.getAttributeValue<string>("hideCursor") == "true" ){
-                    ci::app::AppNative::hideCursor();
-                }
-                if( window.hasAttribute("background") ){
-                    string path = window.getAttributeValue<string>("background");
-                    cout << "- Loading background image : " << path << endl;
-                    try {
-                        backgroundTex = gl::Texture( loadImage( loadResource( path ) ) );
-                    }catch( ... ) {
-                        cout << "Unable to load Background texture file." << endl;
-                    }
-                    cout << endl;
-                }
-            }
-        }
-    
-        /**
-         * @virtual
-         */
-        virtual void initOSC( XmlTree &xml ){
-            if( xml.hasChild("osc") ){
-                XmlTree osc = xml.getChild("osc");
-                if( osc.hasAttribute("port") ){
-                    useOsc = true;
-                    int port = osc.getAttributeValue<int>("port");
-                    cout << "- Setup OSCInput on port " << port << endl << endl;
-                    oscInput.setup( port );
-                    setupOsc();
-                }
-            }
-        }
-    
-        /**
-         * @virtual
-         */
-        virtual void initAudio( XmlTree &xml ){
-            if( xml.hasChild("audio") ){
-                XmlTree audio = xml.getChild("audio");
-                if( audio.hasAttribute("bandSize") ){
-                    useAudio = true;
-                    int bandSize = audio.getAttributeValue<int>("bandSize");
-                    cout << "- Setup AudioInput with bandSize " << bandSize << endl;
-                    audioInput.setup( bandSize );
-                    if( useOsc ){
-                        audioInput.useAudioManager( oscInput );
-                    }
-                    cout << endl;
-                }
-            }
-        }
-    
-        /**
-         * @virtual
-         */
-        virtual void initCapture( XmlTree &xml ){
-            if( xml.hasChild("capture") ){
-                XmlTree capture = xml.getChild("capture");
-                if( capture.hasAttribute("width") && capture.hasAttribute("height") ){
-                    useCapture      = true;
-                    doUpdateCapture = true;
-                    Vec2i captureSize = Vec2i( capture.getAttributeValue<int>("width"), capture.getAttributeValue<int>("height") );
-                    if( capture.hasAttribute("deviceName") ){
-                        string deviceName = capture.getAttributeValue<string>("deviceName");
-                        cout << "- Setup CaptureInput [ " + deviceName + " ]with sized " << captureSize << endl;
-                        captureInput.setup( captureSize.x, captureSize.y, deviceName );
-                    }else{
-                        cout << "- Setup CaptureInput with sized " << captureSize << endl;
-                        captureInput.setup( captureSize.x, captureSize.y );
-                    }
-                    cout << endl;
-                }
-            }
-        }
+        virtual void prepareSettings( Settings *settings );
         
-        /**
-         * @virtual
-         * @override
-         */
-        virtual void setup(){
-            
-            cout << "--- AppBase::setup()" << endl << endl;
-            
-            XmlTree setupSettings = settingXml.getChild("setting/setup");
-            
-            this->initFader();
-            this->initWindow(setupSettings);
-            this->initOSC(setupSettings);
-            this->initAudio(setupSettings);
-            this->initCapture(setupSettings);
-            this->updateTimeinfo();
-            
-            resize();
-            
-            cout << endl;
-            
-        }
+        //! @override
+        virtual void setup();
         
-        // ===========================================================================
-        // === Update / Draw =========================================================
+        virtual void initFader();
         
-        /**
-         * @vertual
-         * @override
-         */
-        virtual void update(){
-            // --- Update Inputs. ---
-            if( useOsc ){
-                oscInput.update();
-            }
-            if( useAudio ){
-                audioInput.update();
-            }
-            if( useCapture && doUpdateCapture ){
-                captureInput.update();
-            }
-            // --- Update Time. ---
-            this->updateTimeinfo();
-        }
+        virtual void initWindow( XmlTree &xml );
         
-        /**
-         * @vertual
-         * @override
-         */
-        virtual void draw(){
-            gl::clear();
-            if( backgroundTex ){
-                gl::draw( backgroundTex, ci::app::getWindowBounds() );
-            }
-        }
+        virtual void initOSC( XmlTree &xml );
+        
+        virtual void initAudio( XmlTree &xml );
+        
+        virtual void initCapture( XmlTree &xml );
+        
+        //! @override
+        virtual void update();
+        
+        //! @override
+        virtual void draw();
         
         // ===========================================================================
         // === Setter Getter =========================================================
         
-        virtual void setColor( float red, float green, float blue ){
-            mColor.set( red, green, blue );
-        }
+        //! Set General Color.
+        virtual void   setColor( float red, float green, float blue );
         
-        virtual Color getColor(){
-            return mColor;
-        }
+        //! Get General Color.
+        virtual Color  getColor();
         
-        virtual ColorA getColorA( float alpha ){
-            return ColorA( mColor.r, mColor.g, mColor.b, alpha );
-        }
+        //! Get General Color with alpha.
+        virtual ColorA getColorA( float alpha );
         
-        virtual Vec2i getWindowSize(){
-            return mWindowSize;
-        }
+        virtual Vec2i getWindowSize();
         
-        virtual Vec2i getWindowAspect(){
-            return sgmnt::utils::getAspectRatio( mWindowSize );
-        }
+        virtual Vec2i getWindowAspect();
         
-        virtual float getFaderValueAt( int index ){
-            return (float)___fader___[index] / 128;
-        }
+        virtual float getFaderValueAt( int index );
         
-        virtual void setTextureToMap( string key, ci::gl::Texture tex ){
-            mTextureMap[key] = tex;
-        }
+        virtual void setTextureToMap( string key, ci::gl::Texture tex );
         
-        virtual void setTextureToMap( string key, string path ){
-            try {
-                cout << "- Loading Texture : " << path << endl;
-                setTextureToMap(key, gl::Texture( loadImage( loadResource( path ) ) ));
-            }catch( ... ) {
-                console() << "unable to load the texture file!" << std::endl;
-            }
-        }
+        virtual void setTextureToMap( string key, string path );
         
-        virtual ci::gl::Texture getTextureFromMap( string key ){
-            return mTextureMap[key];
-        }
+        virtual ci::gl::Texture getTextureFromMap( string key );
         
         // ===========================================================================
         // === Utility ===============================================================
         
-        /**
-         * @virtual
-         */
-        virtual void updateTimeinfo(){
-            time_t rawtime = time(NULL);
-            time(&rawtime);
-            timeinfo = localtime(&rawtime);
-        }
+        virtual void updateTimeinfo();
         
-        /**
-         * @virtual
-         */
-        virtual string getTimeString(const char *format){
-            char str[256];
-            strftime( str, 255, format, timeinfo );
-            string s = str;
-            return s;
-        }
+        virtual string getTimeString(const char *format);
         
         /**
          * node_name で指定したノード名で設定されている XML を読み込みます.
          */
-        XmlTree loadXml( string node_name ){
-            XmlTree xmlList  = settingXml.getChild("setting/xml_list");
-            string file_name = xmlList.getChild(node_name).getAttributeValue<string>("file_name");
-            return loadXml( node_name, "../resources/" + file_name );
-        }
-        
-        XmlTree loadXml( string node_name, string local_path ){
-            
-            cout << endl << "--- AppBase::loadXml(" << node_name << ", " << local_path << ")" << endl;
-            
-            XmlTree xml;
-            
-            XmlTree xmlList  = settingXml.getChild("setting/xml_list");
-            string url       = xmlList.getAttributeValue<string>("url");
-            string file_name = xmlList.getChild(node_name).getAttributeValue<string>("file_name");
-            
-            try{
-                cout << "Loading " << file_name << " from " + url << endl;
-                xml = XmlTree( loadUrl( Url( url + file_name ) ) );
-            }catch(...){
-                cout << "Load error from remote. Try to load from local." << endl;
-                xml = XmlTree( loadResource( local_path ) );
-            }
-            
-            cout << endl;
-            
-            return xml;
-            
-        }
+        XmlTree loadXml( string node_name );
+        XmlTree loadXml( string node_name, string local_path );
         
         // ===========================================================================
         // === Event Listener. =======================================================
@@ -379,15 +145,13 @@ namespace sgmnt{ namespace app{
          * @virtual
          * @override
          */
-        virtual void resize(){
-            cout << "- Setup Camera Perspective." << endl;
-            camera.setPerspective( 30, getWindowAspectRatio(), 0.1, 100 );
-        }
+        virtual void resize();
         
-        virtual void keyDown( ci::app::KeyEvent event ){
-            if( event.getChar() == 'f' )
-                ci::app::setFullScreen( ! ci::app::isFullScreen() );
-        }
+        //! @override
+        virtual void keyDown( ci::app::KeyEvent event );
+        
+        //! OSC メッセージを受信した際の処理.
+        void onReceiveOscMessage( sgmnt::io::OscInputEvent & event );
         
         // ===========================================================================
         // === For Debug. ============================================================
@@ -395,41 +159,25 @@ namespace sgmnt{ namespace app{
         /**
          * @virtual
          */
-        virtual void drawFPS(){
-            gl::drawString(
-                "FPS = " + toString(getAverageFps()) ,
-                Vec2f(20.0f,20.0f),
-                Color::white(),
-                ___font___
-            );
-        }
-    
+        virtual void drawFPS( Vec2f position = Vec2f(20.0f,20.0f) );
         
-        
-    // ===========================================================================================================
-    // === PROTECTED
-    // ===========================================================================================================
-    protected :
+        protected :
         
         // ===========================================================================
         // === Member. ===============================================================
         
         string  mRemoteUrl;
-    
+        
         Vec2i   mWindowSize;
+        
         Color   mColor;
         
         map<string,ci::gl::Texture> mTextureMap;
-    
+        
         // ===========================================================================
         // === Method. ===============================================================
         
-        virtual void setupOsc(){
-            // ===========================================
-            // == Write osc code if needed.
-            oscInput.addEventListener( "/nanokontrol", &___onNanokontrolMessage___ );
-            // ===========================================
-        }
+        virtual void setupOsc();
         
     };
     

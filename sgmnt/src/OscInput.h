@@ -12,6 +12,13 @@ namespace sgmnt {
         
         // --- Event for OSC. ---
         
+        class OscInputEvent : public sgmnt::Event{
+        public:
+            OscInputEvent( const std::string &type ):sgmnt::Event(type){}
+            ~OscInputEvent(){}
+            osc::Message message;
+        };
+        
         class OscInput : public EventDispatcher{
             
             public:
@@ -42,9 +49,9 @@ namespace sgmnt {
                          cout << "Num Arg: " << numArgs << endl;
                          */
                         
-                        sgmnt::Event evt = sgmnt::Event( addr );
-                        evt.message = message;
-                        dispatchEvent( evt );
+                        OscInputEvent * evt = new OscInputEvent(addr);
+                        evt->message = message;
+                        dispatchEvent( *evt );
                         
                         /*
                          if( addr == "/points" ){
