@@ -9,8 +9,6 @@ using namespace sgmnt::io;
 
 // === GLOBAL PROPERTY =============================================================================================
 
-int * ___fader___ = new int[16];
-
 Font ___font___ = Font("Helvetica",12);
 
 namespace sgmnt { namespace app{
@@ -67,7 +65,7 @@ namespace sgmnt { namespace app{
     
     void AppBase::initFader(){
         for( int i=0; i< 16;i++ ){
-            ___fader___[i] = 0;
+            nanoKontrolFader[i] = 0;
         }
     }
     
@@ -192,7 +190,7 @@ namespace sgmnt { namespace app{
     }
     
     float AppBase::getFaderValueAt( int index ){
-        return (float)___fader___[index] / 128;
+        return (float)nanoKontrolFader[index] / 128;
     }
     
     void AppBase::setTextureToMap( string key, ci::gl::Texture tex ){
@@ -276,7 +274,7 @@ namespace sgmnt { namespace app{
     
     void AppBase::onReceiveOscMessage( OscInputEvent & event ){
         for( int i = 0; i < event.message.getNumArgs(); i++ ){
-            ___fader___[i] = event.message.getArgAsInt32(i);
+            nanoKontrolFader[i] = event.message.getArgAsInt32(i);
         }
     }
     

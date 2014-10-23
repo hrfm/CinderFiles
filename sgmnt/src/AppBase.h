@@ -65,6 +65,8 @@ namespace sgmnt{ namespace app{
         bool useCapture;
         bool doUpdateCapture;
         
+        int nanoKontrolFader[16];
+        
         sgmnt::io::OscInput     oscInput;
         sgmnt::io::AudioInput   audioInput;
         sgmnt::io::CaptureInput captureInput;

@@ -3,6 +3,7 @@
 #include <math.h>
 
 using namespace std;
+using namespace ci;
 
 namespace sgmnt{ namespace live_effects{
     
