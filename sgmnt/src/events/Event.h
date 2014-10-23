@@ -18,7 +18,7 @@ namespace sgmnt {
         Event(const std::string &type, bool bubbles = false, bool cancelable = false):_type(type), _bubbles(bubbles), _cancelable(cancelable){};
         ~Event(){};
         
-        virtual Event clone();
+        //virtual Event clone();
         
 		const std::string type();
         const bool bubbles();

@@ -2,7 +2,7 @@
 
 namespace sgmnt {
     
-    Event Event::clone(){}
+    //Event Event::clone(){}
     
     const std::string Event::type(){
         return _type;
