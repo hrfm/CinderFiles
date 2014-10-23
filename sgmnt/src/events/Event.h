@@ -5,7 +5,7 @@
 
 using namespace std;
 
-namespace sgmnt {
+namespace sgmnt { namespace events{
     
     class EventDispatcher;
     
@@ -76,4 +76,4 @@ namespace sgmnt {
         void (T::*_handler)(E&);
     };
     
-}
+}}

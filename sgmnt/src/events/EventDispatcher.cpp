@@ -2,7 +2,7 @@
 
 using namespace std;
 
-namespace sgmnt {
+namespace sgmnt { namespace events {
     
     EventDispatcher::EventDispatcher(){
         _target = this;
@@ -37,4 +37,4 @@ namespace sgmnt {
        return ( _listenerList.find(type) != _listenerList.end() );
     };
     
-}
+}}

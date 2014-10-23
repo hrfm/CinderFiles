@@ -1,6 +1,6 @@
 #include "Event.h"
 
-namespace sgmnt {
+namespace sgmnt { namespace events{
     
     //Event Event::clone(){}
     
@@ -16,4 +16,4 @@ namespace sgmnt {
         return _listener;
     }
     
-}
+}}

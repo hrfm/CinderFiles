@@ -8,7 +8,7 @@
 using namespace ci;
 using namespace ci::gl;
 using namespace std;
-using namespace sgmnt::text;
+using namespace sgmnt::utils;
 
 namespace sgmnt {
     

@@ -37,13 +37,12 @@ namespace sgmnt{ namespace app{
      And capable configured by settings xml files.
      
      */
-    class AppBase : public ci::app::AppNative, public sgmnt::EventDispatcher{
+    class AppBase : public ci::app::AppNative{
         
         public :
         
         AppBase(){
             ci::app::AppNative();
-            sgmnt::EventDispatcher();
         }
         ~AppBase(){}
         

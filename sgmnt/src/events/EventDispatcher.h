@@ -6,7 +6,7 @@
 
 using namespace std;
 
-namespace sgmnt {
+namespace sgmnt { namespace events{
     
     class EventDispatcher{
 	public:
@@ -84,4 +84,4 @@ namespace sgmnt {
         
     };
     
-}
+}}

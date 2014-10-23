@@ -5,14 +5,15 @@
 
 using namespace ci;
 using namespace std;
+using namespace sgmnt::events;
 
 namespace sgmnt { namespace io{
     
     // --- Event for OSC. ---
     
-    class OscInputEvent : public sgmnt::Event{
+    class OscInputEvent : public Event{
     public:
-        OscInputEvent( const std::string &type ):sgmnt::Event(type){}
+        OscInputEvent( const std::string &type ):Event(type){}
         ~OscInputEvent(){}
         osc::Message message;
     };
