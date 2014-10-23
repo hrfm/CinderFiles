@@ -1,7 +1,7 @@
 #pragma once
 
+#include <iostream>
 #include <string>
-#include "cinder/app/AppNative.h"
 
 using namespace std;
 
