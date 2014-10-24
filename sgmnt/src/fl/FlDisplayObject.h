@@ -8,7 +8,7 @@ using namespace sgmnt::app;
 
 namespace fl{ namespace display{
     
-    class FlDisplayObject : public EventDispatcher{
+    class FlDisplayObject : public sgmnt::events::EventDispatcher{
         
         public:
         

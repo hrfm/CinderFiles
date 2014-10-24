@@ -20,6 +20,9 @@
 #include "cinder/Rand.h"
 
 // --- Inputs ---
+#include "DisplayNode.h"
+#include "Texture.h"
+
 #include "OscInput.h"
 #include "AudioInput.h"
 #include "CaptureInput.h"
@@ -27,6 +30,7 @@
 
 using namespace sgmnt;
 using namespace sgmnt::io;
+using namespace sgmnt::display;
 
 namespace sgmnt{ namespace app{
     
@@ -39,7 +43,7 @@ namespace sgmnt{ namespace app{
      */
     class AppBase : public ci::app::AppNative{
         
-        public :
+    public:
         
         AppBase(){
             ci::app::AppNative();
@@ -53,8 +57,6 @@ namespace sgmnt{ namespace app{
         
         XmlTree settingXml;
         
-        gl::Texture backgroundTex;
-        
         CameraPersp camera;
         
         struct tm * timeinfo;
@@ -66,9 +68,12 @@ namespace sgmnt{ namespace app{
         
         int nanoKontrolFader[16];
         
-        sgmnt::io::OscInput     oscInput;
+        sgmnt::osc::OscInput     oscInput;
         sgmnt::io::AudioInput   audioInput;
         sgmnt::io::CaptureInput captureInput;
+        
+        sgmnt::display::DisplayNode stage;
+        sgmnt::display::Texture background;
         
         // ===========================================================================
         // === METHOD. ===============================================================
@@ -152,7 +157,7 @@ namespace sgmnt{ namespace app{
         virtual void keyDown( ci::app::KeyEvent event );
         
         //! OSC メッセージを受信した際の処理.
-        void onReceiveOscMessage( sgmnt::io::OscInputEvent & event );
+        void onReceiveOscMessage( sgmnt::osc::OscInputEvent & event );
         
         // ===========================================================================
         // === For Debug. ============================================================
@@ -162,7 +167,7 @@ namespace sgmnt{ namespace app{
          */
         virtual void drawFPS( Vec2f position = Vec2f(20.0f,20.0f) );
         
-        protected :
+    protected:
         
         // ===========================================================================
         // === Member. ===============================================================

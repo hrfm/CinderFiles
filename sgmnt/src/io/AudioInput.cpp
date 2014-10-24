@@ -121,7 +121,7 @@ namespace sgmnt{ namespace io{
         
     }
     
-    void AudioInput::useAudioManager( OscInput &oscInput ){
+    void AudioInput::useAudioManager( sgmnt::osc::OscInput &oscInput ){
         oscInput.addEventListener( "/audio/gain", this, &AudioInput::onAudioGain );
         oscInput.addEventListener( "/audio/fft/average", this, &AudioInput::onFFTAverage );
     }
@@ -232,11 +232,11 @@ namespace sgmnt{ namespace io{
     };
     
     
-    void AudioInput::onFFTAverage( sgmnt::io::OscInputEvent & event){
+    void AudioInput::onFFTAverage( sgmnt::osc::OscInputEvent & event){
         fftAverage = event.message.getArgAsFloat(0);
     }
     
-    void AudioInput::onAudioGain( sgmnt::io::OscInputEvent & event){
+    void AudioInput::onAudioGain( sgmnt::osc::OscInputEvent & event){
         audioGain  = event.message.getArgAsFloat(0);
     }
     

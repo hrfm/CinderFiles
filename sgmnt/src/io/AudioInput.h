@@ -25,7 +25,7 @@ namespace sgmnt{ namespace io{
         
         void update();
         
-        void  useAudioManager( OscInput &oscInput );
+        void  useAudioManager( sgmnt::osc::OscInput &oscInput );
         
         gl::Texture getAudioTexture();
         
@@ -52,9 +52,9 @@ namespace sgmnt{ namespace io{
         
     private:
         
-        void onFFTAverage( sgmnt::io::OscInputEvent & event);
+        void onFFTAverage( sgmnt::osc::OscInputEvent & event);
         
-        void onAudioGain( sgmnt::io::OscInputEvent & event);
+        void onAudioGain( sgmnt::osc::OscInputEvent & event);
         
         gl::Fbo      soundTexture;
         gl::GlslProg soundTexShader;

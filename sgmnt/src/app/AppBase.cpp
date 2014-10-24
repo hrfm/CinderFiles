@@ -83,7 +83,8 @@ namespace sgmnt { namespace app{
                 string path = window.getAttributeValue<string>("background");
                 cout << "- Loading background image : " << path << endl;
                 try {
-                    backgroundTex = gl::Texture( loadImage( loadResource( path ) ) );
+                    background.init( loadImage( loadResource( path ) ) );
+                    stage.addChild(&background);
                 }catch( ... ) {
                     cout << "Unable to load Background texture file." << endl;
                 }
@@ -155,15 +156,16 @@ namespace sgmnt { namespace app{
         if( useCapture && doUpdateCapture ){
             captureInput.update();
         }
+        // --- Update Stage. ---
+        background.setSize( ci::app::getWindowSize() );
+        stage.update();
         // --- Update Time. ---
         this->updateTimeinfo();
     }
     
     void AppBase::draw(){
         gl::clear();
-        if( backgroundTex ){
-            gl::draw( backgroundTex, ci::app::getWindowBounds() );
-        }
+        stage.draw();
     }
     
     // ===========================================================================
@@ -226,9 +228,6 @@ namespace sgmnt { namespace app{
         return s;
     }
     
-    /**
-     * node_name で指定したノード名で設定されている XML を読み込みます.
-     */
     XmlTree AppBase::loadXml( string node_name ){
         XmlTree xmlList  = settingXml.getChild("setting/xml_list");
         string file_name = xmlList.getChild(node_name).getAttributeValue<string>("file_name");
@@ -272,7 +271,7 @@ namespace sgmnt { namespace app{
             ci::app::setFullScreen( ! ci::app::isFullScreen() );
     }
     
-    void AppBase::onReceiveOscMessage( OscInputEvent & event ){
+    void AppBase::onReceiveOscMessage( sgmnt::osc::OscInputEvent & event ){
         for( int i = 0; i < event.message.getNumArgs(); i++ ){
             nanoKontrolFader[i] = event.message.getArgAsInt32(i);
         }
