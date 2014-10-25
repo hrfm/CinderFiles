@@ -19,6 +19,8 @@ namespace sgmnt{ namespace display{
         virtual void setSize( float w, float h );
         virtual void setSize( ci::Vec2f size );
         
+        virtual ci::Vec2f getSize();
+        
         virtual void update();
         
         virtual void draw();
@@ -29,6 +31,7 @@ namespace sgmnt{ namespace display{
     protected:
         
         virtual void _update();
+        
         virtual void _draw();
         
     };

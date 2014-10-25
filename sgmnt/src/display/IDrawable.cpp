@@ -13,6 +13,10 @@ namespace sgmnt{ namespace display{
         setSize( size.x, size.y );
     }
     
+    Vec2f IDrawable::getSize(){
+        return Vec2f( width, height );
+    }
+    
     void IDrawable::update(){};
     
     void IDrawable::draw(){

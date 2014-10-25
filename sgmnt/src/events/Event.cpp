@@ -11,6 +11,14 @@ namespace sgmnt { namespace events{
         return _type;
     };
     
+    const bool Event::cancelable(){
+        return _cancelable;
+    };
+    
+    void Event::cancel(){
+        _canceled = true;
+    }
+    
     void *Event::target(){
         return _target;
     };

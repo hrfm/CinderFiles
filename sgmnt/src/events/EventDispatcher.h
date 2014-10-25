@@ -3,11 +3,18 @@
 #include "Event.h"
 #include <map>
 #include <list>
+#include <memory>
 
 using namespace std;
 
 namespace sgmnt { namespace events{
     
+    /* ---------------------------------------------------------------------------------------------------
+     
+     リスナの参照等はこのクラスを継承した EventListener クラスにて実行時に解決する.
+     このクラスは EventDispatcher 内でリスナを std::list で保存するための基底となるクラス.
+     
+     */
     class IEventListener{
     public:
         IEventListener(){};
@@ -21,6 +28,11 @@ namespace sgmnt { namespace events{
         }
     };
     
+    /* ---------------------------------------------------------------------------------------------------
+     
+     リスナであるメンバ関数の this 参照と関数ポインタを保持しイベント発生時に関数の実行を行うためのクラス.
+     
+     */
     template <class T, class E = Event> class EventListener : public IEventListener{
         public :
         EventListener( T * listener, void (T::*handler)(E&) ){
@@ -46,14 +58,31 @@ namespace sgmnt { namespace events{
         void (T::*_handler)(E&);
     };
     
+    
+    /* ---------------------------------------------------------------------------------------------------
+     
+     イベントリスナの登録とイベントの通知を行う Observer クラス.
+     
+     */
     class EventDispatcher{
 	public:
         
         EventDispatcher();
         ~EventDispatcher();
         
+        /*
+         
+         Event を発行し該当するリスナを実行します.
+         
+         */
         void dispatchEvent(Event * event);
         
+        /*
+         
+         リスナを追加します.
+         既に登録済みの場合は登録し直します.
+         
+         */
         template <class T, class E = Event>
         void addEventListener( const std::string &type, T * listener, void (T::*handler)(E&), int priority = 0, bool useWeakReference = false ){
             
@@ -63,6 +92,11 @@ namespace sgmnt { namespace events{
             
         }
         
+        /*
+         
+         登録されたリスナを解除します.
+         
+         */
         template <class T, class E = Event>
         void removeEventListener( const std::string &type, T * listener, void (T::*handler)(E&) ){
             
@@ -110,6 +144,11 @@ namespace sgmnt { namespace events{
             
         };
         
+        /*
+         
+         指定した type のイベントリスナが登録されているかを調べます.
+         
+         */
         bool hasEventListener( const std::string &type );
         
 	protected:

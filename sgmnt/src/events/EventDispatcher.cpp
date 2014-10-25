@@ -10,6 +10,7 @@ namespace sgmnt { namespace events {
     
     EventDispatcher::~EventDispatcher(){
         _target = NULL;
+        _listenerList.clear();
     };
     
     void EventDispatcher::dispatchEvent(Event * event){
@@ -27,7 +28,14 @@ namespace sgmnt { namespace events {
             std::list<IEventListener*> &funcList = it->second;
             // Execute callbacks
             for(std::list<IEventListener*>::iterator it_f=funcList.begin(), end_f=funcList.end(); it_f!=end_f; ++it_f){
+                
                 ((*it_f)->exec)(*event);
+                
+                // return immediately if cancel() called.
+                if( event->_canceled == true ){
+                    return;
+                }
+                
             }
         }
         

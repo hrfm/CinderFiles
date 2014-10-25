@@ -15,23 +15,34 @@ namespace sgmnt { namespace events{
         
 	public:
     	
-        Event(const std::string &type, bool bubbles = false, bool cancelable = false):_type(type), _bubbles(bubbles), _cancelable(cancelable){};
+        Event(const std::string &type, bool cancelable = false):_type(type), _cancelable(cancelable){
+            _canceled = false;
+        };
         ~Event(){};
+        
+        //! イベントのタイプを取得します.
+		const std::string type();
+        
+        //! このイベントがキャンセル可能かを調べます.
+		const bool cancelable();
         
         virtual Event clone();
         
-		const std::string type();
-        const bool bubbles();
-		const bool cancelable();
+        virtual void cancel();
         
         void * target();
         void * listener();
+    
+    protected:
         
-    private:
-        
+        //! このイベントのタイプ.
         const std::string _type;
-        const bool _bubbles;
+        
+        //! このイベントがリスナ内でキャンセルが可能であるか.
 		const bool _cancelable;
+        
+        //! cancel() によってキャンセルされていた場合 true になる.
+        bool _canceled;
         
         void * _target;
         void * _listener;

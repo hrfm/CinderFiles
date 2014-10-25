@@ -1,9 +1,5 @@
 #pragma once
 
-
-
-
-
 #include "cinder/app/AppNative.h"
 #include "Cinder/Camera.h"
 #include "cinder/Xml.h"
@@ -41,12 +37,13 @@ namespace sgmnt{ namespace app{
      And capable configured by settings xml files.
      
      */
-    class AppBase : public ci::app::AppNative{
+    class AppBase : public ci::app::AppNative, public sgmnt::events::EventDispatcher{
         
     public:
         
         AppBase(){
             ci::app::AppNative();
+            sgmnt::events::EventDispatcher();
         }
         ~AppBase(){}
         
@@ -156,9 +153,6 @@ namespace sgmnt{ namespace app{
         //! @override
         virtual void keyDown( ci::app::KeyEvent event );
         
-        //! OSC メッセージを受信した際の処理.
-        void onReceiveOscMessage( sgmnt::osc::OscInputEvent & event );
-        
         // ===========================================================================
         // === For Debug. ============================================================
         
@@ -184,6 +178,9 @@ namespace sgmnt{ namespace app{
         // === Method. ===============================================================
         
         virtual void setupOsc();
+        
+        //! OSC メッセージを受信した際の処理.
+        void onReceiveOscMessage( sgmnt::osc::OscInputEvent & event );
         
     };
     

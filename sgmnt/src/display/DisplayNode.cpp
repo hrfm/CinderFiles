@@ -53,6 +53,7 @@ namespace sgmnt{ namespace display{
     }
     
     void DisplayNode::draw(){
+        gl::enableAlphaBlending();
         _draw();
         gl::pushMatrices();
         gl::translate( x, y );
