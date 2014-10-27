@@ -34,10 +34,9 @@ namespace sgmnt{ namespace display{
         
         virtual ci::CaptureRef  getCaptureRef();
         
-        virtual void update();
-        
     protected:
         
+        virtual void _update();
         virtual void _draw();
         
     private:

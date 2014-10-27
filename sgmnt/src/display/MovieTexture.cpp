@@ -4,6 +4,8 @@ using namespace ci;
 
 namespace sgmnt{ namespace display{
     
+    // public:
+    
     MovieTexture::MovieTexture(){
         IDrawable();
         sgmnt::events::EventDispatcher();
@@ -37,18 +39,6 @@ namespace sgmnt{ namespace display{
     
     ci::gl::Texture MovieTexture::getTexture(){
         return mMovieGlRef->getTexture();
-    }
-    
-    void MovieTexture::update(){
-        
-    }
-    
-    void MovieTexture::_draw(){
-        if( width == 0 && height == 0 ){
-            gl::draw( getTexture() );
-        }else{
-            gl::draw( getTexture(), Rectf( 0, 0, width, height ) );
-        }
     }
     
 }}

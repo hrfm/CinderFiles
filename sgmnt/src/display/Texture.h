@@ -18,10 +18,13 @@ namespace sgmnt{ namespace display{
         
         virtual void init( ci::ImageSourceRef ref );
         
+        virtual void setTexturePtr( ci::gl::Texture * ptr );
+        
         virtual ci::gl::Texture getTexture();
         
     protected:
         
+        virtual void _update();
         virtual void _draw();
         
         ci::gl::Texture * mTexturePtr;

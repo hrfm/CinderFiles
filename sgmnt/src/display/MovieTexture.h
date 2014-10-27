@@ -24,17 +24,13 @@ namespace sgmnt{ namespace display{
         MovieTexture( ci::fs::path filePath );
         ~MovieTexture();
         
-        virtual void init( const string filePath );
-        virtual void init( ci::fs::path filePath );
+        void init( const string filePath );
+        void init( ci::fs::path filePath );
         
         virtual ci::qtime::MovieGlRef getMovieGlRef();
         virtual ci::gl::Texture getTexture();
         
-        virtual void update();
-        
     protected:
-        
-        virtual void _draw();
         
     private:
         

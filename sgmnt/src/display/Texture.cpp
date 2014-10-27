@@ -4,6 +4,8 @@ using namespace ci;
 
 namespace sgmnt{ namespace display{
     
+    // public:
+    
     Texture::Texture(){
         IDrawable();
     }
@@ -16,10 +18,12 @@ namespace sgmnt{ namespace display{
     Texture::~Texture(){}
     
     void Texture::init( ImageSourceRef ref  ){
-        if( mTexturePtr ){
-            delete mTexturePtr;
-        }
-        mTexturePtr = new gl::Texture(ref);
+        gl::Texture tex = gl::Texture(ref);
+        setTexturePtr(&tex);
+    }
+    
+    void Texture::setTexturePtr( ci::gl::Texture * ptr ){
+        mTexturePtr = ptr;
         if( width == 0 ){
             width = mTexturePtr->getWidth();
         }
@@ -32,9 +36,15 @@ namespace sgmnt{ namespace display{
         return *mTexturePtr;
     }
     
+    // protected:
+    
+    void Texture::_update(){}
+    
     void Texture::_draw(){
-        if( mTexturePtr ){
-            gl::draw( *mTexturePtr, Rectf( 0, 0, width, height ) );
+        if( width == 0 && height == 0 ){
+            gl::draw( getTexture() );
+        }else{
+            gl::draw( getTexture(), Rectf( 0, 0, width, height ) );
         }
     }
     

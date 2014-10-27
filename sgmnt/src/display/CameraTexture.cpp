@@ -4,6 +4,8 @@ using namespace ci;
 
 namespace sgmnt{ namespace display{
     
+    // public:
+    
     CameraTexture::CameraTexture(){
         sgmnt::display::Texture();
         sgmnt::events::EventDispatcher();
@@ -61,10 +63,12 @@ namespace sgmnt{ namespace display{
         return mCapture;
     }
     
-    void CameraTexture::update(){
+    // protected:
+    
+    void CameraTexture::_update(){
         if( mCapture && mCapture->checkNewFrame() ) {
             gl::Texture tex = gl::Texture( mCapture->getSurface() );
-            mTexturePtr = &tex;
+            setTexturePtr(&tex);
         }
     }
     

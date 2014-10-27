@@ -17,7 +17,9 @@ namespace sgmnt{ namespace display{
         return Vec2f( width, height );
     }
     
-    void IDrawable::update(){};
+    void IDrawable::update(){
+        _update();
+    };
     
     void IDrawable::draw(){
         gl::pushMatrices();

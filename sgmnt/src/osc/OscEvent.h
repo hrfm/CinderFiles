@@ -8,7 +8,7 @@ namespace sgmnt { namespace events{
     // --- Event for OSC. ---
     
     class OscInputEvent : public sgmnt::events::Event{
-        
+    
     public:
         
         OscInputEvent( const std::string &type, ci::osc::Message & message ):Event(type), message(message){}
