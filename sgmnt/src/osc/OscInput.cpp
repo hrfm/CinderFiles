@@ -1,5 +1,7 @@
 #include "OscInput.h"
 
+using namespace sgmnt::events;
+
 namespace sgmnt { namespace osc{
     
     void OscInput::setup( int port ){

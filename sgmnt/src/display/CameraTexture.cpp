@@ -5,7 +5,7 @@ using namespace ci;
 namespace sgmnt{ namespace display{
     
     CameraTexture::CameraTexture(){
-        IDrawable();
+        sgmnt::display::Texture();
         sgmnt::events::EventDispatcher();
     };
     
@@ -61,19 +61,16 @@ namespace sgmnt{ namespace display{
         return mCapture;
     }
     
-    ci::gl::Texture CameraTexture::getTexture(){
-        return mTexture;
-    }
-    
     void CameraTexture::update(){
         if( mCapture && mCapture->checkNewFrame() ) {
-            mTexture = gl::Texture( mCapture->getSurface() );
+            gl::Texture tex = gl::Texture( mCapture->getSurface() );
+            mTexturePtr = &tex;
         }
     }
     
     void CameraTexture::_draw(){
         if( mCaptureAvailable ){
-            gl::draw( mTexture, Rectf( 0, 0, width, height ) );
+            gl::draw( *mTexturePtr, Rectf( 0, 0, width, height ) );
         }
     }
     

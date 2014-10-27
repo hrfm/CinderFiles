@@ -27,6 +27,7 @@
 using namespace sgmnt;
 using namespace sgmnt::io;
 using namespace sgmnt::display;
+using namespace sgmnt::events;
 
 namespace sgmnt{ namespace app{
     
@@ -55,8 +56,6 @@ namespace sgmnt{ namespace app{
         XmlTree settingXml;
         
         CameraPersp camera;
-        
-        struct tm * timeinfo;
         
         bool useOsc;
         bool useAudio;
@@ -129,10 +128,6 @@ namespace sgmnt{ namespace app{
         // ===========================================================================
         // === Utility ===============================================================
         
-        virtual void updateTimeinfo();
-        
-        virtual string getTimeString(const char *format);
-        
         /**
          * node_name で指定したノード名で設定されている XML を読み込みます.
          */
@@ -180,7 +175,7 @@ namespace sgmnt{ namespace app{
         virtual void setupOsc();
         
         //! OSC メッセージを受信した際の処理.
-        void onReceiveOscMessage( sgmnt::osc::OscInputEvent & event );
+        void onReceiveOscMessage( OscInputEvent * event );
         
     };
     

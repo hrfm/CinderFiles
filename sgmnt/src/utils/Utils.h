@@ -1,5 +1,8 @@
 #pragma once
 
+#include "SiTimeUtil.h"
+#include "Timer.h"
+
 namespace sgmnt{ namespace utils{
     
     static int GCD( int a, int b ){

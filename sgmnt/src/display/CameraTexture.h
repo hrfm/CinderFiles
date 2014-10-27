@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IDrawable.h"
+#include "Texture.h"
 #include "EventDispatcher.h"
 
 #include "cinder/gl/gl.h"
@@ -17,7 +17,7 @@ namespace sgmnt{ namespace display{
      FaceDetect 等を行う場合はこのクラスを継承するか Delegate すると便利です.
      
      */
-    class CameraTexture : public IDrawable, public sgmnt::events::EventDispatcher{
+    class CameraTexture : public sgmnt::display::Texture, public sgmnt::events::EventDispatcher{
         
     public:
         
@@ -33,7 +33,6 @@ namespace sgmnt{ namespace display{
         virtual bool captureAvailable();
         
         virtual ci::CaptureRef  getCaptureRef();
-        virtual ci::gl::Texture getTexture();
         
         virtual void update();
         
@@ -45,7 +44,6 @@ namespace sgmnt{ namespace display{
         
         ci::CaptureRef  mCapture;
         bool            mCaptureAvailable;
-        ci::gl::Texture mTexture;
         
     };
     

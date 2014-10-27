@@ -160,7 +160,7 @@ namespace sgmnt{ namespace io{
             
             color1.a = barY / height;
             
-            cout << barY << endl;
+            //cout << barY << endl;
             
             //*
             glBegin( GL_QUADS );
@@ -232,12 +232,12 @@ namespace sgmnt{ namespace io{
     };
     
     
-    void AudioInput::onFFTAverage( sgmnt::osc::OscInputEvent & event){
-        fftAverage = event.message.getArgAsFloat(0);
+    void AudioInput::onFFTAverage( OscInputEvent * event){
+        fftAverage = event->message.getArgAsFloat(0);
     }
     
-    void AudioInput::onAudioGain( sgmnt::osc::OscInputEvent & event){
-        audioGain  = event.message.getArgAsFloat(0);
+    void AudioInput::onAudioGain( OscInputEvent * event){
+        audioGain  = event->message.getArgAsFloat(0);
     }
     
 }}

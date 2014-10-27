@@ -13,6 +13,7 @@
 using namespace ci;
 using namespace ci::app;
 using namespace std;
+using namespace sgmnt::events;
 
 namespace sgmnt{ namespace io{
     
@@ -52,9 +53,9 @@ namespace sgmnt{ namespace io{
         
     private:
         
-        void onFFTAverage( sgmnt::osc::OscInputEvent & event);
+        void onFFTAverage( OscInputEvent * event);
         
-        void onAudioGain( sgmnt::osc::OscInputEvent & event);
+        void onAudioGain( OscInputEvent * event);
         
         gl::Fbo      soundTexture;
         gl::GlslProg soundTexShader;

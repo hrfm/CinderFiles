@@ -55,7 +55,6 @@ namespace sgmnt { namespace app{
         this->initOSC(setupSettings);
         this->initAudio(setupSettings);
         this->initCapture(setupSettings);
-        this->updateTimeinfo();
         
         resize();
         
@@ -146,21 +145,30 @@ namespace sgmnt { namespace app{
     // === Update / Draw =========================================================
     
     void AppBase::update(){
+        
         // --- Update Inputs. ---
+        
         if( useOsc ){
             oscInput.update();
         }
+        
         if( useAudio ){
             audioInput.update();
         }
+        
         if( useCapture && doUpdateCapture ){
             captureInput.update();
         }
+        
         // --- Update Stage. ---
+        
         background.setSize( ci::app::getWindowSize() );
         stage.update();
+        
         // --- Update Time. ---
-        this->updateTimeinfo();
+        
+        sgmnt::utils::SiTimeUtil::getInstance().update();
+        
     }
     
     void AppBase::draw(){
@@ -215,19 +223,6 @@ namespace sgmnt { namespace app{
     // ===========================================================================
     // === Utility ===============================================================
     
-    void AppBase::updateTimeinfo(){
-        time_t rawtime = time(NULL);
-        time(&rawtime);
-        timeinfo = localtime(&rawtime);
-    }
-    
-    string AppBase::getTimeString(const char *format){
-        char str[256];
-        strftime( str, 255, format, timeinfo );
-        string s = str;
-        return s;
-    }
-    
     XmlTree AppBase::loadXml( string node_name ){
         XmlTree xmlList  = settingXml.getChild("setting/xml_list");
         string file_name = xmlList.getChild(node_name).getAttributeValue<string>("file_name");
@@ -271,9 +266,9 @@ namespace sgmnt { namespace app{
             ci::app::setFullScreen( ! ci::app::isFullScreen() );
     }
     
-    void AppBase::onReceiveOscMessage( sgmnt::osc::OscInputEvent & event ){
-        for( int i = 0; i < event.message.getNumArgs(); i++ ){
-            nanoKontrolFader[i] = event.message.getArgAsInt32(i);
+    void AppBase::onReceiveOscMessage( OscInputEvent * event ){
+        for( int i = 0; i < event->message.getNumArgs(); i++ ){
+            nanoKontrolFader[i] = event->message.getArgAsInt32(i);
         }
     }
     

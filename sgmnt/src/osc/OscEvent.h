@@ -3,9 +3,7 @@
 #include "OscListener.h"
 #include "EventDispatcher.h"
 
-using namespace ci;
-
-namespace sgmnt { namespace osc{
+namespace sgmnt { namespace events{
     
     // --- Event for OSC. ---
     

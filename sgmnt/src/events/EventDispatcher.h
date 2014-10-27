@@ -23,7 +23,7 @@ namespace sgmnt { namespace events{
             cout << "IEventListener::==()" << endl;
             return this == listener;
         }
-        virtual void exec( Event & event ){
+        virtual void exec( Event * event ){
             cout << "IEventListener::exec()" << endl;
         }
     };
@@ -35,7 +35,7 @@ namespace sgmnt { namespace events{
      */
     template <class T, class E = Event> class EventListener : public IEventListener{
         public :
-        EventListener( T * listener, void (T::*handler)(E&) ){
+        EventListener( T * listener, void (T::*handler)(E*) ){
             IEventListener();
             _listener = listener;
             _handler  = handler;
@@ -50,12 +50,12 @@ namespace sgmnt { namespace events{
         bool operator==( EventListener<T,E> * listener ){
             return ( this == listener || ( listener->_listener == this->_listener && listener->_handler == this->_handler ) );
         }
-        void exec( E & event ){
+        void exec( E * event ){
             (_listener->*_handler)(event);
         }
         private :
         T * _listener;
-        void (T::*_handler)(E&);
+        void (T::*_handler)(E*);
     };
     
     
@@ -84,7 +84,7 @@ namespace sgmnt { namespace events{
          
          */
         template <class T, class E = Event>
-        void addEventListener( const std::string &type, T * listener, void (T::*handler)(E&), int priority = 0, bool useWeakReference = false ){
+        void addEventListener( const std::string &type, T * listener, void (T::*handler)(E*), int priority = 0, bool useWeakReference = false ){
             
             removeEventListener( type, listener, handler );
             
@@ -98,7 +98,7 @@ namespace sgmnt { namespace events{
          
          */
         template <class T, class E = Event>
-        void removeEventListener( const std::string &type, T * listener, void (T::*handler)(E&) ){
+        void removeEventListener( const std::string &type, T * listener, void (T::*handler)(E*) ){
             
             // Leave if no event registered
             if(!hasEventListener(type)){

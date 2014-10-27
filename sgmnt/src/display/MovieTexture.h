@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IDrawable.h"
+#include "Texture.h"
 #include "EventDispatcher.h"
 
 #include "cinder/gl/gl.h"
@@ -15,7 +15,7 @@ namespace sgmnt{ namespace display{
      動画の Texture への描画のみを行うシンプルなクラスです.
      
      */
-    class MovieTexture : public IDrawable, public sgmnt::events::EventDispatcher{
+    class MovieTexture : public sgmnt::display::Texture, public sgmnt::events::EventDispatcher{
         
     public:
         
@@ -39,7 +39,6 @@ namespace sgmnt{ namespace display{
     private:
         
         ci::qtime::MovieGlRef mMovieGlRef;
-        ci::gl::Texture       mTexture;
         
     };
     

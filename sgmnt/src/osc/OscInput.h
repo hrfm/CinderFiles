@@ -1,7 +1,6 @@
 #pragma once
 
 #include "OscEvent.h"
-#include "EventDispatcher.h"
 
 namespace sgmnt { namespace osc{
     

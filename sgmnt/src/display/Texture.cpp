@@ -16,21 +16,25 @@ namespace sgmnt{ namespace display{
     Texture::~Texture(){}
     
     void Texture::init( ImageSourceRef ref  ){
-        if( mTexture ){
-            delete mTexture;
+        if( mTexturePtr ){
+            delete mTexturePtr;
         }
-        mTexture = new gl::Texture(ref);
+        mTexturePtr = new gl::Texture(ref);
         if( width == 0 ){
-            width = mTexture->getWidth();
+            width = mTexturePtr->getWidth();
         }
         if( height == 0 ){
-            height = mTexture->getHeight();
+            height = mTexturePtr->getHeight();
         }
     }
     
+    gl::Texture Texture::getTexture(){
+        return *mTexturePtr;
+    }
+    
     void Texture::_draw(){
-        if( mTexture ){
-            gl::draw( *mTexture, Rectf( 0, 0, width, height ) );
+        if( mTexturePtr ){
+            gl::draw( *mTexturePtr, Rectf( 0, 0, width, height ) );
         }
     }
     
