@@ -33,8 +33,8 @@ namespace sgmnt { namespace events{
      リスナであるメンバ関数の this 参照と関数ポインタを保持しイベント発生時に関数の実行を行うためのクラス.
      
      */
-    template <class T, class E = Event> class EventListener : public IEventListener{
-        public :
+    template <class T, class E> class EventListener : public IEventListener{
+    public:
         EventListener( T * listener, void (T::*handler)(E*) ){
             IEventListener();
             _listener = listener;
@@ -50,10 +50,12 @@ namespace sgmnt { namespace events{
         bool operator==( EventListener<T,E> * listener ){
             return ( this == listener || ( listener->_listener == this->_listener && listener->_handler == this->_handler ) );
         }
-        void exec( E * event ){
-            (_listener->*_handler)(event);
+        void exec( Event * event ){
+            if( E * evt = dynamic_cast<E*>(event) ){
+                (_listener->*_handler)(evt);
+            }
         }
-        private :
+    private:
         T * _listener;
         void (T::*_handler)(E*);
     };
@@ -83,7 +85,7 @@ namespace sgmnt { namespace events{
          既に登録済みの場合は登録し直します.
          
          */
-        template <class T, class E = Event>
+        template <class T, class E>
         void addEventListener( const std::string &type, T * listener, void (T::*handler)(E*), int priority = 0, bool useWeakReference = false ){
             
             removeEventListener( type, listener, handler );
@@ -97,7 +99,7 @@ namespace sgmnt { namespace events{
          登録されたリスナを解除します.
          
          */
-        template <class T, class E = Event>
+        template <class T, class E>
         void removeEventListener( const std::string &type, T * listener, void (T::*handler)(E*) ){
             
             // Leave if no event registered

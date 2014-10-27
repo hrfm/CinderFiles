@@ -29,7 +29,7 @@ namespace sgmnt { namespace events {
             // Execute callbacks
             for(std::list<IEventListener*>::iterator it_f=funcList.begin(), end_f=funcList.end(); it_f!=end_f; ++it_f){
                 
-                ((*it_f)->exec)(event);
+                (*it_f)->exec(event);
                 
                 // return immediately if cancel() called.
                 if( event->_canceled == true ){
