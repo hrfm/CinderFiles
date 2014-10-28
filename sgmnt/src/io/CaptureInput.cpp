@@ -4,6 +4,7 @@ using namespace ci;
 using namespace ci::app;
 using namespace std;
 
+using namespace sgmnt::io;
 using namespace sgmnt::live_effects;
 
 namespace sgmnt{ namespace io{
@@ -37,8 +38,12 @@ namespace sgmnt{ namespace io{
         
         // --- Setup Capture Devices. ---
         
-        showAllDevices();
+        SiCaptureInput::getInstance().showAllDevices();
         
+        //*
+        mCapture = SiCaptureInput::getInstance().createRef( width, height, deviceName );
+        mCaptureAvailable = true;
+        /*/
         try {
             if( deviceName != "*" ){
                 mCapture = Capture::create( width, height, Capture::findDeviceByName(deviceName) );
@@ -51,6 +56,7 @@ namespace sgmnt{ namespace io{
             cout << "Failed to initialize capture" << std::endl;
             mCaptureAvailable = false;
         }
+        //*/
         
         // --- Create GLSL. ---
         
@@ -63,7 +69,6 @@ namespace sgmnt{ namespace io{
             cout << "Unable to load shader" << endl;
         }
         
-        cout << "fuck" << endl;
     }
     
     void CaptureInput::update(){

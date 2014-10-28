@@ -12,6 +12,9 @@
 #include "CinderOpenCV.h"
 
 #include "DetectRect.h"
+
+#include "SiCaptureInput.h"
+
 #include "ForceMap.h"
 
 using namespace ci;

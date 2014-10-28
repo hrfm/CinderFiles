@@ -2,7 +2,6 @@
 
 #include "SiTextureMap.h"
 #include "SiTimeUtil.h"
-#include "Timer.h"
 
 namespace sgmnt{ namespace utils{
     

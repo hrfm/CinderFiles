@@ -271,7 +271,6 @@ namespace sgmnt { namespace app{
     // === OSC. ===============================================================
     
     void AppBase::setupOsc(){
-        cout << "hoge" << endl;
         // ===========================================
         // == Write osc code if needed.
         SiOscInput::getInstance().addEventListener("/nanokontrol",this,&AppBase::onReceiveOscMessage);
