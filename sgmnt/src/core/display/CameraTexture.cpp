@@ -7,17 +7,16 @@ namespace sgmnt{ namespace display{
     // public:
     
     CameraTexture::CameraTexture(){
-        sgmnt::display::Texture();
-        sgmnt::events::EventDispatcher();
+        CameraTexture("*");
     };
     
     CameraTexture::CameraTexture( string deviceName ){
-        CameraTexture();
-        init( 640, 480, deviceName );
+        CameraTexture( 640, 480, deviceName );
     };
     
     CameraTexture::CameraTexture( int32_t width, int32_t height, const string deviceName ){
-        CameraTexture();
+        sgmnt::display::Texture();
+        sgmnt::events::EventDispatcher();
         init( width, height, deviceName );
     };
     
@@ -27,6 +26,8 @@ namespace sgmnt{ namespace display{
     
     void CameraTexture::init( int32_t width, int32_t height, const string deviceName ){
         
+        cout << "CameraTexture" << endl;
+        
         // --- Setup Capture Devices. ---
         
         this->width  = width;
@@ -35,15 +36,22 @@ namespace sgmnt{ namespace display{
         showAllDevices();
         
         try {
+            
             if( deviceName != "*" ){
                 mCapture = Capture::create( width, height, Capture::findDeviceByName(deviceName) );
             }else{
                 mCapture = Capture::create( width, height );
             }
+            
+            mTexture = gl::Texture( width, height );
+            
             mCaptureAvailable = true;
+            
         }catch( ... ) {
+            
             cout << "Failed to initialize capture" << std::endl;
             mCaptureAvailable = false;
+            
         }
         
     }
@@ -66,15 +74,10 @@ namespace sgmnt{ namespace display{
     // protected:
     
     void CameraTexture::_update(){
+        cout << mCapture << endl;
         if( mCapture && mCapture->checkNewFrame() ) {
-            gl::Texture tex = gl::Texture( mCapture->getSurface() );
-            setTexturePtr(&tex);
-        }
-    }
-    
-    void CameraTexture::_draw(){
-        if( mCaptureAvailable ){
-            gl::draw( *mTexturePtr, Rectf( 0, 0, width, height ) );
+            cout << "_update" << endl;
+            mTexture = gl::Texture( mCapture->getSurface() );
         }
     }
     

@@ -7,7 +7,7 @@ namespace sgmnt{ namespace display{
     // public:
     
     Texture::Texture(){
-        IDrawable();
+        DisplayNode();
     }
     
     Texture::Texture( ImageSourceRef ref ){
@@ -18,22 +18,17 @@ namespace sgmnt{ namespace display{
     Texture::~Texture(){}
     
     void Texture::init( ImageSourceRef ref  ){
-        gl::Texture tex = gl::Texture(ref);
-        setTexturePtr(&tex);
-    }
-    
-    void Texture::setTexturePtr( ci::gl::Texture * ptr ){
-        mTexturePtr = ptr;
+        mTexture = gl::Texture(ref);
         if( width == 0 ){
-            width = mTexturePtr->getWidth();
+            width = mTexture.getWidth();
         }
         if( height == 0 ){
-            height = mTexturePtr->getHeight();
+            height = mTexture.getHeight();
         }
     }
     
     gl::Texture Texture::getTexture(){
-        return *mTexturePtr;
+        return mTexture;
     }
     
     // protected:
@@ -42,7 +37,8 @@ namespace sgmnt{ namespace display{
     
     void Texture::_draw(){
         if( width == 0 && height == 0 ){
-            gl::draw( getTexture() );
+            //gl::draw( getTexture() );
+            return;
         }else{
             gl::draw( getTexture(), Rectf( 0, 0, width, height ) );
         }

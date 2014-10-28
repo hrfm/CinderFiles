@@ -7,8 +7,12 @@ namespace sgmnt{ namespace display{
     // public:
     
     MovieTexture::MovieTexture(){
+        
         IDrawable();
         sgmnt::events::EventDispatcher();
+        
+        _beforeTime = 0.0f;
+        
     };
     
     MovieTexture::MovieTexture( const string filePath ){
@@ -39,6 +43,15 @@ namespace sgmnt{ namespace display{
     
     ci::gl::Texture MovieTexture::getTexture(){
         return mMovieGlRef->getTexture();
+    }
+    
+    void MovieTexture::_update(){
+        float currentTime = mMovieGlRef->getCurrentTime();
+        float duration = mMovieGlRef->getDuration();
+        if( mMovieGlRef->isDone() || ( mMovieGlRef->isPlaying() || currentTime == duration || currentTime < _beforeTime ) ){
+            dispatchEvent( new sgmnt::events::Event( sgmnt::events::Event::DONE ) );
+        }
+        _beforeTime = currentTime;
     }
     
 }}

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "SiTextureMap.h"
 #include "SiTimeUtil.h"
 #include "Timer.h"
 

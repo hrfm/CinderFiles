@@ -99,7 +99,7 @@ namespace sgmnt { namespace app{
                 useOsc = true;
                 int port = osc.getAttributeValue<int>("port");
                 cout << "- Setup OSCInput on port " << port << endl << endl;
-                oscInput.setup( port );
+                sgmnt::osc::SiOscInput::getInstance().addListenPort( port );
                 setupOsc();
             }
         }
@@ -112,9 +112,9 @@ namespace sgmnt { namespace app{
                 useAudio = true;
                 int bandSize = audio.getAttributeValue<int>("bandSize");
                 cout << "- Setup AudioInput with bandSize " << bandSize << endl;
-                audioInput.setup( bandSize );
+                sgmnt::audio::SiAudioInput::getInstance().setup( bandSize );
                 if( useOsc ){
-                    audioInput.useAudioManager( oscInput );
+                    sgmnt::audio::SiAudioInput::getInstance().useAudioManager();
                 }
                 cout << endl;
             }
@@ -149,11 +149,11 @@ namespace sgmnt { namespace app{
         // --- Update Inputs. ---
         
         if( useOsc ){
-            oscInput.update();
+            sgmnt::osc::SiOscInput::getInstance().update();
         }
         
         if( useAudio ){
-            audioInput.update();
+            sgmnt::audio::SiAudioInput::getInstance().update();
         }
         
         if( useCapture && doUpdateCapture ){
@@ -201,23 +201,6 @@ namespace sgmnt { namespace app{
     
     float AppBase::getFaderValueAt( int index ){
         return (float)nanoKontrolFader[index] / 128;
-    }
-    
-    void AppBase::setTextureToMap( string key, ci::gl::Texture tex ){
-        mTextureMap[key] = tex;
-    }
-    
-    void AppBase::setTextureToMap( string key, string path ){
-        try {
-            cout << "- Loading Texture : " << path << endl;
-            setTextureToMap(key, gl::Texture( loadImage( loadResource( path ) ) ));
-        }catch( ... ) {
-            console() << "unable to load the texture file!" << std::endl;
-        }
-    }
-    
-    ci::gl::Texture AppBase::getTextureFromMap( string key ){
-        return mTextureMap[key];
     }
     
     // ===========================================================================
@@ -288,9 +271,10 @@ namespace sgmnt { namespace app{
     // === OSC. ===============================================================
     
     void AppBase::setupOsc(){
+        cout << "hoge" << endl;
         // ===========================================
         // == Write osc code if needed.
-        oscInput.addEventListener("/nanokontrol",this,&AppBase::onReceiveOscMessage);
+        sgmnt::osc::SiOscInput::getInstance().addEventListener("/nanokontrol",this,&AppBase::onReceiveOscMessage);
         // ===========================================
     }
     

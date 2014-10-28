@@ -27,4 +27,10 @@ namespace sgmnt { namespace events{
         return _listener;
     }
     
+    // --- Static Event Types.
+    
+    const string Event::COMPLETE = "complete";
+    const string Event::DONE     = "done";
+    const string Event::ERROR    = "error";
+    
 }}

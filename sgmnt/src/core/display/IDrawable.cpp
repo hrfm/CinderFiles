@@ -17,6 +17,8 @@ namespace sgmnt{ namespace display{
         return Vec2f( width, height );
     }
     
+    void IDrawable::setup(){}
+    
     void IDrawable::update(){
         _update();
     };

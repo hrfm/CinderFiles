@@ -6,28 +6,21 @@
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Texture.h"
 
-// --- timeinfo ---
-#include <time.h>
-#include <boost/algorithm/string.hpp>
-#include <boost/date_time/gregorian/gregorian.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/date_time/c_local_time_adjustor.hpp>
-
 #include "cinder/Rand.h"
 
 // --- Inputs ---
 #include "DisplayNode.h"
 #include "Texture.h"
 
-#include "OscInput.h"
-#include "AudioInput.h"
+#include "SiOscInput.h"
+#include "SiAudioInput.h"
 #include "CaptureInput.h"
 #include "Utils.h"
 
 using namespace sgmnt;
-using namespace sgmnt::io;
 using namespace sgmnt::display;
 using namespace sgmnt::events;
+using namespace sgmnt::io;
 
 namespace sgmnt{ namespace app{
     
@@ -64,8 +57,6 @@ namespace sgmnt{ namespace app{
         
         int nanoKontrolFader[16];
         
-        sgmnt::osc::OscInput     oscInput;
-        sgmnt::io::AudioInput   audioInput;
         sgmnt::io::CaptureInput captureInput;
         
         sgmnt::display::DisplayNode stage;
@@ -119,12 +110,6 @@ namespace sgmnt{ namespace app{
         
         virtual float getFaderValueAt( int index );
         
-        virtual void setTextureToMap( string key, ci::gl::Texture tex );
-        
-        virtual void setTextureToMap( string key, string path );
-        
-        virtual ci::gl::Texture getTextureFromMap( string key );
-        
         // ===========================================================================
         // === Utility ===============================================================
         
@@ -166,8 +151,6 @@ namespace sgmnt{ namespace app{
         Vec2i   mWindowSize;
         
         Color   mColor;
-        
-        map<string,ci::gl::Texture> mTextureMap;
         
         // ===========================================================================
         // === Method. ===============================================================

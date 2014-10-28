@@ -1,10 +1,12 @@
 #pragma once
 
+#include "Singleton.h"
+
 #include "cinder/gl/Fbo.h"
 #include "cinder/gl/GlslProg.h"
 
 #include "cinder/app/AppBasic.h"
-#include "OscInput.h"
+#include "SiOscInput.h"
 
 #include "cinder/audio/Context.h"
 #include "cinder/audio/MonitorNode.h"
@@ -15,18 +17,16 @@ using namespace ci::app;
 using namespace std;
 using namespace sgmnt::events;
 
-namespace sgmnt{ namespace io{
+namespace sgmnt{ namespace audio{
     
-    class AudioInput {
+    class SiAudioInput : public sgmnt::utils::Singleton<SiAudioInput>{
     public:
-        
-        AudioInput();
         
         void setup( uint16_t count );
         
         void update();
         
-        void  useAudioManager( sgmnt::osc::OscInput &oscInput );
+        void  useAudioManager();
         
         gl::Texture getAudioTexture();
         
@@ -53,6 +53,13 @@ namespace sgmnt{ namespace io{
         
     private:
         
+        friend Singleton<SiAudioInput>;
+        
+        SiAudioInput(){
+            fftAverage = 0.0f;
+            audioGain  = 0.0f;
+        }
+        
         void onFFTAverage( OscInputEvent * event);
         
         void onAudioGain( OscInputEvent * event);
@@ -60,8 +67,8 @@ namespace sgmnt{ namespace io{
         gl::Fbo      soundTexture;
         gl::GlslProg soundTexShader;
         
-        audio::InputDeviceNodeRef		mInputDeviceNode;
-        audio::MonitorSpectralNodeRef	mMonitorSpectralNode;
+        cinder::audio::InputDeviceNodeRef		mInputDeviceNode;
+        cinder::audio::MonitorSpectralNodeRef	mMonitorSpectralNode;
         vector<float>					mMagSpectrum;
         
     };

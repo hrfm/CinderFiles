@@ -46,24 +46,34 @@ namespace sgmnt{ namespace display{
     
     void DisplayNode::update(){
         _update();
+        _updateChildren();
+    }
+    
+    void DisplayNode::draw(){
+        gl::enableAlphaBlending();
+        gl::pushMatrices();
+        gl::translate( x, y );
+        {
+            _draw();
+            _drawChildren();
+        }
+        gl::popMatrices();
+    }
+    
+    //! protected:
+    
+    void DisplayNode::_updateChildren(){
         std::list<IDrawable*>::iterator it, end;
         for( it = children.begin(), end = children.end(); it!=end; it++ ){
             (*it)->update();
         }
     }
     
-    void DisplayNode::draw(){
-        gl::enableAlphaBlending();
-        _draw();
-        gl::pushMatrices();
-        gl::translate( x, y );
-        {
-            std::list<IDrawable*>::iterator it, end;
-            for( it = children.begin(), end = children.end(); it!=end; it++ ){
-                (*it)->draw();
-            }
+    void DisplayNode::_drawChildren(){
+        std::list<IDrawable*>::iterator it, end;
+        for( it = children.begin(), end = children.end(); it!=end; it++ ){
+            (*it)->draw();
         }
-        gl::popMatrices();
     }
     
 }}

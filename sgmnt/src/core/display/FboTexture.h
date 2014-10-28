@@ -1,11 +1,11 @@
 #pragma once
 
 #include "Texture.h"
-#include "EventDispatcher.h"
 
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Texture.h"
 #include "cinder/gl/Fbo.h"
+#include "cinder/Camera.h"
 
 namespace sgmnt{ namespace display{
     
@@ -15,7 +15,7 @@ namespace sgmnt{ namespace display{
      動画の Texture への描画のみを行うシンプルなクラスです.
      
      */
-    class FboTexture : public sgmnt::display::Texture, public sgmnt::events::EventDispatcher{
+    class FboTexture : public sgmnt::display::Texture{
         
     public:
         
@@ -28,16 +28,20 @@ namespace sgmnt{ namespace display{
         
         virtual ci::gl::Fbo getFbo();
         
+        virtual ci::gl::Texture getTexture();
+        
         virtual void update();
         
     protected:
+        
+        ci::CameraPersp _getFboCameraPersp();
+        
+        ci::gl::Fbo mFbo;
         
         //virtual void _update();
         //virtual void _draw();
         
     private:
-        
-        ci::gl::Fbo mFbo;
         
     };
     

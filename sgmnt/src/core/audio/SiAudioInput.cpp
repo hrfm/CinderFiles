@@ -1,17 +1,12 @@
-#include "AudioInput.h"
+#include "SiAudioInput.h"
 
 using namespace ci;
 using namespace ci::app;
 using namespace std;
 
-namespace sgmnt{ namespace io{
+namespace sgmnt{ namespace audio{
     
-    AudioInput::AudioInput(){
-        fftAverage = 0.0f;
-        audioGain  = 0.0f;
-    };
-    
-    void AudioInput::setup( uint16_t count ){
+    void SiAudioInput::setup( uint16_t count ){
         
         bandCount = count;
         
@@ -63,7 +58,7 @@ namespace sgmnt{ namespace io{
         
     }
     
-    void AudioInput::update(){
+    void SiAudioInput::update(){
         
         // --- Audio
         
@@ -121,32 +116,32 @@ namespace sgmnt{ namespace io{
         
     }
     
-    void AudioInput::useAudioManager( sgmnt::osc::OscInput &oscInput ){
-        oscInput.addEventListener( "/audio/gain", this, &AudioInput::onAudioGain );
-        oscInput.addEventListener( "/audio/fft/average", this, &AudioInput::onFFTAverage );
+    void SiAudioInput::useAudioManager(){
+        sgmnt::osc::SiOscInput::getInstance().addEventListener( "/audio/gain", this, &SiAudioInput::onAudioGain );
+        sgmnt::osc::SiOscInput::getInstance().addEventListener( "/audio/fft/average", this, &SiAudioInput::onFFTAverage );
     }
     
-    gl::Texture AudioInput::getAudioTexture(){
+    gl::Texture SiAudioInput::getAudioTexture(){
         return soundTexture.getTexture();
     }
     
-    float AudioInput::getAudioManagerGain(){
+    float SiAudioInput::getAudioManagerGain(){
         return audioGain;
     }
     
-    float AudioInput::getAudioManagerFFTAverage(){
+    float SiAudioInput::getAudioManagerFFTAverage(){
         return fftAverage;
     }
     
-    void AudioInput::drawFFT( Rectf bounds ){
+    void SiAudioInput::drawFFT( Rectf bounds ){
         drawFFT(bounds, ColorA(1.0,1.0,1.0,1.0), ColorA(1.0,1.0,1.0,1.0), bandCount);
     }
     
-    void AudioInput::drawFFT( Rectf bounds, ColorA color0, ColorA color1 ){
+    void SiAudioInput::drawFFT( Rectf bounds, ColorA color0, ColorA color1 ){
         drawFFT( bounds, color0, color1, bandCount );
     }
     
-    void AudioInput::drawFFT( Rectf bounds, ColorA color0, ColorA color1, int length ){
+    void SiAudioInput::drawFFT( Rectf bounds, ColorA color0, ColorA color1, int length ){
         
         glPushMatrix();
         glTranslatef( bounds.x1, bounds.y1, 0.0f );
@@ -185,11 +180,11 @@ namespace sgmnt{ namespace io{
         
     }
     
-    void AudioInput::drawWave( Rectf bounds ){
+    void SiAudioInput::drawWave( Rectf bounds ){
         drawWave(bounds, Color(1.0,1.0,1.0) );
     }
     
-    void AudioInput::drawWave( Rectf bounds, Color color ){
+    void SiAudioInput::drawWave( Rectf bounds, Color color ){
         
         /*
          #if defined( CINDER_MAC )
@@ -232,11 +227,11 @@ namespace sgmnt{ namespace io{
     };
     
     
-    void AudioInput::onFFTAverage( OscInputEvent * event){
+    void SiAudioInput::onFFTAverage( OscInputEvent * event){
         fftAverage = event->message.getArgAsFloat(0);
     }
     
-    void AudioInput::onAudioGain( OscInputEvent * event){
+    void SiAudioInput::onAudioGain( OscInputEvent * event){
         audioGain  = event->message.getArgAsFloat(0);
     }
     

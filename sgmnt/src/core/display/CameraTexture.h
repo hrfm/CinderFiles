@@ -37,7 +37,6 @@ namespace sgmnt{ namespace display{
     protected:
         
         virtual void _update();
-        virtual void _draw();
         
     private:
         

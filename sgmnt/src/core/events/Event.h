@@ -32,7 +32,11 @@ namespace sgmnt { namespace events{
         
         void * target();
         void * listener();
-    
+        
+        static const string COMPLETE;
+        static const string DONE;
+        static const string ERROR;
+        
     protected:
         
         //! このイベントのタイプ.

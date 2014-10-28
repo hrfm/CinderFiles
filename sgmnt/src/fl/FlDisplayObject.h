@@ -5,71 +5,74 @@
 
 using namespace sgmnt;
 using namespace sgmnt::app;
+using namespace sgmnt::display;
+using namespace sgmnt::events;
 
 namespace fl{ namespace display{
     
-    class FlDisplayObject : public sgmnt::events::EventDispatcher{
+    class FlDisplayObject : public IDrawable, public EventDispatcher{
         
-        public:
+    public:
         
-            FlDisplayObject(){
-                EventDispatcher();
-            };
+        FlDisplayObject(){
+            IDrawable();
+            EventDispatcher();
+        };
         
-            FlDisplayObject( AppBase * app ){
-                EventDispatcher();
-                setup( app );
-            };
-            
-            virtual void setup( AppBase * app ){
-                mAppBase = app;
-            };
+        FlDisplayObject( AppBase * app ){
+            FlDisplayObject();
+            setup( app );
+        };
         
-            virtual float getX(){
-                return mBounds.x1;
-            }
-            virtual void setX( float x ){
-                float diff = mBounds.x1 - x;
-                mBounds.x1 += diff;
-                mBounds.x2 += diff;
-            };
+        virtual void setup( AppBase * app ){
+            mAppBase = app;
+        };
         
-            virtual float getY(){
-                return mBounds.y1;
-            }
-            virtual void setY( float y ){
-                float diff = mBounds.y1 - y;
-                mBounds.y1 += diff;
-                mBounds.y2 += diff;
-            };
+        virtual float getX(){
+            return mBounds.x1;
+        }
+        virtual void setX( float x ){
+            float diff = mBounds.x1 - x;
+            mBounds.x1 += diff;
+            mBounds.x2 += diff;
+        };
         
-            virtual float getWidth(){
-                return mBounds.getWidth();
-            }
-            virtual void setWidth( float w ){
-                mBounds.x2 = mBounds.x1 + w;
-            };
-            
-            virtual float getHeight(){
-                return mBounds.getHeight();
-            }
-            virtual void setHeight( float h ){
-                mBounds.y2 = mBounds.y1 + h;
-            };
+        virtual float getY(){
+            return mBounds.y1;
+        }
+        virtual void setY( float y ){
+            float diff = mBounds.y1 - y;
+            mBounds.y1 += diff;
+            mBounds.y2 += diff;
+        };
         
-            virtual void update(){
-                // Need to override.
-            };
+        virtual float getWidth(){
+            return mBounds.getWidth();
+        }
+        virtual void setWidth( float w ){
+            mBounds.x2 = mBounds.x1 + w;
+        };
         
-            virtual void draw(){
-                // Need to override.
-            };
+        virtual float getHeight(){
+            return mBounds.getHeight();
+        }
+        virtual void setHeight( float h ){
+            mBounds.y2 = mBounds.y1 + h;
+        };
+        
+        virtual void _update(){
+            // Need to override.
+        };
+        
+        virtual void _draw(){
+            // Need to override.
+        };
         
         protected :
         
-            AppBase*    mAppBase;
-            Rectf       mBounds;
-            
+        AppBase*    mAppBase;
+        Rectf       mBounds;
+        
     };
     
     /**
@@ -77,70 +80,70 @@ namespace fl{ namespace display{
      */
     class FlFboDisplayObject : public FlDisplayObject{
         
-        public :
+    public:
         
-            FlFboDisplayObject(){
-                FlDisplayObject();
-            }
+        FlFboDisplayObject(){
+            FlDisplayObject();
+        }
         
-            FlFboDisplayObject( AppBase * app, Vec2i fboSize ){
-                FlDisplayObject();
-                setup( app, fboSize );
-            }
+        FlFboDisplayObject( AppBase * app, Vec2i fboSize ){
+            FlDisplayObject();
+            setup( app, fboSize );
+        }
         
-            virtual void setup( AppBase * app, Vec2i fboSize ){
-                FlDisplayObject::setup(app);
-                gl::Fbo::Format format;
-                mFbo        = gl::Fbo( fboSize.x, fboSize.y, format );
-                mOutputFbo  = gl::Fbo( fboSize.x, fboSize.y, format );
-                mFboSize    = fboSize;
-                mFboAspect  = sgmnt::utils::getAspectRatio( fboSize );
-                mBounds.set( 0, 0, fboSize.x, fboSize.y );
-            }
+        virtual void setup( AppBase * app, Vec2i fboSize ){
+            FlDisplayObject::setup(app);
+            gl::Fbo::Format format;
+            mFbo        = gl::Fbo( fboSize.x, fboSize.y, format );
+            mOutputFbo  = gl::Fbo( fboSize.x, fboSize.y, format );
+            mFboSize    = fboSize;
+            mFboAspect  = sgmnt::utils::getAspectRatio( fboSize );
+            mBounds.set( 0, 0, fboSize.x, fboSize.y );
+        }
         
-            virtual void update(){
-                Area viewport = gl::getViewport();
-                gl::setViewport( (Area)mBounds );
-                gl::pushMatrices();
-                    gl::setMatricesWindow( mFboSize, false );
-                    mFbo.bindFramebuffer();
-                        mUpdate();
-                    mFbo.unbindFramebuffer();
-                    mUpdateAfter();
-                    mOutputFbo.bindFramebuffer();
-                        mDrawToOutput();
-                    mOutputFbo.unbindFramebuffer();
-                gl::popMatrices();
-                gl::setViewport(viewport);
-            }
+        virtual gl::Texture getTexture(){
+            return mOutputFbo.getTexture();
+        }
         
-            virtual void draw(){
-                gl::draw( getTexture(), mBounds );
-            }
-            
-            virtual void draw( Rectf bounds ){
-                gl::draw( getTexture(), bounds );
-            }
+        virtual void update(){
+            Area viewport = gl::getViewport();
+            gl::setViewport( (Area)mBounds );
+            gl::pushMatrices();
+            gl::setMatricesWindow( mFboSize, false );
+            mFbo.bindFramebuffer();
+            mUpdate();
+            mFbo.unbindFramebuffer();
+            mUpdateAfter();
+            mOutputFbo.bindFramebuffer();
+            mDrawToOutput();
+            mOutputFbo.unbindFramebuffer();
+            gl::popMatrices();
+            gl::setViewport(viewport);
+        }
         
-            virtual gl::Texture getTexture(){
-                return mOutputFbo.getTexture();
-            }
+        virtual void draw(){
+            gl::draw( getTexture(), mBounds );
+        }
         
-        protected :
+        virtual void draw( Rectf bounds ){
+            gl::draw( getTexture(), bounds );
+        }
         
-            gl::Fbo mFbo;
-            gl::Fbo mOutputFbo;
-            Vec2i   mFboSize;
-            Vec2i   mFboAspect;
+    protected:
         
-            virtual void mUpdate(){}
+        virtual void mUpdate(){}
         
-            virtual void mUpdateAfter(){}
+        virtual void mUpdateAfter(){}
         
-            virtual void mDrawToOutput(){
-                gl::clear();
-                gl::draw( mFbo.getTexture() );
-            }
+        virtual void mDrawToOutput(){
+            gl::clear();
+            gl::draw( mFbo.getTexture() );
+        }
+        
+        gl::Fbo mFbo;
+        gl::Fbo mOutputFbo;
+        Vec2i   mFboSize;
+        Vec2i   mFboAspect;
         
     };
     

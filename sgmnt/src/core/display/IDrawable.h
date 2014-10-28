@@ -21,6 +21,8 @@ namespace sgmnt{ namespace display{
         
         virtual ci::Vec2f getSize();
         
+        virtual void setup();
+        
         virtual void update();
         
         virtual void draw();

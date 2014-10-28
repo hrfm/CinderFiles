@@ -32,6 +32,10 @@ namespace sgmnt{ namespace display{
         
     protected:
         
+        virtual void _update();
+        
+        float _beforeTime;
+        
     private:
         
         ci::qtime::MovieGlRef mMovieGlRef;

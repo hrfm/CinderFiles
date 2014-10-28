@@ -7,7 +7,7 @@ namespace sgmnt{ namespace display{
     
     class DisplayNode : public IDrawable{
     
-    public :
+    public:
         
         DisplayNode(){ IDrawable(); };
         ~DisplayNode(){};
@@ -26,6 +26,14 @@ namespace sgmnt{ namespace display{
         virtual void draw();
         
         std::list<IDrawable*> children;
+        
+    protected:
+        
+        //! addChild で追加された子要素を更新します.
+        void _updateChildren();
+        
+        //! addChild で追加された子要素を描画します.
+        void _drawChildren();
         
     };
     

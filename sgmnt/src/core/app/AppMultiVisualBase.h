@@ -6,6 +6,7 @@
 #include "Resources.h"
 #include "AppBase.h"
 #include "VisualBase.h"
+#include "VisualTransitionBase.h"
 
 // === NAMESPACE ===================================================================================================
 
