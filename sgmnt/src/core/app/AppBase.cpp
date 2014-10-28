@@ -99,7 +99,7 @@ namespace sgmnt { namespace app{
                 useOsc = true;
                 int port = osc.getAttributeValue<int>("port");
                 cout << "- Setup OSCInput on port " << port << endl << endl;
-                sgmnt::osc::SiOscInput::getInstance().addListenPort( port );
+                SiOscInput::getInstance().addListenPort( port );
                 setupOsc();
             }
         }
@@ -112,9 +112,9 @@ namespace sgmnt { namespace app{
                 useAudio = true;
                 int bandSize = audio.getAttributeValue<int>("bandSize");
                 cout << "- Setup AudioInput with bandSize " << bandSize << endl;
-                sgmnt::audio::SiAudioInput::getInstance().setup( bandSize );
+                SiAudioInput::getInstance().setup( bandSize );
                 if( useOsc ){
-                    sgmnt::audio::SiAudioInput::getInstance().useAudioManager();
+                    SiAudioInput::getInstance().useAudioManager();
                 }
                 cout << endl;
             }
@@ -149,11 +149,11 @@ namespace sgmnt { namespace app{
         // --- Update Inputs. ---
         
         if( useOsc ){
-            sgmnt::osc::SiOscInput::getInstance().update();
+            SiOscInput::getInstance().update();
         }
         
         if( useAudio ){
-            sgmnt::audio::SiAudioInput::getInstance().update();
+            SiAudioInput::getInstance().update();
         }
         
         if( useCapture && doUpdateCapture ){
@@ -274,7 +274,7 @@ namespace sgmnt { namespace app{
         cout << "hoge" << endl;
         // ===========================================
         // == Write osc code if needed.
-        sgmnt::osc::SiOscInput::getInstance().addEventListener("/nanokontrol",this,&AppBase::onReceiveOscMessage);
+        SiOscInput::getInstance().addEventListener("/nanokontrol",this,&AppBase::onReceiveOscMessage);
         // ===========================================
     }
     

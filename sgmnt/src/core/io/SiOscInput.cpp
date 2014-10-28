@@ -2,7 +2,7 @@
 
 using namespace sgmnt::events;
 
-namespace sgmnt { namespace osc{
+namespace sgmnt { namespace io{
     
     void SiOscInput::addListenPort( int port ){
         if( _listenerMap.find( port ) == _listenerMap.end() ){

@@ -4,7 +4,7 @@ using namespace ci;
 using namespace ci::app;
 using namespace std;
 
-namespace sgmnt{ namespace audio{
+namespace sgmnt{ namespace io{
     
     void SiAudioInput::setup( uint16_t count ){
         
@@ -117,8 +117,8 @@ namespace sgmnt{ namespace audio{
     }
     
     void SiAudioInput::useAudioManager(){
-        sgmnt::osc::SiOscInput::getInstance().addEventListener( "/audio/gain", this, &SiAudioInput::onAudioGain );
-        sgmnt::osc::SiOscInput::getInstance().addEventListener( "/audio/fft/average", this, &SiAudioInput::onFFTAverage );
+        sgmnt::io::SiOscInput::getInstance().addEventListener( "/audio/gain", this, &SiAudioInput::onAudioGain );
+        sgmnt::io::SiOscInput::getInstance().addEventListener( "/audio/fft/average", this, &SiAudioInput::onFFTAverage );
     }
     
     gl::Texture SiAudioInput::getAudioTexture(){

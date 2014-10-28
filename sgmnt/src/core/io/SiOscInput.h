@@ -3,7 +3,7 @@
 #include "OscEvent.h"
 #include "Singleton.h"
 
-namespace sgmnt { namespace osc{
+namespace sgmnt { namespace io{
     
     // --- OSC Manager. ---
     

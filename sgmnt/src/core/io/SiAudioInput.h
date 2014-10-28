@@ -17,7 +17,7 @@ using namespace ci::app;
 using namespace std;
 using namespace sgmnt::events;
 
-namespace sgmnt{ namespace audio{
+namespace sgmnt{ namespace io{
     
     class SiAudioInput : public sgmnt::utils::Singleton<SiAudioInput>{
     public:
