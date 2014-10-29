@@ -21,15 +21,13 @@ namespace sgmnt{ namespace signage{ namespace display{
         sgmnt::display::IDrawable * getContentRef();
         
         void play();
+        void stop();
         
         void update();
         
+        void setSize( float width, float height );
+        
     protected:
-        
-        void _play( sgmnt::display::MovieTexture * content );
-        void _play( sgmnt::display::IDrawable * content );
-        
-        void _update( sgmnt::display::IDrawable * content );
         
         void _onContentComplete( sgmnt::events::Event * event );
         

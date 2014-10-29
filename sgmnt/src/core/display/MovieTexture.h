@@ -30,7 +30,9 @@ namespace sgmnt{ namespace display{
         virtual bool isDrawable();
         
         virtual ci::qtime::MovieGlRef getMovieGlRef();
-        virtual ci::gl::Texture getTexture();
+        
+        virtual void play();
+        virtual void stop();
         
     protected:
         

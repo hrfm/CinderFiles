@@ -28,7 +28,11 @@ namespace sgmnt{ namespace display{
     }
     
     bool Texture::isDrawable(){
-        return ( 0 != width && 0 != height );
+        if( mTexture ){
+            return ( mTexture.getWidth() != 0 && mTexture.getHeight() != 0 );
+        }else{
+            return false;
+        }
     }
     
     gl::Texture Texture::getTexture(){

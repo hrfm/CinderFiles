@@ -138,9 +138,7 @@ namespace sgmnt{ namespace signage{ namespace display{
     void SequentialContents::_update(){
         if( _currentSequence ){
             _currentSequence->update();
-            if(_currentSequence->getContentRef()){
-                _currentSequence->getContentRef()->setSize(width, height);
-            }
+            _currentSequence->setSize( width, height );
         }
     }
     

@@ -8,7 +8,7 @@ namespace sgmnt{ namespace display{
     
     MovieTexture::MovieTexture(){
         
-        IDrawable();
+        sgmnt::display::Texture();
         sgmnt::events::EventDispatcher();
         
         _beforeTime = 0.0f;
@@ -38,24 +38,45 @@ namespace sgmnt{ namespace display{
     };
     
     bool MovieTexture::isDrawable(){
-        return mMovieGlRef && mMovieGlRef->isPlaying();
+        return Texture::isDrawable();
+    }
+    
+    void MovieTexture::play(){
+        if( mMovieGlRef ){
+            _beforeTime = 0;
+            mMovieGlRef->seekToStart();
+            if( !mMovieGlRef->isPlaying() ){
+                mMovieGlRef->play();
+            }
+        }
+    }
+    
+    void MovieTexture::stop(){
+        if( mMovieGlRef ){
+            _beforeTime = 0;
+            if( mMovieGlRef->isPlaying() ){
+                mMovieGlRef->stop();
+            }
+            mMovieGlRef->seekToStart();
+        }
     }
     
     ci::qtime::MovieGlRef MovieTexture::getMovieGlRef(){
         return mMovieGlRef;
     }
     
-    ci::gl::Texture MovieTexture::getTexture(){
-        return mMovieGlRef->getTexture();
-    }
-    
     void MovieTexture::_update(){
-        float currentTime = mMovieGlRef->getCurrentTime();
-        float duration = mMovieGlRef->getDuration();
-        if( mMovieGlRef->isDone() || ( mMovieGlRef->isPlaying() && ( currentTime == duration || currentTime < _beforeTime ) ) ){
-            dispatchEvent( new sgmnt::events::Event( sgmnt::events::Event::COMPLETE ) );
+        if( mMovieGlRef->checkNewFrame() ){
+            mTexture = mMovieGlRef->getTexture();
+            float currentTime = mMovieGlRef->getCurrentTime();
+            float duration = mMovieGlRef->getDuration();
+            if( mMovieGlRef->isDone() || ( mMovieGlRef->isPlaying() && ( currentTime == duration || currentTime < _beforeTime ) ) ){
+                _beforeTime = 0;
+                dispatchEvent( new sgmnt::events::Event( sgmnt::events::Event::COMPLETE ) );
+            }else{
+                _beforeTime = currentTime;
+            }
         }
-        _beforeTime = currentTime;
     }
     
 }}

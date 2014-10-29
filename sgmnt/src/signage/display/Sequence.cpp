@@ -35,35 +35,34 @@ namespace sgmnt{ namespace signage{ namespace display{
     
     void Sequence::play(){
         _startedAt = ci::app::getElapsedSeconds();
-        _play( _content );
+        if( MovieTexture * mov = dynamic_cast<MovieTexture*>(_content) ){
+            mov->play();
+        }
+    }
+    
+    void Sequence::stop(){
+        _startedAt = ci::app::getElapsedSeconds();
+        if( MovieTexture * mov = dynamic_cast<MovieTexture*>(_content) ){
+            mov->stop();
+        }
     }
     
     void Sequence::update(){
         if( 0.0f < _time ){
-            _update( _content );
+            float elapsed = ci::app::getElapsedSeconds() - _startedAt;
+            if( _time < elapsed ){
+                dispatchEvent( new sgmnt::events::Event( sgmnt::events::Event::COMPLETE ) );
+            }
+        }
+    }
+    
+    void Sequence::setSize( float width, float height ){
+        if(_content){
+            _content->setSize( width, height );
         }
     }
     
     //! protected:
-    
-    void Sequence::_play( MovieTexture * content ){
-        ci::qtime::MovieGlRef ref = content->getMovieGlRef();
-        ref->seekToStart();
-        ref->play();
-    }
-    
-    void Sequence::_play( IDrawable * content ){
-        if( MovieTexture * mov = dynamic_cast<MovieTexture*>(content) ){
-            _play( mov );
-        }
-    }
-    
-    void Sequence::_update( IDrawable * content ){
-        float elapsed = ci::app::getElapsedSeconds() - _startedAt;
-        if( _time < elapsed ){
-            dispatchEvent( new sgmnt::events::Event( sgmnt::events::Event::COMPLETE ) );
-        }
-    }
     
     void Sequence::_onContentComplete( sgmnt::events::Event * event ){
         dispatchEvent( new sgmnt::events::Event( sgmnt::events::Event::COMPLETE ) );
