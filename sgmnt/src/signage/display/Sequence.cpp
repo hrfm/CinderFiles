@@ -19,7 +19,7 @@ namespace sgmnt{ namespace signage{ namespace display{
         _time    = time;
         if( _time <= 0.0f ){
             if( EventDispatcher * dispatcher = dynamic_cast<EventDispatcher*>(content) ){
-                dispatcher->addEventListener( Event::COMPLETE, this, &Sequence::_onContentComplete );
+                dispatcher->addEventListener( sgmnt::events::Event::COMPLETE, this, &Sequence::_onContentComplete );
             }else{
                 throw "Invalid Sequence Content.";
             }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<settings>
+<settings url="http://container.hive.co.jp/pan_to_circus/enigma/settings/schedule.xml">
     <list>
         <schedule type="pic" time="16:18" src="~/Documents/contents/realinternet.png"/>
         <schedule type="mov" time="16:19" src="~/Documents/contents/test.mp4" loop="true"/>
