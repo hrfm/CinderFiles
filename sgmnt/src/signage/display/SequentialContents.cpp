@@ -81,7 +81,7 @@ namespace sgmnt{ namespace signage{ namespace display{
                         
                         // 設定されているコンテンツがシーケンスの場合
                         
-                        XmlTree xml = XmlTree( loadFile( path.native() ) );
+                        XmlTree xml = XmlLoader::load( path );
                         sgmnt::signage::display::SequentialContents * seq = new SequentialContents( xml );
                         
                         addContent( seq, time );
