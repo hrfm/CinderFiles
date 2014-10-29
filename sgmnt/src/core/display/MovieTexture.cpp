@@ -68,14 +68,14 @@ namespace sgmnt{ namespace display{
     void MovieTexture::_update(){
         if( mMovieGlRef->checkNewFrame() ){
             mTexture = mMovieGlRef->getTexture();
-            float currentTime = mMovieGlRef->getCurrentTime();
-            float duration = mMovieGlRef->getDuration();
-            if( mMovieGlRef->isDone() || ( mMovieGlRef->isPlaying() && ( currentTime == duration || currentTime < _beforeTime ) ) ){
-                _beforeTime = 0;
-                dispatchEvent( new sgmnt::events::Event( sgmnt::events::Event::COMPLETE ) );
-            }else{
-                _beforeTime = currentTime;
-            }
+        }
+        float currentTime = mMovieGlRef->getCurrentTime();
+        float duration = mMovieGlRef->getDuration();
+        if( mMovieGlRef->isDone() || ( mMovieGlRef->isPlaying() && ( currentTime == duration || currentTime < _beforeTime ) ) ){
+            _beforeTime = 0;
+            dispatchEvent( new sgmnt::events::Event( sgmnt::events::Event::COMPLETE ) );
+        }else{
+            _beforeTime = currentTime;
         }
     }
     

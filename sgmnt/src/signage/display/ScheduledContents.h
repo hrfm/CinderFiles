@@ -3,12 +3,14 @@
 #include <vector>
 #include <boost/algorithm/string.hpp>
 
+#include "cinder/app/App.h"
 #include "cinder/Xml.h"
 
 #include "DisplayNode.h"
-#include "Texture.h"
-#include "MovieTexture.h"
 #include "EventDispatcher.h"
+#include "MovieTexture.h"
+#include "SequentialContents.h"
+#include "Texture.h"
 #include "TimeUtilEvent.h"
 #include "Utils.h"
 

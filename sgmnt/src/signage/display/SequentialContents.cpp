@@ -71,7 +71,7 @@ namespace sgmnt{ namespace signage{ namespace display{
                         // 設定されている者が動画の場合
                         
                         sgmnt::display::MovieTexture * mov = new sgmnt::display::MovieTexture(path);
-                        if( item->getAttribute("loop").getValue<string>() == "true" ){
+                        if( item->hasAttribute("loop") && item->getAttribute("loop").getValue<string>() == "true" ){
                             mov->getMovieGlRef()->setLoop();
                         }
                         mov->getMovieGlRef()->play();

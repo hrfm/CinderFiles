@@ -2,6 +2,7 @@
 
 using namespace ci;
 using namespace std;
+using namespace sgmnt::display;
 using namespace sgmnt::events;
 using namespace sgmnt::utils;
 
@@ -62,21 +63,27 @@ namespace sgmnt{ namespace signage{ namespace display{
                     
                     if( type == "pic" ){
                         
-                        // 設定されているものが画像の場合
+                        // 設定されているコンテンツが画像の場合
                         
                         _contentList[time] = new sgmnt::display::Texture( loadImage(path) );
                         
                     }else if( type == "mov" ){
                         
-                        // 設定されている者が動画の場合
+                        // 設定されているコンテンツが動画の場合
                         
-                        sgmnt::display::MovieTexture * mov = new sgmnt::display::MovieTexture(path);
-                        if( item->getAttribute("loop").getValue<string>() == "true" ){
+                        MovieTexture * mov = new MovieTexture(path);
+                        if( item->hasAttribute("loop") && item->getAttribute("loop").getValue<string>() == "true" ){
                             mov->getMovieGlRef()->setLoop();
                         }
-                        mov->getMovieGlRef()->play();
                         
                         _contentList[time] = mov;
+                        
+                    }else if( type == "seq" ){
+                        
+                        XmlTree xml = XmlTree( loadFile( path.native() ) );
+                        sgmnt::signage::display::SequentialContents * seq = new SequentialContents( xml );
+                        
+                        _contentList[time] = seq;
                         
                     }else{
                         
@@ -90,7 +97,11 @@ namespace sgmnt{ namespace signage{ namespace display{
                     
                     addSchedule( time, hour, min );
                     
-                }catch(...){}
+                }catch(Exception e){
+                    
+                    cout << "[ Error ] " << path << endl;
+                    
+                }
                 
             }
             
@@ -120,13 +131,24 @@ namespace sgmnt{ namespace signage{ namespace display{
         cout << "SequantialContents::_onTimer("+event->type()+")" << endl;
         
         if( _currentContent ){
+            if( MovieTexture * mov = dynamic_cast<MovieTexture*>(_currentContent) ){
+                mov->stop();
+            }
             removeChild(_currentContent);
         }
         
         _currentContent = _contentList[event->type()];
         
         if( _currentContent ){
+            
+            if( MovieTexture * mov = dynamic_cast<MovieTexture*>(_currentContent) ){
+                mov->play();
+            }else if( SequentialContents * seq = dynamic_cast<SequentialContents*>(_currentContent) ){
+                seq->play();
+            }
+            
             addChild( _currentContent );
+            
         }
         
     }
