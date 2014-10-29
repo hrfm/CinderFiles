@@ -103,7 +103,7 @@ namespace sgmnt{ namespace signage{ namespace display{
                 
             }
             
-            _currentSequence - NULL;
+            _currentSequence = NULL;
             
             cout << "--------------------------------" << endl << endl;
             
