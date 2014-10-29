@@ -26,6 +26,7 @@ namespace sgmnt{ namespace signage{ namespace display{
         void addContent( sgmnt::display::IDrawable * content, float time );
         
         void play( int index = 0 );
+        void stop();
         
     protected:
         

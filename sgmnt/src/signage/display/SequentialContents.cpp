@@ -118,19 +118,28 @@ namespace sgmnt{ namespace signage{ namespace display{
             _currentIndex = 0;
         }
         
-        if( _currentSequence != NULL ){
+        if( _currentSequence ){
+            _currentSequence->stop();
             removeChild(_currentSequence->getContentRef());
         }
         
         _currentSequence = _sequenceList.at(index);
         
-        if( _currentSequence != NULL ){
+        if( _currentSequence ){
             _currentSequence->play();
             addChild( _currentSequence->getContentRef() );
         }
         
         _currentIndex = index;
         
+    }
+    
+    void SequentialContents::stop(){
+        if( _currentSequence ){
+            _currentSequence->stop();
+            removeChild(_currentSequence->getContentRef());
+        }
+        _currentSequence = NULL;
     }
     
     //! protected:

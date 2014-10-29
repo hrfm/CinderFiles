@@ -133,6 +133,8 @@ namespace sgmnt{ namespace signage{ namespace display{
         if( _currentContent ){
             if( MovieTexture * mov = dynamic_cast<MovieTexture*>(_currentContent) ){
                 mov->stop();
+            }else if( SequentialContents * seq = dynamic_cast<SequentialContents*>(_currentContent) ){
+                seq->stop();
             }
             removeChild(_currentContent);
         }
