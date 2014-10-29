@@ -63,6 +63,13 @@ namespace sgmnt{ namespace utils{
         //! イベントを発行するタイミングを追加します.
         virtual void addTiming( const string type, TimingData * timing );
         
+        //! イベントを発行するタイミングを追加し,かつイベントリスナも同時に登録します.
+        template<class T,class E>
+        void addTiming( const string type, TimingData * timing, T * listener, void (T::*handler)(E*) ){
+            addTiming( type, timing );
+            addEventListener( type, listener, handler );
+        }
+        
         virtual void removeTiming( const string type );
         
         virtual void removeTiming( const string type, TimingData * timing );

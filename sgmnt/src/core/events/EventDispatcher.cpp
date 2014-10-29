@@ -42,7 +42,7 @@ namespace sgmnt { namespace events {
     };
     
     bool EventDispatcher::hasEventListener(const std::string &type){
-       return ( _listenerList.find(type) != _listenerList.end() );
+        return ( _listenerList.find(type) != _listenerList.end() );
     };
     
 }}

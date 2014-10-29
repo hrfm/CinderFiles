@@ -27,6 +27,8 @@ namespace sgmnt{ namespace display{
         void init( const string filePath );
         void init( ci::fs::path filePath );
         
+        virtual bool isDrawable();
+        
         virtual ci::qtime::MovieGlRef getMovieGlRef();
         virtual ci::gl::Texture getTexture();
         

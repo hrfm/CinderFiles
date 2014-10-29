@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<settings>
+    <list>
+        <sequence type="pic" time="10.0" src="~/Documents/contents/realinternet.png"/>
+        <sequence type="mov" time="0" src="~/Documents/contents/test.mp4" loop="true"/>
+        <sequence type="pic" time="10.0" src="~/Documents/contents/realinternet.png"/>
+        <sequence type="mov" time="20.0" src="~/Documents/contents/tv_01.mp4" loop="true"/>
+    </list>
+</settings>

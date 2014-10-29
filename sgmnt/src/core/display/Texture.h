@@ -18,6 +18,8 @@ namespace sgmnt{ namespace display{
         
         virtual void init( ci::ImageSourceRef ref );
         
+        virtual bool isDrawable();
+        
         virtual ci::gl::Texture getTexture();
         
     protected:

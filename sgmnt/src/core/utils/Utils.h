@@ -20,7 +20,7 @@ namespace sgmnt{ namespace utils{
         return a;
     }
     
-    static Vec2i getAspectRatio( Vec2i resolution ){
+    static ci::Vec2i getAspectRatio( ci::Vec2i resolution ){
         return resolution / GCD( resolution.x, resolution.y );
     }
     

@@ -37,6 +37,10 @@ namespace sgmnt{ namespace display{
         mMovieGlRef = ci::qtime::MovieGl::create( filePath );
     };
     
+    bool MovieTexture::isDrawable(){
+        return mMovieGlRef && mMovieGlRef->isPlaying();
+    }
+    
     ci::qtime::MovieGlRef MovieTexture::getMovieGlRef(){
         return mMovieGlRef;
     }
@@ -48,8 +52,8 @@ namespace sgmnt{ namespace display{
     void MovieTexture::_update(){
         float currentTime = mMovieGlRef->getCurrentTime();
         float duration = mMovieGlRef->getDuration();
-        if( mMovieGlRef->isDone() || ( mMovieGlRef->isPlaying() || currentTime == duration || currentTime < _beforeTime ) ){
-            dispatchEvent( new sgmnt::events::Event( sgmnt::events::Event::DONE ) );
+        if( mMovieGlRef->isDone() || ( mMovieGlRef->isPlaying() && ( currentTime == duration || currentTime < _beforeTime ) ) ){
+            dispatchEvent( new sgmnt::events::Event( sgmnt::events::Event::COMPLETE ) );
         }
         _beforeTime = currentTime;
     }

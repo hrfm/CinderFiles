@@ -27,6 +27,10 @@ namespace sgmnt{ namespace display{
         }
     }
     
+    bool Texture::isDrawable(){
+        return ( 0 != width && 0 != height );
+    }
+    
     gl::Texture Texture::getTexture(){
         return mTexture;
     }
@@ -36,10 +40,7 @@ namespace sgmnt{ namespace display{
     void Texture::_update(){}
     
     void Texture::_draw(){
-        if( width == 0 && height == 0 ){
-            //gl::draw( getTexture() );
-            return;
-        }else{
+        if( isDrawable() ){
             gl::draw( getTexture(), Rectf( 0, 0, width, height ) );
         }
     }
