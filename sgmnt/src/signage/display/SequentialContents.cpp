@@ -10,12 +10,9 @@ namespace sgmnt{ namespace signage{ namespace display{
     //! public:
     
     SequentialContents::SequentialContents(){
-        
+        IEnableTransition();
         DisplayNode();
-        EventDispatcher();
-        
         _currentIndex = 0;
-        
     }
     SequentialContents::SequentialContents( XmlTree &xml ){
         SequentialContents();
@@ -105,6 +102,8 @@ namespace sgmnt{ namespace signage{ namespace display{
                 }catch(...){}
                 
             }
+            
+            _currentSequence - NULL;
             
             cout << "--------------------------------" << endl << endl;
             

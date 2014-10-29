@@ -11,8 +11,8 @@ namespace sgmnt{ namespace signage{ namespace display{
     //! public:
     
     ScheduledContents::ScheduledContents(){
+        IEnableTransition();
         DisplayNode();
-        EventDispatcher();
     }
     ScheduledContents::ScheduledContents( XmlTree &xml ){
         ScheduledContents();
@@ -113,6 +113,8 @@ namespace sgmnt{ namespace signage{ namespace display{
                 
             }
             
+            _currentContent = NULL;
+            
             cout << "--------------------------------" << endl << endl;
             
         }
@@ -131,8 +133,7 @@ namespace sgmnt{ namespace signage{ namespace display{
         }
     }
     
-    void ScheduledContents::_draw(){
-    }
+    void ScheduledContents::_draw(){}
     
     void ScheduledContents::_onTimer( TimeUtilEvent * event ){
         

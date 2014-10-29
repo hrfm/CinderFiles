@@ -6,13 +6,9 @@
 #include "cinder/app/App.h"
 #include "cinder/Xml.h"
 
-#include "DisplayNode.h"
-#include "EventDispatcher.h"
-#include "MovieTexture.h"
+#include "sgmnt.h"
 #include "SequentialContents.h"
-#include "Texture.h"
-#include "TimeUtilEvent.h"
-#include "Utils.h"
+#include "IEnableTransition.h"
 
 namespace sgmnt{ namespace signage{ namespace display{
     
@@ -21,7 +17,7 @@ namespace sgmnt{ namespace signage{ namespace display{
      XML で設定した時刻にコンテンツを切り替え表示するスケジューラークラスです.
      
      */
-    class ScheduledContents : public sgmnt::display::DisplayNode, public sgmnt::events::EventDispatcher{
+    class ScheduledContents : public sgmnt::display::DisplayNode, public IEnableTransition{
         
     public:
         

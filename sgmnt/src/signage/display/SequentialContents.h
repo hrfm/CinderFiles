@@ -3,8 +3,10 @@
 #include <vector>
 #include <boost/algorithm/string.hpp>
 #include "cinder/Xml.h"
+
+#include "sgmnt.h"
 #include "Sequence.h"
-#include "TimeUtilEvent.h"
+#include "IEnableTransition.h"
 
 namespace sgmnt{ namespace signage{ namespace display{
     
@@ -15,7 +17,7 @@ namespace sgmnt{ namespace signage{ namespace display{
      XML で設定した順番にコンテンツを切り替え表示するスケジューラークラスです.
      
      */
-    class SequentialContents : public sgmnt::display::DisplayNode, public sgmnt::events::EventDispatcher{
+    class SequentialContents : public sgmnt::display::DisplayNode, public IEnableTransition{
         
     public:
         
