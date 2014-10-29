@@ -6,6 +6,7 @@
 #include "Texture.h"
 #include "MovieTexture.h"
 #include "EventDispatcher.h"
+#include "SequentialContents.h"
 #include "Utils.h"
 
 namespace sgmnt{ namespace signage{ namespace display{

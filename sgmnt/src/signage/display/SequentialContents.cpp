@@ -74,9 +74,23 @@ namespace sgmnt{ namespace signage{ namespace display{
                         if( item->hasAttribute("loop") && item->getAttribute("loop").getValue<string>() == "true" ){
                             mov->getMovieGlRef()->setLoop();
                         }
-                        mov->getMovieGlRef()->play();
                         
                         addContent( mov, time );
+                        
+                    }else if( type == "seq" ){
+                        
+                        // 設定されているコンテンツがシーケンスの場合
+                        
+                        XmlTree xml = XmlTree( loadFile( path.native() ) );
+                        sgmnt::signage::display::SequentialContents * seq = new SequentialContents( xml );
+                        
+                        addContent( seq, time );
+                        
+                    }else if( type == "blank" ){
+                        
+                        // 設定されているコンテンツが blank の場合
+                        
+                        addContent( new sgmnt::display::IDrawable(), time );
                         
                     }else{
                         
@@ -162,6 +176,7 @@ namespace sgmnt{ namespace signage{ namespace display{
         int nextIndex = _currentIndex + 1;
         if( _sequenceList.size() <= nextIndex ){
             nextIndex = 0;
+            dispatchEvent( new sgmnt::events::Event( sgmnt::events::Event::COMPLETE ) );
         }
         
         play( nextIndex );

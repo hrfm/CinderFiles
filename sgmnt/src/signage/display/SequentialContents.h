@@ -8,6 +8,8 @@
 
 namespace sgmnt{ namespace signage{ namespace display{
     
+    class Sequence;
+    
     /*
      
      XML で設定した順番にコンテンツを切り替え表示するスケジューラークラスです.

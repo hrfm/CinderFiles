@@ -2,6 +2,7 @@
 
 using namespace sgmnt::display;
 using namespace sgmnt::events;
+using namespace sgmnt::signage::display;
 
 namespace sgmnt{ namespace signage{ namespace display{
     
@@ -37,6 +38,8 @@ namespace sgmnt{ namespace signage{ namespace display{
         _startedAt = ci::app::getElapsedSeconds();
         if( MovieTexture * mov = dynamic_cast<MovieTexture*>(_content) ){
             mov->play();
+        }else if( SequentialContents * seq = dynamic_cast<SequentialContents*>(_content) ){
+            seq->play();
         }
     }
     
@@ -44,6 +47,8 @@ namespace sgmnt{ namespace signage{ namespace display{
         _startedAt = ci::app::getElapsedSeconds();
         if( MovieTexture * mov = dynamic_cast<MovieTexture*>(_content) ){
             mov->stop();
+        }else if( SequentialContents * seq = dynamic_cast<SequentialContents*>(_content) ){
+            seq->stop();
         }
     }
     

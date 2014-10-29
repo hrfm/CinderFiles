@@ -80,10 +80,18 @@ namespace sgmnt{ namespace signage{ namespace display{
                         
                     }else if( type == "seq" ){
                         
+                        // 設定されているコンテンツがシーケンスの場合
+                        
                         XmlTree xml = XmlTree( loadFile( path.native() ) );
                         sgmnt::signage::display::SequentialContents * seq = new SequentialContents( xml );
                         
                         _contentList[time] = seq;
+                        
+                    }else if( type == "blank" ){
+                        
+                        // 設定されているコンテンツが blank の場合
+                        
+                        _contentList[time] = new sgmnt::display::IDrawable();
                         
                     }else{
                         
