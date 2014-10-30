@@ -10,6 +10,10 @@ namespace sgmnt{ namespace utils{
     XmlLoader::~XmlLoader(){}
     
     XmlTree XmlLoader::load( ci::fs::path filePath ){
+        return XmlLoader::load( filePath, ci::UrlOptions::UrlOptions( true, 30.0f ) );
+    }
+    
+    XmlTree XmlLoader::load( ci::fs::path filePath, ci::UrlOptions::UrlOptions urlOptions ){
         
         XmlTree xml;
         string pathStr = filePath.native();
@@ -79,11 +83,13 @@ namespace sgmnt{ namespace utils{
             string url = root.getAttributeValue<string>("url");
             cout << "--- XmlLoader::loadXml(" << url << ")" << endl;
             try{
-                xml = XmlTree( loadUrl( Url( url ) ) );
+                xml = XmlTree( loadUrl( Url( url ), urlOptions ) );
             }catch(...){
                 cout << "Xml [ " << url << " ] is not found. Use local xml file." << endl;
             }
         }
+        
+        cout << xml << endl;
         
         cout << endl;
         

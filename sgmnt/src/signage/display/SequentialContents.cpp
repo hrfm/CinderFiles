@@ -10,8 +10,8 @@ namespace sgmnt{ namespace signage{ namespace display{
     //! public:
     
     SequentialContents::SequentialContents(){
-        IEnableTransition();
         DisplayNode();
+        IEnableTransition();
         _currentIndex = 0;
     }
     SequentialContents::SequentialContents( XmlTree &xml ){
@@ -119,7 +119,11 @@ namespace sgmnt{ namespace signage{ namespace display{
     
     void SequentialContents::play( int index ){
         
+        _isPlaying = true;
+        
         cout << "SequentialContents::play(" << index << ")" << endl;
+        
+        cout << _sequenceList.size() << endl;
         
         if( _sequenceList.size() == 0 ){
             return;
@@ -153,6 +157,15 @@ namespace sgmnt{ namespace signage{ namespace display{
             removeChild(_currentSequence->getContentRef());
         }
         _currentSequence = NULL;
+        _isPlaying = false;
+    }
+    
+    bool SequentialContents::isPlaying(){
+        return _isPlaying;
+    }
+    
+    int SequentialContents::numSequence(){
+        return _sequenceList.size();
     }
     
     //! protected:

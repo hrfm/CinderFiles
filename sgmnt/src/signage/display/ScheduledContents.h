@@ -29,6 +29,12 @@ namespace sgmnt{ namespace signage{ namespace display{
         
         void addSchedule( const string key, int hour, int minutes );
         
+        int numSchedule();
+        
+        void play( string type );
+        
+        void playRecentContent();
+        
     protected:
         
         virtual void _update();

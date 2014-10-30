@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <settings url="http://container.hive.co.jp/pan_to_circus/enigma/settings/schedule.xml">
     <list>
-        <schedule type="pic" time="16:18" src="~/Documents/contents/realinternet.png"/>
+        <!--
+        <schedule type="pic" time="16:18" src="~/Documents/contents/test.png"/>
         <schedule type="mov" time="16:19" src="~/Documents/contents/test.mp4" loop="true"/>
-        <schedule type="pic" time="16:34" src="~/Documents/contents/realinternet.png"/>
-        <schedule type="mov" time="16:35" src="~/Documents/contents/tv_01.mp4" loop="true"/>
         <schedule type="seq" time="16:40" src="~/Documents/contents/sequence.xml"/>
-        <schedule type="pic" time="16:45" src="~/Documents/contents/realinternet.png"/>
-        <schedule type="mov" time="16:46" src="~/Documents/contents/test.mp4" loop="true"/>
+        -->
     </list>
 </settings>

@@ -1,4 +1,5 @@
 #include "AppBase.h"
+#include <iostream>
 
 // === NAMESPACE ===================================================================================================
 
@@ -11,12 +12,17 @@ using namespace sgmnt::io;
 
 Font ___font___ = Font("Helvetica",12);
 
+FILE * LOG_FILE;
+
 namespace sgmnt { namespace app{
     
     // ===========================================================================
     // === For Setup =============================================================
     
     void AppBase::prepareSettings( Settings *settings ){
+        
+        fs::path log_output = getDocumentsDirectory() / "log.txt";
+        //LOG_FILE = freopen( log_output.native().c_str(), "w", stdout );
         
         cout << "--- AppBase::prepareSettings()" << endl;
         

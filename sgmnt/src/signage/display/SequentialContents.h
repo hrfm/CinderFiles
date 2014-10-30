@@ -32,6 +32,10 @@ namespace sgmnt{ namespace signage{ namespace display{
         void play( int index = 0 );
         void stop();
         
+        bool isPlaying();
+        
+        int numSequence();
+        
     protected:
         
         virtual void _update();
@@ -40,6 +44,8 @@ namespace sgmnt{ namespace signage{ namespace display{
         void _onComplete( sgmnt::events::Event * event );
         
     private:
+        
+        bool _isPlaying;
         
         //! 現在表示しているコンテンツの _contentList 上の index.
         int _currentIndex;

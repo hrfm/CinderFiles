@@ -27,6 +27,7 @@ namespace sgmnt{ namespace utils{
          
          */
         static XmlTree load( ci::fs::path path );
+        static XmlTree load( ci::fs::path path, ci::UrlOptions::UrlOptions urlOptions );
         
     private:
         

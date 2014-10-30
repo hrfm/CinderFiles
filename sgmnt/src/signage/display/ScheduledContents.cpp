@@ -119,10 +119,100 @@ namespace sgmnt{ namespace signage{ namespace display{
             
         }
         
+        playRecentContent();
+        
     }
     
     void ScheduledContents::addSchedule( const string key, int hour, int minutes ){
         SiTimeUtil::getInstance().addTiming( key, new TimingData( hour, minutes ), this, &ScheduledContents::_onTimer );
+    }
+    
+    int ScheduledContents::numSchedule(){
+        return _contentList.size();
+    }
+    
+    void ScheduledContents::play( string type ){
+        
+        if( _contentList.size() == 0 ){
+            return;
+        }
+        
+        if( _contentList.find(type) == _contentList.end() || _currentContent == _contentList[type] ){
+            return;
+        }
+        
+        if( _currentContent ){
+            if( MovieTexture * mov = dynamic_cast<MovieTexture*>(_currentContent) ){
+                mov->stop();
+            }else if( SequentialContents * seq = dynamic_cast<SequentialContents*>(_currentContent) ){
+                seq->stop();
+            }
+            removeChild(_currentContent);
+        }
+        
+        _currentContent = _contentList[type];
+        
+        if( _currentContent ){
+            
+            if( MovieTexture * mov = dynamic_cast<MovieTexture*>(_currentContent) ){
+                mov->play();
+            }else if( SequentialContents * seq = dynamic_cast<SequentialContents*>(_currentContent) ){
+                seq->play();
+            }
+            
+            addChild( _currentContent );
+            
+        }
+        
+    }
+    
+    void ScheduledContents::playRecentContent(){
+        
+        if( _contentList.size() == 0 ){
+            return;
+        }
+        
+        // TODO 設定されているもっとも時間が近いコンテンツを再生する.
+        
+        std::map<string,sgmnt::display::IDrawable*>::iterator it;
+        std::map<string,sgmnt::display::IDrawable*>::iterator end = _contentList.end();
+        
+        tm * timeinfo = SiTimeUtil::getInstance().getTimeinfo();
+        
+        int currentTime = stoi( to_string(timeinfo->tm_hour) + to_string(timeinfo->tm_min) );
+        int tmpTime = 0;
+        string type = "";
+        
+        int latestTime    = 0;
+        string latestType = "";
+        
+        // Iterate through all functions in the event, from high proproty to low
+        for( it=_contentList.begin(); it!=end; ++it ){
+            
+            string time = it->first;
+            vector<string> pair;
+            boost::split( pair, time, boost::is_any_of(":") );
+            
+            int targetTime = stoi(pair.at(0)+pair.at(1));
+            
+            if( tmpTime < targetTime && targetTime < currentTime){
+                tmpTime = targetTime;
+                type = time;
+            }
+            
+            if( latestTime < targetTime ){
+                latestTime = targetTime;
+                latestType = time;
+            }
+            
+        }
+        
+        if( type != "" ){
+            play( type );
+        }else{
+            play( latestType );
+        }
+        
     }
     
     //! protected:
@@ -139,28 +229,7 @@ namespace sgmnt{ namespace signage{ namespace display{
         
         cout << "SequantialContents::_onTimer("+event->type()+")" << endl;
         
-        if( _currentContent ){
-            if( MovieTexture * mov = dynamic_cast<MovieTexture*>(_currentContent) ){
-                mov->stop();
-            }else if( SequentialContents * seq = dynamic_cast<SequentialContents*>(_currentContent) ){
-                seq->stop();
-            }
-            removeChild(_currentContent);
-        }
-        
-        _currentContent = _contentList[event->type()];
-        
-        if( _currentContent ){
-            
-            if( MovieTexture * mov = dynamic_cast<MovieTexture*>(_currentContent) ){
-                mov->play();
-            }else if( SequentialContents * seq = dynamic_cast<SequentialContents*>(_currentContent) ){
-                seq->play();
-            }
-            
-            addChild( _currentContent );
-            
-        }
+        play(event->type());
         
     }
     
