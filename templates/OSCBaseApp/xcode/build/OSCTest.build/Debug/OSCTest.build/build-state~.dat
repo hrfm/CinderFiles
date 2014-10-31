@@ -1,0 +1,217 @@
+TOSCTest
+v5
+r1
+cCheck dependencies
+cProcessInfoPlistFile /Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/Debug/OSCTest.app/Contents/Info.plist Info.plist
+cProcessPCH++ /var/folders/80/d83t3h_168z28_vx_0x3_1w00000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/OSCTest_Prefix-dvuxabgjmfsqzcfkqldtutzceqag/OSCTest_Prefix.pch.pth OSCTest_Prefix.pch normal i386 objective-c++ com.apple.compilers.llvm.clang.1_0.compiler
+cCompileC ./build/OSCTest.build/Debug/OSCTest.build/Objects-normal/i386/basicApp.o /Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/../src/basicApp.cpp normal i386 objective-c++ com.apple.compilers.llvm.clang.1_0.compiler
+cLd /Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/Debug/OSCTest.app/Contents/MacOS/OSCTest normal i386
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk
+c000000005201E95000000000000000AA
+t1375856976
+s170
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/Accelerate.framework/Accelerate
+c0000000051B6DBB800000000000024F0
+t1370938296
+s9456
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/ApplicationServices.framework/ApplicationServices
+c0000000051B6DBB80000000000007C70
+t1370938296
+s31856
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/AudioToolbox.framework/AudioToolbox
+c0000000051B6DBB90000000000024DD8
+t1370938297
+s151000
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/AudioUnit.framework/AudioUnit
+c0000000051B6DBB900000000000060B4
+t1370938297
+s24756
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/Cocoa.framework/Headers/Cocoa.h
+c0000000051B6DBB900000000000001E5
+t1370938297
+s485
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/CoreAudio.framework/CoreAudio
+c0000000051B6DBB9000000000000E9A8
+t1370938297
+s59816
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/CoreLocation.framework/CoreLocation
+c0000000051B6DBB90000000000019AD0
+t1370938297
+s105168
+
+N/System/Library/Frameworks/Carbon.framework/Carbon
+c0000000051A3493D00000000000069F0
+t1369655613
+s27120
+
+N/System/Library/Frameworks/Cocoa.framework/Cocoa
+c0000000051A3493D0000000000006730
+t1369655613
+s26416
+
+N/System/Library/Frameworks/CoreVideo.framework/CoreVideo
+c0000000051A349400000000000081CB0
+t1369655616
+s531632
+
+N/System/Library/Frameworks/OpenGL.framework/OpenGL
+c0000000051A34949000000000002DAD0
+t1369655625
+s187088
+
+N/System/Library/Frameworks/QTKit.framework/QTKit
+c0000000051A3494D00000000004A2E10
+t1369655629
+s4861456
+
+N/System/Library/Frameworks/QuickTime.framework/QuickTime
+c0000000051A34A500000000000322E20
+t1369655888
+s3288608
+
+N/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/../src/basicApp.cpp
+c0000000052575821000000000000096D
+t1381455905
+s2413
+
+N/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/Debug/OSCTest.app
+t2
+s0
+
+N/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/Debug/OSCTest.app/Contents/Info.plist
+t2
+s0
+
+N/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/Debug/OSCTest.app/Contents/MacOS/OSCTest
+t2
+s0
+
+N/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/Debug/OSCTest.app/Contents/PkgInfo
+t2
+s0
+
+N/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/OSCTest.build/Debug/OSCTest.build/Objects-normal/i386/OSCTest.LinkFileList
+c0000000052575830000000000000007B
+t1381455920
+s123
+
+N/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/OSCTest.build/Debug/OSCTest.build/Objects-normal/i386/basicApp.o
+t2
+s0
+
+N/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/OSCTest_Prefix.pch
+c00000000524D83460000000000000093
+t1380811590
+s147
+i<Cocoa/Cocoa.h>
+
+N/var/folders/80/d83t3h_168z28_vx_0x3_1w00000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/OSCTest_Prefix-dvuxabgjmfsqzcfkqldtutzceqag/OSCTest_Prefix.pch.pth
+t2
+s0
+
+N/var/folders/80/d83t3h_168z28_vx_0x3_1w00000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/OSCTest_Prefix-ewszpcoedqyehldbleyyrhbrbzsq/OSCTest_Prefix.pch.pth
+t2
+s0
+
+NInfo.plist
+c00000000524D83460000000000000345
+t1380811590
+s837
+
+CBuild AST from /Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/../src/basicApp.cpp
+r0
+
+CCheck dependencies
+r0
+lSLF05#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection18"Check dependencies3dee2bb08f07b841^8b8b3bb08f07b841^---0#1#0#--18"Check dependencies36"ACBB7D95-4A60-495E-8E8E-C6459CE1A57D-
+
+CCompileC ./build/OSCTest.build/Debug/OSCTest.build/Objects-normal/i386/basicApp.o /Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/../src/basicApp.cpp normal i386 objective-c++ com.apple.compilers.llvm.clang.1_0.compiler
+s403148721.443651
+e403148723.803047
+r1
+xCompileC
+x./build/OSCTest.build/Debug/OSCTest.build/Objects-normal/i386/basicApp.o
+x/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/../src/basicApp.cpp
+xnormal
+xi386
+xobjective-c++
+xcom.apple.compilers.llvm.clang.1_0.compiler
+lSLF05#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection77"Compile /Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/../src/basicApp.cpp46b471b18f07b841^f793cdb38f07b841^---0#0#0#-19%DVTDocumentLocation2@85"file://localhost/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/../src/basicApp.cpp0000000000000000^2683"CompileC ./build/OSCTest.build/Debug/OSCTest.build/Objects-normal/i386/basicApp.o ../src/basicApp.cpp normal i386 objective-c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode    setenv LANG en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c++ -arch i386 -fmessage-length=0 -std=c++11 -stdlib=libc++ -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Wreturn-type -Wno-implicit-atomic-properties -Wno-receiver-is-weak -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wformat -Wno-missing-braces -Wparentheses -Wswitch -Wno-unused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wno-empty-body -Wno-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wno-constant-conversion -Wno-int-conversion -Wno-enum-conversion -Wno-shorten-64-to-32 -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wno-undeclared-selector -Wno-deprecated-implementations -Wno-c++11-extensions -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk -fasm-blocks -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.7 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/OSCTest.build/Debug/OSCTest.build/OSCTest.hmap -I/Users/Hirofumi/git/cinder/Cinder/include -I/Users/Hirofumi/git/cinder/Cinder/blocks/OSC/src -I/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/build/Debug/include -I/Users/Hirofumi/git/cinder/Cinder/boost -I/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/OSCTest.build/Debug/OSCTest.build/DerivedSources/i386 -I/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/OSCTest.build/Debug/OSCTest.build/DerivedSources -F/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/build/Debug -include /var/folders/80/d83t3h_168z28_vx_0x3_1w00000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/OSCTest_Prefix-dvuxabgjmfsqzcfkqldtutzceqag/OSCTest_Prefix.pch -MMD -MT dependencies -MF /Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/OSCTest.build/Debug/OSCTest.build/Objects-normal/i386/basicApp.d --serialize-diagnostics /Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/OSCTest.build/Debug/OSCTest.build/Objects-normal/i386/basicApp.dia -c /Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/../src/basicApp.cpp -o /Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/OSCTest.build/Debug/OSCTest.build/Objects-normal/i386/basicApp.o36"3634F9E4-0CD8-4512-8FD6-3C757C8B4FF2-
+
+CLd /Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/Debug/OSCTest.app/Contents/MacOS/OSCTest normal i386
+s403148723.810085
+e403148724.920880
+r0
+xLd
+x/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/Debug/OSCTest.app/Contents/MacOS/OSCTest
+xnormal
+xi386
+oUndefined symbols for architecture i386:
+o  "cinder::osc::Message::~Message()", referenced from:
+o      OSCTest::update() in basicApp.o
+o  "cinder::osc::Listener::getNextMessage(cinder::osc::Message*)", referenced from:
+o      OSCTest::update() in basicApp.o
+o  "cinder::osc::Listener::setup(int)", referenced from:
+o      OSCTest::setup() in basicApp.o
+o  "cinder::osc::Listener::Listener()", referenced from:
+o      OSCTest::OSCTest() in basicApp.o
+o  "cinder::osc::Message::getArgType(int) const", referenced from:
+o      OSCTest::update() in basicApp.o
+o  "cinder::osc::Message::getNumArgs() const", referenced from:
+o      OSCTest::update() in basicApp.o
+o  "cinder::osc::Message::getArgAsFloat(int, bool) const", referenced from:
+o      OSCTest::update() in basicApp.o
+o  "cinder::osc::Message::getArgAsInt32(int, bool) const", referenced from:
+o      OSCTest::update() in basicApp.o
+o  "cinder::osc::Message::getArgAsString(int, bool) const", referenced from:
+o      OSCTest::update() in basicApp.o
+o  "cinder::osc::Message::getArgTypeName(int) const", referenced from:
+o      OSCTest::update() in basicApp.o
+o  "cinder::osc::Listener::hasWaitingMessages() const", referenced from:
+o      OSCTest::update() in basicApp.o
+old: symbol(s) not found for architecture i386
+oclang: error: linker command failed with exit code 1 (use -v to see invocation)
+lSLF05#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection103"Link /Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/Debug/OSCTest.app/Contents/MacOS/OSCTestaf7bcfb38f07b841^40bfebb48f07b841^-1332"Undefined symbols for architecture i386:  "cinder::osc::Message::~Message()", referenced from:      OSCTest::update() in basicApp.o  "cinder::osc::Listener::getNextMessage(cinder::osc::Message*)", referenced from:      OSCTest::update() in basicApp.o  "cinder::osc::Listener::setup(int)", referenced from:      OSCTest::setup() in basicApp.o  "cinder::osc::Listener::Listener()", referenced from:      OSCTest::OSCTest() in basicApp.o  "cinder::osc::Message::getArgType(int) const", referenced from:      OSCTest::update() in basicApp.o  "cinder::osc::Message::getNumArgs() const", referenced from:      OSCTest::update() in basicApp.o  "cinder::osc::Message::getArgAsFloat(int, bool) const", referenced from:      OSCTest::update() in basicApp.o  "cinder::osc::Message::getArgAsInt32(int, bool) const", referenced from:      OSCTest::update() in basicApp.o  "cinder::osc::Message::getArgAsString(int, bool) const", referenced from:      OSCTest::update() in basicApp.o  "cinder::osc::Message::getArgTypeName(int) const", referenced from:      OSCTest::update() in basicApp.o  "cinder::osc::Listener::hasWaitingMessages() const", referenced from:      OSCTest::update() in basicApp.old: symbol(s) not found for architecture i386clang: error: linker command failed with exit code 1 (use -v to see invocation)24(21%IDEActivityLogMessage2@52""cinder::osc::Message::~Message()", referenced from:-403148724#41#55#-2#-23%DVTTextDocumentLocation3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@31"OSCTest::update() in basicApp.o-403148724#96#38#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@80""cinder::osc::Listener::getNextMessage(cinder::osc::Message*)", referenced from:-403148724#134#83#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@31"OSCTest::update() in basicApp.o-403148724#217#38#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@53""cinder::osc::Listener::setup(int)", referenced from:-403148724#255#56#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@30"OSCTest::setup() in basicApp.o-403148724#311#37#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@53""cinder::osc::Listener::Listener()", referenced from:-403148724#348#56#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@32"OSCTest::OSCTest() in basicApp.o-403148724#404#39#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@63""cinder::osc::Message::getArgType(int) const", referenced from:-403148724#443#66#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@31"OSCTest::update() in basicApp.o-403148724#509#38#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@60""cinder::osc::Message::getNumArgs() const", referenced from:-403148724#547#63#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@31"OSCTest::update() in basicApp.o-403148724#610#38#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@72""cinder::osc::Message::getArgAsFloat(int, bool) const", referenced from:-403148724#648#75#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@31"OSCTest::update() in basicApp.o-403148724#723#38#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@72""cinder::osc::Message::getArgAsInt32(int, bool) const", referenced from:-403148724#761#75#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@31"OSCTest::update() in basicApp.o-403148724#836#38#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@73""cinder::osc::Message::getArgAsString(int, bool) const", referenced from:-403148724#874#76#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@31"OSCTest::update() in basicApp.o-403148724#950#38#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@67""cinder::osc::Message::getArgTypeName(int) const", referenced from:-403148724#988#70#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@31"OSCTest::update() in basicApp.o-403148724#1058#38#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@69""cinder::osc::Listener::hasWaitingMessages() const", referenced from:-403148724#1096#72#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@31"OSCTest::update() in basicApp.o-403148724#1168#38#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@41"Symbol(s) not found for architecture i386-403148724#1206#46#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@65"Linker command failed with exit code 1 (use -v to see invocation)-403148724#1252#80#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--0#0#0#--1122"Ld ./build/Debug/OSCTest.app/Contents/MacOS/OSCTest normal i386    cd /Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode    setenv MACOSX_DEPLOYMENT_TARGET 10.7    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch i386 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk -L/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/build/Debug -F/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/build/Debug -filelist /Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/OSCTest.build/Debug/OSCTest.build/Objects-normal/i386/OSCTest.LinkFileList -mmacosx-version-min=10.7 /Users/Hirofumi/git/cinder/Cinder/lib/libcinder_d.a -stdlib=libc++ -fobjc-link-runtime -framework CoreLocation -framework Cocoa -framework OpenGL -framework Carbon -framework CoreVideo -framework QTKit -framework QuickTime -framework ApplicationServices -framework Accelerate -framework AudioToolbox -framework AudioUnit -framework CoreAudio -o /Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/Debug/OSCTest.app/Contents/MacOS/OSCTest36"FF9B8F0A-F60D-47FF-99BB-B03D5295AC8F-
+
+CProcessInfoPlistFile /Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/Debug/OSCTest.app/Contents/Info.plist Info.plist
+s403148720.236537
+e403148720.240260
+r1
+xProcessInfoPlistFile
+x/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/Debug/OSCTest.app/Contents/Info.plist
+xInfo.plist
+lSLF05#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection18"Process Info.plist3ca43cb08f07b841^05a43db08f07b841^---0#0#0#-19%DVTDocumentLocation2@76"file://localhost/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/Info.plist0000000000000000^417"ProcessInfoPlistFile ./build/Debug/OSCTest.app/Contents/Info.plist Info.plist    cd /Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode    builtin-infoPlistUtility Info.plist -genpkginfo /Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/Debug/OSCTest.app/Contents/PkgInfo -expandbuildsettings -platform macosx -o /Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/Debug/OSCTest.app/Contents/Info.plist36"009E1655-08EA-4EC2-924E-FC40588AA4F1-
+
+CProcessPCH++ /Users/Hirofumi/Library/Developer/Xcode/DerivedData/OSCTest-dngrktyrfasykdaikdevovbhtptu/Index/PrecompiledHeaders/OSCTest_Prefix-dfvqorhheeyhisdodacsmmroatpu_ast/OSCTest_Prefix.pch.pth OSCTest_Prefix.pch normal i386 objective-c++ com.apple.compilers.llvm.clang.1_0.astbuilder
+r0
+
+CProcessPCH++ /Users/Hirofumi/Library/Developer/Xcode/DerivedData/OSCTest-dngrktyrfasykdaikdevovbhtptu/Index/PrecompiledHeaders/OSCTest_Prefix-gdqmqctooofhttcxhqlgpbiirpym_ast/OSCTest_Prefix.pch.pth OSCTest_Prefix.pch normal i386 objective-c++ com.apple.compilers.llvm.clang.1_0.astbuilder
+r0
+
+CProcessPCH++ /var/folders/80/d83t3h_168z28_vx_0x3_1w00000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/OSCTest_Prefix-dvuxabgjmfsqzcfkqldtutzceqag/OSCTest_Prefix.pch.pth OSCTest_Prefix.pch normal i386 objective-c++ com.apple.compilers.llvm.clang.1_0.compiler
+s403148720.248314
+e403148721.436667
+r1
+xProcessPCH++
+x/var/folders/80/d83t3h_168z28_vx_0x3_1w00000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/OSCTest_Prefix-dvuxabgjmfsqzcfkqldtutzceqag/OSCTest_Prefix.pch.pth
+xOSCTest_Prefix.pch
+xnormal
+xi386
+xobjective-c++
+xcom.apple.compilers.llvm.clang.1_0.compiler
+lSLF05#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection29"Precompile OSCTest_Prefix.pch87e13fb08f07b841^fbca6fb18f07b841^---0#0#0#-19%DVTDocumentLocation2@84"file://localhost/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/OSCTest_Prefix.pch0000000000000000^2724"ProcessPCH++ /var/folders/80/d83t3h_168z28_vx_0x3_1w00000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/OSCTest_Prefix-dvuxabgjmfsqzcfkqldtutzceqag/OSCTest_Prefix.pch.pth OSCTest_Prefix.pch normal i386 objective-c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode    setenv LANG en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c++-header -arch i386 -fmessage-length=0 -std=c++11 -stdlib=libc++ -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Wreturn-type -Wno-implicit-atomic-properties -Wno-receiver-is-weak -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wformat -Wno-missing-braces -Wparentheses -Wswitch -Wno-unused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wno-empty-body -Wno-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wno-constant-conversion -Wno-int-conversion -Wno-enum-conversion -Wno-shorten-64-to-32 -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wno-undeclared-selector -Wno-deprecated-implementations -Wno-c++11-extensions -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk -fasm-blocks -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.7 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/OSCTest.build/Debug/OSCTest.build/OSCTest.hmap -I/Users/Hirofumi/git/cinder/Cinder/include -I/Users/Hirofumi/git/cinder/Cinder/blocks/OSC/src -I/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/build/Debug/include -I/Users/Hirofumi/git/cinder/Cinder/boost -I/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/OSCTest.build/Debug/OSCTest.build/DerivedSources/i386 -I/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/OSCTest.build/Debug/OSCTest.build/DerivedSources -F/Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/build/Debug --serialize-diagnostics /var/folders/80/d83t3h_168z28_vx_0x3_1w00000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/OSCTest_Prefix-dvuxabgjmfsqzcfkqldtutzceqag/OSCTest_Prefix.pch.dia -c /Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/OSCTest_Prefix.pch -o /var/folders/80/d83t3h_168z28_vx_0x3_1w00000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/OSCTest_Prefix-dvuxabgjmfsqzcfkqldtutzceqag/OSCTest_Prefix.pch.pth -MMD -MT dependencies -MF /var/folders/80/d83t3h_168z28_vx_0x3_1w00000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/OSCTest_Prefix-dvuxabgjmfsqzcfkqldtutzceqag/OSCTest_Prefix.pch.d36"BCF3AC4A-5E83-4B53-AC7A-AE0670D06746-
+
+CProcessPCH++ /var/folders/80/d83t3h_168z28_vx_0x3_1w00000gn/C/com.apple.Xcode.501/SharedPrecompiledHeaders/OSCTest_Prefix-ewszpcoedqyehldbleyyrhbrbzsq/OSCTest_Prefix.pch.pth OSCTest_Prefix.pch normal i386 objective-c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CTouch /Users/Hirofumi/git/hrfm/CinderApps/OSCTest/xcode/./build/Debug/OSCTest.app
+r0
+
