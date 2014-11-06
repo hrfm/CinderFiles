@@ -28,6 +28,7 @@ namespace sgmnt{ namespace signage{ namespace display{
         void init( ci::XmlTree &xml );
         
         void addContent( sgmnt::display::IDrawable * content, float time );
+        void addContent( sgmnt::display::IDrawable * content, float time, string trigger );
         
         void play( int index = 0 );
         void stop();

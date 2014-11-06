@@ -13,6 +13,7 @@ namespace sgmnt{ namespace signage{ namespace display{
     ScheduledContents::ScheduledContents(){
         IEnableTransition();
         DisplayNode();
+        _isPlaying = false;
     }
     ScheduledContents::ScheduledContents( XmlTree &xml ){
         ScheduledContents();
@@ -58,8 +59,8 @@ namespace sgmnt{ namespace signage{ namespace display{
                     string time = item->getAttribute("time").getValue<string>();
                     boost::split( pair, time, boost::is_any_of(":") );
                     
-                    int hour = stoi(pair.at(0));
-                    int min  = stoi(pair.at(1));
+                    string hour = pair.at(0);
+                    string min  = pair.at(1);
                     
                     if( type == "pic" ){
                         
@@ -103,7 +104,20 @@ namespace sgmnt{ namespace signage{ namespace display{
                     
                     cout << "[ " << hour << ":" << min << " ] " << path << endl;
                     
-                    addSchedule( time, hour, min );
+                    int h, m;
+                    
+                    if( hour == "*" ){
+                        h = -1;
+                    }else{
+                        h = stoi(hour);
+                    }
+                    m = stoi(min);
+                    
+                    if( item->hasAttribute("trigger") ){
+                        addSchedule( time, m, h, item->getAttributeValue<string>("trigger") );
+                    }else{
+                        addSchedule( time, m, h );
+                    }
                     
                 }catch(Exception e){
                     
@@ -119,12 +133,23 @@ namespace sgmnt{ namespace signage{ namespace display{
             
         }
         
-        playRecentContent();
-        
     }
     
-    void ScheduledContents::addSchedule( const string key, int hour, int minutes ){
-        SiTimeUtil::getInstance().addTiming( key, new TimingData( hour, minutes ), this, &ScheduledContents::_onTimer );
+    void ScheduledContents::addSchedule( const string key, int minutes ){
+        addSchedule( key, minutes, -1 );
+    }
+    
+    void ScheduledContents::addSchedule( const string key, int minutes, string trigger ){
+        addSchedule( key, minutes, -1, trigger );
+    }
+    
+    void ScheduledContents::addSchedule( const string key, int minutes, int hour, string trigger ){
+        addSchedule( key, minutes, hour );
+        _triggerList[key] = trigger;
+    }
+    
+    void ScheduledContents::addSchedule( const string key, int minutes, int hour ){
+        SiTimeUtil::getInstance().addTiming( key, new TimingData( minutes, hour ), this, &ScheduledContents::_onTimer );
     }
     
     int ScheduledContents::numSchedule(){
@@ -140,6 +165,8 @@ namespace sgmnt{ namespace signage{ namespace display{
         if( _contentList.find(type) == _contentList.end() || _currentContent == _contentList[type] ){
             return;
         }
+        
+        _isPlaying = true;
         
         if( _currentContent ){
             if( MovieTexture * mov = dynamic_cast<MovieTexture*>(_currentContent) ){
@@ -162,6 +189,12 @@ namespace sgmnt{ namespace signage{ namespace display{
             
             addChild( _currentContent );
             
+        }
+        
+        if( _triggerList.find(type) != _triggerList.end() ){
+            sgmnt::events::TriggerEvent * evt = new sgmnt::events::TriggerEvent( sgmnt::events::TriggerEvent::TRIGGER, _triggerList[type] );
+            dispatchEvent( evt );
+            sgmnt::events::SiEventDispatcher::getInstance().dispatchEvent( evt );
         }
         
     }
@@ -213,6 +246,10 @@ namespace sgmnt{ namespace signage{ namespace display{
             play( latestType );
         }
         
+    }
+    
+    bool ScheduledContents::isPlaying(){
+        return _isPlaying;
     }
     
     //! protected:

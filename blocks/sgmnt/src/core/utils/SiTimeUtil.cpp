@@ -8,13 +8,18 @@ namespace sgmnt{ namespace utils{
     // ======================================================================
     // TimingData class.
     
-    TimingData::TimingData( int hour, int minutes ){
+    TimingData::TimingData( int minutes ){
+        TimingData( minutes, -1 );
+    }
+    
+    TimingData::TimingData( int minutes, int hour ){
         
         if( hour < 0 ){
-            throw;
+            _hour = -1;
+        }else{
+            _hour = hour % 24;
         }
         
-        _hour    = hour % 24;
         _minutes = minutes % 60;
         
         _beforeHour    = SiTimeUtil::getInstance().getHour();
@@ -27,8 +32,10 @@ namespace sgmnt{ namespace utils{
         
         bool flag = false;
         
-        if( _beforeMinutes < _minutes && _minutes <= minutes && hour == _hour ){
-            flag = true;
+        if( _beforeMinutes < _minutes && _minutes <= minutes ){
+            if( _hour < 0 || _hour == hour ){
+                flag = true;
+            }
         }
         
         _beforeHour    = hour;

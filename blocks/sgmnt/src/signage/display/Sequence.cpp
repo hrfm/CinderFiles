@@ -10,11 +10,11 @@ namespace sgmnt{ namespace signage{ namespace display{
     
     Sequence::Sequence(){
         EventDispatcher();
+        _trigger = "";
     }
     
     Sequence::Sequence( sgmnt::display::IDrawable * content, float time ){
         Sequence();
-        cout << content << endl;
         _content = content;
         _time    = time;
         if( _time <= 0.0f ){
@@ -30,17 +30,30 @@ namespace sgmnt{ namespace signage{ namespace display{
         
     }
     
+    void Sequence::setTrigger( string trigger ){
+        _trigger = trigger;
+    }
+    
     sgmnt::display::IDrawable * Sequence::getContentRef(){
         return _content;
     }
     
     void Sequence::play(){
+        
         _startedAt = ci::app::getElapsedSeconds();
+        
+        if( _trigger != "" ){
+            sgmnt::events::TriggerEvent * evt = new sgmnt::events::TriggerEvent( sgmnt::events::TriggerEvent::TRIGGER, _trigger );
+            dispatchEvent( evt );
+            sgmnt::events::SiEventDispatcher::getInstance().dispatchEvent( evt );
+        }
+        
         if( MovieTexture * mov = dynamic_cast<MovieTexture*>(_content) ){
             mov->play();
         }else if( SequentialContents * seq = dynamic_cast<SequentialContents*>(_content) ){
             seq->play();
         }
+        
     }
     
     void Sequence::stop(){

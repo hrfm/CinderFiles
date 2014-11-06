@@ -57,11 +57,13 @@ namespace sgmnt{ namespace signage{ namespace display{
                     const string type = item->getAttribute("type").getValue<string>();
                     float time = item->getAttribute("time").getValue<float>();
                     
+                    sgmnt::display::IDrawable * content;
+                    
                     if( type == "pic" ){
                         
                         // 設定されているものが画像の場合
                         
-                        addContent( new sgmnt::display::Texture( loadImage(path) ), time );
+                        content = new sgmnt::display::Texture( loadImage(path) );
                         
                     }else if( type == "mov" ){
                         
@@ -71,8 +73,7 @@ namespace sgmnt{ namespace signage{ namespace display{
                         if( item->hasAttribute("loop") && item->getAttribute("loop").getValue<string>() == "true" ){
                             mov->getMovieGlRef()->setLoop();
                         }
-                        
-                        addContent( mov, time );
+                        content = mov;
                         
                     }else if( type == "seq" ){
                         
@@ -80,14 +81,13 @@ namespace sgmnt{ namespace signage{ namespace display{
                         
                         XmlTree xml = XmlLoader::load( path );
                         sgmnt::signage::display::SequentialContents * seq = new SequentialContents( xml );
-                        
-                        addContent( seq, time );
+                        content = seq;
                         
                     }else if( type == "blank" ){
                         
                         // 設定されているコンテンツが blank の場合
                         
-                        addContent( new sgmnt::display::IDrawable(), time );
+                        content = new sgmnt::display::IDrawable();
                         
                     }else{
                         
@@ -99,6 +99,12 @@ namespace sgmnt{ namespace signage{ namespace display{
                     
                     cout << "[ " << index++ <<  " ] " << time << " -> " << path << endl;
                     
+                    if( item->hasAttribute("trigger") ){
+                        addContent( content, time, item->getAttributeValue<string>("trigger") );
+                    }else{
+                        addContent( content, time );
+                    }
+
                 }catch(...){}
                 
             }
@@ -113,6 +119,13 @@ namespace sgmnt{ namespace signage{ namespace display{
     
     void SequentialContents::addContent( IDrawable * content, float time ){
         Sequence * seq = new Sequence( content, time );
+        seq->addEventListener( sgmnt::events::Event::COMPLETE, this, &SequentialContents::_onComplete );
+        _sequenceList.push_back( seq );
+    }
+    
+    void SequentialContents::addContent( IDrawable * content, float time, string trigger ){
+        Sequence * seq = new Sequence( content, time );
+        seq->setTrigger( trigger );
         seq->addEventListener( sgmnt::events::Event::COMPLETE, this, &SequentialContents::_onComplete );
         _sequenceList.push_back( seq );
     }

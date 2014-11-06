@@ -16,7 +16,8 @@ namespace sgmnt{ namespace utils{
     struct TimingData{
     public:
         
-        TimingData( int hour, int minutes = 0 );
+        TimingData( int minutes );
+        TimingData( int minutes, int hour );
         ~TimingData(){}
         
         //! 引数に指定した時刻と比較しタイミングと合致した場合 true を返します.

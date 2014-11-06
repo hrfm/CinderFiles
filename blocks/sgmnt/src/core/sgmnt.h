@@ -4,9 +4,11 @@
 
 #include "Event.h"
 #include "EventDispatcher.h"
+#include "SiEventDispatcher.h"
 
 #include "OscEvent.h"
 #include "TimeUtilEvent.h"
+#include "TriggerEvent.h"
 
 // --- sgmnt::display
 

@@ -9,6 +9,7 @@
 #include "sgmnt.h"
 #include "SequentialContents.h"
 #include "IEnableTransition.h"
+#include "SiEventDispatcher.h"
 
 namespace sgmnt{ namespace signage{ namespace display{
     
@@ -27,13 +28,19 @@ namespace sgmnt{ namespace signage{ namespace display{
         
         void init( ci::XmlTree &xml );
         
-        void addSchedule( const string key, int hour, int minutes );
+        void addSchedule( const string key, int minutes );
+        void addSchedule( const string key, int minutes, string trigger );
+        
+        void addSchedule( const string key, int minutes, int hour );
+        void addSchedule( const string key, int minutes, int hour, string trigger );
         
         int numSchedule();
         
         void play( string type );
         
         void playRecentContent();
+        
+        bool isPlaying();
         
     protected:
         
@@ -42,11 +49,14 @@ namespace sgmnt{ namespace signage{ namespace display{
         
         void _onTimer( sgmnt::events::TimeUtilEvent * event );
         
+        bool _isPlaying;
+        
     private:
         
         sgmnt::display::IDrawable * _currentContent;
         
         map<string,sgmnt::display::IDrawable*> _contentList;
+        map<string,string> _triggerList;
         
     };
     
