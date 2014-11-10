@@ -2,7 +2,7 @@
 
 using namespace std;
 
-namespace hrfm{ namespace live_effects{
+namespace hrfm{ namespace cv{
     
     // パーティクルクラス
     class Particle {

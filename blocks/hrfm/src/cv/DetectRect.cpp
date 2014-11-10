@@ -2,7 +2,7 @@
 
 using namespace ci;
 
-namespace hrfm{ namespace io{
+namespace hrfm{ namespace cv{
     
     DetectRect::DetectRect( float x1, float y1, float x2, float y2 ){
         setup( Rectf(x1, y1, x2, y2) );
@@ -33,7 +33,6 @@ namespace hrfm{ namespace io{
     
     bool DetectRect::dead(){
         if( life <= 0 ){
-            //cout << "dead!!" << endl;
             return life <= 0;
         }else{
             return false;

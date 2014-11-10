@@ -10,18 +10,16 @@
 #include "cinder/Utilities.h"
 
 #include "CinderOpenCV.h"
-
-#include "DetectRect.h"
-
 #include "SiCaptureInput.h"
 
-#include "ForceMap.h"
+#include "FaceDetect.h"
+#include "OpticalFlow.h"
 
 using namespace ci;
 using namespace ci::app;
 using namespace std;
 
-using namespace hrfm::live_effects;
+using namespace hrfm::cv;
 
 namespace hrfm{ namespace io{
     
@@ -83,9 +81,6 @@ namespace hrfm{ namespace io{
         //
         // ========================================================================================
         
-        vector<cv::Point2f> prevFeatures, features;
-        vector<uint8_t>		featureStatuses;
-        
         void setupOpticalFlow( Vec2i textureSize );
         
         void updateOpticalFlow( float bias = 1.0, float frameRate = 30.0 );
@@ -104,12 +99,6 @@ namespace hrfm{ namespace io{
         
     private:
         
-        void updateFaces();
-        
-        void chooseFeatures( cv::Mat currentFrame );
-        
-        void trackFeatures( cv::Mat currentFrame );
-        
         // --- Video Capture. ---
         
         CaptureRef              mCapture;
@@ -127,26 +116,11 @@ namespace hrfm{ namespace io{
         
         // ----- Face Detect.
         
-        bool                    mFaceDetectSetuped;
-        bool                    mFaceDetectEnabled;
-        
-        double                  recentSec;
-        std::thread             mThread;
-        Surface                 cloneSurface;
-        
-        cv::CascadeClassifier	mFaceCascade, mEyeCascade;
-        vector<DetectRect>      mFaces, mEyes;
-        
-        float recentTime;
+        FaceDetect * mFaceDetect;
         
         // ----- Optical Flow.
         
-        static const int        MAX_FEATURES = 256;
-        
-        gl::Fbo                 mOpticalFlowFBO;
-        Rectf                   mOpticalFlowBounds;
-        cv::Mat                 mPrevFrame;
-        ForceMap                mForceMap;
+        OpticalFlow * mOpticalFlow;
         
     };
     

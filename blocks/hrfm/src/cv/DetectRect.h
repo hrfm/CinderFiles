@@ -5,7 +5,7 @@
 using namespace ci;
 using namespace ci::app;
 
-namespace hrfm{ namespace io{
+namespace hrfm{ namespace cv{
     
     // ========================================================================================= //
     

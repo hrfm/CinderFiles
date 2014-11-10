@@ -5,7 +5,7 @@
 using namespace std;
 using namespace ci;
 
-namespace hrfm{ namespace live_effects{
+namespace hrfm{ namespace cv{
     
     class ForceNode{
         
