@@ -6,8 +6,6 @@ using namespace ci::app;
 
 namespace hrfm{ namespace cv{
     
-    
-    
     void OpticalFlow::update( gl::Texture texture, float bias, float frameRate ){
         
         mOpticalFlowFBO.bindFramebuffer();

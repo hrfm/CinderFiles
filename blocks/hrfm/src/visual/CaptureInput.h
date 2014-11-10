@@ -67,12 +67,9 @@ namespace hrfm{ namespace io{
         
         void setupFaceDetect();
         void setupFaceDetect( Vec2i textureSize );
-        
         void enableFaceDetect();
         void disableFaceDetect();
-        
         bool faceDetectEnabled();
-        
         vector<DetectRect> getFaces();
         
         // ========================================================================================
@@ -82,19 +79,12 @@ namespace hrfm{ namespace io{
         // ========================================================================================
         
         void setupOpticalFlow( Vec2i textureSize );
-        
         void updateOpticalFlow( float bias = 1.0, float frameRate = 30.0 );
-        
         void drawOpticalFlow();
-        
         ForceMap getForceMap();
-        
         void drawForceMap();
-        
         gl::Texture getOpticalFlowTexture();
-        
         Vec2i getOpticalFlowTextureSize();
-        
         Rectf getOpticalFlowTextureBounds();
         
     private:
