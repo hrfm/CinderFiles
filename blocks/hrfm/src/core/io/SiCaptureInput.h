@@ -17,11 +17,13 @@ namespace hrfm { namespace io{
         
         ci::CaptureRef createRef( int width, int height, string deviceName = "*" );
         
-        ci::CaptureRef getCaptureRef( string deviceName );
+        ci::Vec2i getSize( string deviceName = "*" );
         
-        ci::Surface getSurface( string deviceName );
+        ci::CaptureRef getCaptureRef( string deviceName = "*" );
         
-        ci::gl::Texture getTexture( string deviceName );
+        ci::Surface getSurface( string deviceName = "*" );
+        
+        ci::gl::Texture getTexture( string deviceName = "*" );
         
         void update();
         

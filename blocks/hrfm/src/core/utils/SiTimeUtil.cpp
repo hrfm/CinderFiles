@@ -94,6 +94,14 @@ namespace hrfm{ namespace utils{
         return _timeinfo;
     }
     
+    int SiTimeUtil::getWeekDay(){
+        return _timeinfo->tm_wday;
+    }
+    
+    string SiTimeUtil::getWeekDayString(){
+        return _days[_timeinfo->tm_wday];
+    }
+    
     int SiTimeUtil::getDay(){
         return _timeinfo->tm_yday;
     }

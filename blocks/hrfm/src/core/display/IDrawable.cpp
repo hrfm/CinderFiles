@@ -4,17 +4,21 @@ using namespace ci;
 
 namespace hrfm{ namespace display{
     
-    void IDrawable::setSize( float w, float h ){
+    void IDrawable::setSize( int w, int h ){
         width  = w;
         height = h;
     }
     
-    void IDrawable::setSize( Vec2f size ){
+    void IDrawable::setSize( Vec2i size ){
         setSize( size.x, size.y );
     }
     
-    Vec2f IDrawable::getSize(){
+    Vec2i IDrawable::getSize(){
         return Vec2f( width, height );
+    }
+    
+    Rectf IDrawable::getBounds(){
+        return Rectf( x, y, width, height );
     }
     
     void IDrawable::setup(){}

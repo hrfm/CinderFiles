@@ -9,12 +9,16 @@
 #include "cinder/Rand.h"
 
 // --- Inputs ---
-#include "DisplayNode.h"
+#include "Stage.h"
 #include "Texture.h"
 
 #include "SiOscInput.h"
 #include "SiAudioInput.h"
 #include "CaptureInput.h"
+
+#include "TriggerEvent.h"
+#include "SiEventDispatcher.h"
+
 #include "Utils.h"
 
 using namespace hrfm;
@@ -59,7 +63,7 @@ namespace hrfm{ namespace app{
         
         hrfm::io::CaptureInput captureInput;
         
-        hrfm::display::DisplayNode stage;
+        hrfm::display::Stage stage;
         hrfm::display::Texture background;
         
         // ===========================================================================
@@ -161,8 +165,17 @@ namespace hrfm{ namespace app{
         
         virtual void setupOsc();
         
-        //! OSC メッセージを受信した際の処理.
-        void onReceiveOscMessage( OscInputEvent * event );
+        /**
+         * OSC メッセージを受信した際の処理.
+         * @virtual
+         */
+        virtual void onReceiveOscMessage( OscInputEvent * event );
+        
+        /**
+         * TriggerEvent 発生時の処理.
+         * @virtual
+         */
+        virtual void onTrigger( TriggerEvent * event );
         
     };
     

@@ -35,6 +35,7 @@ namespace fl{ namespace display{
             float diff = mBounds.x1 - x;
             mBounds.x1 += diff;
             mBounds.x2 += diff;
+            this->x = x;
         };
         
         virtual float getY(){
@@ -44,6 +45,7 @@ namespace fl{ namespace display{
             float diff = mBounds.y1 - y;
             mBounds.y1 += diff;
             mBounds.y2 += diff;
+            this->y = y;
         };
         
         virtual float getWidth(){
@@ -51,6 +53,7 @@ namespace fl{ namespace display{
         }
         virtual void setWidth( float w ){
             mBounds.x2 = mBounds.x1 + w;
+            this->width = w;
         };
         
         virtual float getHeight(){
@@ -58,6 +61,7 @@ namespace fl{ namespace display{
         }
         virtual void setHeight( float h ){
             mBounds.y2 = mBounds.y1 + h;
+            this->height = h;
         };
         
         virtual void _update(){
@@ -68,7 +72,7 @@ namespace fl{ namespace display{
             // Need to override.
         };
         
-        protected :
+    protected:
         
         AppBase*    mAppBase;
         Rectf       mBounds;

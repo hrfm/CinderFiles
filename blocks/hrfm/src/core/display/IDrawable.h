@@ -9,17 +9,19 @@ namespace hrfm{ namespace display{
     public:
         
         IDrawable(){
-            x         = 0;
-            y         = 0;
-            width     = 0;
-            height    = 0;
+            x      = 0.0f;
+            y      = 0.0f;
+            width  = 0.0f;
+            height = 0.0f;
+            alpha  = 1.0f;
         };
         ~IDrawable(){};
         
-        virtual void setSize( float w, float h );
-        virtual void setSize( ci::Vec2f size );
+        virtual void setSize( int w, int h );
+        virtual void setSize( ci::Vec2i size );
+        virtual ci::Vec2i getSize();
         
-        virtual ci::Vec2f getSize();
+        virtual ci::Rectf getBounds();
         
         virtual void setup();
         
@@ -27,8 +29,9 @@ namespace hrfm{ namespace display{
         
         virtual void draw();
         
+        float alpha;
         float x, y;
-        float width, height;
+        int width, height;
         
     protected:
         

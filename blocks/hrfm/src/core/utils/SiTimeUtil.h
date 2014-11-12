@@ -46,6 +46,12 @@ namespace hrfm{ namespace utils{
         //! 現在時刻の情報を取得します.
         virtual tm * getTimeinfo();
         
+        //! 現在の曜日を 0-6 の数値で取得します.
+        virtual int getWeekDay();
+        
+        //! 現在の曜日を sun|mon|tue|wed|thu|fri|sat の３文字の文字列で取得します.
+        virtual string getWeekDayString();
+        
         //! 現在の日を取得します.
         virtual int getDay();
         
@@ -90,6 +96,8 @@ namespace hrfm{ namespace utils{
             update();
             
         }
+        
+        const string _days[7] = {"sun","mon","tue","wed","thu","fri","sat"};
         
         struct tm * _timeinfo;
         struct tm * _beforeTimeinfo;

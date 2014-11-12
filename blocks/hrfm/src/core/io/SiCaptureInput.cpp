@@ -35,6 +35,10 @@ namespace hrfm { namespace io{
         
     }
     
+    ci::Vec2i SiCaptureInput::getSize( string deviceName ){
+        return _captureRefMap[deviceName]->getSize();
+    }
+    
     ci::CaptureRef SiCaptureInput::getCaptureRef( string deviceName ){
         return _captureRefMap[deviceName];
     }

@@ -6,6 +6,7 @@
 using namespace std;
 using namespace hrfm;
 using namespace hrfm::app;
+using namespace hrfm::events;
 using namespace hrfm::io;
 
 // === GLOBAL PROPERTY =============================================================================================
@@ -63,6 +64,12 @@ namespace hrfm { namespace app{
         this->initCapture(setupSettings);
         
         resize();
+        
+        stage.setSize( getWindowWidth(), getWindowHeight() );
+        
+        // --- TriggerEvent Listener.
+        
+        SiEventDispatcher::getInstance().addEventListener( TriggerEvent::TRIGGER, this, &AppBase::onTrigger );
         
         cout << endl;
         
@@ -255,6 +262,7 @@ namespace hrfm { namespace app{
     void AppBase::resize(){
         cout << "- Setup Camera Perspective." << endl;
         camera.setPerspective( 30, getWindowAspectRatio(), 0.1, 100 );
+        stage.setSize( getWindowWidth(), getWindowHeight() );
     }
     
     void AppBase::keyDown( ci::app::KeyEvent event ){
@@ -266,6 +274,10 @@ namespace hrfm { namespace app{
         for( int i = 0; i < event->message.getNumArgs(); i++ ){
             nanoKontrolFader[i] = event->message.getArgAsInt32(i);
         }
+    }
+    
+    void AppBase::onTrigger( TriggerEvent * event ){
+        cout << "TRIGGER : " << event->type() << endl;
     }
     
     // ===========================================================================
