@@ -47,9 +47,9 @@ namespace hrfm{ namespace io{
         
         bool isCaptureAvailable();
         
-        gl::Texture getCaptureTexture();
+        ci::gl::Texture getCaptureTexture();
         
-        gl::Texture getDiffTexture();
+        ci::gl::Texture getDiffTexture();
         
         void bindTexture( int index );
         
@@ -83,7 +83,7 @@ namespace hrfm{ namespace io{
         void drawOpticalFlow();
         ForceMap getForceMap();
         void drawForceMap();
-        gl::Texture getOpticalFlowTexture();
+        ci::gl::Texture getOpticalFlowTexture();
         Vec2i getOpticalFlowTextureSize();
         Rectf getOpticalFlowTextureBounds();
         
@@ -92,17 +92,17 @@ namespace hrfm{ namespace io{
         // --- Video Capture. ---
         
         CaptureRef              mCapture;
-        gl::Texture             mTexture;
+        ci::gl::Texture             mTexture;
         
         Vec2i                   mCaptureSize;
         Rectf                   mDrawBounds;
-        gl::Fbo                 mCaptureFBO;
+        ci::gl::Fbo                 mCaptureFBO;
         
         bool                    mCaptureAvailable;
         bool                    mCaptureReflect;
         
-        gl::GlslProg            mDiffShader;
-        gl::Fbo                 mCaptureDiffFBO;
+        ci::gl::GlslProg            mDiffShader;
+        ci::gl::Fbo                 mCaptureDiffFBO;
         
         // ----- Face Detect.
         

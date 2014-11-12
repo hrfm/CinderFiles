@@ -6,13 +6,11 @@
 
 namespace hrfm{ namespace signage{ namespace display{
     
-    class IEnableTransition : public hrfm::events::EventDispatcher{
+    class IEnableTransition{
         
     public:
         
-        IEnableTransition(){
-            hrfm::events::EventDispatcher();
-        }
+        IEnableTransition(){}
         ~IEnableTransition(){};
         
         virtual void setTransition( hrfm::signage::display::Transition * transition ){

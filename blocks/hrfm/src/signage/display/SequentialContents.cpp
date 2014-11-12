@@ -201,7 +201,7 @@ namespace hrfm{ namespace signage{ namespace display{
         int nextIndex = _currentIndex + 1;
         if( _sequenceList.size() <= nextIndex ){
             nextIndex = 0;
-            dispatchEvent( new hrfm::events::Event( hrfm::events::Event::COMPLETE ) );
+            this->dispatchEvent( new hrfm::events::Event( hrfm::events::Event::COMPLETE ) );
         }
         
         play( nextIndex );

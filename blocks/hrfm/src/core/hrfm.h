@@ -16,9 +16,9 @@
 #include "DisplayNode.h"
 
 #include "CameraTexture.h"
-#include "FboTexture.h"
 #include "MovieTexture.h"
 #include "Texture.h"
+#include "Stage.h"
 
 // --- hrfm::io
 

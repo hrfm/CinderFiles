@@ -37,6 +37,9 @@ namespace hrfm { namespace events{
         static const string DONE;
         static const string ERROR;
         
+        static const string ADDED_TO_STAGE;
+        static const string REMOVED_FROM_STAGE;
+        
     protected:
         
         //! このイベントのタイプ.

@@ -5,7 +5,7 @@
 
 namespace hrfm{ namespace signage{ namespace display{
     
-    class Transition : public hrfm::display::FboTexture, public hrfm::events::EventDispatcher{
+    class Transition : public hrfm::display::Texture{
         
     public:
         

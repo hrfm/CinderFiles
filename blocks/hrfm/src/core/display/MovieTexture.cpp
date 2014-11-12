@@ -7,12 +7,8 @@ namespace hrfm{ namespace display{
     // public:
     
     MovieTexture::MovieTexture(){
-        
         hrfm::display::Texture();
-        hrfm::events::EventDispatcher();
-        
         _beforeTime = 0.0f;
-        
     };
     
     MovieTexture::MovieTexture( const string filePath ){

@@ -196,12 +196,12 @@ namespace hrfm{ namespace cv{
                     
                 }
                 
-                mTexture = gl::Texture( mSurface );
+                mTexture = ci::gl::Texture( mSurface );
                 //*/
                 
             }
         
-            gl::Texture getForceTexture(){
+            ci::gl::Texture getForceTexture(){
                 return mTexture;
             }
         
@@ -221,14 +221,14 @@ namespace hrfm{ namespace cv{
                 Vec2f force, from;
                 glDisable( GL_TEXTURE_2D );
                 glBegin( GL_LINES );
-                    gl::lineWidth( lineWidth );
+                    ci::gl::lineWidth( lineWidth );
                     for( int x=0; x < mCols; x++ ){
                         for( int y=0; y < mRows; y++ ){
                             force  = getForceAt( x, y );
                             from.x = (float)x / (float)(mCols-1) * size.x;
                             from.y = (float)y / (float)(mRows-1) * size.y;
-                            gl::vertex( from );
-                            gl::vertex( from + force );
+                            ci::gl::vertex( from );
+                            ci::gl::vertex( from + force );
                         }
                     }
                 glEnd();
@@ -242,7 +242,7 @@ namespace hrfm{ namespace cv{
             Vec2i   mSize;
         
             Surface     mSurface;
-            gl::Texture mTexture;
+            ci::gl::Texture mTexture;
         
             vector<ForceNode*> mForces;
         
@@ -250,7 +250,7 @@ namespace hrfm{ namespace cv{
             Vec2f mMaxForce;
             Vec2f mMaxForcePoint;
             
-            gl::Fbo motionFbo;
+            ci::gl::Fbo motionFbo;
         
     };
     

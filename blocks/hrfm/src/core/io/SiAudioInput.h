@@ -28,7 +28,7 @@ namespace hrfm{ namespace io{
         
         void  useAudioManager();
         
-        gl::Texture getAudioTexture();
+        ci::gl::Texture getAudioTexture();
         
         float getAudioManagerGain();
         float getAudioManagerFFTAverage();
@@ -64,8 +64,8 @@ namespace hrfm{ namespace io{
         
         void onAudioGain( OscInputEvent * event);
         
-        gl::Fbo      soundTexture;
-        gl::GlslProg soundTexShader;
+        ci::gl::Fbo      soundTexture;
+        ci::gl::GlslProg soundTexShader;
         
         cinder::audio::InputDeviceNodeRef		mInputDeviceNode;
         cinder::audio::MonitorSpectralNodeRef	mMonitorSpectralNode;

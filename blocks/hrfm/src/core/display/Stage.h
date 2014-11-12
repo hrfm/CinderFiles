@@ -12,6 +12,7 @@ namespace hrfm{ namespace display{
             DisplayNode();
         };
         ~Stage(){};
+        virtual IDrawable * addChild( IDrawable * child );
         virtual void setSize( int w, int h );
         virtual void update();
         virtual void draw();

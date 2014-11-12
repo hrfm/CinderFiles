@@ -17,7 +17,7 @@ namespace hrfm{ namespace display{
      FaceDetect 等を行う場合はこのクラスを継承するか Delegate すると便利です.
      
      */
-    class CameraTexture : public hrfm::display::Texture, public hrfm::events::EventDispatcher{
+    class CameraTexture : public hrfm::display::Texture{
         
     public:
         

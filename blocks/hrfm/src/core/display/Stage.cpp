@@ -13,6 +13,13 @@ namespace hrfm{ namespace display{
         
     }
     
+    IDrawable * Stage::addChild( IDrawable * child ){
+        children.remove(child);
+        child->_setStage(this);
+        children.push_back(child);
+        return child;
+    }
+    
     void Stage::update(){
         _update();
         _updateChildren();

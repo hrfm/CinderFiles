@@ -16,7 +16,6 @@ namespace hrfm{ namespace display{
     
     CameraTexture::CameraTexture( int32_t width, int32_t height, const string deviceName ){
         hrfm::display::Texture();
-        hrfm::events::EventDispatcher();
         init( width, height, deviceName );
     };
     

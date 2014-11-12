@@ -15,7 +15,7 @@ namespace hrfm{ namespace display{
      動画の Texture への描画のみを行うシンプルなクラスです.
      
      */
-    class MovieTexture : public hrfm::display::Texture, public hrfm::events::EventDispatcher{
+    class MovieTexture : public hrfm::display::Texture{
         
     public:
         

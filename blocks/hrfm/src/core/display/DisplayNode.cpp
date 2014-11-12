@@ -10,12 +10,16 @@ namespace hrfm{ namespace display{
     
     IDrawable * DisplayNode::addChild( IDrawable * child ){
         children.remove(child);
+        if( hasStage() ){
+            child->_setStage(_stage);
+        }
         children.push_back(child);
         return child;
     }
     
     IDrawable * DisplayNode::removeChild( IDrawable * child ){
         children.remove(child);
+        child->_unsetStage();
         return child;
     }
     

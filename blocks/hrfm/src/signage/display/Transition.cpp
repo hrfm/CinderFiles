@@ -6,8 +6,7 @@ using namespace hrfm::events;
 namespace hrfm{ namespace signage{ namespace display{
     
     Transition::Transition(){
-        EventDispatcher();
-        FboTexture();
+        hrfm::display::Texture();
     };
     Transition::Transition( int width, int height ){
         Transition( Vec2i( width, height ) );
@@ -19,7 +18,7 @@ namespace hrfm{ namespace signage{ namespace display{
     Transition::~Transition(){}
     
     void Transition::init( ci::Vec2i size ){
-        FboTexture::init(size);
+        //FboTexture::init(size);
     }
     
     void Transition::setup( hrfm::display::Texture * tex0, hrfm::display::Texture * tex1, float time ){
@@ -39,7 +38,7 @@ namespace hrfm{ namespace signage{ namespace display{
     void Transition::_draw(){}
     
     void Transition::setSize( float width, float height ){
-        FboTexture::setSize( width, height );
+        //FboTexture::setSize( width, height );
     }
     
     bool Transition::running(){
