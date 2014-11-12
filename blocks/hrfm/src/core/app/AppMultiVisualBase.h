@@ -49,7 +49,7 @@ namespace hrfm{ namespace app{
         bool                    mUseTransition;
         VisualTransitionBase *  mTransition;
     
-        gl::Texture             mTexture;
+        ci::gl::Texture         mTexture;
         
         void setupOsc();
         

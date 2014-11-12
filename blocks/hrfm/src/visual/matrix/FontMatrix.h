@@ -30,8 +30,8 @@ namespace hrfm {
             
             void setText(string log);
             
-            gl::Texture getTexture();
-            gl::Texture getFadeTexture();
+            ci::gl::Texture getTexture();
+            ci::gl::Texture getFadeTexture();
             
             Rectf getBounds();
             Vec2i getSize();
@@ -47,8 +47,8 @@ namespace hrfm {
             int myCurrentCol;
             int myCurrentRow;
             
-            gl::Fbo myFboTmp;
-            gl::Fbo myFadeFboTmp;
+            ci::gl::Fbo myFboTmp;
+            ci::gl::Fbo myFadeFboTmp;
             
             Slide2DEffect myFbo;
             Slide2DEffect myFadeFbo;

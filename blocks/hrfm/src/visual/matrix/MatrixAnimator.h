@@ -30,11 +30,11 @@ namespace hrfm {
                     myColSize = (float)mySize.x / (float)myCols;
                     myRowSize = (float)mySize.y / (float)myRows;
                     // init Fbo.
-                    gl::Fbo::Format format;
-                    myFbo = gl::Fbo( size.x, size.y, format );
+                    ci::gl::Fbo::Format format;
+                    myFbo = ci::gl::Fbo( size.x, size.y, format );
                 };
                 virtual void update( Channel32f * mChannel ){};
-                gl::Texture getTexture(){
+                ci::gl::Texture getTexture(){
                     return myFbo.getTexture();
                 }
                 void bindTexture( int index ){
@@ -49,7 +49,7 @@ namespace hrfm {
                 int myRows;
                 float myColSize;
                 float myRowSize;
-                gl::Fbo myFbo;
+                ci::gl::Fbo myFbo;
         };
         
         class MatrixAnimator : public BaseMatrixAnimator {

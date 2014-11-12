@@ -106,7 +106,7 @@ namespace hrfm {
                 }
                 
                 if( 0.001f <= speedDiff ){
-                    gl::color(1.0,0.0,0.0);
+                    ci::gl::color(1.0,0.0,0.0);
                 }else{
                     if( 0.0f < speedDiff ){
                         myDirection = 2;
@@ -114,11 +114,11 @@ namespace hrfm {
                         mySpeedX    = 0.0;
                         mySpeedY    = myBaseSpeed;
                     }
-                    gl::color(0.8,0.8,0.8);
+                    ci::gl::color(0.8,0.8,0.8);
                 }
                 
                 mRectf.set( floor(myCol)*w, floor(myRow)*h, floor(myCol+1.0f)*w, floor(myRow+1.0f)*h );
-                gl::drawSolidRect( mRectf );
+                ci::gl::drawSolidRect( mRectf );
                 
             }
             

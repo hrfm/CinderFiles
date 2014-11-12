@@ -41,7 +41,7 @@ namespace hrfm{ namespace cv{
     
     void FaceDetect::update( Surface surface ){
         
-        if( mFaceDetectEnabled ){
+        if( mFaceDetectEnabled && &surface != nullptr ){
             mCloneSurface = surface;
         }
         

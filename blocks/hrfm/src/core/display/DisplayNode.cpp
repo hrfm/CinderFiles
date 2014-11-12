@@ -65,14 +65,18 @@ namespace hrfm{ namespace display{
     void DisplayNode::_updateChildren(){
         std::list<IDrawable*>::iterator it, end;
         for( it = children.begin(), end = children.end(); it!=end; it++ ){
-            (*it)->update();
+            if( *it!=nullptr ){
+                (*it)->update();
+            }
         }
     }
     
     void DisplayNode::_drawChildren(){
         std::list<IDrawable*>::iterator it, end;
         for( it = children.begin(), end = children.end(); it!=end; it++ ){
-            (*it)->draw();
+            if( *it!=nullptr ){
+                (*it)->draw();
+            }
         }
     }
     

@@ -3,7 +3,7 @@
 #include "AppBase.h"
 #include "EventDispatcher.h"
 
-using namespace hrfm;
+using namespace ci;
 using namespace hrfm::app;
 using namespace hrfm::display;
 using namespace hrfm::events;
@@ -93,23 +93,23 @@ namespace fl{ namespace display{
         
         virtual void setup( AppBase * app, Vec2i fboSize ){
             FlDisplayObject::setup(app);
-            gl::Fbo::Format format;
-            mFbo        = gl::Fbo( fboSize.x, fboSize.y, format );
-            mOutputFbo  = gl::Fbo( fboSize.x, fboSize.y, format );
+            ci::gl::Fbo::Format format;
+            mFbo        = ci::gl::Fbo( fboSize.x, fboSize.y, format );
+            mOutputFbo  = ci::gl::Fbo( fboSize.x, fboSize.y, format );
             mFboSize    = fboSize;
             mFboAspect  = hrfm::utils::getAspectRatio( fboSize );
             mBounds.set( 0, 0, fboSize.x, fboSize.y );
         }
         
-        virtual gl::Texture getTexture(){
+        virtual ci::gl::Texture getTexture(){
             return mOutputFbo.getTexture();
         }
         
         virtual void update(){
-            Area viewport = gl::getViewport();
-            gl::setViewport( (Area)mBounds );
-            gl::pushMatrices();
-            gl::setMatricesWindow( mFboSize, false );
+            Area viewport = ci::gl::getViewport();
+            ci::gl::setViewport( (Area)mBounds );
+            ci::gl::pushMatrices();
+            ci::gl::setMatricesWindow( mFboSize, false );
             mFbo.bindFramebuffer();
             mUpdate();
             mFbo.unbindFramebuffer();
@@ -117,16 +117,16 @@ namespace fl{ namespace display{
             mOutputFbo.bindFramebuffer();
             mDrawToOutput();
             mOutputFbo.unbindFramebuffer();
-            gl::popMatrices();
-            gl::setViewport(viewport);
+            ci::gl::popMatrices();
+            ci::gl::setViewport(viewport);
         }
         
         virtual void draw(){
-            gl::draw( getTexture(), mBounds );
+            ci::gl::draw( getTexture(), mBounds );
         }
         
         virtual void draw( Rectf bounds ){
-            gl::draw( getTexture(), bounds );
+            ci::gl::draw( getTexture(), bounds );
         }
         
     protected:
@@ -136,12 +136,12 @@ namespace fl{ namespace display{
         virtual void mUpdateAfter(){}
         
         virtual void mDrawToOutput(){
-            gl::clear();
-            gl::draw( mFbo.getTexture() );
+            ci::gl::clear();
+            ci::gl::draw( mFbo.getTexture() );
         }
         
-        gl::Fbo mFbo;
-        gl::Fbo mOutputFbo;
+        ci::gl::Fbo mFbo;
+        ci::gl::Fbo mOutputFbo;
         Vec2i   mFboSize;
         Vec2i   mFboAspect;
         

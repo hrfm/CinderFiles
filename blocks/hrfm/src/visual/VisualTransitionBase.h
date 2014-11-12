@@ -20,10 +20,10 @@ namespace hrfm { namespace visual{
         };
         
         virtual void init( Vec2i size, float transitionTime ){
-            gl::Fbo::Format format;
+            ci::gl::Fbo::Format format;
             mResolution = size;
             mAspect     = getAspectRatio( size );
-            mOutputFbo  = gl::Fbo( mResolution.x, mResolution.y, format );
+            mOutputFbo  = ci::gl::Fbo( mResolution.x, mResolution.y, format );
             mTransTime  = transitionTime;
         };
         
@@ -44,7 +44,7 @@ namespace hrfm { namespace visual{
             mNext->prepareTransitionIn();
             
             mOutputFbo.bindFramebuffer();
-            gl::clear();
+            ci::gl::clear();
             mOutputFbo.unbindFramebuffer();
             
         }
@@ -116,7 +116,7 @@ namespace hrfm { namespace visual{
             }
         };
         
-        virtual gl::Texture output(){
+        virtual ci::gl::Texture output(){
             if( 1.0 <= mProgress ){
                 return mNext->output();
             }else if( mCurrent->isTransitionOutCompleted() ){
@@ -128,7 +128,7 @@ namespace hrfm { namespace visual{
         
     protected:
         
-        gl::Fbo     mOutputFbo;
+        ci::gl::Fbo mOutputFbo;
         Vec2i       mResolution;
         Vec2i       mAspect;
         float       mTransTime;

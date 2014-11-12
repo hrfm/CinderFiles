@@ -27,9 +27,9 @@ namespace hrfm {
             //myFontManager.setFontByName("misakigothic");
             //myFontManager.setFontByName("OCRAStd");
             
-            gl::Fbo::Format format;
-            myFboTmp     = gl::Fbo( size.x, size.y, format );
-            myFadeFboTmp = gl::Fbo( size.x, size.y, format );
+            ci::gl::Fbo::Format format;
+            myFboTmp     = ci::gl::Fbo( size.x, size.y, format );
+            myFadeFboTmp = ci::gl::Fbo( size.x, size.y, format );
             
             myFbo.setup( size );
             myFadeFbo.setup( size );
@@ -76,8 +76,8 @@ namespace hrfm {
             if( random == false ){
              
                 myFboTmp.bindFramebuffer();
-                    gl::pushMatrices();
-                    gl::setMatricesWindow(windowSize,false);
+                    ci::gl::pushMatrices();
+                    ci::gl::setMatricesWindow(windowSize,false);
                         // draw font.
                         for( int line = 0; line < numUpdateRow; line++ ){
                             loop = true;
@@ -91,8 +91,8 @@ namespace hrfm {
                                     loop = false;
                                 }
                                 if( maxCols <= ++currentCol || eof ){
-                                    gl::color(0.0,0.0,0.0);
-                                    gl::drawSolidRect( Rectf( x+myFontSize, y, windowSize.x, y+myFontSize ) );
+                                    ci::gl::color(0.0,0.0,0.0);
+                                    ci::gl::drawSolidRect( Rectf( x+myFontSize, y, windowSize.x, y+myFontSize ) );
                                     currentCol = 0;
                                     if( myMatrixSize.y < ++currentRow ){
                                         currentRow = 0;
@@ -100,31 +100,31 @@ namespace hrfm {
                                 }
                             }
                         }
-                    gl::popMatrices();
+                    ci::gl::popMatrices();
                 myFboTmp.unbindFramebuffer();
                 
                 mySlideY = (float)currentRow / (float)myMatrixSize.y;
                 
                 myFadeFboTmp.bindFramebuffer();
-                    gl::pushMatrices();
-                    gl::setMatricesWindow(windowSize,false);
-                        gl::color(0.0f,0.0f,0.0f,0.08f);
-                        gl::drawSolidRect(windowBounds);
-                        gl::color( 1.0, 1.0, 1.0, 1.0 );
+                    ci::gl::pushMatrices();
+                    ci::gl::setMatricesWindow(windowSize,false);
+                        ci::gl::color(0.0f,0.0f,0.0f,0.08f);
+                        ci::gl::drawSolidRect(windowBounds);
+                        ci::gl::color( 1.0, 1.0, 1.0, 1.0 );
                         vector<int>::iterator it = filled.begin();
                         while( it != filled.end() ){
                             float y = (*it) * myFontSize;
-                            gl::drawSolidRect( Rectf( 0, y, windowSize.x, y+myFontSize ) );
+                            ci::gl::drawSolidRect( Rectf( 0, y, windowSize.x, y+myFontSize ) );
                             it++;
                         }
-                    gl::popMatrices();
+                    ci::gl::popMatrices();
                 myFadeFboTmp.unbindFramebuffer();
              
             }else{
                 
                 myFboTmp.bindFramebuffer();
-                    gl::pushMatrices();
-                    gl::setMatricesWindow(windowSize,false);
+                    ci::gl::pushMatrices();
+                    ci::gl::setMatricesWindow(windowSize,false);
                     // draw font.
                     for( int line = 0; line < numUpdateRow; line++ ){
                         loop = true;
@@ -143,22 +143,22 @@ namespace hrfm {
                             }
                         }
                     }
-                    gl::popMatrices();
+                    ci::gl::popMatrices();
                 myFboTmp.unbindFramebuffer();
                 
                 myFadeFboTmp.bindFramebuffer();
-                    gl::pushMatrices();
-                    gl::setMatricesWindow(windowSize,false);
-                        gl::color(0.0f,0.0f,0.0f,0.02f);
-                        gl::drawSolidRect(windowBounds);
-                        gl::color( 1.0, 1.0, 1.0, 1.0 );
+                    ci::gl::pushMatrices();
+                    ci::gl::setMatricesWindow(windowSize,false);
+                        ci::gl::color(0.0f,0.0f,0.0f,0.02f);
+                        ci::gl::drawSolidRect(windowBounds);
+                        ci::gl::color( 1.0, 1.0, 1.0, 1.0 );
                         vector<int>::iterator it = filled.begin();
                         while( it != filled.end() ){
                             float x = (*it) * myFontSize;
-                            gl::drawSolidRect( Rectf( x, 0, x+myFontSize, getWindowHeight() ) );
+                            ci::gl::drawSolidRect( Rectf( x, 0, x+myFontSize, getWindowHeight() ) );
                             it++;
                         }
-                    gl::popMatrices();
+                    ci::gl::popMatrices();
                 myFadeFboTmp.unbindFramebuffer();
                 
             }

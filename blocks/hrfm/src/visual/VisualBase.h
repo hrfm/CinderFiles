@@ -38,7 +38,7 @@ namespace hrfm { namespace visual{
         
             virtual void draw(){};
         
-            virtual gl::Texture output(){
+            virtual ci::gl::Texture output(){
                 return getTexture();
             };
             

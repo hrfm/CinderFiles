@@ -120,8 +120,8 @@ namespace hrfm{ namespace cv{
                 
                 Vec2i size = bounds.getSize();
                 
-                gl::pushMatrices();
-                gl::translate( bounds.x1, bounds.y1, 0 );
+                ci::gl::pushMatrices();
+                ci::gl::translate( bounds.x1, bounds.y1, 0 );
                 
                 vector<Particle*>::iterator it;
                 const std::vector<Particle*>::const_iterator & end = particles.end();
@@ -135,11 +135,11 @@ namespace hrfm{ namespace cv{
                             alpha = 0.2;
                         }
                         glColor4f(1.0,1.0,1.0,alpha);
-                        gl::drawSolidCircle( (*it)->getPosition() * Vec2f(size), particleSize * alpha );
+                        ci::gl::drawSolidCircle( (*it)->getPosition() * Vec2f(size), particleSize * alpha );
                     }
                 }
                 
-                gl::popMatrices();
+                ci::gl::popMatrices();
                 
             }
             
@@ -147,8 +147,8 @@ namespace hrfm{ namespace cv{
                 
                 Vec2i size = bounds.getSize();
                 
-                gl::pushMatrices();
-                gl::translate( bounds.x1, bounds.y1, 0 );
+                ci::gl::pushMatrices();
+                ci::gl::translate( bounds.x1, bounds.y1, 0 );
                 
                 glDisable( GL_TEXTURE_2D );
                 glBegin( GL_LINES );
@@ -164,14 +164,14 @@ namespace hrfm{ namespace cv{
                                 alpha = 1.0;
                             }
                             glColor4f(1.0,1.0,1.0,alpha);
-                            gl::vertex( (*it)->getBeforePosition()* Vec2f(size) );
-                            gl::vertex( (*it)->getPosition()* Vec2f(size) );
+                            ci::gl::vertex( (*it)->getBeforePosition()* Vec2f(size) );
+                            ci::gl::vertex( (*it)->getPosition()* Vec2f(size) );
                         }
                     }
                 glEnd();
                 glEnable( GL_TEXTURE_2D );
                 
-                gl::popMatrices();
+                ci::gl::popMatrices();
                 
             }
         
@@ -190,14 +190,14 @@ namespace hrfm{ namespace cv{
             ActiveEffect(){}
             
             void setup( Vec2i size ){
-                gl::Fbo::Format format;
-                motionFbo = gl::Fbo( size.x, size.y, format );
+                ci::gl::Fbo::Format format;
+                motionFbo = ci::gl::Fbo( size.x, size.y, format );
             }
             
             void update( ForceMap map ){
                 mParticle.update( map );
                 motionFbo.bindFramebuffer();
-                    gl::clear();
+                    ci::gl::clear();
                 motionFbo.unbindFramebuffer();
             }
             
@@ -207,16 +207,16 @@ namespace hrfm{ namespace cv{
                     return;
                 }
                 
-                gl::enableAdditiveBlending();
+                ci::gl::enableAdditiveBlending();
                 motionFbo.bindFramebuffer();
-                    gl::pushMatrices();
-                    gl::setMatricesWindow( getWindowSize(), false );
+                    ci::gl::pushMatrices();
+                    ci::gl::setMatricesWindow( getWindowSize(), false );
                     glColor4f(1.0,1.0,1.0,alpha);
                     //captureInput.drawForceMap();
                     mParticle.drawLine( getWindowBounds() );
-                    gl::popMatrices();
+                    ci::gl::popMatrices();
                 motionFbo.unbindFramebuffer();
-                gl::disableAlphaBlending();
+                ci::gl::disableAlphaBlending();
                 
             }
             
@@ -226,16 +226,16 @@ namespace hrfm{ namespace cv{
                     return;
                 }
                 
-                gl::enableAdditiveBlending();
+                ci::gl::enableAdditiveBlending();
                 motionFbo.bindFramebuffer();
-                    gl::pushMatrices();
-                    gl::setMatricesWindow( getWindowSize(), false );
+                    ci::gl::pushMatrices();
+                    ci::gl::setMatricesWindow( getWindowSize(), false );
                     glColor4f(1.0,1.0,1.0,alpha);
                     //captureInput.drawForceMap();
                     mParticle.draw( getWindowBounds(), particleSize );
-                    gl::popMatrices();
+                    ci::gl::popMatrices();
                 motionFbo.unbindFramebuffer();
-                gl::disableAlphaBlending();
+                ci::gl::disableAlphaBlending();
                 
             }
         
@@ -245,13 +245,13 @@ namespace hrfm{ namespace cv{
                     return;
                 }
                 
-                gl::enableAdditiveBlending();
+                ci::gl::enableAdditiveBlending();
                 motionFbo.bindFramebuffer();
                 
-                    gl::pushMatrices();
-                    gl::setMatricesWindow( getWindowSize(), false );
+                    ci::gl::pushMatrices();
+                    ci::gl::setMatricesWindow( getWindowSize(), false );
                     
-                    gl::color( ColorA( 1.0f, 1.0f, 1.0f, alpha ) );
+                    ci::gl::color( ColorA( 1.0f, 1.0f, 1.0f, alpha ) );
                     
                     Vec2f pos    = map.getMaxForcePosition();
                     Vec2f center = Vec2f( pos.x * getWindowWidth(), pos.y * getWindowHeight() );
@@ -260,25 +260,25 @@ namespace hrfm{ namespace cv{
                     
                     if( 30.0 < length ){
                         for( int i = 0; i < 20; i++ ){
-                            gl::lineWidth(randFloat()*3);
+                            ci::gl::lineWidth(randFloat()*3);
                             Vec2f pos = center + Vec2f(randFloat()*1920.0-960.f, randFloat()*1000.0-500.f);
-                            gl::drawLine( pos, pos +  force * 300.0f );
-                            gl::drawLine( pos, pos + -force * 300.0f );
+                            ci::gl::drawLine( pos, pos +  force * 300.0f );
+                            ci::gl::drawLine( pos, pos + -force * 300.0f );
                         }
                     }else if( 10.0 < length ){
                         for( int i = 0; i < 40; i++ ){
-                            gl::lineWidth(randFloat()* 10);
+                            ci::gl::lineWidth(randFloat()* 10);
                             float radian = 6.28 * randFloat();
                             Vec2f pos = Vec2f(cos(radian), sin(radian));
-                            gl::drawLine( center + pos * ( 100 + 400.0 * randFloat() ), center + pos * 2000 );
+                            ci::gl::drawLine( center + pos * ( 100 + 400.0 * randFloat() ), center + pos * 2000 );
                         }
                     }
                     
-                    gl::lineWidth(1);
+                    ci::gl::lineWidth(1);
                 
-                    gl::popMatrices();
+                    ci::gl::popMatrices();
                 motionFbo.unbindFramebuffer();
-                gl::disableAlphaBlending();
+                ci::gl::disableAlphaBlending();
                 
             }
         
@@ -288,13 +288,13 @@ namespace hrfm{ namespace cv{
                     return;
                 }
                 
-                gl::enableAdditiveBlending();
+                ci::gl::enableAdditiveBlending();
                 motionFbo.bindFramebuffer();
                 
-                    gl::pushMatrices();
-                    gl::setMatricesWindow( getWindowSize(), false );
+                    ci::gl::pushMatrices();
+                    ci::gl::setMatricesWindow( getWindowSize(), false );
                     
-                    gl::color( ColorA( 1.0f, 1.0f, 1.0f, alpha ) );
+                    ci::gl::color( ColorA( 1.0f, 1.0f, 1.0f, alpha ) );
                     
                     Vec2f pos    = map.getMaxForcePosition();
                     Vec2f center = Vec2f( pos.x * getWindowWidth(), pos.y * getWindowHeight() );
@@ -303,17 +303,17 @@ namespace hrfm{ namespace cv{
                 
                     if( 10.0 < length ){
                         for( int i = 0; i < 10; i++ ){
-                            gl::lineWidth(randFloat()* 5);
+                            ci::gl::lineWidth(randFloat()* 5);
                             ___drawKaminari___( center + Vec2f( randFloat(-30,30),randFloat(-30,30) ), 6.28 * randFloat() );
                         }
                     }
                     
-                    gl::lineWidth(1);
+                    ci::gl::lineWidth(1);
                     
-                    gl::popMatrices();
+                    ci::gl::popMatrices();
                 
                 motionFbo.unbindFramebuffer();
-                gl::disableAlphaBlending();
+                ci::gl::disableAlphaBlending();
                 
             }
         
@@ -322,19 +322,19 @@ namespace hrfm{ namespace cv{
                 float angle = firstAngle;
                 for( int i=0; i< 70; i++ ){
                     to = from + Vec2f( cos(angle), sin(angle) ) * (10.0f+30.0f*randFloat());
-                    gl::drawLine( from, to );
+                    ci::gl::drawLine( from, to );
                     from = to;
                     angle += 1.0 * randFloat() - 0.5;
                 }
             }
         
-            gl::Texture getTexture(){
+            ci::gl::Texture getTexture(){
                 return motionFbo.getTexture();
             }
         
         private :
         
-            gl::Fbo motionFbo;
+            ci::gl::Fbo motionFbo;
             ParticleController mParticle;
         
     };

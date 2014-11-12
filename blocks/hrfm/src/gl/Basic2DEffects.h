@@ -13,7 +13,7 @@
 using namespace ci;
 using namespace ci::app;
 using namespace std;
-using namespace hrfm::visual;
+using namespace hrfm::gl;
 
 class SciFi2DEffect : public Base2DEffect{
     public :
