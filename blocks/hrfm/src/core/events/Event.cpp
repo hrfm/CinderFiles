@@ -32,6 +32,9 @@ namespace hrfm { namespace events{
     const string Event::COMPLETE = "complete";
     const string Event::DONE     = "done";
     const string Event::ERROR    = "error";
+    
+    const string Event::ADDED   = "added";
+    const string Event::REMOVED = "removed";
     const string Event::ADDED_TO_STAGE     = "added_to_stage";
     const string Event::REMOVED_FROM_STAGE = "removed_from_stage";
     

@@ -9,6 +9,8 @@ namespace hrfm{ namespace display{
         height = h;
     }
     
+    void IDrawable::setup(){}
+    
     void IDrawable::setSize( Vec2i size ){
         setSize( size.x, size.y );
     }
@@ -20,8 +22,6 @@ namespace hrfm{ namespace display{
     Rectf IDrawable::getBounds(){
         return Rectf( x, y, width, height );
     }
-    
-    void IDrawable::setup(){}
     
     void IDrawable::update(){
         _update();
@@ -37,17 +37,44 @@ namespace hrfm{ namespace display{
     }
     
     void IDrawable::_update(){}
+    
     void IDrawable::_draw(){};
     
-    Stage * IDrawable::getStage(){
-        return _stage;
+    bool IDrawable::hasParent(){
+        return _parent != nullptr && _parent != NULL;
+    }
+    
+    DisplayNode * IDrawable::getParent(){
+        return _parent;
     }
     
     bool IDrawable::hasStage(){
         return _stage != nullptr && _stage != NULL;
     }
     
+    Stage * IDrawable::getStage(){
+        return _stage;
+    }
+    
     //! protected
+    
+    void IDrawable::_setParent( DisplayNode * node ){
+        if( !hasParent() ){
+            _parent = node;
+            dispatchEvent( new hrfm::events::Event(hrfm::events::Event::ADDED) );
+        }else{
+            _parent = node;
+        }
+    }
+    
+    void IDrawable::_unsetParent(){
+        if( hasStage() ){
+            _stage = NULL;
+            dispatchEvent( new hrfm::events::Event(hrfm::events::Event::REMOVED) );
+        }else{
+            _stage = NULL;
+        }
+    }
     
     void IDrawable::_setStage( Stage * stage ){
         if( !hasStage() ){

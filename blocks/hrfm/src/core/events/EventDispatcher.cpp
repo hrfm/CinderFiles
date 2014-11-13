@@ -20,6 +20,8 @@ namespace hrfm { namespace events {
             return;
         }
         
+        event->_target = this;
+        
         // A reference to keep code clean
         std::map<int, std::list<IEventListener*> > &list = _listenerList[event->type()];
         

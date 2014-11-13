@@ -25,6 +25,8 @@ namespace hrfm{ namespace display{
         virtual void update();
         virtual void draw();
         
+        virtual DisplayNode * removeOwn();
+        
         std::list<IDrawable*> children;
         
     protected:
@@ -34,6 +36,8 @@ namespace hrfm{ namespace display{
         
         //! addChild で追加された子要素を描画します.
         void _drawChildren();
+        
+        virtual void _unsetStage();
         
     };
     

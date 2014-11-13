@@ -22,20 +22,23 @@ namespace hrfm{ namespace display{
         };
         ~IDrawable(){};
         
+        virtual void setup();
+        
         virtual void setSize( int w, int h );
         virtual void setSize( ci::Vec2i size );
+        
         virtual ci::Vec2i getSize();
-        
         virtual ci::Rectf getBounds();
-        
-        virtual void setup();
         
         virtual void update();
         
         virtual void draw();
         
-        virtual Stage * getStage();
+        virtual bool hasParent();
+        virtual DisplayNode * getParent();
+        
         virtual bool hasStage();
+        virtual Stage * getStage();
         
         float alpha;
         float x, y;
@@ -44,6 +47,7 @@ namespace hrfm{ namespace display{
     protected:
         
         Stage * _stage;
+        DisplayNode * _parent;
         virtual void _update();
         virtual void _draw();
         
@@ -54,6 +58,9 @@ namespace hrfm{ namespace display{
         
         virtual void _setStage( Stage * node );
         virtual void _unsetStage();
+        
+        virtual void _setParent( DisplayNode * node );
+        virtual void _unsetParent();
         
     };
     

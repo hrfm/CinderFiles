@@ -13,6 +13,7 @@ namespace hrfm{ namespace display{
         if( hasStage() ){
             child->_setStage(_stage);
         }
+        child->_setParent(this);
         children.push_back(child);
         return child;
     }
@@ -20,6 +21,7 @@ namespace hrfm{ namespace display{
     IDrawable * DisplayNode::removeChild( IDrawable * child ){
         children.remove(child);
         child->_unsetStage();
+        child->_unsetParent();
         return child;
     }
     
@@ -64,24 +66,54 @@ namespace hrfm{ namespace display{
         gl::popMatrices();
     }
     
+    DisplayNode * DisplayNode::removeOwn(){
+        if( hasParent() ){
+            getParent()->removeChild(this);
+        }
+        return this;
+    }
+    
     //! protected:
     
     void DisplayNode::_updateChildren(){
+        
+        if( numChildren() == 0 ) return;
+        
         std::list<IDrawable*>::iterator it, end;
         for( it = children.begin(), end = children.end(); it!=end; it++ ){
             if( *it!=nullptr ){
                 (*it)->update();
             }
         }
+        
     }
     
     void DisplayNode::_drawChildren(){
+        
+        if( numChildren() == 0 ) return;
+        
         std::list<IDrawable*>::iterator it, end;
         for( it = children.begin(), end = children.end(); it!=end; it++ ){
             if( *it!=nullptr ){
                 (*it)->draw();
             }
         }
+        
+    }
+    
+    void DisplayNode::_unsetStage(){
+        
+        IDrawable::_unsetStage();
+        
+        if( numChildren() == 0 ) return;
+        
+        std::list<IDrawable*>::iterator it, end;
+        for( it = children.begin(), end = children.end(); it!=end; it++ ){
+            if( *it!=nullptr ){
+                (*it)->_unsetStage();
+            }
+        }
+        
     }
     
 }}

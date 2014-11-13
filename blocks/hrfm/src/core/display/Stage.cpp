@@ -16,6 +16,7 @@ namespace hrfm{ namespace display{
     IDrawable * Stage::addChild( IDrawable * child ){
         children.remove(child);
         child->_setStage(this);
+        child->_setParent(this);
         children.push_back(child);
         return child;
     }

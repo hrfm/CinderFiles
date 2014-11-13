@@ -37,6 +37,8 @@ namespace hrfm { namespace events{
         static const string DONE;
         static const string ERROR;
         
+        static const string ADDED;
+        static const string REMOVED;
         static const string ADDED_TO_STAGE;
         static const string REMOVED_FROM_STAGE;
         
@@ -50,6 +52,10 @@ namespace hrfm { namespace events{
         
         //! cancel() によってキャンセルされていた場合 true になる.
         bool _canceled;
+        
+    protected:
+        
+        friend class EventDispatcher;
         
         void * _target;
         void * _listener;
