@@ -37,6 +37,8 @@ namespace hrfm { namespace events{
         static const string DONE;
         static const string ERROR;
         
+        static const string RESIZE;
+        
         static const string ADDED;
         static const string REMOVED;
         static const string ADDED_TO_STAGE;

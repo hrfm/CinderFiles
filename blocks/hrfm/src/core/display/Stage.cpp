@@ -11,6 +11,8 @@ namespace hrfm{ namespace display{
         ci::gl::Fbo::Format format;
         _fbo = ci::gl::Fbo( w, h, format );
         
+        dispatchEvent( new hrfm::events::Event( hrfm::events::Event::RESIZE ) );
+        
     }
     
     IDrawable * Stage::addChild( IDrawable * child ){
