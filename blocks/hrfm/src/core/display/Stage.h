@@ -10,6 +10,8 @@ namespace hrfm{ namespace display{
     public:
         Stage(){
             DisplayNode();
+            _beforeWidth  = width;
+            _beforeHeight = height;
         };
         ~Stage(){};
         virtual IDrawable * addChild( IDrawable * child );
@@ -19,6 +21,8 @@ namespace hrfm{ namespace display{
         ci::gl::Texture getTexture();
     private:
         ci::gl::Fbo _fbo;
+        int _beforeWidth;
+        int _beforeHeight;
     };
     
 }}

@@ -19,11 +19,11 @@ namespace hrfm{ namespace display{
     
     void Texture::init( ImageSourceRef ref  ){
         mTexture = gl::Texture(ref);
-        if( _width == 0 ){
-            _width = mTexture.getWidth();
+        if( width == 0 ){
+            width = mTexture.getWidth();
         }
-        if( _height == 0 ){
-            _height = mTexture.getHeight();
+        if( height == 0 ){
+            height = mTexture.getHeight();
         }
     }
     
