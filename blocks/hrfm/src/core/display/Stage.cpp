@@ -28,6 +28,8 @@ namespace hrfm{ namespace display{
     
     void Stage::draw(){
         
+        Area viewport = ci::gl::getViewport();
+        
         ci::gl::enableAlphaBlending();
         
         _fbo.bindFramebuffer();
@@ -36,6 +38,7 @@ namespace hrfm{ namespace display{
             ci::gl::color( ci::Color( 1.0, 1.0, 1.0) );
             ci::gl::pushMatrices();
             {
+                ci::gl::setViewport( (Area)getBounds() );
                 ci::gl::setMatricesWindow( width, height, false );
                 {
                     _draw();
@@ -50,6 +53,8 @@ namespace hrfm{ namespace display{
         gl::draw( _fbo.getTexture(), Rectf( 0, 0, width, height ) );
         
         ci::gl::disableAlphaBlending();
+        
+        ci::gl::setViewport(viewport);
         
     }
     

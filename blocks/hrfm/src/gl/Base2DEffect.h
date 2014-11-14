@@ -10,6 +10,9 @@
 
 #include "Utils.h"
 
+#include "SiFboFactory.h"
+#include "ShaderFactory.h"
+
 using namespace ci;
 using namespace ci::app;
 using namespace std;
@@ -29,25 +32,15 @@ namespace hrfm { namespace gl{
         // どのシェーダを使うかはクラスに任せます.
         void setup( Vec2i size ){
             
-            ci::gl::Fbo::Format format;
-            mFbo = ci::gl::Fbo( size.x, size.y, format );
-            
-            cout << "create FBO " << size << endl;
-            
             // Calcurate Aspect Ratio.
-            
             mAspect = getAspectRatio( size );
             
-            // Create Shader.
+            // Create Fbo.
+            mFbo = *SiFboFactory::getInstance().create( size.x, size.y, false );
             
-            try {
-                mShader = ci::gl::GlslProg( getVertexShader(), getFragmentShader() );
-            }catch( ci::gl::GlslProgCompileExc &exc ) {
-                cout << "Shader compile error: " << endl;
-                cout << exc.what();
-            }catch( ... ) {
-                cout << "Unable to load shader" << endl;
-            }
+            // Create Shader.
+            mShader = ShaderFactory::create( getVertexShader(), getFragmentShader() );
+            
         }
         
         virtual ci::gl::Texture affect( ci::gl::Texture tex ){
@@ -61,8 +54,13 @@ namespace hrfm { namespace gl{
             {
                 ci::gl::pushMatrices();
                 {
+                    //*
                     ci::gl::setViewport( mFbo.getBounds() );
                     ci::gl::setMatricesWindow( mAspect, false );
+                    /*/
+                    ci::gl::setViewport( mFbo.getBounds() );
+                    ci::gl::setMatricesWindow( mFbo.getWidth(), mFbo.getHeight(), false );
+                    //*/
                     ci::gl::clear();
                     mShader.bind();
                     {

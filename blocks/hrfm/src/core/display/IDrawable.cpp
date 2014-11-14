@@ -4,12 +4,12 @@ using namespace ci;
 
 namespace hrfm{ namespace display{
     
+    void IDrawable::setup(){}
+    
     void IDrawable::setSize( int w, int h ){
         width  = w;
         height = h;
     }
-    
-    void IDrawable::setup(){}
     
     void IDrawable::setSize( Vec2i size ){
         setSize( size.x, size.y );

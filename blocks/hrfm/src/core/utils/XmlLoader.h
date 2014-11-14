@@ -1,7 +1,7 @@
 #pragma once
 
-#include "cinder/app/App.h"
 #include "cinder/Xml.h"
+#include "DataLoader.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -10,11 +10,13 @@ using namespace std;
 namespace hrfm{ namespace utils{
     
     class XmlLoader{
+    
+    private:
+    
+        XmlLoader(){};
+        ~XmlLoader(){};
         
     public:
-        
-        XmlLoader();
-        ~XmlLoader();
         
         /*
          
