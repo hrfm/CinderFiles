@@ -5,12 +5,12 @@ using namespace ci;
 namespace hrfm{ namespace display{
     
     void Stage::setSize( int w, int h ){
-        //if( width != w && height != h ){
+        if( width != w || height != h ){
             DisplayNode::setSize( w, h );
             ci::gl::Fbo::Format format;
             _fbo = ci::gl::Fbo( w, h, format );
             dispatchEvent( new hrfm::events::Event( hrfm::events::Event::RESIZE ) );
-        //}
+        }
     }
     
     IDrawable * Stage::addChild( IDrawable * child ){
