@@ -23,6 +23,10 @@ namespace hrfm{ namespace display{
         return Rectf( x, y, width, height );
     }
     
+    Rectf IDrawable::getDrawBounds(){
+        return Rectf( 0, 0, width, height );
+    }
+    
     void IDrawable::update(){
         _update();
     };

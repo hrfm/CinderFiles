@@ -29,6 +29,7 @@ namespace hrfm{ namespace display{
         
         virtual ci::Vec2i getSize();
         virtual ci::Rectf getBounds();
+        virtual ci::Rectf getDrawBounds();
         
         virtual void update();
         
