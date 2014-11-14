@@ -21,5 +21,4 @@ namespace hrfm{ namespace display{
         ci::gl::Fbo _fbo;
     };
     
-    
 }}

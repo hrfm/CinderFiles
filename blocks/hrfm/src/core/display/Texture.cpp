@@ -19,11 +19,11 @@ namespace hrfm{ namespace display{
     
     void Texture::init( ImageSourceRef ref  ){
         mTexture = gl::Texture(ref);
-        if( width == 0 ){
-            width = mTexture.getWidth();
+        if( _width == 0 ){
+            _width = mTexture.getWidth();
         }
-        if( height == 0 ){
-            height = mTexture.getHeight();
+        if( _height == 0 ){
+            _height = mTexture.getHeight();
         }
     }
     
@@ -45,7 +45,7 @@ namespace hrfm{ namespace display{
     
     void Texture::_draw(){
         if( isDrawable() ){
-            gl::draw( getTexture(), Rectf( 0, 0, width, height ) );
+            gl::draw( getTexture(), getDrawBounds() );
         }
     }
     

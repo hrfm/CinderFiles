@@ -83,7 +83,7 @@ namespace hrfm{ namespace display{
     void DisplayNode::draw(){
         gl::enableAlphaBlending();
         gl::pushMatrices();
-        gl::translate( x, y );
+        gl::translate( _x, _y );
         {
             _draw();
             _drawChildren();

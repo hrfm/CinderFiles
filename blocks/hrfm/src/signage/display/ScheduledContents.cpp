@@ -256,7 +256,7 @@ namespace hrfm{ namespace signage{ namespace display{
     
     void ScheduledContents::_update(){
         if( _currentContent ){
-            _currentContent->setSize(width, height);
+            _currentContent->setSize( _width, _height);
         }
     }
     

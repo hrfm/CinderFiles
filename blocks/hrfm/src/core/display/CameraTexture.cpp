@@ -29,8 +29,7 @@ namespace hrfm{ namespace display{
         
         // --- Setup Capture Devices. ---
         
-        this->width  = width;
-        this->height = height;
+        setSize( width, height );
         
         showAllDevices();
         

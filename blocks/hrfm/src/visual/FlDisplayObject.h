@@ -35,7 +35,7 @@ namespace fl{ namespace display{
             float diff = mBounds.x1 - x;
             mBounds.x1 += diff;
             mBounds.x2 += diff;
-            this->x = x;
+            this->_x = x;
         };
         
         virtual float getY(){
@@ -45,23 +45,23 @@ namespace fl{ namespace display{
             float diff = mBounds.y1 - y;
             mBounds.y1 += diff;
             mBounds.y2 += diff;
-            this->y = y;
+            this->_y = y;
         };
         
-        virtual float getWidth(){
+        virtual int getWidth(){
             return mBounds.getWidth();
         }
         virtual void setWidth( float w ){
             mBounds.x2 = mBounds.x1 + w;
-            this->width = w;
+            this->_width = w;
         };
         
-        virtual float getHeight(){
+        virtual int getHeight(){
             return mBounds.getHeight();
         }
         virtual void setHeight( float h ){
             mBounds.y2 = mBounds.y1 + h;
-            this->height = h;
+            this->_height = h;
         };
         
         virtual void _update(){

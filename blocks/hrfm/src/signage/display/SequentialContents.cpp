@@ -186,7 +186,7 @@ namespace hrfm{ namespace signage{ namespace display{
     void SequentialContents::_update(){
         if( _currentSequence ){
             _currentSequence->update();
-            _currentSequence->setSize( width, height );
+            _currentSequence->setSize( _width, _height );
         }
     }
     

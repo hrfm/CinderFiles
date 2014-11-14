@@ -5,7 +5,7 @@ using namespace ci;
 namespace hrfm{ namespace display{
     
     void Stage::setSize( int w, int h ){
-        if( width != w || height != h ){
+        if( _width != w || _height != h ){
             DisplayNode::setSize( w, h );
             ci::gl::Fbo::Format format;
             _fbo = ci::gl::Fbo( w, h, format );
@@ -39,7 +39,7 @@ namespace hrfm{ namespace display{
             ci::gl::pushMatrices();
             {
                 ci::gl::setViewport( (Area)getBounds() );
-                ci::gl::setMatricesWindow( width, height, false );
+                ci::gl::setMatricesWindow( _width, _height, false );
                 {
                     _draw();
                     _drawChildren();
@@ -49,8 +49,8 @@ namespace hrfm{ namespace display{
         }
         _fbo.unbindFramebuffer();
         
-        ci::gl::translate( x, y );
-        gl::draw( _fbo.getTexture(), Rectf( 0, 0, width, height ) );
+        ci::gl::translate( _x, _y );
+        gl::draw( _fbo.getTexture(), getDrawBounds() );
         
         ci::gl::disableAlphaBlending();
         
