@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Texture.h"
-#include "EventDispatcher.h"
+#include "TextureNode.h"
 
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Texture.h"
@@ -15,24 +14,22 @@ namespace hrfm{ namespace display{
      動画の Texture への描画のみを行うシンプルなクラスです.
      
      */
-    class MovieTexture : public hrfm::display::Texture{
+    class MovieTexture : public TextureNode{
         
     public:
         
         MovieTexture();
-        MovieTexture( const string filePath );
         MovieTexture( ci::fs::path filePath );
         ~MovieTexture();
         
-        void init( const string filePath );
         void init( ci::fs::path filePath );
-        
-        virtual bool isDrawable();
         
         virtual ci::qtime::MovieGlRef getMovieGlRef();
         
         virtual void play();
         virtual void stop();
+        
+        virtual ci::gl::Texture getTexture();
         
     protected:
         
@@ -42,7 +39,7 @@ namespace hrfm{ namespace display{
         
     private:
         
-        ci::qtime::MovieGlRef mMovieGlRef;
+        ci::qtime::MovieGlRef _movieGlRef;
         
     };
     

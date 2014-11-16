@@ -17,7 +17,7 @@ namespace hrfm{ namespace signage{ namespace display{
             _transition = transition;
         }
         
-        virtual void setupTransition(  hrfm::display::Texture * tex0, hrfm::display::Texture * tex1, float time ){
+        virtual void setupTransition(  hrfm::display::TextureNode * tex0, hrfm::display::TextureNode * tex1, float time ){
             if( _transition ){
                 _transition->setup( tex0, tex1, time );
             }

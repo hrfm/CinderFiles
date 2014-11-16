@@ -3,7 +3,6 @@
 #include "cinder/app/App.h"
 
 #include "DisplayNode.h"
-#include "Texture.h"
 #include "MovieTexture.h"
 #include "EventDispatcher.h"
 #include "SiEventDispatcher.h"

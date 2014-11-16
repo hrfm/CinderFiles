@@ -66,7 +66,7 @@ namespace hrfm{ namespace signage{ namespace display{
                         
                         // 設定されているコンテンツが画像の場合
                         
-                        _contentList[time] = new hrfm::display::Texture( loadImage(path) );
+                        _contentList[time] = new hrfm::display::ImageTexture( loadImage(path) );
                         
                     }else if( type == "mov" ){
                         

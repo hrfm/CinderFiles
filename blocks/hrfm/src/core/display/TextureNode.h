@@ -1,22 +1,17 @@
 #pragma once
 
 #include "DisplayNode.h"
-#include "EventDispatcher.h"
-
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Texture.h"
 
 namespace hrfm{ namespace display{
     
-    class Texture : public DisplayNode{
+    class TextureNode : public DisplayNode{
     
     public:
         
-        Texture();
-        Texture( ci::ImageSourceRef ref );
-        ~Texture();
-        
-        virtual void init( ci::ImageSourceRef ref );
+        TextureNode();
+        ~TextureNode();
         
         virtual bool isDrawable();
         
@@ -24,10 +19,9 @@ namespace hrfm{ namespace display{
         
     protected:
         
-        virtual void _update();
         virtual void _draw();
         
-        ci::gl::Texture mTexture;
+        ci::gl::Texture _texture;
         
     private:
         

@@ -13,8 +13,8 @@
 // --- hrfm::display
 
 #include "DisplayNode.h"
-#include "Texture.h"
-#include "CameraTexture.h"
+#include "TextureNode.h"
+#include "ImageTexture.h"
 #include "MovieTexture.h"
 #include "Stage.h"
 

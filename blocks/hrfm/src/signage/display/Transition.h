@@ -5,7 +5,7 @@
 
 namespace hrfm{ namespace signage{ namespace display{
     
-    class Transition : public hrfm::display::Texture{
+    class Transition : public hrfm::display::TextureNode{
         
     public:
         
@@ -16,7 +16,7 @@ namespace hrfm{ namespace signage{ namespace display{
         
         virtual void init( ci::Vec2i size );
         
-        void setup( hrfm::display::Texture * tex0, hrfm::display::Texture * tex1, float time );
+        void setup( hrfm::display::TextureNode * tex0, hrfm::display::TextureNode * tex1, float time );
         
         void setSize( float width, float height );
         
@@ -30,8 +30,8 @@ namespace hrfm{ namespace signage{ namespace display{
         virtual void _update();
         virtual void _draw();
         
-        hrfm::display::Texture * _tex0;
-        hrfm::display::Texture * _tex1;
+        hrfm::display::TextureNode * _tex0;
+        hrfm::display::TextureNode * _tex1;
         
     };
     

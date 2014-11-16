@@ -10,7 +10,7 @@
 
 // --- Inputs ---
 #include "Stage.h"
-#include "Texture.h"
+#include "ImageTexture.h"
 
 #include "SiOscInput.h"
 #include "SiAudioInput.h"
@@ -64,7 +64,7 @@ namespace hrfm{ namespace app{
         hrfm::io::CaptureInput captureInput;
         
         hrfm::display::Stage stage;
-        hrfm::display::Texture background;
+        hrfm::display::ImageTexture background;
         
         // ===========================================================================
         // === METHOD. ===============================================================

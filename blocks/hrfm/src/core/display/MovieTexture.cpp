@@ -7,67 +7,53 @@ namespace hrfm{ namespace display{
     // public:
     
     MovieTexture::MovieTexture(){
-        hrfm::display::Texture();
-        _beforeTime = 0.0f;
+        TextureNode();
     };
-    
-    MovieTexture::MovieTexture( const string filePath ){
-        MovieTexture();
-        init(filePath);
-    }
     
     MovieTexture::MovieTexture( ci::fs::path filePath ){
         MovieTexture();
-        init(filePath);
-    }
+        init( filePath );
+    };
     
-    MovieTexture::~MovieTexture(){
-        
-    }
+    MovieTexture::~MovieTexture(){};
     
     void MovieTexture::init( ci::fs::path filePath ){
-        init(filePath.native());
-    };
-    
-    void MovieTexture::init( const string filePath ){
-        mMovieGlRef = ci::qtime::MovieGl::create( filePath );
-    };
-    
-    bool MovieTexture::isDrawable(){
-        return Texture::isDrawable();
+        _beforeTime = 0.0f;
+        _movieGlRef = ci::qtime::MovieGl::create( filePath );
     }
     
     void MovieTexture::play(){
-        if( mMovieGlRef ){
+        if( _movieGlRef ){
             _beforeTime = 0;
-            mMovieGlRef->seekToStart();
-            if( !mMovieGlRef->isPlaying() ){
-                mMovieGlRef->play();
+            _movieGlRef->seekToStart();
+            if( !_movieGlRef->isPlaying() ){
+                _movieGlRef->play();
             }
         }
     }
     
     void MovieTexture::stop(){
-        if( mMovieGlRef ){
+        if( _movieGlRef ){
             _beforeTime = 0;
-            if( mMovieGlRef->isPlaying() ){
-                mMovieGlRef->stop();
+            if( _movieGlRef->isPlaying() ){
+                _movieGlRef->stop();
             }
-            mMovieGlRef->seekToStart();
+            _movieGlRef->seekToStart();
         }
     }
     
     ci::qtime::MovieGlRef MovieTexture::getMovieGlRef(){
-        return mMovieGlRef;
+        return _movieGlRef;
+    }
+    
+    gl::Texture MovieTexture::getTexture(){
+        return _movieGlRef->getTexture();
     }
     
     void MovieTexture::_update(){
-        if( mMovieGlRef->checkNewFrame() ){
-            mTexture = mMovieGlRef->getTexture();
-        }
-        float currentTime = mMovieGlRef->getCurrentTime();
-        float duration = mMovieGlRef->getDuration();
-        if( mMovieGlRef->isDone() || ( mMovieGlRef->isPlaying() && ( currentTime == duration || currentTime < _beforeTime ) ) ){
+        float currentTime = _movieGlRef->getCurrentTime();
+        float duration = _movieGlRef->getDuration();
+        if( _movieGlRef->isDone() || ( _movieGlRef->isPlaying() && ( currentTime == duration || currentTime < _beforeTime ) ) ){
             _beforeTime = 0;
             dispatchEvent( new hrfm::events::Event( hrfm::events::Event::COMPLETE ) );
         }else{
