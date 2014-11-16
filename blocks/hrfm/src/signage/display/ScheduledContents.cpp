@@ -92,7 +92,7 @@ namespace hrfm{ namespace signage{ namespace display{
                         
                         // 設定されているコンテンツが blank の場合
                         
-                        _contentList[time] = new hrfm::display::IDrawable();
+                        _contentList[time] = new hrfm::display::DisplayNode();
                         
                     }else{
                         
@@ -207,8 +207,8 @@ namespace hrfm{ namespace signage{ namespace display{
         
         // TODO 設定されているもっとも時間が近いコンテンツを再生する.
         
-        std::map<string,hrfm::display::IDrawable*>::iterator it;
-        std::map<string,hrfm::display::IDrawable*>::iterator end = _contentList.end();
+        std::map<string,hrfm::display::DisplayNode*>::iterator it;
+        std::map<string,hrfm::display::DisplayNode*>::iterator end = _contentList.end();
         
         tm * timeinfo = SiTimeUtil::getInstance().getTimeinfo();
         

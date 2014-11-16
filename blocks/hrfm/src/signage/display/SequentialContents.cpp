@@ -57,7 +57,7 @@ namespace hrfm{ namespace signage{ namespace display{
                     const string type = item->getAttribute("type").getValue<string>();
                     float time = item->getAttribute("time").getValue<float>();
                     
-                    hrfm::display::IDrawable * content;
+                    hrfm::display::DisplayNode * content;
                     
                     if( type == "pic" ){
                         
@@ -87,7 +87,7 @@ namespace hrfm{ namespace signage{ namespace display{
                         
                         // 設定されているコンテンツが blank の場合
                         
-                        content = new hrfm::display::IDrawable();
+                        content = new hrfm::display::DisplayNode();
                         
                     }else{
                         
@@ -117,13 +117,13 @@ namespace hrfm{ namespace signage{ namespace display{
         
     }
     
-    void SequentialContents::addContent( IDrawable * content, float time ){
+    void SequentialContents::addContent( DisplayNode * content, float time ){
         Sequence * seq = new Sequence( content, time );
         seq->addEventListener( hrfm::events::Event::COMPLETE, this, &SequentialContents::_onComplete );
         _sequenceList.push_back( seq );
     }
     
-    void SequentialContents::addContent( IDrawable * content, float time, string trigger ){
+    void SequentialContents::addContent( DisplayNode * content, float time, string trigger ){
         Sequence * seq = new Sequence( content, time );
         seq->setTrigger( trigger );
         seq->addEventListener( hrfm::events::Event::COMPLETE, this, &SequentialContents::_onComplete );

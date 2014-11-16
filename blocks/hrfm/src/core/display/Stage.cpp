@@ -15,7 +15,7 @@ namespace hrfm{ namespace display{
         _beforeHeight = height;
     }
     
-    IDrawable * Stage::addChild( IDrawable * child ){
+    DisplayNode * Stage::addChild( DisplayNode * child ){
         eraseFromChildren(child);
         child->_setStage(this);
         child->_setParent(this);

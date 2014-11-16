@@ -53,9 +53,9 @@ namespace hrfm{ namespace signage{ namespace display{
         
     private:
         
-        hrfm::display::IDrawable * _currentContent;
+        hrfm::display::DisplayNode * _currentContent;
         
-        map<string,hrfm::display::IDrawable*> _contentList;
+        map<string,hrfm::display::DisplayNode*> _contentList;
         map<string,string> _triggerList;
         
     };

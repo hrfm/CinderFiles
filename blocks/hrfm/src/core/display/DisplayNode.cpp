@@ -4,11 +4,36 @@ using namespace ci;
 
 namespace hrfm{ namespace display{
     
+    //! public:
+    
+    void DisplayNode::setup(){}
+    
+    Vec2i DisplayNode::getSize(){
+        return Vec2f( width, height );
+    }
+    
+    void DisplayNode::setSize( int w, int h ){
+        width  = w;
+        height = h;
+    }
+    
+    void DisplayNode::setSize( Vec2i size ){
+        setSize( size.x, size.y );
+    }
+    
+    Rectf DisplayNode::getBounds(){
+        return Rectf( x, y, width, height );
+    }
+    
+    Rectf DisplayNode::getDrawBounds(){
+        return Rectf( 0, 0, width, height );
+    }
+    
     int DisplayNode::numChildren(){
         return children.size();
     }
     
-    IDrawable * DisplayNode::addChild( IDrawable * child ){
+    DisplayNode * DisplayNode::addChild( DisplayNode * child ){
         
         eraseFromChildren(child);
         
@@ -23,7 +48,7 @@ namespace hrfm{ namespace display{
         
     }
     
-    IDrawable * DisplayNode::removeChild( IDrawable * child ){
+    DisplayNode * DisplayNode::removeChild( DisplayNode * child ){
         
         if( eraseFromChildren(child) ){
             child->_unsetStage();
@@ -34,7 +59,7 @@ namespace hrfm{ namespace display{
         
     }
     
-    IDrawable * DisplayNode::addChildAt( IDrawable * child, int index ){
+    DisplayNode * DisplayNode::addChildAt( DisplayNode * child, int index ){
         
         if( numChildren() < index || index < 0 ){
             
@@ -46,7 +71,7 @@ namespace hrfm{ namespace display{
             
         }else{
             
-            std::vector<IDrawable*>::iterator itr = children.begin() + index;
+            std::vector<DisplayNode*>::iterator itr = children.begin() + index;
             
             if( *itr != child ){
                 eraseFromChildren(child);
@@ -59,7 +84,7 @@ namespace hrfm{ namespace display{
         
     }
     
-    IDrawable * DisplayNode::removeChildAt( int index ){
+    DisplayNode * DisplayNode::removeChildAt( int index ){
         
         if( numChildren() <= index || index < 0 ){
             
@@ -67,12 +92,19 @@ namespace hrfm{ namespace display{
             
         }else{
             
-            std::vector<IDrawable*>::iterator itr = children.begin() + index;
+            std::vector<DisplayNode*>::iterator itr = children.begin() + index;
             children.erase(itr);
             return *itr;
             
         }
         
+    }
+    
+    DisplayNode * DisplayNode::removeOwn(){
+        if( hasParent() ){
+            getParent()->removeChild(this);
+        }
+        return this;
     }
     
     void DisplayNode::update(){
@@ -91,17 +123,30 @@ namespace hrfm{ namespace display{
         gl::popMatrices();
     }
     
-    DisplayNode * DisplayNode::removeOwn(){
-        if( hasParent() ){
-            getParent()->removeChild(this);
-        }
-        return this;
+    bool DisplayNode::hasParent(){
+        return _parent != nullptr && _parent != NULL;
+    }
+    
+    DisplayNode * DisplayNode::getParent(){
+        return _parent;
+    }
+    
+    bool DisplayNode::hasStage(){
+        return _stage != nullptr && _stage != NULL;
+    }
+    
+    Stage * DisplayNode::getStage(){
+        return _stage;
     }
     
     //! protected:
     
-    inline bool DisplayNode::eraseFromChildren( IDrawable * child ){
-        auto itr = std::remove_if(children.begin(),children.end(),[child](IDrawable* d)->bool{
+    void DisplayNode::_update(){}
+    
+    void DisplayNode::_draw(){};
+    
+    inline bool DisplayNode::eraseFromChildren( DisplayNode * child ){
+        auto itr = std::remove_if(children.begin(),children.end(),[child](DisplayNode* d)->bool{
             return d == child;
         });
         if( itr == children.end() ){
@@ -115,7 +160,7 @@ namespace hrfm{ namespace display{
         
         if( numChildren() == 0 ) return;
         
-        std::vector<IDrawable*>::iterator it, end;
+        std::vector<DisplayNode*>::iterator it, end;
         for( it = children.begin(), end = children.end(); it!=end; it++ ){
             if( *it!=nullptr ){
                 (*it)->update();
@@ -128,7 +173,7 @@ namespace hrfm{ namespace display{
         
         if( numChildren() == 0 ) return;
         
-        std::vector<IDrawable*>::iterator it, end;
+        std::vector<DisplayNode*>::iterator it, end;
         for( it = children.begin(), end = children.end(); it!=end; it++ ){
             if( *it!=nullptr ){
                 (*it)->draw();
@@ -137,13 +182,58 @@ namespace hrfm{ namespace display{
         
     }
     
-    void DisplayNode::_unsetStage(){
+    //! protected
+    
+    void DisplayNode::_setParent( DisplayNode * node ){
+        if( !hasParent() ){
+            _parent = node;
+            dispatchEvent( new hrfm::events::Event(hrfm::events::Event::ADDED) );
+        }else{
+            _parent = node;
+        }
+    }
+    
+    void DisplayNode::_unsetParent(){
+        if( hasStage() ){
+            _stage = NULL;
+            dispatchEvent( new hrfm::events::Event(hrfm::events::Event::REMOVED) );
+        }else{
+            _stage = NULL;
+        }
+    }
+    
+    void DisplayNode::_setStage( Stage * stage ){
         
-        IDrawable::_unsetStage();
+        if( !hasStage() ){
+            _stage = stage;
+            dispatchEvent( new hrfm::events::Event(hrfm::events::Event::ADDED_TO_STAGE) );
+        }else{
+            _stage = stage;
+        }
         
         if( numChildren() == 0 ) return;
         
-        std::vector<IDrawable*>::iterator it, end;
+        std::vector<DisplayNode*>::iterator it, end;
+        for( it = children.begin(), end = children.end(); it!=end; it++ ){
+            if( *it!=nullptr ){
+                (*it)->_setStage( stage );
+            }
+        }
+        
+    }
+    
+    void DisplayNode::_unsetStage(){
+        
+        if( hasStage() ){
+            _stage = NULL;
+            dispatchEvent( new hrfm::events::Event(hrfm::events::Event::REMOVED_FROM_STAGE) );
+        }else{
+            _stage = NULL;
+        }
+        
+        if( numChildren() == 0 ) return;
+        
+        std::vector<DisplayNode*>::iterator it, end;
         for( it = children.begin(), end = children.end(); it!=end; it++ ){
             if( *it!=nullptr ){
                 (*it)->_unsetStage();

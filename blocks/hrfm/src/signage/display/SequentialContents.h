@@ -27,8 +27,8 @@ namespace hrfm{ namespace signage{ namespace display{
         
         void init( ci::XmlTree &xml );
         
-        void addContent( hrfm::display::IDrawable * content, float time );
-        void addContent( hrfm::display::IDrawable * content, float time, string trigger );
+        void addContent( hrfm::display::DisplayNode * content, float time );
+        void addContent( hrfm::display::DisplayNode * content, float time, string trigger );
         
         void play( int index = 0 );
         void stop();

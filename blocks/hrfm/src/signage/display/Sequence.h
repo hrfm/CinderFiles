@@ -17,12 +17,12 @@ namespace hrfm{ namespace signage{ namespace display{
     public:
         
         Sequence();
-        Sequence( hrfm::display::IDrawable * content, float time );
+        Sequence( hrfm::display::DisplayNode * content, float time );
         ~Sequence();
         
         void setTrigger( string trigger );
         
-        hrfm::display::IDrawable * getContentRef();
+        hrfm::display::DisplayNode * getContentRef();
         
         void play();
         void stop();
@@ -37,7 +37,7 @@ namespace hrfm{ namespace signage{ namespace display{
         
         float _time;
         float _startedAt;
-        hrfm::display::IDrawable * _content;
+        hrfm::display::DisplayNode * _content;
         string _trigger;
         
     };

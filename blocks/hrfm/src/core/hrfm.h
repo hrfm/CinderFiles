@@ -12,12 +12,10 @@
 
 // --- hrfm::display
 
-#include "IDrawable.h"
 #include "DisplayNode.h"
-
+#include "Texture.h"
 #include "CameraTexture.h"
 #include "MovieTexture.h"
-#include "Texture.h"
 #include "Stage.h"
 
 // --- hrfm::io

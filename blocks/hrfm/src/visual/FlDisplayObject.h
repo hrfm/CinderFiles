@@ -6,17 +6,15 @@
 using namespace ci;
 using namespace hrfm::app;
 using namespace hrfm::display;
-using namespace hrfm::events;
 
 namespace fl{ namespace display{
     
-    class FlDisplayObject : public IDrawable, public EventDispatcher{
+    class FlDisplayObject : public DisplayNode{
         
     public:
         
         FlDisplayObject(){
-            IDrawable();
-            EventDispatcher();
+            DisplayNode();
         };
         
         FlDisplayObject( AppBase * app ){

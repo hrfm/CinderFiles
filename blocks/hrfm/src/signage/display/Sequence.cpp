@@ -13,7 +13,7 @@ namespace hrfm{ namespace signage{ namespace display{
         _trigger = "";
     }
     
-    Sequence::Sequence( hrfm::display::IDrawable * content, float time ){
+    Sequence::Sequence( hrfm::display::DisplayNode * content, float time ){
         Sequence();
         _content = content;
         _time    = time;
@@ -34,7 +34,7 @@ namespace hrfm{ namespace signage{ namespace display{
         _trigger = trigger;
     }
     
-    hrfm::display::IDrawable * Sequence::getContentRef(){
+    hrfm::display::DisplayNode * Sequence::getContentRef(){
         return _content;
     }
     

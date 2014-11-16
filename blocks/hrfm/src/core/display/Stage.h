@@ -14,7 +14,7 @@ namespace hrfm{ namespace display{
             _beforeHeight = height;
         };
         ~Stage(){};
-        virtual IDrawable * addChild( IDrawable * child );
+        virtual DisplayNode * addChild( DisplayNode * child );
         virtual void setSize( int w, int h );
         virtual void update();
         virtual void draw();
