@@ -22,7 +22,7 @@ namespace hrfm{ namespace display{
     }
     
     Rectf DisplayNode::getBounds(){
-        return Rectf( x, y, width, height );
+        return Rectf( x, y, x+width, y+height );
     }
     
     Rectf DisplayNode::getDrawBounds(){
