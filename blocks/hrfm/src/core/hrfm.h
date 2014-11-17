@@ -1,5 +1,20 @@
 #pragma once
 
+// --- hrfm::cv
+
+#include "DetectRect.h"
+#include "FaceDetect.h"
+#include "ForceMap.h"
+#include "OpticalFlow.h"
+
+// --- hrfm::display
+
+#include "DisplayNode.h"
+#include "TextureNode.h"
+#include "ImageTexture.h"
+#include "MovieTexture.h"
+#include "Stage.h"
+
 // --- hrfm::events
 
 #include "Event.h"
@@ -9,14 +24,6 @@
 #include "OscEvent.h"
 #include "TimeUtilEvent.h"
 #include "TriggerEvent.h"
-
-// --- hrfm::display
-
-#include "DisplayNode.h"
-#include "TextureNode.h"
-#include "ImageTexture.h"
-#include "MovieTexture.h"
-#include "Stage.h"
 
 // --- hrfm::gl
 
@@ -29,6 +36,11 @@
 #include "SiAudioInput.h"
 #include "SiCaptureInput.h"
 #include "SiOscInput.h"
+
+// --- hrfm::physics
+
+#include "DeclineWave.h"
+#include "WaveNode.h"
 
 // --- hrfm::utils
 
