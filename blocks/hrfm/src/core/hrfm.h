@@ -1,12 +1,5 @@
 #pragma once
 
-// --- hrfm::cv
-
-#include "DetectRect.h"
-#include "FaceDetect.h"
-#include "ForceMap.h"
-#include "OpticalFlow.h"
-
 // --- hrfm::display
 
 #include "DisplayNode.h"
