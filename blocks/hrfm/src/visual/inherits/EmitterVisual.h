@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Base2DEffect.h"
+#include "FilterBase.h"
 #include "VisualBase.h"
 #include "cinder/gl/Texture.h"
 

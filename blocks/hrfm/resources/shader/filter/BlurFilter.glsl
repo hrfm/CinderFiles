@@ -3,10 +3,9 @@
 uniform sampler2D tex;
 uniform vec2      sample_offset;
 uniform float     attenuation;
-uniform vec2 resolution;
+uniform vec2      resolution;
 
-void main()
-{
+void main(){
     
     vec4 sum = vec4( 0.0, 0.0, 0.0, 0.0 );
     
@@ -36,6 +35,5 @@ void main()
     sum += texture2D( tex, pos + +10.0 * sample_offset ).rgba * 0.009167927656011385;
     
     gl_FragColor.rgba = attenuation * sum;
-//    gl_FragColor.a = 1.0;
     
 }

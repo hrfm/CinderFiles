@@ -1,17 +1,13 @@
 #pragma once
 
 #include "cinder/app/AppBasic.h"
-
-#include "cinder/Xml.h"
-
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Fbo.h"
 #include "Cinder/gl/GlslProg.h"
-
-#include "Utils.h"
-
+#include "cinder/Xml.h"
 #include "SiFboFactory.h"
 #include "ShaderFactory.h"
+#include "Utils.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -22,11 +18,11 @@ namespace hrfm { namespace gl{
     
     // --- Event for OSC. ---
     
-    class Base2DEffect{
+    class FilterBase{
         
     public:
         
-        Base2DEffect(){};
+        FilterBase(){};
         
         // 最も基本的な初期化を行います.
         // どのシェーダを使うかはクラスに任せます.

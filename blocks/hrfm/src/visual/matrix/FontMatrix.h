@@ -3,12 +3,14 @@
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Fbo.h"
 #include "FontManager.h"
+#include "Filter.h"
 #include "OutputEffect.h"
 
 using namespace ci;
 using namespace ci::gl;
 using namespace std;
 using namespace hrfm::utils;
+using namespace hrfm::gl::filter;
 
 namespace hrfm {
     
@@ -50,8 +52,8 @@ namespace hrfm {
             ci::gl::Fbo myFboTmp;
             ci::gl::Fbo myFadeFboTmp;
             
-            Slide2DEffect myFbo;
-            Slide2DEffect myFadeFbo;
+            ScrollFilter myFbo;
+            ScrollFilter myFadeFbo;
             
             float mySlideY;
             

@@ -4,12 +4,15 @@
 #include "VisualBase.h"
 #include "OutputEffect.h"
 
+#include "BlurFilter.h"
+
 using namespace ci;
 using namespace ci::app;
 using namespace std;
 
 using namespace hrfm;
 using namespace hrfm::visual;
+using namespace hrfm::gl::filter;
 
 namespace hrfm{ namespace visual{
     
@@ -64,9 +67,9 @@ namespace hrfm{ namespace visual{
             
         private :
         
-            Blur2DEffect mBlurEffectV;
-            Blur2DEffect mBlurEffectH;
-            Base2DEffect mLastEffect;
+            BlurFilter mBlurEffectV;
+            BlurFilter mBlurEffectH;
+            FilterBase mLastEffect;
         
     };
     
