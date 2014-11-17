@@ -18,6 +18,12 @@
 #include "MovieTexture.h"
 #include "Stage.h"
 
+// --- hrfm::gl
+
+#include "ShaderFactory.h"
+#include "SiFboFactory.h"
+#include "Filter.h"
+
 // --- hrfm::io
 
 #include "SiAudioInput.h"
