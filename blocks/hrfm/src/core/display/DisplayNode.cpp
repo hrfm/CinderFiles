@@ -121,6 +121,7 @@ namespace hrfm{ namespace display{
             _drawChildren();
         }
         gl::popMatrices();
+        gl::disableAlphaBlending();
     }
     
     bool DisplayNode::hasParent(){

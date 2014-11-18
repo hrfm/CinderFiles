@@ -6,9 +6,11 @@
 
 #include "hrfm.h"
 #include "Sequence.h"
-#include "IEnableTransition.h"
+#include "Transition.h"
 
 namespace hrfm{ namespace signage{ namespace display{
+    
+    class Transition;
     
     class Sequence;
     
@@ -17,7 +19,7 @@ namespace hrfm{ namespace signage{ namespace display{
      XML で設定した順番にコンテンツを切り替え表示するスケジューラークラスです.
      
      */
-    class SequentialContents : public hrfm::display::DisplayNode, public IEnableTransition{
+    class SequentialContents : public hrfm::display::DisplayNode{
         
     public:
         
@@ -29,6 +31,10 @@ namespace hrfm{ namespace signage{ namespace display{
         
         void addContent( hrfm::display::DisplayNode * content, float time );
         void addContent( hrfm::display::DisplayNode * content, float time, string trigger );
+        
+        virtual void setSize( int w, int h );
+        
+        void setTransition( Transition * transition );
         
         void play( int index = 0 );
         void stop();
@@ -43,6 +49,7 @@ namespace hrfm{ namespace signage{ namespace display{
         virtual void _draw();
         
         void _onComplete( hrfm::events::Event * event );
+        void _onTransitionComplete( hrfm::events::Event * event );
         
     private:
         
@@ -56,6 +63,12 @@ namespace hrfm{ namespace signage{ namespace display{
         
         //! 表示するコンテンツのリスト.
         vector<Sequence*> _sequenceList;
+        
+        //! 表示切り替え時のトランジション.
+        
+        bool _isSetTransition;
+        bool _runningTransition;
+        Transition * _transition;
         
     };
     

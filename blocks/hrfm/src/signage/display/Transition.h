@@ -2,10 +2,15 @@
 
 #include "cinder/app/App.h"
 #include "hrfm.h"
+#include "Sequence.h"
+
+using namespace hrfm::display;
 
 namespace hrfm{ namespace signage{ namespace display{
     
-    class Transition : public hrfm::display::TextureNode{
+    class Sequence;
+    
+    class Transition : public hrfm::events::EventDispatcher{
         
     public:
         
@@ -14,24 +19,31 @@ namespace hrfm{ namespace signage{ namespace display{
         Transition( ci::Vec2i size );
         ~Transition();
         
-        virtual void init( ci::Vec2i size );
+        virtual void setSize( float width, float height );
         
-        void setup( hrfm::display::TextureNode * tex0, hrfm::display::TextureNode * tex1, float time );
+        virtual void prepare();
+        virtual void setCurrent( DisplayNode * content );
+        virtual void setNext( DisplayNode * content );
+        virtual void start( float time );
         
-        void setSize( float width, float height );
+        virtual bool running();
         
-        bool running();
+        virtual void update();
+        
+        virtual ci::gl::Texture getTexture();
         
     protected:
         
+        ci::gl::Fbo * _fbo;
+        ci::gl::Fbo * _currentFbo;
+        ci::gl::Fbo * _nextFbo;
+        
+        DisplayNode * _current;
+        DisplayNode * _next;
+        
         float _time;
         float _startedAt;
-        
-        virtual void _update();
-        virtual void _draw();
-        
-        hrfm::display::TextureNode * _tex0;
-        hrfm::display::TextureNode * _tex1;
+        bool  _running;
         
     };
     

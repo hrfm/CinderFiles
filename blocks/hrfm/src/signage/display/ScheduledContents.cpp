@@ -12,7 +12,6 @@ namespace hrfm{ namespace signage{ namespace display{
     
     ScheduledContents::ScheduledContents(){
         DisplayNode();
-        IEnableTransition();
         _isPlaying = false;
     }
     ScheduledContents::ScheduledContents( XmlTree &xml ){

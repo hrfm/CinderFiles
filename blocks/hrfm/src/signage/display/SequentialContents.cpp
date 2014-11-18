@@ -11,8 +11,6 @@ namespace hrfm{ namespace signage{ namespace display{
     
     SequentialContents::SequentialContents(){
         DisplayNode();
-        IEnableTransition();
-        _currentIndex = 0;
     }
     SequentialContents::SequentialContents( XmlTree &xml ){
         SequentialContents();
@@ -25,7 +23,11 @@ namespace hrfm{ namespace signage{ namespace display{
     
     void SequentialContents::init( XmlTree &xml ){
         
+        _currentIndex      = 0;
+        _isSetTransition   = false;
+        
         cout << "- SequentialContents::init()" << endl << endl;
+        
         cout << xml << endl;
         
         if( xml.hasChild("settings") ){
@@ -130,37 +132,80 @@ namespace hrfm{ namespace signage{ namespace display{
         _sequenceList.push_back( seq );
     }
     
+    void SequentialContents::setTransition( hrfm::signage::display::Transition * transition ){
+        cout << "SequentialContents::setTransition" << endl;
+        _isSetTransition = true;
+        _transition = transition;
+    }
+    
+    void SequentialContents::setSize( int w, int h ){
+        if( _isSetTransition && ( width != w || height != h ) ){
+            DisplayNode::setSize( w, h );
+            _transition->setSize( w, h );
+        }
+    }
+    
     void SequentialContents::play( int index ){
         
         _isPlaying = true;
         
         cout << "SequentialContents::play(" << index << ")" << endl;
         
-        cout << _sequenceList.size() << endl;
-        
+        // シーケンスの設定自体が存在しない場合はリターン.
         if( _sequenceList.size() == 0 ){
             return;
         }
         
+        // index の値がはみ出ないように丸め込む.
         if( _sequenceList.size() <= index ){
             _currentIndex = _sequenceList.size() - 1;
         }else if( index < 0 ){
             _currentIndex = 0;
         }
         
-        if( _currentSequence ){
-            _currentSequence->stop();
-            removeChild(_currentSequence->getContentRef());
+        // Transition の設定の有無に応じて修正.
+        if( _isSetTransition == true ){
+            
+            // トランジションの準備.
+            _transition->prepare();
+            
+            // 現在表示中のコンテンツがある場合,描画ツリーから外しつつ Transition に委譲.
+            if( _currentSequence ){
+                _currentSequence->stop();
+                removeChild(_currentSequence->getContentRef());
+                _transition->setCurrent( _currentSequence->getContentRef() );
+            }
+            
+            // 次に表示をするコンテンツを設定し Transition に委譲する.Transition が完了するまで addChild はしない.
+            _currentSequence = _sequenceList.at(index);
+            if( _currentSequence ){
+                _currentSequence->play();
+                _transition->setNext( _currentSequence->getContentRef() );
+            }
+            _currentIndex = index;
+            
+            // Transition の終了を Listen しつつトランジションを開始.
+            _transition->addEventListener( hrfm::events::Event::COMPLETE , this, &SequentialContents::_onTransitionComplete );
+            
+            _transition->start(3.0f);
+            
+        }else{
+            
+            if( _currentSequence ){
+                _currentSequence->stop();
+                removeChild(_currentSequence->getContentRef());
+            }
+            
+            _currentSequence = _sequenceList.at(index);
+            
+            if( _currentSequence ){
+                _currentSequence->play();
+                addChild( _currentSequence->getContentRef() );
+            }
+            
+            _currentIndex = index;
+            
         }
-        
-        _currentSequence = _sequenceList.at(index);
-        
-        if( _currentSequence ){
-            _currentSequence->play();
-            addChild( _currentSequence->getContentRef() );
-        }
-        
-        _currentIndex = index;
         
     }
     
@@ -188,15 +233,20 @@ namespace hrfm{ namespace signage{ namespace display{
             _currentSequence->update();
             _currentSequence->setSize( width, height );
         }
+        if( _isSetTransition && _transition->running() ){
+            _transition->update();
+        }
     }
     
     void SequentialContents::_draw(){
-        
+        if( _isSetTransition && _transition->running() ){
+            ci::gl::draw( _transition->getTexture(), getDrawBounds() );
+        }
     }
     
     void SequentialContents::_onComplete( hrfm::events::Event * event ){
         
-        cout << "SequantialContents::_onTimer("+event->type()+")" << endl;
+        cout << "SequantialContents::_onComplete("+event->type()+")" << endl;
         
         int nextIndex = _currentIndex + 1;
         if( _sequenceList.size() <= nextIndex ){
@@ -205,6 +255,15 @@ namespace hrfm{ namespace signage{ namespace display{
         }
         
         play( nextIndex );
+        
+    }
+    
+    void SequentialContents::_onTransitionComplete( hrfm::events::Event * event ){
+        
+        cout << "SequentialContents::_onTransitionComplete()" << endl;
+        
+        _transition->removeEventListener( hrfm::events::Event::COMPLETE, this, &SequentialContents::_onTransitionComplete );
+        addChild( _currentSequence->getContentRef() );
         
     }
     

@@ -8,7 +8,6 @@
 
 #include "hrfm.h"
 #include "SequentialContents.h"
-#include "IEnableTransition.h"
 #include "SiEventDispatcher.h"
 
 namespace hrfm{ namespace signage{ namespace display{
@@ -18,7 +17,7 @@ namespace hrfm{ namespace signage{ namespace display{
      XML で設定した時刻にコンテンツを切り替え表示するスケジューラークラスです.
      
      */
-    class ScheduledContents : public hrfm::display::DisplayNode, public IEnableTransition{
+    class ScheduledContents : public hrfm::display::DisplayNode{
         
     public:
         
