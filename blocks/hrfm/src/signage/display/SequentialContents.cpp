@@ -187,7 +187,7 @@ namespace hrfm{ namespace signage{ namespace display{
             // Transition の終了を Listen しつつトランジションを開始.
             _transition->addEventListener( hrfm::events::Event::COMPLETE , this, &SequentialContents::_onTransitionComplete );
             
-            _transition->start(3.0f);
+            _transition->start(1.3f);
             
         }else{
             

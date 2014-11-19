@@ -40,16 +40,9 @@ namespace hrfm{ namespace cv{
     }
     
     void FaceDetect::update( Surface surface ){
-        
         if( mFaceDetectEnabled && &surface != nullptr ){
-            mCloneSurface = surface;
+            mCloneSurface = surface.clone();
         }
-        
-        // clear out the previously deteced faces & eyes
-        for( vector<DetectRect>::iterator it = mFaces.begin(); it != mFaces.end(); ++it ){
-            (*it).update();
-        }
-        
     }
     
     void FaceDetect::enable(){
@@ -82,7 +75,7 @@ namespace hrfm{ namespace cv{
             
             double elapsedSec = getElapsedSeconds();
             
-            if( mCloneSurface && 0.3f < elapsedSec - recentSec ){
+            if( mCloneSurface && 0.1f < elapsedSec - recentSec ){
                 
                 try{
                     
@@ -138,6 +131,7 @@ namespace hrfm{ namespace cv{
                     
                     vector<DetectRect>::iterator it = mFaces.begin();
                     while( it != mFaces.end() ){
+                        (*it).update();
                         if( (*it).dead() ){
                             it = mFaces.erase(it);
                         }else{

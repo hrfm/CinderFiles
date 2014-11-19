@@ -23,6 +23,7 @@
 #include "ShaderFactory.h"
 #include "SiFboFactory.h"
 #include "Filter.h"
+#include "TransitionShaderBase.h"
 
 // --- hrfm::io
 

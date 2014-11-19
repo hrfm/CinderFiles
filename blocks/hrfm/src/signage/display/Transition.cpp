@@ -3,6 +3,7 @@
 
 using namespace hrfm::display;
 using namespace hrfm::events;
+using namespace hrfm::gl;
 
 namespace hrfm{ namespace signage{ namespace display{
     
@@ -11,20 +12,29 @@ namespace hrfm{ namespace signage{ namespace display{
     Transition::Transition(){
         hrfm::events::EventDispatcher();
     };
-    Transition::Transition( ci::Vec2i size ){
+    Transition::Transition( ci::Vec2i size, TransitionShaderBase * shader ){
         hrfm::events::EventDispatcher();
-        setSize( size.x, size.y );
+        init( size.x, size.y, shader );
     }
-    Transition::Transition( int width, int height ){
+    Transition::Transition( int width, int height, TransitionShaderBase * shader ){
         hrfm::events::EventDispatcher();
-        setSize( width, height );
+        init( width, height, shader );
     }
     Transition::~Transition(){}
     
-    void Transition::setSize( float width, float height ){
+    void Transition::init( int width, int height, TransitionShaderBase * shader ){
+        _shader = shader;
+        setSize( width, height );
+    }
+    
+    void Transition::setSize( int width, int height ){
+        
         _fbo        = hrfm::gl::SiFboFactory::getInstance().create( width, height, false );
         _currentFbo = hrfm::gl::SiFboFactory::getInstance().create( width, height, false );
         _nextFbo    = hrfm::gl::SiFboFactory::getInstance().create( width, height, false );
+        
+        _shader->setSize( width, height );
+        
     }
     
     void Transition::prepare(){
@@ -55,12 +65,10 @@ namespace hrfm{ namespace signage{ namespace display{
         
         float elapsed = ci::app::getElapsedSeconds() - _startedAt;
         
-        float per = elapsed / _time;
-        if( 1.0 < per ){
-            per = 1.0;
+        float progress = elapsed / _time;
+        if( 1.0 < progress ){
+            progress = 1.0;
         }
-        
-        cout << per << endl;
         
         Area viewport = ci::gl::getViewport();
         
@@ -114,14 +122,19 @@ namespace hrfm{ namespace signage{ namespace display{
                 ci::gl::setViewport( (Area)_fbo->getBounds() );
                 ci::gl::setMatricesWindow( _fbo->getWidth(), _fbo->getHeight(), false );
                 {
+                    _shader->bindShader();
+                    _shader->affect( _currentFbo->getTexture(), _nextFbo->getTexture(), progress );
+                    _shader->unbindShader();
+                    /*
                     ci::gl::enableAdditiveBlending();
                     {
-                        ci::gl::color( ColorA( 1.0, 1.0, 1.0, 1.0 - per ) );
+                        ci::gl::color( ColorA( 1.0, 1.0, 1.0, 1.0 - progress ) );
                         ci::gl::draw( _currentFbo->getTexture(), _fbo->getBounds() );
-                        ci::gl::color( ColorA( 1.0, 1.0, 1.0, per ) );
+                        ci::gl::color( ColorA( 1.0, 1.0, 1.0, progress ) );
                         ci::gl::draw( _nextFbo->getTexture(), _fbo->getBounds() );
                     }
                     ci::gl::disableAlphaBlending();
+                    */
                 }
             }
             ci::gl::popMatrices();

@@ -5,6 +5,7 @@
 #include "Sequence.h"
 
 using namespace hrfm::display;
+using namespace hrfm::gl;
 
 namespace hrfm{ namespace signage{ namespace display{
     
@@ -15,11 +16,12 @@ namespace hrfm{ namespace signage{ namespace display{
     public:
         
         Transition();
-        Transition( int width, int height );
-        Transition( ci::Vec2i size );
+        Transition( int width, int height, TransitionShaderBase * shader );
+        Transition( ci::Vec2i size, TransitionShaderBase * shader );
         ~Transition();
         
-        virtual void setSize( float width, float height );
+        virtual void init( int width, int height, TransitionShaderBase * shader );
+        virtual void setSize( int width, int height );
         
         virtual void prepare();
         virtual void setCurrent( DisplayNode * content );
@@ -37,6 +39,8 @@ namespace hrfm{ namespace signage{ namespace display{
         ci::gl::Fbo * _fbo;
         ci::gl::Fbo * _currentFbo;
         ci::gl::Fbo * _nextFbo;
+        
+        TransitionShaderBase * _shader;
         
         DisplayNode * _current;
         DisplayNode * _next;
