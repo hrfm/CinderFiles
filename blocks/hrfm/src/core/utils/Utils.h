@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SiTextureFontMap.h"
+#include "SiFontUtil.h"
 #include "SiTextureMap.h"
 #include "SiTimeUtil.h"
 #include "XmlLoader.h"

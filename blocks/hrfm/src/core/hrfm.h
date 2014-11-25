@@ -22,8 +22,11 @@
 
 #include "ShaderFactory.h"
 #include "SiFboFactory.h"
-#include "Filter.h"
+
+#include "FilterHeaders.h"
+
 #include "TransitionShaderBase.h"
+#include "MatrixTransition.h"
 
 // --- hrfm::io
 

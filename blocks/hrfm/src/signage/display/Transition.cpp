@@ -50,6 +50,10 @@ namespace hrfm{ namespace signage{ namespace display{
         _next = next;
     }
     
+    void Transition::start(){
+        start( _shader->getInterval() );
+    }
+    
     void Transition::start( float time ){
         cout << "Transition::start(" << time << ")" << endl;
         _time      = time;
@@ -113,6 +117,8 @@ namespace hrfm{ namespace signage{ namespace display{
         _nextFbo->unbindFramebuffer();
         
         // --- Draw output into _fbo;
+        
+        _shader->prepare();
         
         _fbo->bindFramebuffer();
         {

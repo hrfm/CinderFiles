@@ -118,7 +118,7 @@ namespace hrfm{ namespace signage{ namespace display{
                         addSchedule( time, m, h );
                     }
                     
-                }catch(Exception e){
+                }catch(...){
                     
                     cout << "[ Error ] " << path << endl;
                     

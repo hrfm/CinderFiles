@@ -26,6 +26,7 @@ namespace hrfm{ namespace signage{ namespace display{
         virtual void prepare();
         virtual void setCurrent( DisplayNode * content );
         virtual void setNext( DisplayNode * content );
+        virtual void start();
         virtual void start( float time );
         
         virtual bool running();

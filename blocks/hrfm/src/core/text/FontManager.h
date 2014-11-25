@@ -2,12 +2,13 @@
 
 // === INCLUDE ====================================================================================================
 
+#include <iostream>
+#include <sstream>
 #include "cinder/app/AppBasic.h"
 #include "cinder/gl/Texture.h"
 #include "cinder/gl/TextureFont.h"
 #include "cinder/Font.h"
-#include <iostream>
-#include <sstream>
+#include "SiFontUtil.h"
 
 // === NAMESPACE ===================================================================================================
 
@@ -18,7 +19,7 @@ using namespace std;
 
 // === FontManager =================================================================================================
 
-namespace hrfm{ namespace utils{
+namespace hrfm{ namespace text{
     
     class FontManager{
         
@@ -36,19 +37,22 @@ namespace hrfm{ namespace utils{
         void setRandomFont();
         void setRandomGlyph();
         
+        Vec2f measureString( string txt );
+        
         // 改行が起こった場合 true
-        bool setGlyphByNextText();
+        string setGlyphByNextText();
+        bool isLineHead();
         
         void draw( Rectf bounds );
-        void draw( Rectf bounds, float r, float g, float b );
+        void draw( string text, Rectf bounds );
         
-        int fontSize;
+        void draw( Rectf bounds, float r, float g, float b );
+        void draw( string text, Rectf bounds, float r, float g, float b );
         
         vector<string>	mFontNames;
         
         Font            mFont;
         TextureFontRef  mTextureFont;
-        string          mGlyph;
         
     private:
         
@@ -63,8 +67,12 @@ namespace hrfm{ namespace utils{
         string        myCurrentLine;
         int           myCurrentLineIndex;
         
-        map<const string, TextureFontRef> myFontMap;
-        string myCurrentFontName;
+        string _glyph;
+        string _glyphs;
+        
+        vector<string> _fontNames;
+        int    _fontSize;
+        TextureFontRef _textureFontRef;
         
     };
     

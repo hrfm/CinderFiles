@@ -22,6 +22,7 @@ namespace hrfm { namespace gl{
     public:
         
         TransitionShaderBase(){
+            mInterval = 1.0f;
             setSize( 640, 480 );
         };
         
@@ -42,6 +43,18 @@ namespace hrfm { namespace gl{
         virtual void setSize( Vec2f size ){
             mSize   = size;
             mAspect = getAspectRatio( size );
+        }
+        
+        virtual void setInterval( float interval ){
+            mInterval = interval;
+        }
+        
+        virtual float getInterval(){
+            return mInterval;
+        }
+        
+        virtual void prepare(){
+            
         }
         
         virtual void bindShader(){
@@ -103,6 +116,7 @@ namespace hrfm { namespace gl{
         
     protected:
         
+        float mInterval;
         ci::gl::GlslProg mShader;
         Vec2f mSize;
         Vec2i mAspect;
