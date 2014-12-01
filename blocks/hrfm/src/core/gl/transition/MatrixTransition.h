@@ -27,6 +27,8 @@ namespace hrfm { namespace gl{
         
         FontMatrix _matrix;
         
+        double _beforeTime;
+        
     };
 
 }}

@@ -40,8 +40,11 @@ namespace hrfm{ namespace cv{
     }
     
     void FaceDetect::update( Surface surface ){
-        if( mFaceDetectEnabled && &surface != nullptr ){
-            mCloneSurface = surface.clone();
+        if( pthread_mutex_lock(&_mutex) != 0 ){
+            if( mFaceDetectEnabled && &surface != nullptr ){
+                //mCloneSurface = surface.clone();
+            }
+            pthread_mutex_unlock(&_mutex);
         }
     }
     
@@ -75,81 +78,88 @@ namespace hrfm{ namespace cv{
             
             double elapsedSec = getElapsedSeconds();
             
-            if( mCloneSurface && 0.1f < elapsedSec - recentSec ){
+            if( mCloneSurface && 0.2f < elapsedSec - recentSec ){
                 
-                try{
+                if( pthread_mutex_lock(&_mutex) != 0 ){
                     
-                    const int calcScale = 3; // calculate the image at half scale
-                    
-                    // create a grayscale copy of the input image
-                    ::cv::Mat grayCameraImage( toOcv( mCloneSurface, CV_8UC1 ) );
-                    
-                    //*
-                    // scale it to half size, as dictated by the calcScale constant
-                    int scaledWidth = mCloneSurface.getWidth() / calcScale;
-                    int scaledHeight = mCloneSurface.getHeight() / calcScale;
-                    ::cv::Mat smallImg( scaledHeight, scaledWidth, CV_8UC1 );
-                    ::cv::resize( grayCameraImage, smallImg, smallImg.size(), 0, 0, ::cv::INTER_LINEAR );
-                    
-                    // equalize the histogram
-                    ::cv::equalizeHist( smallImg, smallImg );
-                    
-                    // detect the faces and iterate them, appending them to mFaces
-                    vector<::cv::Rect> faces;
-                    mFaceCascade.detectMultiScale( smallImg, faces );
-                    
-                    for( vector<::cv::Rect>::const_iterator faceIter = faces.begin(); faceIter != faces.end(); ++faceIter ) {
+                    try{
                         
-                        Rectf faceRect( fromOcv( *faceIter ) );
-                        faceRect *= calcScale;
+                        const int calcScale = 3; // calculate the image at half scale
                         
-                        // 既にある DetectRect と被っているかを調べ被っていればそれを更新する.
-                        bool updated = false;
-                        for( vector<DetectRect>::iterator it = mFaces.begin(); it != mFaces.end(); ++it ){
-                            if( (*it).check( faceRect ) ){
-                                updated = true;
-                                break;
+                        // create a grayscale copy of the input image
+                        ::cv::Mat grayCameraImage( toOcv( mCloneSurface, CV_8UC1 ) );
+                        
+                        //*
+                        // scale it to half size, as dictated by the calcScale constant
+                        int scaledWidth = mCloneSurface.getWidth() / calcScale;
+                        int scaledHeight = mCloneSurface.getHeight() / calcScale;
+                        ::cv::Mat smallImg( scaledHeight, scaledWidth, CV_8UC1 );
+                        ::cv::resize( grayCameraImage, smallImg, smallImg.size(), 0, 0, ::cv::INTER_LINEAR );
+                        
+                        // equalize the histogram
+                        ::cv::equalizeHist( smallImg, smallImg );
+                        
+                        // detect the faces and iterate them, appending them to mFaces
+                        vector<::cv::Rect> faces;
+                        mFaceCascade.detectMultiScale( smallImg, faces );
+                        
+                        for( vector<::cv::Rect>::const_iterator faceIter = faces.begin(); faceIter != faces.end(); ++faceIter ) {
+                            
+                            Rectf faceRect( fromOcv( *faceIter ) );
+                            faceRect *= calcScale;
+                            
+                            // 既にある DetectRect と被っているかを調べ被っていればそれを更新する.
+                            bool updated = false;
+                            for( vector<DetectRect>::iterator it = mFaces.begin(); it != mFaces.end(); ++it ){
+                                if( (*it).check( faceRect ) ){
+                                    updated = true;
+                                    break;
+                                }
+                            }
+                            if( !updated ){
+                                mFaces.push_back( DetectRect( faceRect ) );
+                            }
+                            
+                            // detect eyes within this face and iterate them, appending them to mEyes
+                            if( false ){
+                                mEyes.clear();
+                                vector<::cv::Rect> eyes;
+                                mEyeCascade.detectMultiScale( smallImg( *faceIter ), eyes );
+                                for( vector<::cv::Rect>::const_iterator eyeIter = eyes.begin(); eyeIter != eyes.end(); ++eyeIter ) {
+                                    Rectf eyeRect( fromOcv( *eyeIter ) );
+                                    eyeRect = eyeRect * calcScale + faceRect.getUpperLeft();
+                                    mEyes.push_back( eyeRect );
+                                }
+                            }
+                            
+                        }
+                        
+                        vector<DetectRect>::iterator it = mFaces.begin();
+                        while( it != mFaces.end() ){
+                            (*it).update();
+                            if( (*it).dead() ){
+                                it = mFaces.erase(it);
+                            }else{
+                                it++;
                             }
                         }
-                        if( !updated ){
-                            mFaces.push_back( DetectRect( faceRect ) );
-                        }
                         
-                        // detect eyes within this face and iterate them, appending them to mEyes
-                        if( false ){
-                            mEyes.clear();
-                            vector<::cv::Rect> eyes;
-                            mEyeCascade.detectMultiScale( smallImg( *faceIter ), eyes );
-                            for( vector<::cv::Rect>::const_iterator eyeIter = eyes.begin(); eyeIter != eyes.end(); ++eyeIter ) {
-                                Rectf eyeRect( fromOcv( *eyeIter ) );
-                                eyeRect = eyeRect * calcScale + faceRect.getUpperLeft();
-                                mEyes.push_back( eyeRect );
-                            }
-                        }
+                        //*/
                         
-                    }
+                    }catch(...){}
                     
-                    vector<DetectRect>::iterator it = mFaces.begin();
-                    while( it != mFaces.end() ){
-                        (*it).update();
-                        if( (*it).dead() ){
-                            it = mFaces.erase(it);
-                        }else{
-                            it++;
-                        }
-                    }
+                    recentSec = elapsedSec;
                     
-                    //*/
+                    pthread_mutex_unlock(&_mutex);
                     
-                }catch(...){}
-                
-                recentSec = elapsedSec;
+                }
                 
             }
+            
             
         }
         
     }
-
+    
     
 }}

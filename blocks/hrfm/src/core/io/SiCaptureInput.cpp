@@ -42,16 +42,90 @@ namespace hrfm { namespace io{
     ci::CaptureRef SiCaptureInput::getCaptureRef( string deviceName ){
         return _captureRefMap[deviceName];
     }
-
+    
     ci::Surface SiCaptureInput::getSurface( string deviceName ){
         return _captureRefMap[deviceName]->getSurface();
     }
     
     ci::gl::Texture SiCaptureInput::getTexture( string deviceName ){
-        return ci::gl::Texture( getSurface( deviceName ) );
+        
+        if( _texBeforeFrameMap.find(deviceName) == _texBeforeFrameMap.end() ){
+            _texBeforeFrameMap[deviceName] = 0;
+        }
+        
+        int currentFrame = getElapsedFrames();
+        int beforeFrame  = _beforeTextureBeforeFrameMap[deviceName];
+        
+        if( _texMap.find(deviceName) == _texMap.end() || beforeFrame != currentFrame ){
+            _texMap[deviceName] = ci::gl::Texture( getSurface( deviceName ) );
+            _texBeforeFrameMap[deviceName] = currentFrame;
+        }
+        
+        return _texMap[deviceName];
+        
     }
     
-    void SiCaptureInput::update(){
+    ci::gl::Texture SiCaptureInput::getDiffTexture( string deviceName ){
+        
+        if( _diffFboMap.find(deviceName) == _diffFboMap.end() ){
+            ci::Vec2i size = getCaptureRef(deviceName)->getSize();
+            ci::gl::Fbo::Format format;
+            ci::gl::Fbo fbo = ci::gl::Fbo( size.x, size.y, format );
+            _diffFboMap[deviceName] = fbo;
+        }
+        
+        if( _beforeTextureBeforeFrameMap.find(deviceName) == _beforeTextureBeforeFrameMap.end() ){
+            _beforeTextureBeforeFrameMap[deviceName] = 0;
+        }
+        
+        int currentFrame = getElapsedFrames();
+        int beforeFrame  = _beforeTextureBeforeFrameMap[deviceName];
+        
+        if( beforeFrame != currentFrame ){
+            
+            if( _beforeTextureMap.find(deviceName) != _beforeTextureMap.end() ){
+                
+                Area viewport = ci::gl::getViewport();
+                
+                ci::gl::Texture tex = getTexture(deviceName);
+                ci::gl::Fbo     fbo = _diffFboMap[deviceName];
+                
+                // 前フレームとの差分を取得する.
+                fbo.bindFramebuffer();
+                {
+                    ci::gl::pushMatrices();
+                    ci::gl::setViewport( fbo.getBounds() );
+                    ci::gl::setMatricesWindow( fbo.getSize(), false );
+                    {
+                        ci::gl::clear();
+                        ci::gl::color(1.0f,1.0f,1.0f);
+                        _beforeTextureMap[deviceName].bind(0);
+                        tex.bind(1);
+                        _diffShader.bind();
+                        {
+                            _diffShader.uniform("tex0", 0);
+                            _diffShader.uniform("tex1", 1);
+                            _diffShader.uniform("resolution", Vec2f(fbo.getSize()) );
+                            ci::gl::drawSolidRect( fbo.getBounds() );
+                        }
+                        _diffShader.unbind();
+                        tex.unbind();
+                        _beforeTextureMap[deviceName].unbind();
+                    }
+                    ci::gl::popMatrices();
+                }
+                fbo.unbindFramebuffer();
+                
+                ci::gl::setViewport(viewport);
+                
+            }
+            
+            _beforeTextureMap[deviceName]            = getTexture(deviceName);
+            _beforeTextureBeforeFrameMap[deviceName] = currentFrame;
+            
+        }
+        
+        return _diffFboMap[deviceName].getTexture();
         
     }
     

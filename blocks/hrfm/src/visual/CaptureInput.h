@@ -51,9 +51,9 @@ namespace hrfm{ namespace io{
         
         ci::gl::Texture getDiffTexture();
         
-        void bindTexture( int index );
+        //void bindTexture( int index );
         
-        void unbindTexture();
+        //void unbindTexture();
         
         void showAllDevices();
         
@@ -91,18 +91,14 @@ namespace hrfm{ namespace io{
         
         // --- Video Capture. ---
         
-        CaptureRef              mCapture;
-        ci::gl::Texture             mTexture;
+        string     _deviceName;
+        CaptureRef mCapture;
         
-        Vec2i                   mCaptureSize;
-        Rectf                   mDrawBounds;
-        ci::gl::Fbo                 mCaptureFBO;
+        Vec2i mCaptureSize;
+        Rectf mDrawBounds;
         
-        bool                    mCaptureAvailable;
-        bool                    mCaptureReflect;
-        
-        ci::gl::GlslProg            mDiffShader;
-        ci::gl::Fbo                 mCaptureDiffFBO;
+        bool mCaptureAvailable;
+        bool mCaptureReflect;
         
         // ----- Face Detect.
         

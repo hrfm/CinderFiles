@@ -53,6 +53,7 @@ namespace hrfm{ namespace text{
     private:
         
         string _text;
+        float _measureX;
         
         Vec2i _fboSize;
         int   _fontSize;

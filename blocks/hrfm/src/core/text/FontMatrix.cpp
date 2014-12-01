@@ -30,11 +30,18 @@ namespace hrfm{ namespace text{
         
         // --- Measure num of matrix cols.
         
-        string txt = "0";
+        string txt = "";
         int length = 0;
-        while( myFontManager.measureString(txt).x < _fboSize.x ){
+        
+        while( true ){
             txt += "0";
-            length++;
+            float measureX = myFontManager.measureString(txt).x;
+            if( measureX < _fboSize.x ){
+                _measureX = measureX;
+                length++;
+            }else{
+                break;
+            }
         }
         _mtxSize  = Vec2i( length, ceil( _fboSize.y / fontSize ) );
         

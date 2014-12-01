@@ -230,11 +230,12 @@ namespace hrfm{ namespace signage{ namespace display{
     
     void SequentialContents::_update(){
         if( _currentSequence ){
-            _currentSequence->update();
             _currentSequence->setSize( width, height );
         }
         if( _isSetTransition && _transition->running() ){
             _transition->update();
+        }else if( _currentSequence ){
+            _currentSequence->update();
         }
     }
     

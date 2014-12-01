@@ -6,16 +6,23 @@ namespace hrfm { namespace gl{
         
         TransitionShaderBase();
         
-        setInterval( 3.0f );
+        setInterval( 2.0f );
         
         init( DataLoader::load("MatrixTransition.glsl") );
         
+        _beforeTime = 0.0;
+        
         _matrix.setup( Vec2i( 3840, 720 ), 20, "OCRAStd" );
+        _matrix.shuffle();
         
     }
     
     void MatrixTransition::prepare(){
-        _matrix.shuffle();
+        double elapsed = getElapsedSeconds();
+        if( 0.05 < elapsed - _beforeTime ){
+            _matrix.shuffle();
+            _beforeTime = elapsed;
+        }
     }
     
     void MatrixTransition::bindTexture( const ci::gl::Texture & current, const ci::gl::Texture & next ){

@@ -15,94 +15,33 @@ namespace hrfm{ namespace io{
         setup( width, height, "*" );
     }
     
-    void CaptureInput::setup( int32_t width, int32_t height, string deviceName ){
+    void CaptureInput::setup( int32_t width, int32_t height, string deviceName = "*" ){
         
         // --- Init Properties. ---
         
         mCaptureSize    = Vec2i( width, height );
         mCaptureReflect = false;
         
-        // --- Create Fbo. ---
-        
-        gl::Fbo::Format captureFormat;
-        mCaptureFBO     = gl::Fbo( width, height, captureFormat );
-        mCaptureDiffFBO = gl::Fbo( width, height, captureFormat );
-        mDrawBounds     = mCaptureFBO.getBounds();
-        
         // --- Setup Capture Devices. ---
         
+        _deviceName = deviceName;
+        
         SiCaptureInput::getInstance().showAllDevices();
-        mCapture = SiCaptureInput::getInstance().createRef( width, height, deviceName );
+        mCapture = SiCaptureInput::getInstance().createRef( width, height, _deviceName );
         mCaptureAvailable = true;
         
-        // --- Create GLSL. ---
+        mDrawBounds = mCapture->getBounds();
         
-        try {
-            mDiffShader = gl::GlslProg( loadResource("../resources/simple_vert.glsl"), loadResource("../resources/diff_frag.glsl") );
-        }catch( ci::gl::GlslProgCompileExc &exc ) {
-            cout << "Shader compile error: " << endl;
-            cout << exc.what();
-        }catch( ... ) {
-            cout << "Unable to load shader" << endl;
-        }
+        // --- Create GLSL. ---
         
     }
     
     void CaptureInput::update(){
-        
         if( mCapture && mCapture->checkNewFrame() ) {
-            
             if( mFaceDetect ){
                 mFaceDetect->update( mCapture->getSurface().clone() );
             }
-            
-            mTexture = gl::Texture( mCapture->getSurface() );
-            
-            Area viewport = gl::getViewport();
-            
-            // ---
-            
-            // 前フレームとの差分を取得する.
-            mCaptureDiffFBO.bindFramebuffer();
-            gl::pushMatrices();
-            gl::setViewport( mCaptureDiffFBO.getBounds() );
-            gl::setMatricesWindow( mCaptureDiffFBO.getSize(), false );
-            gl::clear( Color( 0, 0, 0 ) );
-            gl::color(1.0f,1.0f,1.0f);
-            glPushMatrix();
-            gl::draw( mTexture, mDrawBounds );
-            glPopMatrix();
-            mCaptureDiffFBO.bindTexture(0);
-            mCaptureFBO.bindTexture(1);
-            mDiffShader.bind();
-            mDiffShader.uniform("tex0", 0);
-            mDiffShader.uniform("tex1", 1);
-            mDiffShader.uniform("resolution", Vec2f( mCaptureDiffFBO.getWidth(), mCaptureDiffFBO.getHeight() ) );
-            gl::drawSolidRect( mDrawBounds );
-            mDiffShader.unbind();
-            mCaptureFBO.unbindTexture();
-            mCaptureDiffFBO.unbindTexture();
-            gl::popMatrices();
-            mCaptureDiffFBO.unbindFramebuffer();
-            
-            // --- キャプチャ用 Frame Buffer の更新.
-            
-            mCaptureFBO.bindFramebuffer();
-            gl::pushMatrices();
-            gl::setViewport( mCaptureFBO.getBounds() );
-            gl::setMatricesWindow( mCaptureFBO.getSize(), false );
-            gl::clear( Color( 0, 0, 0 ) );
-            gl::color(1.0f,1.0f,1.0f);
-            glPushMatrix();
-            gl::draw( mTexture, mDrawBounds );
-            glPopMatrix();
-            gl::popMatrices();
-            mCaptureFBO.unbindFramebuffer();
-            
-            gl::setViewport( viewport );
-            
         }
-        
     }
     
     bool CaptureInput::captureAvailable(){
@@ -127,27 +66,19 @@ namespace hrfm{ namespace io{
     }
     
     Rectf CaptureInput::getBounds(){
-        return mCaptureFBO.getBounds();
+        return mCapture->getBounds();
     }
     
     bool CaptureInput::isCaptureAvailable(){
         return mCaptureAvailable;
     }
     
-    gl::Texture CaptureInput::getCaptureTexture(){
-        return mCaptureFBO.getTexture();
+    ci::gl::Texture CaptureInput::getCaptureTexture(){
+        return SiCaptureInput::getInstance().getTexture( _deviceName );
     }
     
-    gl::Texture CaptureInput::getDiffTexture(){
-        return mCaptureDiffFBO.getTexture();
-    }
-    
-    void CaptureInput::bindTexture( int index ){
-        mCaptureFBO.bindTexture( index );
-    }
-    
-    void CaptureInput::unbindTexture(){
-        mCaptureFBO.unbindTexture();
+    ci::gl::Texture CaptureInput::getDiffTexture(){
+        return SiCaptureInput::getInstance().getDiffTexture( _deviceName );
     }
     
     void CaptureInput::showAllDevices(){
@@ -212,7 +143,7 @@ namespace hrfm{ namespace io{
     
     void CaptureInput::updateOpticalFlow( float bias, float frameRate ){
         if( mOpticalFlow ){
-            mOpticalFlow->update( mCaptureFBO.getTexture(), bias, frameRate );
+            mOpticalFlow->update( SiCaptureInput::getInstance().getTexture( _deviceName ), bias, frameRate );
         }
     }
     
@@ -231,7 +162,7 @@ namespace hrfm{ namespace io{
         getForceMap().draw( texSize );
     }
     
-    gl::Texture CaptureInput::getOpticalFlowTexture(){
+    ci::gl::Texture CaptureInput::getOpticalFlowTexture(){
         return mOpticalFlow->getOpticalFlowTexture();
     }
     

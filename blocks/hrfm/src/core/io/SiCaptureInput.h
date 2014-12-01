@@ -2,7 +2,9 @@
 
 #include "Singleton.h"
 #include "EventDispatcher.h"
+#include "ShaderFactory.h"
 #include "cinder/gl/Texture.h"
+#include "cinder/gl/Fbo.h"
 #include "cinder/Capture.h"
 
 namespace hrfm { namespace io{
@@ -25,7 +27,7 @@ namespace hrfm { namespace io{
         
         ci::gl::Texture getTexture( string deviceName = "*" );
         
-        void update();
+        ci::gl::Texture getDiffTexture( string deviceName = "*" );
         
     private:
         
@@ -33,9 +35,21 @@ namespace hrfm { namespace io{
         
         SiCaptureInput(){
             hrfm::events::EventDispatcher();
+            _diffShader = hrfm::gl::ShaderFactory::create( "simple_vert.glsl", "diff_frag.glsl" );
         }
         
+        int _beforeFrame;
+        
+        ci::gl::GlslProg _diffShader;
+        
         map<string,ci::CaptureRef> _captureRefMap;
+        
+        map<string,ci::gl::Texture> _texMap;
+        map<string,int>             _texBeforeFrameMap;
+        
+        map<string,ci::gl::Fbo>     _diffFboMap;
+        map<string,ci::gl::Texture> _beforeTextureMap;
+        map<string,int>             _beforeTextureBeforeFrameMap;
         
     };
     

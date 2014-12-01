@@ -107,6 +107,16 @@ namespace hrfm{ namespace display{
         return this;
     }
     
+    bool DisplayNode::hasChildOf( DisplayNode * child ){
+        auto itr = std::remove_if(children.begin(),children.end(),[child](DisplayNode* d)->bool{
+            return d == child;
+        });
+        if( itr == children.end() ){
+            return false;
+        }
+        return true;
+    }
+    
     void DisplayNode::update(){
         _update();
         _updateChildren();

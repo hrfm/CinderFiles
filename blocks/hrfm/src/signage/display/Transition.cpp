@@ -82,6 +82,7 @@ namespace hrfm{ namespace signage{ namespace display{
         {
             ci::gl::clear();
             if( _current ){
+                _current->update();
                 ci::gl::pushMatrices();
                 {
                     ci::gl::setViewport( (Area)_currentFbo->getBounds() );
@@ -102,6 +103,7 @@ namespace hrfm{ namespace signage{ namespace display{
         {
             ci::gl::clear();
             if( _next ){
+                _next->update();
                 ci::gl::pushMatrices();
                 {
                     ci::gl::setViewport( (Area)_next->getBounds() );

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<settings>
+<settings url="http://container.hive.co.jp/pan_to_circus/enigma/settings/sequence.xml">
     <list>
         <sequence type="pic" time="10.0" src="~/Documents/contents/realinternet.png"/>
         <sequence type="mov" time="0" src="~/Documents/contents/test.mp4" loop="true"/>

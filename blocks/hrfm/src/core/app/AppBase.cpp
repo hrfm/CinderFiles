@@ -40,6 +40,7 @@ namespace hrfm { namespace app{
         
         // Set this app's FrameRate from xml.
         settings->setFrameRate( prepare.getAttributeValue<float>("frameRate") );
+        settings->setFrameRate( 60 );
         cout << "FrameRate  : " << settings->getFrameRate() << endl;
         
         // Set this app's WindowSize from xml.
@@ -85,7 +86,7 @@ namespace hrfm { namespace app{
         if( xml.hasChild("window") ){
             XmlTree window = xml.getChild("window");
             if( window.hasAttribute("fullScreen") && window.getAttributeValue<string>("fullScreen") == "true" ){
-                ci::app::setFullScreen(true);
+                //ci::app::setFullScreen(true);
                 system( ("open -a "+ci::app::getAppPath().string()).c_str() );
             }
             if( window.hasAttribute("hideCursor") && window.getAttributeValue<string>("hideCursor") == "true" ){
@@ -192,7 +193,7 @@ namespace hrfm { namespace app{
     }
     
     void AppBase::draw(){
-        gl::clear();
+        ci::gl::clear();
         stage.draw();
     }
     
@@ -284,7 +285,7 @@ namespace hrfm { namespace app{
     // === For Debug. ============================================================
     
     void AppBase::drawFPS( Vec2f position ){
-        gl::drawString(
+        ci::gl::drawString(
                        "FPS = " + toString(getAverageFps()) ,
                        position,
                        Color::white(),

@@ -40,6 +40,8 @@ namespace hrfm{ namespace display{
         virtual DisplayNode * removeChildAt( int index );
         virtual DisplayNode * removeOwn();
         
+        virtual bool hasChildOf( DisplayNode * child );
+        
         virtual void update();
         virtual void draw();
         

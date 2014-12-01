@@ -27,6 +27,8 @@ namespace hrfm{ namespace cv{
         
     private:
         
+        pthread_mutex_t _mutex;
+        
         void _updateFaces();
         
         bool mFaceDetectEnabled;
