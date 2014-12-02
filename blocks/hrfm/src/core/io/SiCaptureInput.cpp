@@ -48,21 +48,12 @@ namespace hrfm { namespace io{
     }
     
     ci::gl::Texture SiCaptureInput::getTexture( string deviceName ){
-        
-        if( _texBeforeFrameMap.find(deviceName) == _texBeforeFrameMap.end() ){
-            _texBeforeFrameMap[deviceName] = 0;
-        }
-        
-        int currentFrame = getElapsedFrames();
-        int beforeFrame  = _beforeTextureBeforeFrameMap[deviceName];
-        
-        if( _texMap.find(deviceName) == _texMap.end() || beforeFrame != currentFrame ){
+        if( getCaptureRef()->checkNewFrame() ){
             _texMap[deviceName] = ci::gl::Texture( getSurface( deviceName ) );
-            _texBeforeFrameMap[deviceName] = currentFrame;
+        }else if( _texMap.find(deviceName) == _texMap.end() ){
+            _texMap[deviceName] = ci::gl::Texture(1,1);
         }
-        
         return _texMap[deviceName];
-        
     }
     
     ci::gl::Texture SiCaptureInput::getDiffTexture( string deviceName ){

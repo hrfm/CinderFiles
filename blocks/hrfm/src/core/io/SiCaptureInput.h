@@ -45,8 +45,6 @@ namespace hrfm { namespace io{
         map<string,ci::CaptureRef> _captureRefMap;
         
         map<string,ci::gl::Texture> _texMap;
-        map<string,int>             _texBeforeFrameMap;
-        
         map<string,ci::gl::Fbo>     _diffFboMap;
         map<string,ci::gl::Texture> _beforeTextureMap;
         map<string,int>             _beforeTextureBeforeFrameMap;
