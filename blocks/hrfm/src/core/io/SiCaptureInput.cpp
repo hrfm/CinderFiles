@@ -39,31 +39,26 @@ namespace hrfm { namespace io{
         return _captureRefMap[deviceName]->getSize();
     }
     
-    ci::CaptureRef SiCaptureInput::getCaptureRef( string deviceName ){
-        return _captureRefMap[deviceName];
+    void SiCaptureInput::update( string deviceName ){
+        updateTexture( deviceName );
+        updateDiffTexture( deviceName );
     }
     
-    ci::Surface SiCaptureInput::getSurface( string deviceName ){
-        return _captureRefMap[deviceName]->getSurface();
-    }
-    
-    ci::gl::Texture SiCaptureInput::getTexture( string deviceName ){
-        if( getCaptureRef()->checkNewFrame() ){
-            _texMap[deviceName] = ci::gl::Texture( getSurface( deviceName ) );
-        }else if( _texMap.find(deviceName) == _texMap.end() ){
-            _texMap[deviceName] = ci::gl::Texture(1,1);
+    ci::gl::Texture SiCaptureInput::updateTexture( string deviceName ){
+        if( _beforeFrameMap.find(deviceName) == _beforeFrameMap.end() ){
+            _beforeFrameMap[deviceName] = 0;
+        }else{
+            int currentFrame = getElapsedFrames();
+            int beforeFrame  = _beforeFrameMap[deviceName];
+            if( beforeFrame < currentFrame ){
+                _beforeFrameMap[deviceName] = currentFrame;
+                _texMap[deviceName] = ci::gl::Texture( getSurface( deviceName ) );
+            }
         }
-        return _texMap[deviceName];
+        return getTexture(deviceName);
     }
     
-    ci::gl::Texture SiCaptureInput::getDiffTexture( string deviceName ){
-        
-        if( _diffFboMap.find(deviceName) == _diffFboMap.end() ){
-            ci::Vec2i size = getCaptureRef(deviceName)->getSize();
-            ci::gl::Fbo::Format format;
-            ci::gl::Fbo fbo = ci::gl::Fbo( size.x, size.y, format );
-            _diffFboMap[deviceName] = fbo;
-        }
+    ci::gl::Texture SiCaptureInput::updateDiffTexture( string deviceName ){
         
         if( _beforeTextureBeforeFrameMap.find(deviceName) == _beforeTextureBeforeFrameMap.end() ){
             _beforeTextureBeforeFrameMap[deviceName] = 0;
@@ -77,6 +72,13 @@ namespace hrfm { namespace io{
             if( _beforeTextureMap.find(deviceName) != _beforeTextureMap.end() ){
                 
                 Area viewport = ci::gl::getViewport();
+                
+                if( _diffFboMap.find(deviceName) == _diffFboMap.end() ){
+                    ci::Vec2i size = getCaptureRef(deviceName)->getSize();
+                    ci::gl::Fbo::Format format;
+                    ci::gl::Fbo fbo = ci::gl::Fbo( size.x, size.y, format );
+                    _diffFboMap[deviceName] = fbo;
+                }
                 
                 ci::gl::Texture tex = getTexture(deviceName);
                 ci::gl::Fbo     fbo = _diffFboMap[deviceName];
@@ -114,6 +116,34 @@ namespace hrfm { namespace io{
             _beforeTextureMap[deviceName]            = getTexture(deviceName);
             _beforeTextureBeforeFrameMap[deviceName] = currentFrame;
             
+        }
+        
+        return getDiffTexture();
+        
+    }
+    
+    ci::CaptureRef SiCaptureInput::getCaptureRef( string deviceName ){
+        return _captureRefMap[deviceName];
+    }
+    
+    ci::Surface SiCaptureInput::getSurface( string deviceName ){
+        return _captureRefMap[deviceName]->getSurface();
+    }
+    
+    ci::gl::Texture SiCaptureInput::getTexture( string deviceName ){
+        if( _texMap.find(deviceName) == _texMap.end() ){
+            _texMap[deviceName] = ci::gl::Texture(1,1);
+        }
+        return _texMap[deviceName];
+    }
+    
+    ci::gl::Texture SiCaptureInput::getDiffTexture( string deviceName ){
+        
+        if( _diffFboMap.find(deviceName) == _diffFboMap.end() ){
+            ci::Vec2i size = getCaptureRef(deviceName)->getSize();
+            ci::gl::Fbo::Format format;
+            ci::gl::Fbo fbo = ci::gl::Fbo( size.x, size.y, format );
+            _diffFboMap[deviceName] = fbo;
         }
         
         return _diffFboMap[deviceName].getTexture();
