@@ -24,7 +24,7 @@ namespace hrfm{ namespace io{
         
         void setup( uint16_t count );
         
-        void update();
+        void update( float decline = 0.68 );
         
         void  useAudioManager();
         
@@ -67,9 +67,10 @@ namespace hrfm{ namespace io{
         ci::gl::Fbo      soundTexture;
         ci::gl::GlslProg soundTexShader;
         
-        cinder::audio::InputDeviceNodeRef		mInputDeviceNode;
-        cinder::audio::MonitorSpectralNodeRef	mMonitorSpectralNode;
-        vector<float>					mMagSpectrum;
+        cinder::audio::InputDeviceNodeRef     mInputDeviceNode;
+        cinder::audio::MonitorSpectralNodeRef mMonitorSpectralNode;
+        
+        vector<float>					      mMagSpectrum;
         
     };
     

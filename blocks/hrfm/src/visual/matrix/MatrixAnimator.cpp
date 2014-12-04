@@ -21,20 +21,30 @@ namespace hrfm{ namespace matrix{
         float mChannelWidth  = mChannel->getWidth();
         float mChannelHeight = mChannel->getHeight();
         
+        Area viewport = ci::gl::getViewport();
+        
         myFbo.bindFramebuffer();
-        gl::pushMatrices();
-        gl::setMatricesWindow(getWindowSize(),false);
-        // --- フェード処理
-        gl::color(0.0f,0.0f,0.0f,0.02f);
-        gl::drawSolidRect(getWindowBounds());
-        // update and draw MatrixLine.
-        vector<MatrixLine*>::iterator it = myMatrixLines.begin();  // イテレータのインスタンス化
-        while( it != myMatrixLines.end() ){
-            (*it)->update( mChannel, mChannelWidth, mChannelHeight, myColSize, myRowSize );
-            ++it;
+        {
+            gl::pushMatrices();
+            gl::setViewport( myFbo.getBounds() );
+            gl::setMatricesWindow( myFbo.getSize(), false );
+            {
+                // --- フェード処理
+                gl::color(0.0f,0.0f,0.0f,0.02f);
+                gl::drawSolidRect( myFbo.getBounds() );
+                // update and draw MatrixLine.
+                vector<MatrixLine*>::iterator it  = myMatrixLines.begin();
+                vector<MatrixLine*>::iterator end = myMatrixLines.end();
+                while( it != end ){
+                    (*it)->update( mChannel, mChannelWidth, mChannelHeight, myColSize, myRowSize );
+                    ++it;
+                }
+            }
+            gl::popMatrices();
         }
-        gl::popMatrices();
         myFbo.unbindFramebuffer();
+        
+        ci::gl::setViewport(viewport);
         
     }
     

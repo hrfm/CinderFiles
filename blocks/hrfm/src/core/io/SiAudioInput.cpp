@@ -20,24 +20,21 @@ namespace hrfm{ namespace io{
         
         // --- Create Sound Context.
         
-        /*
-         auto ctx = audio::Context::master();
-         
-         // The InputDeviceNode is platform-specific, so you create it using a special method on the Context:
-         mInputDeviceNode = ctx->createInputDeviceNode();
-         
-         // By providing an FFT size double that of the window size, we 'zero-pad' the analysis data, which gives
-         // an increase in resolution of the resulting spectrum data.
-         auto monitorFormat = audio::MonitorSpectralNode::Format().fftSize( bandCount ).windowSize( bandCount / 2.0 );
-         mMonitorSpectralNode = ctx->makeNode( new audio::MonitorSpectralNode( monitorFormat ) );
-         
-         mInputDeviceNode >> mMonitorSpectralNode;
-         
-         // InputDeviceNode (and all InputNode subclasses) need to be enabled()'s to process audio. So does the Context:
-         mInputDeviceNode->enable();
-         ctx->enable();
-         
-         //*/
+        auto ctx = audio::Context::master();
+        
+        // The InputDeviceNode is platform-specific, so you create it using a special method on the Context:
+        mInputDeviceNode = ctx->createInputDeviceNode();
+        
+        // By providing an FFT size double that of the window size, we 'zero-pad' the analysis data, which gives
+        // an increase in resolution of the resulting spectrum data.
+        auto monitorFormat   = audio::MonitorSpectralNode::Format().windowSize( bandCount );
+        mMonitorSpectralNode = ctx->makeNode( new audio::MonitorSpectralNode( monitorFormat ) );
+        
+        mInputDeviceNode >> mMonitorSpectralNode;
+        
+        // InputDeviceNode (and all InputNode subclasses) need to be enabled()'s to process audio. So does the Context:
+        mInputDeviceNode->enable();
+        ctx->enable();
         
         // ----------
         
@@ -58,48 +55,31 @@ namespace hrfm{ namespace io{
         
     }
     
-    void SiAudioInput::update(){
+    void SiAudioInput::update( float decline ){
         
         // --- Audio
         
+        for( int i = 0; i < bandCount; i++ ) {
+            fft2[i] *= decline;
+        }
+        
+        // We copy the magnitude spectrum out from the Node on the main thread, once per update:
+        mMagSpectrum = mMonitorSpectralNode->getMagSpectrum();
+        
+        float maxValue = 0.0f;
+        for( auto spectrum = mMagSpectrum.begin(); spectrum != mMagSpectrum.end(); ++spectrum ) {
+            maxValue = max( maxValue, *spectrum );
+        }
+        
+        int i = 0;
+        for( auto spectrum = mMagSpectrum.begin(); spectrum != mMagSpectrum.end(); ++spectrum ) {
+            fft[i] = ( *spectrum / maxValue );
+            if( bandCount <= ++i ){
+                break;
+            }
+        }
+        
         /*
-         // We copy the magnitude spectrum out from the Node on the main thread, once per update:
-         mMagSpectrum = mMonitorSpectralNode->getMagSpectrum();
-         
-         for( int i = 0; i < ( bandCount ); i++ ) {
-         fft2[i] *= 0.68;
-         }
-         
-         float maxValue = 0.0f;
-         
-         for( auto spectrum = mMagSpectrum.begin(); spectrum != mMagSpectrum.end(); ++spectrum ) {
-         maxValue = max( maxValue, *spectrum );
-         }
-         
-         if( 1.0f < maxValue ){
-         value = 1.0f;
-         int i = 0;
-         for( auto spectrum = mMagSpectrum.begin(); spectrum != mMagSpectrum.end(); ++spectrum ) {
-         fft[i] = ( *spectrum / maxValue );
-         if( fft2[i] < fft[i] ){
-         fft2[i] = fft[i];
-         }
-         if( bandCount <= ++i ){
-         break;
-         }
-         }
-         }else{
-         value = 0.0f;
-         int i = 0;
-         for( auto spectrum = mMagSpectrum.begin(); spectrum != mMagSpectrum.end(); ++spectrum ) {
-         fft[i] = ( *spectrum / 1.0f );
-         value = max(value,fft[i]);
-         if( bandCount <= ++i ){
-         break;
-         }
-         }
-         }
-         
          soundTexture.bindFramebuffer();
          gl::pushMatrices();
          gl::setMatricesWindow( soundTexture.getSize(), false );
@@ -143,39 +123,38 @@ namespace hrfm{ namespace io{
     
     void SiAudioInput::drawFFT( Rectf bounds, ColorA color0, ColorA color1, int length ){
         
-        glPushMatrix();
-        glTranslatef( bounds.x1, bounds.y1, 0.0f );
-        
         float width  = bounds.getWidth() / length;
         float height = bounds.getHeight();
         
-        for( int i = 1; i < (length); i++ ) {
-            
-            float barY = fft2[i] * height;
-            
-            color1.a = barY / height;
-            
-            //cout << barY << endl;
-            
-            //*
-            glBegin( GL_QUADS );
-            gl::color( color0 );
-            glVertex2f( i * width, height );
-            glVertex2f( i * width + width, height );
-            gl::color( color1 );
-            glVertex2f( i * width + width, height - barY );
-            glVertex2f( i * width, height - barY );
-            glEnd();
-            /*/
-             gl::color( color1 );
-             gl::drawLine(
-             Vec2f( i * width + width, height - barY ),
-             Vec2f( (i-1) * width + width, height - barY )
-             );
-             //*/
-            
+        glPushMatrix();
+        glTranslatef( bounds.x1, bounds.y1, 0.0f );
+        {
+            for( int i = 1; i < (length); i++ ) {
+                float barY = fft[i] * height;
+                glBegin( GL_QUADS );
+                {
+                    gl::color( color0 );
+                    glVertex2f( i * width, height );
+                    glVertex2f( i * width + width, height );
+                    gl::color( color1 );
+                    glVertex2f( i * width + width, height - barY );
+                    glVertex2f( i * width, height - barY );
+                }
+                glEnd();
+                
+                //color1.a = barY / height;
+                //cout << barY << endl;
+                //*
+                /*/
+                 gl::color( color1 );
+                 gl::drawLine(
+                 Vec2f( i * width + width, height - barY ),
+                 Vec2f( (i-1) * width + width, height - barY )
+                 );
+                 //*/
+                
+            }
         }
-        
         glPopMatrix();
         
     }
