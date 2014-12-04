@@ -24,14 +24,17 @@ namespace hrfm{ namespace io{
         
         void setup( uint16_t count );
         
-        void update( float decline = 0.68 );
-        
         void  useAudioManager();
         
-        ci::gl::Texture getAudioTexture();
-        
+        size_t numChannels();
+        const float * getChannelAt( size_t ch );
+        float * getFFT();
         float getAudioManagerGain();
         float getAudioManagerFFTAverage();
+        
+        void update( float decline = 0.68 );
+        
+        // --- draw method.
         
         void drawFFT( Rectf bounds );
         void drawFFT( Rectf bounds, ColorA color0, ColorA color1 );
@@ -40,31 +43,28 @@ namespace hrfm{ namespace io{
         void drawWave( Rectf bounds );
         void drawWave( Rectf bounds, Color color );
         
-        float fftAverage;
-        float audioGain;
-        
-        uint16_t bandCount;
-        bool bufferAvailable;
-        
-        float * fft;
-        map<size_t,const float*> channels;
-        
     private:
         
         friend Singleton<SiAudioInput>;
         
         SiAudioInput(){
-            fftAverage = 0.0f;
-            audioGain  = 0.0f;
+            _fftAverage = 0.0f;
+            _audioGain  = 0.0f;
         }
         
         void onFFTAverage( OscInputEvent * event);
         void onAudioGain( OscInputEvent * event);
         
-        cinder::audio::InputDeviceNodeRef     mInputDeviceNode;
-        cinder::audio::MonitorSpectralNodeRef mMonitorSpectralNode;
-        cinder::audio::MonitorNodeRef         mMonitorNode;
+        float _audioGain;
+        float _fftAverage;
         
+        uint16_t _bandCount;
+        float * _fft;
+        map<size_t,const float*> _channels;
+        
+        cinder::audio::InputDeviceNodeRef     mInputDeviceNode;
+        cinder::audio::MonitorNodeRef         mMonitorNode;
+        cinder::audio::MonitorSpectralNodeRef mMonitorSpectralNode;
         vector<float>					      mMagSpectrum;
         
     };

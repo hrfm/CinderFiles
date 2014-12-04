@@ -6,9 +6,11 @@ using namespace std;
 
 namespace hrfm{ namespace io{
     
+    //! public:
+    
     void SiAudioInput::setup( uint16_t count ){
         
-        bandCount = count;
+        _bandCount = count;
         
         // --- Create Sound Context.
         
@@ -19,9 +21,9 @@ namespace hrfm{ namespace io{
         
         // --- init FFT
         
-        fft = new float[bandCount];
+        _fft = new float[_bandCount];
         
-        auto monitorSpectralFormat   = audio::MonitorSpectralNode::Format().windowSize( bandCount * 2 );
+        auto monitorSpectralFormat   = audio::MonitorSpectralNode::Format().windowSize( _bandCount * 2 );
         mMonitorSpectralNode = ctx->makeNode( new audio::MonitorSpectralNode( monitorSpectralFormat ) );
         mInputDeviceNode >> mMonitorSpectralNode;
         
@@ -39,13 +41,26 @@ namespace hrfm{ namespace io{
         
     }
     
+    size_t SiAudioInput::numChannels(){
+        const audio::Buffer &buffer = mMonitorNode->getBuffer();
+        return buffer.getNumChannels();
+    }
+    
+    const float * SiAudioInput::getChannelAt( size_t ch ){
+        return _channels[ch];
+    }
+    
+    float * SiAudioInput::getFFT(){
+        return _fft;
+    }
+    
     void SiAudioInput::update( float decline ){
         
         // --- Wave
         
         const audio::Buffer &buffer = mMonitorNode->getBuffer();
         for( size_t ch = 0; ch < buffer.getNumChannels(); ch++ ) {
-            channels[ch] = buffer.getChannel(ch);
+            _channels[ch] = buffer.getChannel(ch);
         }
         
         // --- FFT
@@ -53,8 +68,8 @@ namespace hrfm{ namespace io{
         int i = 0;
         float maxValue = 0.0f;
         
-        for( int i = 0; i < bandCount; i++ ) {
-            fft[i] *= decline;
+        for( int i = 0; i < _bandCount; i++ ) {
+            _fft[i] *= decline;
         }
         
         // We copy the magnitude spectrum out from the Node on the main thread, once per update:
@@ -63,8 +78,8 @@ namespace hrfm{ namespace io{
             maxValue = max( maxValue, *spectrum );
         }
         for( auto spectrum = mMagSpectrum.begin(); spectrum != mMagSpectrum.end(); ++spectrum ) {
-            fft[i] = ( *spectrum / maxValue );
-            if( bandCount <= ++i ){
+            _fft[i] = ( *spectrum / maxValue );
+            if( _bandCount <= ++i ){
                 break;
             }
         }
@@ -77,19 +92,21 @@ namespace hrfm{ namespace io{
     }
     
     float SiAudioInput::getAudioManagerGain(){
-        return audioGain;
+        return _audioGain;
     }
     
     float SiAudioInput::getAudioManagerFFTAverage(){
-        return fftAverage;
+        return _fftAverage;
     }
     
+    // --- Draw method.
+    
     void SiAudioInput::drawFFT( Rectf bounds ){
-        drawFFT(bounds, ColorA(1.0,1.0,1.0,1.0), ColorA(1.0,1.0,1.0,1.0), bandCount);
+        drawFFT( bounds, ColorA(1.0,1.0,1.0,1.0), ColorA(1.0,1.0,1.0,1.0), _bandCount );
     }
     
     void SiAudioInput::drawFFT( Rectf bounds, ColorA color0, ColorA color1 ){
-        drawFFT( bounds, color0, color1, bandCount );
+        drawFFT( bounds, color0, color1, _bandCount );
     }
     
     void SiAudioInput::drawFFT( Rectf bounds, ColorA color0, ColorA color1, int length ){
@@ -101,7 +118,7 @@ namespace hrfm{ namespace io{
         glTranslatef( bounds.x1, bounds.y1, 0.0f );
         {
             for( int i = 1; i < (length); i++ ) {
-                float barY = fft[i] * height;
+                float barY = _fft[i] * height;
                 glBegin( GL_QUADS );
                 {
                     gl::color( color0 );
@@ -135,10 +152,10 @@ namespace hrfm{ namespace io{
         {
             for( int i = 0; i < 512; i++ ) {
                 float x = ( i * width );
-                float y = ( ( channels[0][i] - 1 ) * - height / 2 );
+                float y = ( ( _channels[0][i] - 1 ) * - height / 2 );
                 leftBufferLine.push_back( Vec2f( x , y) );
                 /*
-                y = ( ( channels[1][i] - 1 ) * - height / 2 );
+                y = ( ( _channels[1][i] - 1 ) * - height / 2 );
                 rightBufferLine.push_back( Vec2f( x , y) );
                 */
             }
@@ -150,13 +167,14 @@ namespace hrfm{ namespace io{
         
     };
     
+    //! protected:
     
     void SiAudioInput::onFFTAverage( OscInputEvent * event){
-        fftAverage = event->message.getArgAsFloat(0);
+        _fftAverage = event->message.getArgAsFloat(0);
     }
     
     void SiAudioInput::onAudioGain( OscInputEvent * event){
-        audioGain  = event->message.getArgAsFloat(0);
+        _audioGain  = event->message.getArgAsFloat(0);
     }
     
 }}
