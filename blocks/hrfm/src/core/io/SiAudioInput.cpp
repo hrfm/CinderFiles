@@ -10,14 +10,6 @@ namespace hrfm{ namespace io{
         
         bandCount = count;
         
-        value = 0.0f;
-        fft   = new float[bandCount];
-        fft2  = new float[bandCount];
-        for( int i = 0; i < bandCount; i++ ){
-            fft[i]  = 0;
-            fft2[i] = 0;
-        }
-        
         // --- Create Sound Context.
         
         auto ctx = audio::Context::master();
@@ -25,53 +17,51 @@ namespace hrfm{ namespace io{
         // The InputDeviceNode is platform-specific, so you create it using a special method on the Context:
         mInputDeviceNode = ctx->createInputDeviceNode();
         
-        // By providing an FFT size double that of the window size, we 'zero-pad' the analysis data, which gives
-        // an increase in resolution of the resulting spectrum data.
-        auto monitorFormat   = audio::MonitorSpectralNode::Format().windowSize( bandCount );
-        mMonitorSpectralNode = ctx->makeNode( new audio::MonitorSpectralNode( monitorFormat ) );
+        // --- init FFT
         
+        fft = new float[bandCount];
+        
+        auto monitorSpectralFormat   = audio::MonitorSpectralNode::Format().windowSize( bandCount * 2 );
+        mMonitorSpectralNode = ctx->makeNode( new audio::MonitorSpectralNode( monitorSpectralFormat ) );
         mInputDeviceNode >> mMonitorSpectralNode;
+        
+        // --- init Wave
+        
+        auto monitorFormat   = audio::MonitorSpectralNode::Format().windowSize( 512 );
+        mMonitorNode = ctx->makeNode( new audio::MonitorNode(monitorFormat) );
+        mInputDeviceNode >> mMonitorNode;
+        
+        // ---
         
         // InputDeviceNode (and all InputNode subclasses) need to be enabled()'s to process audio. So does the Context:
         mInputDeviceNode->enable();
         ctx->enable();
         
-        // ----------
-        
-        gl::Fbo::Format format;
-        soundTexture = gl::Fbo( count * 10, count * 10, format );
-        
-        try {
-            soundTexShader = gl::GlslProg(
-                                          loadResource("../resources/simple_vert.glsl"),
-                                          loadResource("../resources/audio_frag.glsl")
-                                          );
-        }catch( ci::gl::GlslProgCompileExc &exc ) {
-            cout << "Shader compile error: " << endl;
-            cout << exc.what();
-        }catch( ... ) {
-            cout << "Unable to load shader" << endl;
-        }
-        
     }
     
     void SiAudioInput::update( float decline ){
         
-        // --- Audio
+        // --- Wave
+        
+        const audio::Buffer &buffer = mMonitorNode->getBuffer();
+        for( size_t ch = 0; ch < buffer.getNumChannels(); ch++ ) {
+            channels[ch] = buffer.getChannel(ch);
+        }
+        
+        // --- FFT
+        
+        int i = 0;
+        float maxValue = 0.0f;
         
         for( int i = 0; i < bandCount; i++ ) {
-            fft2[i] *= decline;
+            fft[i] *= decline;
         }
         
         // We copy the magnitude spectrum out from the Node on the main thread, once per update:
         mMagSpectrum = mMonitorSpectralNode->getMagSpectrum();
-        
-        float maxValue = 0.0f;
         for( auto spectrum = mMagSpectrum.begin(); spectrum != mMagSpectrum.end(); ++spectrum ) {
             maxValue = max( maxValue, *spectrum );
         }
-        
-        int i = 0;
         for( auto spectrum = mMagSpectrum.begin(); spectrum != mMagSpectrum.end(); ++spectrum ) {
             fft[i] = ( *spectrum / maxValue );
             if( bandCount <= ++i ){
@@ -79,30 +69,11 @@ namespace hrfm{ namespace io{
             }
         }
         
-        /*
-         soundTexture.bindFramebuffer();
-         gl::pushMatrices();
-         gl::setMatricesWindow( soundTexture.getSize(), false );
-         gl::clear();
-         gl::color( ColorA( 1.0, 1.0, 1.0, 1.0 ) );
-         soundTexShader.bind();
-         soundTexShader.uniform( "iResolution", Vec2f( soundTexture.getWidth(), soundTexture.getHeight() ) );
-         soundTexShader.uniform( "iFFT", fft2, 64 );
-         gl::drawSolidRect( soundTexture.getBounds() );
-         soundTexShader.unbind();
-         gl::popMatrices();
-         soundTexture.unbindFramebuffer();
-         */
-        
     }
     
     void SiAudioInput::useAudioManager(){
         hrfm::io::SiOscInput::getInstance().addEventListener( "/audio/gain", this, &SiAudioInput::onAudioGain );
         hrfm::io::SiOscInput::getInstance().addEventListener( "/audio/fft/average", this, &SiAudioInput::onFFTAverage );
-    }
-    
-    gl::Texture SiAudioInput::getAudioTexture(){
-        return soundTexture.getTexture();
     }
     
     float SiAudioInput::getAudioManagerGain(){
@@ -141,18 +112,6 @@ namespace hrfm{ namespace io{
                     glVertex2f( i * width, height - barY );
                 }
                 glEnd();
-                
-                //color1.a = barY / height;
-                //cout << barY << endl;
-                //*
-                /*/
-                 gl::color( color1 );
-                 gl::drawLine(
-                 Vec2f( i * width + width, height - barY ),
-                 Vec2f( (i-1) * width + width, height - barY )
-                 );
-                 //*/
-                
             }
         }
         glPopMatrix();
@@ -165,43 +124,29 @@ namespace hrfm{ namespace io{
     
     void SiAudioInput::drawWave( Rectf bounds, Color color ){
         
-        /*
-         #if defined( CINDER_MAC )
-         
-         if( !_mPcmBuffer ){
-         return;
-         }
-         
-         uint32_t bufferLength = _mPcmBuffer->getSampleCount();
-         audio::Buffer32fRef leftBuffer = _mPcmBuffer->getChannelData( audio::CHANNEL_FRONT_LEFT );
-         audio::Buffer32fRef rightBuffer = _mPcmBuffer->getChannelData( audio::CHANNEL_FRONT_RIGHT );
-         
-         float width  = bounds.getWidth() / (float)bufferLength;
-         float height = bounds.getHeight();
-         
-         PolyLine<Vec2f>	leftBufferLine;
-         PolyLine<Vec2f>	rightBufferLine;
-         
-         glPushMatrix();
-         glTranslatef( bounds.x1, bounds.y1, 0.0f );
-         
-         for( int i = 0; i < bufferLength; i++ ) {
-         float x = ( i * width );
-         //get the PCM value from the left channel buffer
-         float y = ( ( leftBuffer->mData[i] - 1 ) * - height / 3 );
-         leftBufferLine.push_back( Vec2f( x , y) );
-         y = ( ( rightBuffer->mData[i] - 1 ) * - height / 3 );
-         rightBufferLine.push_back( Vec2f( x , y) );
-         }
-         
-         gl::color( color );
-         gl::draw( leftBufferLine );
-         gl::draw( rightBufferLine );
-         
-         glPopMatrix();
-         
-         #endif
-         */
+        float width  = bounds.getWidth() / 512.0f;
+        float height = bounds.getHeight();
+        
+        PolyLine<Vec2f>	leftBufferLine;
+        //PolyLine<Vec2f>	rightBufferLine;
+        
+        glPushMatrix();
+        glTranslatef( bounds.x1, bounds.y1, 0.0f );
+        {
+            for( int i = 0; i < 512; i++ ) {
+                float x = ( i * width );
+                float y = ( ( channels[0][i] - 1 ) * - height / 2 );
+                leftBufferLine.push_back( Vec2f( x , y) );
+                /*
+                y = ( ( channels[1][i] - 1 ) * - height / 2 );
+                rightBufferLine.push_back( Vec2f( x , y) );
+                */
+            }
+            gl::color( color );
+            gl::draw( leftBufferLine );
+            //gl::draw( rightBufferLine );
+        }
+        glPopMatrix();
         
     };
     

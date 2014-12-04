@@ -46,10 +46,8 @@ namespace hrfm{ namespace io{
         uint16_t bandCount;
         bool bufferAvailable;
         
-        float value;
-        float * fftBuffer;
         float * fft;
-        float * fft2;
+        map<size_t,const float*> channels;
         
     private:
         
@@ -61,14 +59,11 @@ namespace hrfm{ namespace io{
         }
         
         void onFFTAverage( OscInputEvent * event);
-        
         void onAudioGain( OscInputEvent * event);
-        
-        ci::gl::Fbo      soundTexture;
-        ci::gl::GlslProg soundTexShader;
         
         cinder::audio::InputDeviceNodeRef     mInputDeviceNode;
         cinder::audio::MonitorSpectralNodeRef mMonitorSpectralNode;
+        cinder::audio::MonitorNodeRef         mMonitorNode;
         
         vector<float>					      mMagSpectrum;
         
