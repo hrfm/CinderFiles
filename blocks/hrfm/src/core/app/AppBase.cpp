@@ -40,7 +40,6 @@ namespace hrfm { namespace app{
         
         // Set this app's FrameRate from xml.
         settings->setFrameRate( prepare.getAttributeValue<float>("frameRate") );
-        settings->setFrameRate( 60 );
         cout << "FrameRate  : " << settings->getFrameRate() << endl;
         
         // Set this app's WindowSize from xml.

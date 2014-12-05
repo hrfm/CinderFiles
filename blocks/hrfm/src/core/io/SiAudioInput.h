@@ -22,7 +22,7 @@ namespace hrfm{ namespace io{
     class SiAudioInput : public hrfm::utils::Singleton<SiAudioInput>{
     public:
         
-        void setup( uint16_t count );
+        void setup( uint16_t count, uint16_t bufferLength = 128 );
         
         void  useAudioManager();
         
@@ -59,6 +59,8 @@ namespace hrfm{ namespace io{
         float _fftAverage;
         
         uint16_t _bandCount;
+        uint16_t _bufferLength;
+        size_t _numChannels;
         float * _fft;
         map<size_t,const float*> _channels;
         

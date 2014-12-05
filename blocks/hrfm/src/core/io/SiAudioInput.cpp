@@ -8,9 +8,10 @@ namespace hrfm{ namespace io{
     
     //! public:
     
-    void SiAudioInput::setup( uint16_t count ){
+    void SiAudioInput::setup( uint16_t count, uint16_t bufferLength ){
         
-        _bandCount = count;
+        _bandCount    = count;
+        _bufferLength = bufferLength;
         
         // --- Create Sound Context.
         
@@ -29,7 +30,7 @@ namespace hrfm{ namespace io{
         
         // --- init Wave
         
-        auto monitorFormat   = audio::MonitorSpectralNode::Format().windowSize( 512 );
+        auto monitorFormat   = audio::MonitorSpectralNode::Format().windowSize( bufferLength );
         mMonitorNode = ctx->makeNode( new audio::MonitorNode(monitorFormat) );
         mInputDeviceNode >> mMonitorNode;
         
@@ -39,11 +40,15 @@ namespace hrfm{ namespace io{
         mInputDeviceNode->enable();
         ctx->enable();
         
+        // ---
+        
+        const audio::Buffer &buffer = mMonitorNode->getBuffer();
+        _numChannels = buffer.getNumChannels();
+        
     }
     
     size_t SiAudioInput::numChannels(){
-        const audio::Buffer &buffer = mMonitorNode->getBuffer();
-        return buffer.getNumChannels();
+        return _numChannels;
     }
     
     const float * SiAudioInput::getChannelAt( size_t ch ){
@@ -68,17 +73,13 @@ namespace hrfm{ namespace io{
         int i = 0;
         float maxValue = 0.0f;
         
-        for( int i = 0; i < _bandCount; i++ ) {
-            _fft[i] *= decline;
-        }
-        
         // We copy the magnitude spectrum out from the Node on the main thread, once per update:
         mMagSpectrum = mMonitorSpectralNode->getMagSpectrum();
         for( auto spectrum = mMagSpectrum.begin(); spectrum != mMagSpectrum.end(); ++spectrum ) {
             maxValue = max( maxValue, *spectrum );
         }
         for( auto spectrum = mMagSpectrum.begin(); spectrum != mMagSpectrum.end(); ++spectrum ) {
-            _fft[i] = ( *spectrum / maxValue );
+            _fft[i] = max( _fft[i] * decline, ( *spectrum / maxValue ) );
             if( _bandCount <= ++i ){
                 break;
             }
@@ -117,6 +118,15 @@ namespace hrfm{ namespace io{
         glPushMatrix();
         glTranslatef( bounds.x1, bounds.y1, 0.0f );
         {
+            
+            for( int i = 1; i < (length-1); i++ ) {
+                float barY = _fft[i] * height;
+                float nextBarY = _fft[i+1] * height;
+                gl::drawLine( Vec2f( i*width, height - barY ), Vec2f( (i+1)*width, height - nextBarY ) );
+                gl::drawLine( Vec2f( i*width, height ), Vec2f( i*width, height - barY ) );
+            }
+            
+            /*
             for( int i = 1; i < (length); i++ ) {
                 float barY = _fft[i] * height;
                 glBegin( GL_QUADS );
@@ -130,6 +140,7 @@ namespace hrfm{ namespace io{
                 }
                 glEnd();
             }
+            //*/
         }
         glPopMatrix();
         
@@ -141,7 +152,7 @@ namespace hrfm{ namespace io{
     
     void SiAudioInput::drawWave( Rectf bounds, Color color ){
         
-        float width  = bounds.getWidth() / 512.0f;
+        float width  = bounds.getWidth() / (float)_bufferLength;
         float height = bounds.getHeight();
         
         PolyLine<Vec2f>	leftBufferLine;
@@ -150,7 +161,7 @@ namespace hrfm{ namespace io{
         glPushMatrix();
         glTranslatef( bounds.x1, bounds.y1, 0.0f );
         {
-            for( int i = 0; i < 512; i++ ) {
+            for( int i = 0; i < _bufferLength; i++ ) {
                 float x = ( i * width );
                 float y = ( ( _channels[0][i] - 1 ) * - height / 2 );
                 leftBufferLine.push_back( Vec2f( x , y) );
