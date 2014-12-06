@@ -32,6 +32,7 @@
 
 #include "SiAudioInput.h"
 #include "SiCaptureInput.h"
+#include "SiKORGMIDIInterface.h"
 #include "SiOscInput.h"
 
 // --- hrfm::physics

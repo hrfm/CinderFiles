@@ -13,6 +13,12 @@ namespace hrfm { namespace io{
         
         void addListenPort( int port );
         
+        //! ポートの番号に関わらず、なんらかのポートで OSC の受信を監視しているかどうかを取得します.
+        bool listening();
+        
+        //! 指定したポート番号で OSC の受信を監視しているかどうかを取得します.
+        bool listening( int port );
+        
         void update();
         
     private:

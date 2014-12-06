@@ -30,4 +30,20 @@ namespace hrfm{ namespace utils{
         return 1.0 / ( 1.0 + pow( M_E, - gain * value ) );
     }
     
+    static fs::path generateFilePath( string pathStr ){
+        fs::path filePath;
+        if( pathStr.find("/") == string::npos ){
+            // ファイル名のみの指定だった場合.
+            // ../resources/ から読み込みます.
+            filePath = "../resources/" + pathStr;
+        }else if( pathStr.find("~/") == 0 ){
+            // User Directory のパスが指定されていた場合.
+            pathStr.erase(0,2);
+            filePath = getDocumentsDirectory() / ".." / pathStr;
+        }else{
+            filePath = pathStr;
+        }
+        return filePath;
+    }
+    
 }}
