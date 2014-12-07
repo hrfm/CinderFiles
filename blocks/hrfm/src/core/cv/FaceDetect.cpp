@@ -8,19 +8,16 @@ namespace hrfm{ namespace cv{
     
     // ========================================================================================= //
     
-    FaceDetect::FaceDetect(){
-        
-    }
-    
-    FaceDetect::FaceDetect( Vec2i textureSize ){
+    FaceDetect::FaceDetect( Vec2i textureSize, int calcScale ){
         
         cout << endl << "- Setup FaceDetect." << endl;
+        
+        _calcScale = calcScale;
         
         // --- Setup OpenCV
         
         //*
         try{
-            
             mFaceCascade.load( getAssetPath( "haarcascade_frontalface_alt.xml" ).string() );
             mEyeCascade.load( getAssetPath( "haarcascade_eye.xml" ).string() );
         }catch(...){
@@ -41,23 +38,18 @@ namespace hrfm{ namespace cv{
     
     void FaceDetect::update( Surface surface ){
         if( pthread_mutex_lock(&_mutex) != 0 ){
-            if( mFaceDetectEnabled && &surface != nullptr ){
-                //mCloneSurface = surface.clone();
+            if( &surface != nullptr ){
+                mCloneSurface = surface.clone();
             }
             pthread_mutex_unlock(&_mutex);
         }
     }
     
-    void FaceDetect::enable(){
-        mFaceDetectEnabled = true;
-    }
-    
-    void FaceDetect::disable(){
-        mFaceDetectEnabled = false;
-    }
-    
-    bool FaceDetect::isEnable(){
-        return mFaceDetectEnabled;
+    void FaceDetect::setCalcScale( int scale ){
+        if( scale <= 0 ){
+            scale = 1;
+        }
+        _calcScale = scale;
     }
     
     vector<DetectRect> FaceDetect::getFaces(){
@@ -72,19 +64,15 @@ namespace hrfm{ namespace cv{
         
         while(true){
             
-            if( mFaceDetectEnabled == false ){
-                continue;
-            }
-            
             double elapsedSec = getElapsedSeconds();
             
-            if( mCloneSurface && 0.2f < elapsedSec - recentSec ){
+            if( mCloneSurface && 0.1f < elapsedSec - recentSec ){
                 
                 if( pthread_mutex_lock(&_mutex) != 0 ){
                     
                     try{
                         
-                        const int calcScale = 3; // calculate the image at half scale
+                        const int calcScale = _calcScale; // calculate the image at half scale
                         
                         // create a grayscale copy of the input image
                         ::cv::Mat grayCameraImage( toOcv( mCloneSurface, CV_8UC1 ) );

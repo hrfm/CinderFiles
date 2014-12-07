@@ -4,11 +4,11 @@ namespace hrfm { namespace io{
     
     void SiCaptureInput::showAllDevices(){
         // print the devices
-        cout << endl << "--- SiCaptureInput::showAllDevices() ---" << endl;
+        cout << endl << "SiCaptureInput::showAllDevices()" << endl;
         for( auto device = ci::Capture::getDevices().begin(); device != ci::Capture::getDevices().end(); ++device ) {
-            cout << "Device: " << (*device)->getName() << " " << std::endl;
+            cout << "- " << (*device)->getName() << " " << endl;
         }
-        cout << "----------------------------------------" << endl;
+        cout << endl;
     }
     
     ci::CaptureRef SiCaptureInput::createRef( int width, int height, string deviceName ){

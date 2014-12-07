@@ -19,20 +19,7 @@ namespace hrfm{ namespace cv{
         
     public:
         
-        OpticalFlow( Vec2i textureSize ){
-            
-            // --- Create FBO. ---
-            
-            ci::gl::Fbo::Format captureFormat;
-            mOpticalFlowFBO    = ci::gl::Fbo( textureSize.x, textureSize.y, captureFormat );
-            mOpticalFlowBounds = mOpticalFlowFBO.getBounds();
-            
-            // --- Create ForceMap. ---
-            
-            mForceMap.setup( 16 * 4, 9 * 4 );
-            
-        };
-        
+        OpticalFlow( Vec2i textureSize, int forceMapScale = 4 );
         ~OpticalFlow(){};
         
         void update( ci::gl::Texture texture, float bias = 1.0, float frameRate = 30.0 );
@@ -41,11 +28,9 @@ namespace hrfm{ namespace cv{
         
         ForceMap getForceMap();
         
-        ci::gl::Texture getOpticalFlowTexture();
-        
-        Vec2i getOpticalFlowTextureSize();
-        
-        Rectf getOpticalFlowTextureBounds();
+        ci::gl::Texture getTexture();
+        Vec2i getSize();
+        Rectf getBounds();
         
         vector<::cv::Point2f> prevFeatures, features;
         vector<uint8_t>		  featureStatuses;

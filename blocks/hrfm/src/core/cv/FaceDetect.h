@@ -15,30 +15,24 @@ namespace hrfm{ namespace cv{
         
     public:
         
-        FaceDetect( );
-        FaceDetect( Vec2i textureSize );
+        FaceDetect( Vec2i textureSize = Vec2i( 320, 240 ), int calcScale = 3 );
         ~FaceDetect();
         
         void update( Surface surface );
-        void enable();
-        void disable();
-        bool isEnable();
+        void setCalcScale( int scale );
         vector<DetectRect> getFaces();
         
     private:
         
-        pthread_mutex_t _mutex;
-        
         void _updateFaces();
         
-        bool mFaceDetectEnabled;
+        pthread_mutex_t _mutex;
         
-        double recentSec;
+        int _calcScale;
         
         std::thread mThread;
-        
+        double recentSec;
         Surface mCloneSurface;
-        
         ::cv::CascadeClassifier	mFaceCascade, mEyeCascade;
         vector<DetectRect>      mFaces, mEyes;
         

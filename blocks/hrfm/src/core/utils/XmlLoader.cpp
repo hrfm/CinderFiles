@@ -23,7 +23,7 @@ namespace hrfm{ namespace utils{
         
         if( root.hasAttribute("url") ){
             string url = root.getAttributeValue<string>("url");
-            cout << "--- XmlLoader::load(" << url << ")" << endl;
+            cout << "XmlLoader::load(" << url << ")" << endl;
             try{
                 xml = XmlTree( loadUrl( Url( url ), urlOptions ) );
             }catch(...){
@@ -31,9 +31,7 @@ namespace hrfm{ namespace utils{
             }
         }
         
-        cout << xml << endl;
-        
-        cout << endl;
+        cout << xml;
         
         return xml;
         

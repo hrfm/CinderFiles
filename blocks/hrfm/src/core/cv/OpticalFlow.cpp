@@ -6,6 +6,20 @@ using namespace ci::app;
 
 namespace hrfm{ namespace cv{
     
+    OpticalFlow::OpticalFlow( Vec2i textureSize, int forceMapScale ){
+        
+        // --- Create FBO. ---
+        
+        ci::gl::Fbo::Format captureFormat;
+        mOpticalFlowFBO    = ci::gl::Fbo( textureSize.x, textureSize.y, captureFormat );
+        mOpticalFlowBounds = mOpticalFlowFBO.getBounds();
+        
+        // --- Create ForceMap. ---
+        
+        mForceMap.setup( 16 * forceMapScale, 9 * forceMapScale );
+        
+    }
+    
     void OpticalFlow::update( gl::Texture texture, float bias, float frameRate ){
         
         mOpticalFlowFBO.bindFramebuffer();
@@ -103,15 +117,15 @@ namespace hrfm{ namespace cv{
         return mForceMap;
     }
     
-    gl::Texture OpticalFlow::getOpticalFlowTexture(){
+    gl::Texture OpticalFlow::getTexture(){
         return mOpticalFlowFBO.getTexture();
     }
     
-    Vec2i OpticalFlow::getOpticalFlowTextureSize(){
+    Vec2i OpticalFlow::getSize(){
         return mOpticalFlowFBO.getSize();
     }
     
-    Rectf OpticalFlow::getOpticalFlowTextureBounds(){
+    Rectf OpticalFlow::getBounds(){
         return mOpticalFlowFBO.getBounds();
     }
     

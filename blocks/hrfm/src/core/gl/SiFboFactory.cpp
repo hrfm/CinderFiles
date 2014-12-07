@@ -9,19 +9,19 @@ namespace hrfm{ namespace gl{
             string key = to_string(width) + "_" + to_string(height);
             
             if( this->find(key) == this->end() ){
-                cout << "[SiFboFactory] Create new FBO ( " << width << ", " << height << " ) on cache." << endl;
+                //cout << "SiFboFactory::create( " << width << ", " << height << " ) => Set fbo to Cache" << endl;
                 ci::gl::Fbo * fbo;
                 fbo = new ci::gl::Fbo( width, height, format );
                 this->insert( map<string,ci::gl::Fbo*>::value_type( key, fbo ) );
             }else{
-                cout << "[SiFboFactory] Get FBO from cache." << endl;
+                //cout << "SiFboFactory::create( " << width << ", " << height << " ) => Get fbo from cache." << endl;
             }
             
             return this->at(key);
             
         }else{
             
-            cout << "[SiFboFactory] Create new FBO ( " << width << ", " << height << " )." << endl;
+            //cout << "SiFboFactory::create( " << width << ", " << height << " )" << endl;
             return new ci::gl::Fbo( width, height, format );
             
         }

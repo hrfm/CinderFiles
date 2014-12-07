@@ -29,33 +29,20 @@ namespace hrfm{ namespace io{
         
         CaptureInput();
         
-        bool useOpticalFlow;
-        
-        void setup( int32_t width, int32_t height );
-        void setup( int32_t width, int32_t height, string deviceName );
+        void setup( int32_t width, int32_t height, string deviceName = "*" );
         
         void update();
         
-        bool captureAvailable();
-        
-        void enableCaptureReflect();
-        void disableCaptureReflect();
-        
         Vec2i getSize();
-        
         Rectf getBounds();
         
         bool isCaptureAvailable();
         
         ci::gl::Texture getCaptureTexture();
-        
         ci::gl::Texture getDiffTexture();
         
         //void bindTexture( int index );
-        
         //void unbindTexture();
-        
-        void showAllDevices();
         
         void quit();
         
@@ -65,10 +52,7 @@ namespace hrfm{ namespace io{
         //
         // ========================================================================================
         
-        void setupFaceDetect();
-        void setupFaceDetect( Vec2i textureSize );
-        void enableFaceDetect();
-        void disableFaceDetect();
+        void setupFaceDetect( Vec2i textureSize = Vec2i(480,270) );
         bool faceDetectEnabled();
         vector<DetectRect> getFaces();
         
@@ -78,6 +62,7 @@ namespace hrfm{ namespace io{
         //
         // ========================================================================================
         
+        bool useOpticalFlow;
         void setupOpticalFlow( Vec2i textureSize );
         void updateOpticalFlow( float bias = 1.0, float frameRate = 30.0 );
         void drawOpticalFlow();
@@ -100,13 +85,8 @@ namespace hrfm{ namespace io{
         bool mCaptureAvailable;
         bool mCaptureReflect;
         
-        // ----- Face Detect.
-        
-        FaceDetect * mFaceDetect;
-        
-        // ----- Optical Flow.
-        
-        OpticalFlow * mOpticalFlow;
+        FaceDetect  * mFaceDetect  = NULL;
+        OpticalFlow * mOpticalFlow = NULL;
         
     };
     

@@ -19,7 +19,7 @@ namespace hrfm{ namespace utils{
             // 読み込む Data がネット上のファイルだった場合.
             // loadUrl を使いダウンロードします.
             
-            cout << endl << "--- DataLoader::loadUrl(" << pathStr << ")" << endl;
+            cout << endl << "DataLoader::loadUrl(" << pathStr << ")" << endl;
             
             try{
                 return loadUrl( Url( pathStr ) );
@@ -39,7 +39,7 @@ namespace hrfm{ namespace utils{
             
             pathStr = filePath.native();
             
-            cout << "--- DataLoader::loadResource(" << pathStr << ")" << endl;
+            cout << "DataLoader::loadResource(" << pathStr << ")" << endl;
             
             try{
                 return loadResource( pathStr );
@@ -61,7 +61,7 @@ namespace hrfm{ namespace utils{
             
             pathStr = filePath.native();
             
-            cout << "--- DataLoader::loadFile(" << pathStr << ")" << endl;
+            cout << "DataLoader::loadFile(" << pathStr << ")" << endl;
             
             try{
                 return loadFile( pathStr );

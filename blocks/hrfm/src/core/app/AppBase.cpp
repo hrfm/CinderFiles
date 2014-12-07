@@ -31,25 +31,37 @@ namespace hrfm { namespace app{
         
         // --- Start preparing. --------------------------------------------------
         
-        cout << "--- AppBase::prepareSettings()" << endl;
-        cout << settingXml << endl << endl;
+        cout << "--- AppBase::prepareSettings() -----------------------------------------" << endl << endl;
+        cout << settingXml;
         
-        XmlTree prepare = settingXml.getChild("setting/prepare");
+        if( settingXml.hasChild("setting/prepare") ){
+            
+            XmlTree prepare = settingXml.getChild("setting/prepare");
+            
+            // Set this app's FrameRate from xml.
+            if( prepare.hasAttribute("frameRate") ){
+                settings->setFrameRate( prepare.getAttributeValue<float>("frameRate") );
+            }
+            cout << "FrameRate  : " << settings->getFrameRate() << endl;
+            
+            // Set this app's WindowSize from xml.
+            if( prepare.hasAttribute("windowWidth") && prepare.hasAttribute("windowHeight") ){
+                mWindowSize = Vec2i( prepare.getAttributeValue<int>("windowWidth"), prepare.getAttributeValue<int>("windowHeight") );
+            }else{
+                mWindowSize = settings->getWindowSize();
+            }
+            settings->setWindowSize( mWindowSize.x, mWindowSize.y );
+            cout << "WindowSize : " << settings->getWindowSize() << endl << endl;
+            
+        }
         
-        // Set this app's FrameRate from xml.
-        settings->setFrameRate( prepare.getAttributeValue<float>("frameRate") );
-        cout << "FrameRate  : " << settings->getFrameRate() << endl;
-        
-        // Set this app's WindowSize from xml.
-        mWindowSize = Vec2i( prepare.getAttributeValue<int>("windowWidth"), prepare.getAttributeValue<int>("windowHeight") );
-        settings->setWindowSize( mWindowSize.x, mWindowSize.y );
-        cout << "WindowSize : " << settings->getWindowSize() << endl << endl;
+        cout << "------------------------------------------------------------------------" << endl << endl;
         
     }
     
     void AppBase::setup(){
         
-        cout << "--- AppBase::setup()" << endl << endl;
+        cout << "--- AppBase::setup() ---------------------------------------------------" << endl << endl;
         
         // --- Setup from xml settings. -----------------------
         
@@ -74,7 +86,7 @@ namespace hrfm { namespace app{
         
         resize();
         
-        cout << endl;
+        cout << "------------------------------------------------------------------------" << endl << endl;
         
     }
     
@@ -105,13 +117,12 @@ namespace hrfm { namespace app{
             Vec2i captureSize = Vec2i( xml.getAttributeValue<int>("width"), xml.getAttributeValue<int>("height") );
             if( xml.hasAttribute("deviceName") ){
                 string deviceName = xml.getAttributeValue<string>("deviceName");
-                cout << "- Setup CaptureInput [ " + deviceName + " ]with sized " << captureSize << endl;
+                cout << "- Setup CaptureInput [" + deviceName + "] with sized " << captureSize << endl;
                 captureInput.setup( captureSize.x, captureSize.y, deviceName );
             }else{
                 cout << "- Setup CaptureInput with sized " << captureSize << endl;
                 captureInput.setup( captureSize.x, captureSize.y );
             }
-            cout << endl;
         }
     }
     
