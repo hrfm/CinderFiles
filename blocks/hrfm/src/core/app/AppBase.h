@@ -50,8 +50,6 @@ namespace hrfm{ namespace app{
         // ===========================================================================
         // === PROPERTY. =============================================================
         
-        XmlTree settingXml;
-        
         bool useAudio;
         bool useCapture;
         bool doUpdateCapture;
@@ -83,6 +81,8 @@ namespace hrfm{ namespace app{
         virtual Vec2i getWindowSize();
         virtual Vec2i getWindowAspect();
         
+        virtual XmlTree getSettingXml();
+        
         //! @override
         virtual void update();
         virtual void updateIO();
@@ -113,6 +113,7 @@ namespace hrfm{ namespace app{
         
     protected:
         
+        XmlTree _settingXml;
         Vec2i mWindowSize;
         
         /**

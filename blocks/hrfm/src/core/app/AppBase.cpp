@@ -17,12 +17,22 @@ namespace hrfm { namespace app{
         
         // --- Load XML for Settings. --------------------------------------------
         
-        settingXml = XmlLoader::load("setting.xml");
+        string path = "setting.xml";
+        
+        for( int i=0; i<getArgs().size(); i++ ){
+            string key = getArgs().at(i);
+            if( key == "-xml" || key == "-x" ){
+                path = getArgs().at(++i);
+                break;
+            }
+        }
+        
+        _settingXml = XmlLoader::load(path);
         
         // --- Log settings from XML. --------------------------------------------
         
-        if( settingXml.hasChild("setting/log") ){
-            XmlTree log = settingXml.getChild("setting/log");
+        if( _settingXml.hasChild("setting/log") ){
+            XmlTree log = _settingXml.getChild("setting/log");
             if( log.hasAttribute("dest") ){
                 fs::path log_output = generateFilePath( log.getAttributeValue<string>("dest") );
                 LOG_FILE = freopen( log_output.native().c_str(), "w", stdout );
@@ -32,11 +42,12 @@ namespace hrfm { namespace app{
         // --- Start preparing. --------------------------------------------------
         
         cout << "--- AppBase::prepareSettings() -----------------------------------------" << endl << endl;
-        cout << settingXml;
+        cout << "Setting xml from \"" << path << "\"" <<  endl << endl;
+        cout << _settingXml;
         
-        if( settingXml.hasChild("setting/prepare") ){
+        if( _settingXml.hasChild("setting/prepare") ){
             
-            XmlTree prepare = settingXml.getChild("setting/prepare");
+            XmlTree prepare = _settingXml.getChild("setting/prepare");
             
             // Set this app's FrameRate from xml.
             if( prepare.hasAttribute("frameRate") ){
@@ -65,7 +76,7 @@ namespace hrfm { namespace app{
         
         // --- Setup from xml settings. -----------------------
         
-        XmlTree xml = settingXml.getChild("setting/setup");
+        XmlTree xml = _settingXml.getChild("setting/setup");
         {
             if( xml.hasChild("window") ){
                 this->initWindow( xml.getChild("window") );
@@ -113,7 +124,6 @@ namespace hrfm { namespace app{
     void AppBase::initCapture( XmlTree &xml ){
         if( xml.hasAttribute("width") && xml.hasAttribute("height") ){
             useCapture      = true;
-            doUpdateCapture = true;
             Vec2i captureSize = Vec2i( xml.getAttributeValue<int>("width"), xml.getAttributeValue<int>("height") );
             if( xml.hasAttribute("deviceName") ){
                 string deviceName = xml.getAttributeValue<string>("deviceName");
@@ -136,14 +146,15 @@ namespace hrfm { namespace app{
         return hrfm::utils::getAspectRatio( mWindowSize );
     }
     
+    XmlTree AppBase::getSettingXml(){
+        return _settingXml;
+    }
+    
     // === Update / Draw =========================================================
     
     void AppBase::update(){
-        
         updateIO();
-        
         updateStage();
-        
     }
     
     void AppBase::updateIO(){
@@ -158,7 +169,8 @@ namespace hrfm { namespace app{
             SiAudioInput::getInstance().update();
         }
         
-        if( useCapture && doUpdateCapture ){
+        if( useCapture ){
+            SiCaptureInput::getInstance().update();
             captureInput.update();
         }
         
