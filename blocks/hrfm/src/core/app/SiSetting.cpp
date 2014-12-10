@@ -14,8 +14,4 @@ namespace hrfm { namespace app{
         return _xml;
     }
     
-    bool SiSetting::hasValue( const string key ){
-        return _values.find(key) != _values.end();
-    }
-    
 }}
