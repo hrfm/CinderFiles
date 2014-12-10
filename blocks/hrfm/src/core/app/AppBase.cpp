@@ -27,7 +27,7 @@ namespace hrfm { namespace app{
             }
         }
         
-        _settingXml = XmlLoader::load(path);
+        XmlTree _settingXml = SiSetting::getInstance().load(path);
         
         // --- Log settings from XML. --------------------------------------------
         
@@ -76,7 +76,7 @@ namespace hrfm { namespace app{
         
         // --- Setup from xml settings. -----------------------
         
-        XmlTree xml = _settingXml.getChild("setting/setup");
+        XmlTree xml = SiSetting::getInstance().getXmlTree().getChild("setting/setup");
         {
             if( xml.hasChild("window") ){
                 this->initWindow( xml.getChild("window") );
@@ -144,10 +144,6 @@ namespace hrfm { namespace app{
     
     Vec2i AppBase::getWindowAspect(){
         return hrfm::utils::getAspectRatio( mWindowSize );
-    }
-    
-    XmlTree AppBase::getSettingXml(){
-        return _settingXml;
     }
     
     // === Update / Draw =========================================================

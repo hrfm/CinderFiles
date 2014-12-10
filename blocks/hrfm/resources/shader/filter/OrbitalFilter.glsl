@@ -29,17 +29,31 @@ vec2 trans(vec2 p){
     
 }
 
+float sigmoid( float val, float gain ){
+    float v = val - 0.5;
+    return 1.0 / ( 1.0 + exp( -gain * v ) );
+}
+
 void main(void){
     
     vec2 pos = ( ( gl_FragCoord.xy / windowSize ) * 2.0 ) - ( 0.5 * 2.0 );
-    vec2 v     = trans(pos);
+    vec2 v   = trans(pos);
     
     if( v.x == -100 ){
         gl_FragColor = vec4( vec3(0.0), 0.1 );
     }else{
+        
         vec4 color = texture2D( tex, mod(v,1.0) );
-        color.a = 1.0 - ( (v.y-1.0) / 1.0 );
+        
+        color.a = 1.0 - ( v.y / r_max );
+        if( color.a < 0.0 ){
+            color.a = 0.0;
+        }
+        
+        color.a = sigmoid( color.a, 20 );
+        
         gl_FragColor = color;
+        
     }
     
 }

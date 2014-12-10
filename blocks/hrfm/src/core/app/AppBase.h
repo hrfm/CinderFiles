@@ -9,6 +9,9 @@
 #include "cinder/Rand.h"
 
 // --- Inputs ---
+
+#include "SiSetting.h"
+
 #include "Stage.h"
 #include "ImageTexture.h"
 
@@ -81,8 +84,6 @@ namespace hrfm{ namespace app{
         virtual Vec2i getWindowSize();
         virtual Vec2i getWindowAspect();
         
-        virtual XmlTree getSettingXml();
-        
         //! @override
         virtual void update();
         virtual void updateIO();
@@ -113,7 +114,6 @@ namespace hrfm{ namespace app{
         
     protected:
         
-        XmlTree _settingXml;
         Vec2i mWindowSize;
         
         /**
