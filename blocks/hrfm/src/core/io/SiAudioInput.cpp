@@ -10,10 +10,16 @@ namespace hrfm{ namespace io{
     
     void SiAudioInput::setup( uint16_t count, uint16_t bufferLength ){
         
+        cout << "SiAudioInput::setup" << endl;
+        
+        _enabled      = true;
+        
         _bandCount    = count;
         _bufferLength = bufferLength;
         
         // --- Create Sound Context.
+        
+        cout << "create context." << endl;
         
         auto ctx = audio::Context::master();
         
@@ -22,28 +28,49 @@ namespace hrfm{ namespace io{
         
         // --- init FFT
         
+        cout << "Setup FFT." << endl;
+        
         _fft = new float[_bandCount];
         
         auto monitorSpectralFormat   = audio::MonitorSpectralNode::Format().windowSize( _bandCount * 2 );
         mMonitorSpectralNode = ctx->makeNode( new audio::MonitorSpectralNode( monitorSpectralFormat ) );
-        mInputDeviceNode >> mMonitorSpectralNode;
+        try{
+            mInputDeviceNode->connect( mMonitorSpectralNode );
+        }catch(...){
+            cout << "error" << endl;
+            _enabled = false;
+        }
         
         // --- init Wave
         
+        cout << "Setup Audio Channels." << endl;
+        
         auto monitorFormat   = audio::MonitorSpectralNode::Format().windowSize( bufferLength );
         mMonitorNode = ctx->makeNode( new audio::MonitorNode(monitorFormat) );
-        mInputDeviceNode >> mMonitorNode;
+        try{
+            mInputDeviceNode->connect(mMonitorNode);
+        }catch(...){
+            cout << "error" << endl;
+            _enabled = false;
+        }
         
         // ---
         
-        // InputDeviceNode (and all InputNode subclasses) need to be enabled()'s to process audio. So does the Context:
-        mInputDeviceNode->enable();
-        ctx->enable();
-        
-        // ---
-        
-        const audio::Buffer &buffer = mMonitorNode->getBuffer();
-        _numChannels = buffer.getNumChannels();
+        try{
+            
+            // InputDeviceNode (and all InputNode subclasses) need to be enabled()'s to process audio. So does the Context:
+            mInputDeviceNode->enable();
+            ctx->enable();
+            
+            const audio::Buffer &buffer = mMonitorNode->getBuffer();
+            _numChannels = buffer.getNumChannels();
+            
+        }catch(...){
+            
+            _numChannels = 2;
+            _enabled = false;
+            
+        }
         
     }
     
@@ -63,26 +90,54 @@ namespace hrfm{ namespace io{
         
         // --- Wave
         
-        const audio::Buffer &buffer = mMonitorNode->getBuffer();
-        for( size_t ch = 0; ch < buffer.getNumChannels(); ch++ ) {
-            _channels[ch] = buffer.getChannel(ch);
+        if( _enabled ){
+            
+            const audio::Buffer &buffer = mMonitorNode->getBuffer();
+            for( size_t ch = 0; ch < buffer.getNumChannels(); ch++ ) {
+                _channels[ch] = buffer.getChannel(ch);
+            }
+            
+        }else{
+            
+            for( size_t ch = 0; ch < _numChannels; ch++ ) {
+                float * list = new float[_bandCount*2];
+                //*
+                for( int i = 0, len = _bandCount*2; i < len; i++ ){
+                    list[i] = -0.5f + randFloat();
+                }
+                //*/
+                _channels[ch] = list;
+            }
+            
         }
         
         // --- FFT
         
-        int i = 0;
-        float maxValue = 0.0f;
-        
-        // We copy the magnitude spectrum out from the Node on the main thread, once per update:
-        mMagSpectrum = mMonitorSpectralNode->getMagSpectrum();
-        for( auto spectrum = mMagSpectrum.begin(); spectrum != mMagSpectrum.end(); ++spectrum ) {
-            maxValue = max( maxValue, *spectrum );
-        }
-        for( auto spectrum = mMagSpectrum.begin(); spectrum != mMagSpectrum.end(); ++spectrum ) {
-            _fft[i] = max( _fft[i] * decline, ( *spectrum / maxValue ) );
-            if( _bandCount <= ++i ){
-                break;
+        if( _enabled ){
+            
+            int i = 0;
+            float maxValue = 0.0f;
+            
+            // We copy the magnitude spectrum out from the Node on the main thread, once per update:
+            mMagSpectrum = mMonitorSpectralNode->getMagSpectrum();
+            for( auto spectrum = mMagSpectrum.begin(); spectrum != mMagSpectrum.end(); ++spectrum ) {
+                maxValue = max( maxValue, *spectrum );
             }
+            for( auto spectrum = mMagSpectrum.begin(); spectrum != mMagSpectrum.end(); ++spectrum ) {
+                _fft[i] = max( _fft[i] * decline, ( *spectrum / maxValue ) );
+                if( _bandCount <= ++i ){
+                    break;
+                }
+            }
+            
+        }else{
+            
+            //*
+            for( int i = 0; i < _bandCount; i++ ){
+                _fft[i] = max( _fft[i] * decline, randFloat() );
+            }
+            //*/
+            
         }
         
     }

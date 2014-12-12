@@ -4,6 +4,7 @@
 
 #include "cinder/gl/Fbo.h"
 #include "cinder/gl/GlslProg.h"
+#include "cinder/Rand.h"
 
 #include "cinder/app/AppBasic.h"
 #include "SiOscInput.h"
@@ -54,6 +55,8 @@ namespace hrfm{ namespace io{
         
         void onFFTAverage( OscInputEvent * event);
         void onAudioGain( OscInputEvent * event);
+        
+        bool _enabled;
         
         float _audioGain;
         float _fftAverage;

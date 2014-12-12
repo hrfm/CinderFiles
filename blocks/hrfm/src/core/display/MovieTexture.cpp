@@ -51,8 +51,8 @@ namespace hrfm{ namespace display{
     }
     
     void MovieTexture::_update(){
+        float duration    = _movieGlRef->getDuration();
         float currentTime = _movieGlRef->getCurrentTime();
-        float duration = _movieGlRef->getDuration();
         if( _movieGlRef->isDone() || ( _movieGlRef->isPlaying() && ( currentTime == duration || currentTime < _beforeTime ) ) ){
             _beforeTime = 0;
             dispatchEvent( new hrfm::events::Event( hrfm::events::Event::COMPLETE ) );
