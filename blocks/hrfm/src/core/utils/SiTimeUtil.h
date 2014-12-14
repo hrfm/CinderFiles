@@ -16,9 +16,10 @@ namespace hrfm{ namespace utils{
     struct TimingData{
     public:
         
-        TimingData( int minutes );
-        TimingData( int minutes, int hour );
+        TimingData( int minutes, int hour = -1 );
         ~TimingData(){}
+        
+        void init( int minutes, int hour );
         
         //! 引数に指定した時刻と比較しタイミングと合致した場合 true を返します.
         bool check( int hour, int minutes );

@@ -27,6 +27,9 @@ namespace hrfm{ namespace display{
         virtual ci::qtime::MovieGlRef getMovieGlRef();
         
         virtual void play();
+        virtual void play( ci::fs::path filePath );
+        virtual void play( ci::qtime::MovieGlRef & movieGlRef );
+        
         virtual void stop();
         
         virtual ci::gl::Texture getTexture();
@@ -39,7 +42,7 @@ namespace hrfm{ namespace display{
         
     private:
         
-        ci::qtime::MovieGlRef _movieGlRef;
+        ci::qtime::MovieGlRef _movieGlRef = NULL;
         
     };
     

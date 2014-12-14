@@ -8,11 +8,11 @@ namespace hrfm{ namespace utils{
     // ======================================================================
     // TimingData class.
     
-    TimingData::TimingData( int minutes ){
-        TimingData( minutes, -1 );
+    TimingData::TimingData( int minutes, int hour ){
+        init( minutes, hour );
     }
     
-    TimingData::TimingData( int minutes, int hour ){
+    void TimingData::init( int minutes, int hour ){
         
         if( hour < 0 ){
             _hour = -1;
@@ -32,7 +32,7 @@ namespace hrfm{ namespace utils{
         
         bool flag = false;
         
-        if( _beforeMinutes < _minutes && _minutes <= minutes ){
+        if( _beforeMinutes != minutes && _minutes == minutes ){
             if( _hour < 0 || _hour == hour ){
                 flag = true;
             }
@@ -82,6 +82,7 @@ namespace hrfm{ namespace utils{
             
             for( it_t = dataList.begin(), end_t = dataList.end(); it_t!=end_t; ++it_t){
                 if( (*it_t)->check( hour, minutes ) ){
+                    cout << "dispatch!!" << endl;
                     dispatchEvent( new TimeUtilEvent( type, _timeinfo ) );
                 }
             }

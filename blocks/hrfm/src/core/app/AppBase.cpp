@@ -31,6 +31,7 @@ namespace hrfm { namespace app{
         
         // --- Log settings from XML. --------------------------------------------
         
+        /*
         if( _settingXml.hasChild("setting/log") ){
             XmlTree log = _settingXml.getChild("setting/log");
             if( log.hasAttribute("dest") ){
@@ -38,6 +39,7 @@ namespace hrfm { namespace app{
                 LOG_FILE = freopen( log_output.native().c_str(), "w", stdout );
             }
         }
+        //*/
         
         // --- Start preparing. --------------------------------------------------
         
