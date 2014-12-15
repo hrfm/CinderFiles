@@ -15,9 +15,9 @@ void main(void){
     color.xyz = color.xyz + ( vec3(chroma) - color.xyz ) * 0.8;
     
     // --- 青っぽく変換
-    color.x *= 0.5;
-    color.y *= 1.3;
-    color.z *= 1.5;
+    color.x *= 0.7;
+    color.y *= 1.2;
+    color.z *= 1.6;
     
     // ---------- Color.
     gl_FragColor = color;
