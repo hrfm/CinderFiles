@@ -133,8 +133,10 @@ namespace hrfm{ namespace io{
         }else{
             
             //*
+            float bias = 0.98;
             for( int i = 0; i < _bandCount; i++ ){
-                _fft[i] = max( _fft[i] * decline, randFloat() );
+                _fft[i] = max( _fft[i] * decline, randFloat() * bias );
+                bias *= 0.92;
             }
             //*/
             

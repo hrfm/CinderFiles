@@ -16,6 +16,10 @@ namespace hrfm{ namespace display{
         return ( getTexture() != nullptr && getTexture().getWidth() != 0 && getTexture().getHeight() != 0 );
     }
     
+    void TextureNode::setTexture( ci::gl::Texture tex ){
+        _texture = tex;
+    }
+    
     gl::Texture TextureNode::getTexture(){
         return _texture;
     }

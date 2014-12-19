@@ -15,6 +15,7 @@ namespace hrfm{ namespace display{
         
         virtual bool isDrawable();
         
+        void setTexture( ci::gl::Texture tex );
         virtual ci::gl::Texture getTexture();
         
     protected:
