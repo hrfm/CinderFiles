@@ -5,7 +5,6 @@
 #include "DisplayNode.h"
 #include "FontManager.h"
 #include "FilterHeaders.h"
-#include "OutputEffect.h"
 
 using namespace ci;
 using namespace ci::gl;

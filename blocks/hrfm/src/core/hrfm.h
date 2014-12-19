@@ -43,3 +43,7 @@
 // --- hrfm::utils
 
 #include "Utils.h"
+
+// --- hrfm::app
+
+#include "AppBase.h"
