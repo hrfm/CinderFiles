@@ -30,6 +30,7 @@ namespace hrfm{ namespace io{
         size_t numChannels();
         const float * getChannelAt( size_t ch );
         float * getFFT();
+        float * getFFTNormalized();
         float getAudioManagerGain();
         float getAudioManagerFFTAverage();
         
@@ -63,8 +64,11 @@ namespace hrfm{ namespace io{
         
         uint16_t _bandCount;
         uint16_t _bufferLength;
-        size_t _numChannels;
-        float * _fft;
+        size_t   _numChannels;
+        
+        float *  _fftValues;
+        float *  _fftNormalized;
+        
         map<size_t,const float*> _channels;
         
         cinder::audio::InputDeviceNodeRef     mInputDeviceNode;

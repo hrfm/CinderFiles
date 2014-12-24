@@ -30,7 +30,8 @@ namespace hrfm{ namespace io{
         
         cout << "Setup FFT." << endl;
         
-        _fft = new float[_bandCount];
+        _fftValues     = new float[_bandCount];
+        _fftNormalized = new float[_bandCount];
         
         auto monitorSpectralFormat   = audio::MonitorSpectralNode::Format().windowSize( _bandCount * 2 );
         mMonitorSpectralNode = ctx->makeNode( new audio::MonitorSpectralNode( monitorSpectralFormat ) );
@@ -83,7 +84,11 @@ namespace hrfm{ namespace io{
     }
     
     float * SiAudioInput::getFFT(){
-        return _fft;
+        return _fftValues;
+    }
+    
+    float * SiAudioInput::getFFTNormalized(){
+        return _fftNormalized;
     }
     
     void SiAudioInput::update( float decline ){
@@ -124,10 +129,14 @@ namespace hrfm{ namespace io{
                 maxValue = max( maxValue, *spectrum );
             }
             for( auto spectrum = mMagSpectrum.begin(); spectrum != mMagSpectrum.end(); ++spectrum ) {
-                _fft[i] = max( _fft[i] * decline, ( *spectrum / maxValue ) );
+                
+                _fftValues[i]     = max( _fftValues[i] * decline, *spectrum );
+                _fftNormalized[i] = _fftValues[i] / maxValue;
+                
                 if( _bandCount <= ++i ){
                     break;
                 }
+                
             }
             
         }else{
@@ -135,7 +144,7 @@ namespace hrfm{ namespace io{
             //*
             float bias = 0.98;
             for( int i = 0; i < _bandCount; i++ ){
-                _fft[i] = max( _fft[i] * decline, randFloat() * bias );
+                _fftValues[i] = max( _fftValues[i] * decline, randFloat() * bias );
                 bias *= 0.92;
             }
             //*/
@@ -177,8 +186,8 @@ namespace hrfm{ namespace io{
         {
             
             for( int i = 1; i < (length-1); i++ ) {
-                float barY = _fft[i] * height;
-                float nextBarY = _fft[i+1] * height;
+                float barY     = _fftValues[i] * height;
+                float nextBarY = _fftValues[i+1] * height;
                 gl::drawLine( Vec2f( i*width, height - barY ), Vec2f( (i+1)*width, height - nextBarY ) );
                 gl::drawLine( Vec2f( i*width, height ), Vec2f( i*width, height - barY ) );
             }

@@ -28,6 +28,10 @@
 #include "TransitionShaderBase.h"
 #include "MatrixTransition.h"
 
+// --- hrfm::geom;
+
+#include "Geom.h"
+
 // --- hrfm::io
 
 #include "SiAudioInput.h"
