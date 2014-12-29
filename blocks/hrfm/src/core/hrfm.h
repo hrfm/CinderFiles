@@ -21,7 +21,7 @@
 
 // --- hrfm::gl
 
-#include "GL.h"
+#include "hrfm.gl.h"
 
 #include "FilterHeaders.h"
 
@@ -30,7 +30,7 @@
 
 // --- hrfm::geom;
 
-#include "Geom.h"
+#include "hrfm.geom.h"
 
 // --- hrfm::io
 

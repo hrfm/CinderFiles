@@ -6,7 +6,7 @@
 #include "cinder/gl/Texture.h"
 #include "cinder/gl/Fbo.h"
 #include "cinder/Capture.h"
-#include "GL.h"
+#include "hrfm.gl.h"
 
 namespace hrfm { namespace io{
     
