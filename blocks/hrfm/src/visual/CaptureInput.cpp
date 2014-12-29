@@ -15,6 +15,7 @@ namespace hrfm{ namespace io{
         // --- Setup Capture Devices. ---
         _deviceName = deviceName;
         SiCaptureInput::getInstance().showAllDevices();
+        SiCaptureInput::getInstance().setDefaultDeviceName( deviceName );
         mCapture = SiCaptureInput::getInstance().createRef( width, height, _deviceName, cacheLength );
         // --- Create GLSL. ---
     }

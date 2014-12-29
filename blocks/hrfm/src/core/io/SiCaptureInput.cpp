@@ -2,6 +2,8 @@
 
 namespace hrfm { namespace io{
     
+    //! public
+    
     void SiCaptureInput::showAllDevices(){
         // print the devices
         cout << endl << "SiCaptureInput::showAllDevices()" << endl;
@@ -44,16 +46,115 @@ namespace hrfm { namespace io{
         
     }
     
+    void SiCaptureInput::setDefaultDeviceName( string deviceName ){
+        _defaultDeviceName = deviceName;
+    }
+    
+    //! --- サイズの取得
+    
+    ci::Vec2i SiCaptureInput::getSize(){
+        return getSize( _defaultDeviceName );
+    }
     ci::Vec2i SiCaptureInput::getSize( string deviceName ){
         return _captureRefMap[deviceName]->getSize();
     }
     
+    //! --- Capture の更新
+    
+    
+    void SiCaptureInput::update(){
+        update( _defaultDeviceName );
+    }
     void SiCaptureInput::update( string deviceName ){
-        updateTexture( deviceName );
-        updateDiffTexture( deviceName );
+        _updateTexture( deviceName );
+        _updateDiffTexture( deviceName );
     }
     
-    ci::gl::Texture SiCaptureInput::updateTexture( string deviceName ){
+    // --- CaptureRef の取得
+    
+    ci::CaptureRef SiCaptureInput::getCaptureRef(){
+        return getCaptureRef( _defaultDeviceName );
+    }
+    ci::CaptureRef SiCaptureInput::getCaptureRef( string deviceName ){
+        return _captureRefMap[deviceName];
+    }
+    
+    // --- Surface の取得
+    
+    ci::Surface SiCaptureInput::getSurface(){
+        return getSurface( _defaultDeviceName );
+    }
+    ci::Surface SiCaptureInput::getSurface( string deviceName ){
+        return _captureRefMap[deviceName]->getSurface();
+    }
+    
+    // --- Texture の取得
+    
+    ci::gl::Texture SiCaptureInput::getTexture( int cacheAt ){
+        return getTexture( _defaultDeviceName, cacheAt );
+    }
+    ci::gl::Texture SiCaptureInput::getTexture( string deviceName, int cacheAt ){
+        return *getTexturePtr( deviceName, cacheAt );
+    }
+    
+    // --- 指定したサイズで Texture を取得
+    
+    ci::gl::Texture SiCaptureInput::getResizedTexture( Vec2i size, int cacheAt ){
+        return getResizedTexture( size, _defaultDeviceName, cacheAt );
+    }
+    ci::gl::Texture SiCaptureInput::getResizedTexture( Vec2i size, string deviceName, int cacheAt ){
+        return hrfm::gl::resizeTexture( getTexturePtr(deviceName, cacheAt), size );
+    }
+    
+    // --- Texture のポインタを取得
+    
+    ci::gl::Texture * SiCaptureInput::getTexturePtr( int cacheAt ){
+        return getTexturePtr( _defaultDeviceName, cacheAt );
+    }
+    ci::gl::Texture * SiCaptureInput::getTexturePtr( string deviceName, int cacheAt ){
+        int numCached = getNumCached(deviceName);
+        if( numCached < cacheAt + 1 ){
+            cacheAt = numCached - 1;
+        }
+        return &_textureCacheVectorMap[deviceName].at( _textureCacheVectorMap[deviceName].size() - (cacheAt+1) );
+    }
+    
+    // --- 前フレームとの差分テクスチャを取得
+    
+    ci::gl::Texture SiCaptureInput::getDiffTexture(){
+        return getDiffTexture( _defaultDeviceName );
+    }
+    ci::gl::Texture SiCaptureInput::getDiffTexture( string deviceName ){
+        if( _diffFboMap.find(deviceName) == _diffFboMap.end() ){
+            ci::Vec2i size = getCaptureRef(deviceName)->getSize();
+            ci::gl::Fbo::Format format;
+            ci::gl::Fbo fbo = ci::gl::Fbo( size.x, size.y, format );
+            _diffFboMap[deviceName] = fbo;
+        }
+        return _diffFboMap[deviceName].getTexture();
+    }
+    
+    // --- 何フレーム分キャプチャを行ったかを取得
+    
+    int SiCaptureInput::getNumCached(){
+        return getNumCached( _defaultDeviceName );
+    }
+    int SiCaptureInput::getNumCached( string deviceName ){
+        return _textureCacheVectorMap[deviceName].size();
+    }
+    
+    // --- 何フレーム分キャッシュするかの上限を取得
+    
+    int SiCaptureInput::getCacheLength(){
+        return getCacheLength( _defaultDeviceName );
+    }
+    int SiCaptureInput::getCacheLength( string deviceName ){
+        return _textureCacheLengthMap[deviceName];
+    }
+    
+    //! protected
+    
+    ci::gl::Texture SiCaptureInput::_updateTexture( string deviceName ){
         if( _beforeFrameMap.find(deviceName) == _beforeFrameMap.end() ){
             _beforeFrameMap[deviceName] = 0;
         }else{
@@ -75,7 +176,7 @@ namespace hrfm { namespace io{
         return getTexture(deviceName);
     }
     
-    ci::gl::Texture SiCaptureInput::updateDiffTexture( string deviceName ){
+    ci::gl::Texture SiCaptureInput::_updateDiffTexture( string deviceName ){
         
         if( _beforeTextureBeforeFrameMap.find(deviceName) == _beforeTextureBeforeFrameMap.end() ){
             _beforeTextureBeforeFrameMap[deviceName] = 0;
@@ -139,74 +240,6 @@ namespace hrfm { namespace io{
         
         return getDiffTexture();
         
-    }
-    
-    ci::CaptureRef SiCaptureInput::getCaptureRef( string deviceName ){
-        return _captureRefMap[deviceName];
-    }
-    
-    ci::Surface SiCaptureInput::getSurface( string deviceName ){
-        return _captureRefMap[deviceName]->getSurface();
-    }
-    
-    ci::gl::Texture SiCaptureInput::getTexture( string deviceName, int cacheAt ){
-        return *getTexturePtr( deviceName, cacheAt );
-    }
-    
-    ci::gl::Texture SiCaptureInput::getResizedTexture( Vec2i size, string deviceName, int cacheAt ){
-        
-        ci::gl::Fbo::Format format;
-        ci::gl::Fbo fbo = ci::gl::Fbo( size.x, size.y, format );
-        
-        Area viewport = ci::gl::getViewport();
-        ci::gl::Texture * tex = getTexturePtr(deviceName);
-        
-        fbo.bindFramebuffer();
-        {
-            ci::gl::pushMatrices();
-            ci::gl::setViewport( fbo.getBounds() );
-            ci::gl::setMatricesWindow( fbo.getSize(), false );
-            {
-                ci::gl::color( Color( 1.0, 1.0, 1.0 ) );
-                ci::gl::draw( *tex, fbo.getBounds() );
-            }
-            ci::gl::popMatrices();
-        }
-        fbo.unbindFramebuffer();
-        
-        ci::gl::setViewport(viewport);
-        
-        return fbo.getTexture();
-        
-    }
-    
-    ci::gl::Texture * SiCaptureInput::getTexturePtr( string deviceName, int cacheAt ){
-        int numCached = getNumCached(deviceName);
-        if( numCached < cacheAt + 1 ){
-            cacheAt = numCached - 1;
-        }
-        return &_textureCacheVectorMap[deviceName].at( _textureCacheVectorMap[deviceName].size() - (cacheAt+1) );
-    }
-    
-    ci::gl::Texture SiCaptureInput::getDiffTexture( string deviceName ){
-        
-        if( _diffFboMap.find(deviceName) == _diffFboMap.end() ){
-            ci::Vec2i size = getCaptureRef(deviceName)->getSize();
-            ci::gl::Fbo::Format format;
-            ci::gl::Fbo fbo = ci::gl::Fbo( size.x, size.y, format );
-            _diffFboMap[deviceName] = fbo;
-        }
-        
-        return _diffFboMap[deviceName].getTexture();
-        
-    }
-    
-    int SiCaptureInput::getNumCached( string deviceName ){
-        return _textureCacheVectorMap[deviceName].size();
-    }
-    
-    int SiCaptureInput::getCacheLength( string deviceName ){
-        return _textureCacheLengthMap[deviceName];
     }
     
 }}

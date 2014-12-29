@@ -21,8 +21,7 @@
 
 // --- hrfm::gl
 
-#include "ShaderFactory.h"
-#include "SiFboFactory.h"
+#include "GL.h"
 
 #include "FilterHeaders.h"
 
