@@ -48,6 +48,7 @@ namespace hrfm { namespace io{
     
     void SiCaptureInput::setDefaultDeviceName( string deviceName ){
         _defaultDeviceName = deviceName;
+        cout << "SiCaptureInput::setDefaultDeviceName(\"" << _defaultDeviceName << "\");" << endl << endl;
     }
     
     //! --- サイズの取得

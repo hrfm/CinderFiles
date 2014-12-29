@@ -17,6 +17,7 @@
 
 #include "SiOscInput.h"
 #include "SiAudioInput.h"
+#include "SiKORGMIDIInterface.h"
 #include "CaptureInput.h"
 
 #include "TriggerEvent.h"
@@ -80,6 +81,7 @@ namespace hrfm{ namespace app{
         virtual void initWindow( XmlTree &xml );
         virtual void initAudio( XmlTree &xml );
         virtual void initCapture( XmlTree &xml );
+        virtual void initKORGMIDIInterface( XmlTree &xml );
         
         virtual Vec2i getWindowSize();
         virtual Vec2i getWindowAspect();

@@ -87,6 +87,9 @@ namespace hrfm { namespace app{
             if( xml.hasChild("capture") ){
                 this->initCapture(xml.getChild("capture"));
             }
+            if( xml.hasChild("korg") ){
+                this->initKORGMIDIInterface(xml.getChild("korg"));
+            }
         }
         
         // --- TriggerEvent Listener.
@@ -144,6 +147,15 @@ namespace hrfm { namespace app{
             
         }
         
+    }
+    
+    void AppBase::initKORGMIDIInterface( XmlTree &xml ){
+        if( xml.hasAttribute("listen") ){
+            int listenPort = xml.getAttributeValue<int>("listen");
+            cout << "- Setup KORGMIDIInterface with listen port " << listenPort << endl;
+            SiKORGMIDIInterface::getInstance().listen( listenPort );
+            cout << endl;
+        }
     }
     
     // === Setter / Getter =======================================================
