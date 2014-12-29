@@ -153,6 +153,33 @@ namespace hrfm { namespace io{
         return *getTexturePtr( deviceName, cacheAt );
     }
     
+    ci::gl::Texture SiCaptureInput::getResizedTexture( Vec2i size, string deviceName, int cacheAt ){
+        
+        ci::gl::Fbo::Format format;
+        ci::gl::Fbo fbo = ci::gl::Fbo( size.x, size.y, format );
+        
+        Area viewport = ci::gl::getViewport();
+        ci::gl::Texture * tex = getTexturePtr(deviceName);
+        
+        fbo.bindFramebuffer();
+        {
+            ci::gl::pushMatrices();
+            ci::gl::setViewport( fbo.getBounds() );
+            ci::gl::setMatricesWindow( fbo.getSize(), false );
+            {
+                ci::gl::color( Color( 1.0, 1.0, 1.0 ) );
+                ci::gl::draw( *tex, fbo.getBounds() );
+            }
+            ci::gl::popMatrices();
+        }
+        fbo.unbindFramebuffer();
+        
+        ci::gl::setViewport(viewport);
+        
+        return fbo.getTexture();
+        
+    }
+    
     ci::gl::Texture * SiCaptureInput::getTexturePtr( string deviceName, int cacheAt ){
         int numCached = getNumCached(deviceName);
         if( numCached < cacheAt + 1 ){

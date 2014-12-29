@@ -3,6 +3,7 @@
 // --- hrfm::display
 
 #include "DisplayNode.h"
+#include "FboDisplayNode.h"
 #include "TextureNode.h"
 #include "ImageTexture.h"
 #include "MovieTexture.h"
@@ -51,3 +52,7 @@
 // --- hrfm::app
 
 #include "AppBase.h"
+
+// --- hrfm::cv
+
+#include "Delaunay.h"

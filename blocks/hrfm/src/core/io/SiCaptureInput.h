@@ -30,6 +30,7 @@ namespace hrfm { namespace io{
         ci::CaptureRef    getCaptureRef( string deviceName = "*" );
         ci::Surface       getSurface( string deviceName = "*" );
         ci::gl::Texture   getTexture( string deviceName = "*", int cacheAt = 0 );
+        ci::gl::Texture   getResizedTexture( Vec2i size, string deviceName = "*", int cacheAt = 0 );
         ci::gl::Texture * getTexturePtr( string deviceName = "*", int cacheAt = 0 );
         ci::gl::Texture   getDiffTexture( string deviceName = "*" );
         
@@ -48,7 +49,7 @@ namespace hrfm { namespace io{
         map<string,int> _beforeFrameMap;
         map<string,int> _beforeTextureBeforeFrameMap;
         
-        map<string,int>                      _textureCacheLengthMap;
+        map<string,int>                     _textureCacheLengthMap;
         map<string,vector<ci::gl::Texture>> _textureCacheVectorMap;
         
         ci::gl::GlslProg        _diffShader;
