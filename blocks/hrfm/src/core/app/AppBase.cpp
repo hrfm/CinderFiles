@@ -122,18 +122,28 @@ namespace hrfm { namespace app{
     }
     
     void AppBase::initCapture( XmlTree &xml ){
+        
         if( xml.hasAttribute("width") && xml.hasAttribute("height") ){
+            
             useCapture      = true;
             Vec2i captureSize = Vec2i( xml.getAttributeValue<int>("width"), xml.getAttributeValue<int>("height") );
+            
+            int cacheLength = 2;
+            if( xml.hasAttribute("cacheLength") ){
+                cacheLength = xml.getAttributeValue<int>("cacheLength");
+            }
+            
             if( xml.hasAttribute("deviceName") ){
                 string deviceName = xml.getAttributeValue<string>("deviceName");
                 cout << "- Setup CaptureInput [" + deviceName + "] with sized " << captureSize << endl;
-                captureInput.setup( captureSize.x, captureSize.y, deviceName );
+                captureInput.setup( captureSize.x, captureSize.y, deviceName, cacheLength );
             }else{
                 cout << "- Setup CaptureInput with sized " << captureSize << endl;
-                captureInput.setup( captureSize.x, captureSize.y );
+                captureInput.setup( captureSize.x, captureSize.y, "*", cacheLength );
             }
+            
         }
+        
     }
     
     // === Setter / Getter =======================================================

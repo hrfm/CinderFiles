@@ -22,23 +22,30 @@ namespace hrfm{ namespace cv{
     
     void OpticalFlow::update( gl::Texture texture, float bias, float frameRate ){
         
+        Area viewport = ci::gl::getViewport();
+        
         mOpticalFlowFBO.bindFramebuffer();
-        gl::pushMatrices();
-        gl::setMatricesWindow( getWindowSize(), false );
-        gl::clear();
-        gl::color(1.0f,1.0f,1.0f);
-        glPushMatrix();
-        gl::draw( texture, mOpticalFlowBounds );
-        glPopMatrix();
-        gl::popMatrices();
+        {
+            gl::pushMatrices();
+            ci::gl::setViewport( mOpticalFlowFBO.getBounds() );
+            ci::gl::setMatricesWindow( mOpticalFlowFBO.getWidth(), mOpticalFlowBounds.getHeight(), false );
+            {
+                gl::clear();
+                gl::color(1.0f,1.0f,1.0f);
+                gl::draw( texture, mOpticalFlowBounds );
+            }
+            gl::popMatrices();
+        }
         mOpticalFlowFBO.unbindFramebuffer();
+        
+        ci::gl::setViewport(viewport);
         
         if( 1.0 / frameRate < getElapsedSeconds() - recentTime ){
             
             ::cv::Mat currentFrame( toOcv( Channel( Surface( mOpticalFlowFBO.getTexture() ) ) ) );
             
             if( mPrevFrame.data ) {
-                if( features.empty() || getElapsedFrames() % 30 == 0 ){
+                if( features.empty() || getElapsedFrames() % 3 == 0 ){
                     // pick new features once every 30 frames, or the first frame
                     _chooseFeatures( mPrevFrame );
                 }
@@ -47,6 +54,7 @@ namespace hrfm{ namespace cv{
             
             mPrevFrame = currentFrame;
             
+            /*
             // --- Update ForceMap. ---
             
             Vec2f from, to, size( mOpticalFlowFBO.getSize() );
@@ -64,11 +72,13 @@ namespace hrfm{ namespace cv{
                 }
             }
             
+            */
+            
             recentTime = getElapsedSeconds();
             
         }
         
-        mForceMap.update();
+        //mForceMap.update();
         
     }
     
@@ -82,16 +92,16 @@ namespace hrfm{ namespace cv{
         glDisable( GL_TEXTURE_2D );
         
         glColor4f( 1, 1, 0, 0.5f );
+        
+        vector<::cv::Point2f>::const_iterator featureIt, featureEnd;
         // draw all the old points
-        for( vector<::cv::Point2f>::const_iterator featureIt = prevFeatures.begin(); featureIt != prevFeatures.end(); ++featureIt ){
+        for( featureIt = prevFeatures.begin(), featureEnd = prevFeatures.end(); featureIt != featureEnd; ++featureIt ){
             gl::drawStrokedCircle( fromOcv( *featureIt ), 1 );
         }
-        
         // draw all the new points
-        for( vector<::cv::Point2f>::const_iterator featureIt = features.begin(); featureIt != features.end(); ++featureIt ){
+        for( featureIt = features.begin(), featureEnd = features.end(); featureIt != featureEnd; ++featureIt ){
             gl::drawSolidCircle( fromOcv( *featureIt ), 1 );
         }
-        
         // draw the lines connecting them
         glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
         

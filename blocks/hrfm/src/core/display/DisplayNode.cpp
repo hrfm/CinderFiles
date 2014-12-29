@@ -15,6 +15,11 @@ namespace hrfm{ namespace display{
     void DisplayNode::setSize( int w, int h ){
         width  = w;
         height = h;
+        if( _beforeWidth != width || _beforeHeight != height ){
+            dispatchEvent( new hrfm::events::Event( hrfm::events::Event::RESIZE ) );
+            _beforeWidth  = width;
+            _beforeHeight = height;
+        }
     }
     
     void DisplayNode::setSize( Vec2i size ){
@@ -118,11 +123,26 @@ namespace hrfm{ namespace display{
     }
     
     void DisplayNode::update(){
+        
+        if( visible == false || alpha <= 0.0f ){
+            return;
+        }
+        
+        if( _beforeWidth != width || _beforeHeight != height ){
+            dispatchEvent( new hrfm::events::Event( hrfm::events::Event::RESIZE ) );
+            _beforeWidth  = width;
+            _beforeHeight = height;
+        }
+        
         _update();
         _updateChildren();
+        
     }
     
     void DisplayNode::draw(){
+        if( visible == false || alpha <= 0.0f ){
+            return;
+        }
         gl::enableAlphaBlending();
         gl::pushMatrices();
         gl::translate( x, y );

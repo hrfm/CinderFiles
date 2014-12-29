@@ -15,20 +15,23 @@ namespace hrfm { namespace io{
         
     public:
         
-        void            showAllDevices();
+        void              showAllDevices();
         
-        ci::CaptureRef  createRef( int width, int height, string deviceName = "*" );
+        ci::CaptureRef    createRef( int width, int height, string deviceName = "*", int cacheLength = 2 );
         
-        ci::Vec2i       getSize( string deviceName = "*" );
+        ci::Vec2i         getSize( string deviceName = "*" );
+        int               getNumCached( string deviceName = "*" );
+        int               getCacheLength( string deviceName = "*" );
         
-        void            update( string deviceName = "*" );
-        ci::gl::Texture updateTexture( string deviceName = "*" );
-        ci::gl::Texture updateDiffTexture( string deviceName = "*" );
+        void              update( string deviceName = "*" );
+        ci::gl::Texture   updateTexture( string deviceName = "*" );
+        ci::gl::Texture   updateDiffTexture( string deviceName = "*" );
         
-        ci::CaptureRef  getCaptureRef( string deviceName = "*" );
-        ci::Surface     getSurface( string deviceName = "*" );
-        ci::gl::Texture getTexture( string deviceName = "*" );
-        ci::gl::Texture getDiffTexture( string deviceName = "*" );
+        ci::CaptureRef    getCaptureRef( string deviceName = "*" );
+        ci::Surface       getSurface( string deviceName = "*" );
+        ci::gl::Texture   getTexture( string deviceName = "*", int cacheAt = 0 );
+        ci::gl::Texture * getTexturePtr( string deviceName = "*", int cacheAt = 0 );
+        ci::gl::Texture   getDiffTexture( string deviceName = "*" );
         
     private:
         
@@ -39,17 +42,17 @@ namespace hrfm { namespace io{
             _diffShader = hrfm::gl::ShaderFactory::create( "simple_vert.glsl", "diff_frag.glsl" );
         }
         
-        int _beforeFrame;
-        
-        ci::gl::GlslProg _diffShader;
-        
         map<string,ci::CaptureRef> _captureRefMap;
-        map<string,int>            _beforeFrameMap;
         
-        map<string,ci::gl::Texture> _texMap;
-        map<string,ci::gl::Fbo>     _diffFboMap;
-        map<string,ci::gl::Texture> _beforeTextureMap;
-        map<string,int>             _beforeTextureBeforeFrameMap;
+        int _beforeFrame;
+        map<string,int> _beforeFrameMap;
+        map<string,int> _beforeTextureBeforeFrameMap;
+        
+        map<string,int>                      _textureCacheLengthMap;
+        map<string,vector<ci::gl::Texture>> _textureCacheVectorMap;
+        
+        ci::gl::GlslProg        _diffShader;
+        map<string,ci::gl::Fbo> _diffFboMap;
         
     };
     

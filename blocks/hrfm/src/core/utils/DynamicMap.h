@@ -25,7 +25,7 @@ namespace hrfm { namespace utils{
                     return v->value;
                 }
             }
-            return NULL;
+            return T();
         };
         
         template <class T> T * getValuePtr( const string key ){

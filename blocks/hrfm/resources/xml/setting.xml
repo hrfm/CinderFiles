@@ -4,14 +4,16 @@
     
     <!-- log Settings. -->
     
+    <!--
     <log
         dest = "~/Documents/log.txt"
     />
+    -->
     
     <!-- prepare Settings. -->
     
     <prepare
-        frameRate     = "60"
+        frameRate     = "120"
         windowWidth   = "1920"
         windowHeight  = "1080"
     />
@@ -29,7 +31,8 @@
         <capture
             width  = "640"
             height = "480"
-            deviceName = "*"
+            deviceName  = "*"
+            cacheLength = "30"
         />
     </setup>
     

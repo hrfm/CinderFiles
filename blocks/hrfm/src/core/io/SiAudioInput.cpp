@@ -121,17 +121,22 @@ namespace hrfm{ namespace io{
         if( _enabled ){
             
             int i = 0;
-            float maxValue = 0.0f;
+            float maxValue = 0.0000001f;
             
             // We copy the magnitude spectrum out from the Node on the main thread, once per update:
             mMagSpectrum = mMonitorSpectralNode->getMagSpectrum();
             for( auto spectrum = mMagSpectrum.begin(); spectrum != mMagSpectrum.end(); ++spectrum ) {
                 maxValue = max( maxValue, *spectrum );
             }
+            
             for( auto spectrum = mMagSpectrum.begin(); spectrum != mMagSpectrum.end(); ++spectrum ) {
                 
-                _fftValues[i]     = max( _fftValues[i] * decline, *spectrum );
+                _fftValues[i] = max( _fftValues[i] * decline, *spectrum );
+                if( _fftValues[i] != _fftValues[i] ){
+                    _fftValues[i] = 0;
+                }
                 _fftNormalized[i] = _fftValues[i] / maxValue;
+                
                 
                 if( _bandCount <= ++i ){
                     break;

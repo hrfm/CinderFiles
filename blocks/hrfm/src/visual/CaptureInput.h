@@ -29,7 +29,7 @@ namespace hrfm{ namespace io{
         
         CaptureInput();
         
-        void setup( int32_t width, int32_t height, string deviceName = "*" );
+        void setup( int32_t width, int32_t height, string deviceName = "*", int cacheLength = 2 );
         
         void update();
         
@@ -65,6 +65,7 @@ namespace hrfm{ namespace io{
         bool useOpticalFlow;
         void setupOpticalFlow( Vec2i textureSize );
         void updateOpticalFlow( float bias = 1.0, float frameRate = 30.0 );
+        
         void drawOpticalFlow();
         ForceMap getForceMap();
         void drawForceMap();

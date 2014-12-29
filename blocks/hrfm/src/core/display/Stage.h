@@ -10,19 +10,15 @@ namespace hrfm{ namespace display{
     public:
         Stage(){
             DisplayNode();
-            _beforeWidth  = width;
-            _beforeHeight = height;
+            this->addEventListener( hrfm::events::Event::RESIZE, this, &Stage::_onResize );
         };
         ~Stage(){};
         virtual DisplayNode * addChild( DisplayNode * child );
-        virtual void setSize( int w, int h );
-        virtual void update();
         virtual void draw();
         ci::gl::Texture getTexture();
     private:
         ci::gl::Fbo _fbo;
-        int _beforeWidth;
-        int _beforeHeight;
+        void _onResize( hrfm::events::Event * event );
     };
     
 }}

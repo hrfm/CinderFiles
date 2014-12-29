@@ -4,38 +4,12 @@ using namespace ci;
 
 namespace hrfm{ namespace display{
     
-    void Stage::setSize( int w, int h ){
-        DisplayNode::setSize( w, h );
-        if( _beforeWidth != width || _beforeHeight != height ){
-            ci::gl::Fbo::Format format;
-            _fbo = ci::gl::Fbo( width, height, format );
-            dispatchEvent( new hrfm::events::Event( hrfm::events::Event::RESIZE ) );
-        }
-        _beforeWidth  = width;
-        _beforeHeight = height;
-    }
-    
     DisplayNode * Stage::addChild( DisplayNode * child ){
         eraseFromChildren(child);
         child->_setStage(this);
         child->_setParent(this);
         children.push_back(child);
         return child;
-    }
-    
-    void Stage::update(){
-        
-        if( _beforeWidth != width || _beforeHeight != height ){
-            ci::gl::Fbo::Format format;
-            _fbo = ci::gl::Fbo( width, height, format );
-            dispatchEvent( new hrfm::events::Event( hrfm::events::Event::RESIZE ) );
-            _beforeWidth  = width;
-            _beforeHeight = height;
-        }
-        
-        _update();
-        _updateChildren();
-        
     }
     
     void Stage::draw(){
@@ -72,6 +46,12 @@ namespace hrfm{ namespace display{
     
     ci::gl::Texture Stage::getTexture(){
         return _fbo.getTexture();
+    }
+    
+    void Stage::_onResize( hrfm::events::Event * event ){
+        cout << "_onResize" << endl;
+        ci::gl::Fbo::Format format;
+        _fbo = ci::gl::Fbo( width, height, format );
     }
     
 }}

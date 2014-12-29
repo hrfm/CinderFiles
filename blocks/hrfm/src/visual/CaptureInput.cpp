@@ -11,23 +11,23 @@ namespace hrfm{ namespace io{
     
     CaptureInput::CaptureInput(){};
     
-    void CaptureInput::setup( int32_t width, int32_t height, string deviceName ){
+    void CaptureInput::setup( int32_t width, int32_t height, string deviceName, int cacheLength ){
         // --- Setup Capture Devices. ---
         _deviceName = deviceName;
         SiCaptureInput::getInstance().showAllDevices();
-        mCapture = SiCaptureInput::getInstance().createRef( width, height, _deviceName );
+        mCapture = SiCaptureInput::getInstance().createRef( width, height, _deviceName, cacheLength );
         // --- Create GLSL. ---
     }
     
     void CaptureInput::update(){
-        if( mCapture && mCapture->checkNewFrame() ){
+        //if( mCapture && mCapture->checkNewFrame() ){
             if( mFaceDetect ){
                 mFaceDetect->update( mCapture->getSurface().clone() );
             }
             if( mOpticalFlow ){
-                
+                updateOpticalFlow();
             }
-        }
+        //}
     }
     
     Vec2i CaptureInput::getSize(){
@@ -88,6 +88,7 @@ namespace hrfm{ namespace io{
     
     void CaptureInput::updateOpticalFlow( float bias, float frameRate ){
         if( mOpticalFlow ){
+            cout << "updateOpticalFlow()" << endl;
             mOpticalFlow->update( SiCaptureInput::getInstance().getTexture( _deviceName ), bias, frameRate );
         }
     }

@@ -14,11 +14,14 @@ namespace hrfm{ namespace display{
         
         DisplayNode(){
             hrfm::events::EventDispatcher();
-            alpha = 1.0f;
-            x = 0.0f;
-            y = 0.0f;
-            width  = 0.0f;
-            height = 0.0f;
+            x       = 0.0f;
+            y       = 0.0f;
+            alpha   = 1.0f;
+            width   = 0.0f;
+            height  = 0.0f;
+            visible = true;
+            _beforeWidth  = 0.0f;
+            _beforeHeight = 0.0f;
         };
         ~DisplayNode(){};
         
@@ -53,9 +56,9 @@ namespace hrfm{ namespace display{
 
         std::vector<DisplayNode*> children;
         
-        float alpha;
-        float x, y;
-        int width, height;
+        float x, y, alpha;
+        int   width, height;
+        bool  visible;
         
     protected:
         
@@ -70,6 +73,9 @@ namespace hrfm{ namespace display{
         
         //! addChild で追加された子要素を描画します.
         void _drawChildren();
+        
+        int _beforeWidth;
+        int _beforeHeight;
         
     protected:
         
