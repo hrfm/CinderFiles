@@ -25,9 +25,6 @@ namespace hrfm{ namespace io{
             if( mFaceDetect ){
                 mFaceDetect->update( mCapture->getSurface().clone() );
             }
-            if( mOpticalFlow ){
-                updateOpticalFlow();
-            }
         //}
     }
     
@@ -73,52 +70,6 @@ namespace hrfm{ namespace io{
         }else{
             return vector<DetectRect>();
         }
-    }
-    
-    // ========================================================================================
-    //
-    // Optical Flow.
-    //
-    // ========================================================================================
-    
-    void CaptureInput::setupOpticalFlow( Vec2i textureSize ){
-        if( mOpticalFlow == NULL ){
-            mOpticalFlow = new OpticalFlow( textureSize );
-        }
-    }
-    
-    void CaptureInput::updateOpticalFlow( float bias, float frameRate ){
-        if( mOpticalFlow ){
-            cout << "updateOpticalFlow()" << endl;
-            mOpticalFlow->update( SiCaptureInput::getInstance().getTexture( _deviceName ), bias, frameRate );
-        }
-    }
-    
-    void CaptureInput::drawOpticalFlow(){
-        if( mOpticalFlow ){
-            mOpticalFlow->draw();
-        }
-    }
-    
-    ForceMap CaptureInput::getForceMap(){
-        return mOpticalFlow->getForceMap();
-    }
-    
-    void CaptureInput::drawForceMap(){
-        Vec2f texSize = Vec2f( getOpticalFlowTextureSize() );
-        getForceMap().draw( texSize );
-    }
-    
-    ci::gl::Texture CaptureInput::getOpticalFlowTexture(){
-        return mOpticalFlow->getTexture();
-    }
-    
-    Vec2i CaptureInput::getOpticalFlowTextureSize(){
-        return mOpticalFlow->getSize();
-    }
-    
-    Rectf CaptureInput::getOpticalFlowTextureBounds(){
-        return mOpticalFlow->getBounds();
     }
     
 }}

@@ -26,6 +26,7 @@
             hideCursor    = "true"
         />
         <audio
+            deviceName = "*"
             bandSize="64"
         />
         <capture

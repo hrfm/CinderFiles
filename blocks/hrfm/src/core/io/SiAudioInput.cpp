@@ -8,23 +8,52 @@ namespace hrfm{ namespace io{
     
     //! public:
     
+    void SiAudioInput::showAllDevices(){
+        // print the devices
+        cout << endl << "SiAudioInput::showAllDevices()" << endl;
+        vector<ci::audio::DeviceRef> list = ci::audio::Device::getInputDevices();
+        for( auto device = list.begin(); device != list.end(); ++device ) {
+            cout << "- NAME:" << (*device)->getName() << " KEY:" << (*device)->getKey() << endl;
+        }
+        cout << endl;
+    }
+    
     void SiAudioInput::setup( uint16_t count, uint16_t bufferLength ){
+        setup( "", count, bufferLength );
+    }
+    
+    void SiAudioInput::setup( string deviceName, uint16_t count, uint16_t bufferLength ){
         
         cout << "SiAudioInput::setup" << endl;
         
-        _enabled      = true;
+        showAllDevices();
         
+        _enabled      = true;
         _bandCount    = count;
         _bufferLength = bufferLength;
         
         // --- Create Sound Context.
         
-        cout << "create context." << endl;
+        cout << "create Context." << endl;
         
         auto ctx = audio::Context::master();
         
+        cout << "get InputDevice : ";
+        
+        ci::audio::DeviceRef dev;
+        if( deviceName == "*" ){
+            dev = ci::audio::Device::getDefaultInput();
+        }else{
+            dev = ci::audio::Device::findDeviceByName(deviceName);
+        }
+        if( !dev ){
+            cout << "AudioDevice \"" << deviceName << "\" is not found." << endl;
+            throw;
+        }
+        
+        cout << dev->getName() << endl;
         // The InputDeviceNode is platform-specific, so you create it using a special method on the Context:
-        mInputDeviceNode = ctx->createInputDeviceNode();
+        mInputDeviceNode = ctx->createInputDeviceNode( dev );
         
         // --- init FFT
         
@@ -33,7 +62,7 @@ namespace hrfm{ namespace io{
         _fftValues     = new float[_bandCount];
         _fftNormalized = new float[_bandCount];
         
-        auto monitorSpectralFormat   = audio::MonitorSpectralNode::Format().windowSize( _bandCount * 2 );
+        auto monitorSpectralFormat = audio::MonitorSpectralNode::Format().windowSize( _bandCount * 2 );
         mMonitorSpectralNode = ctx->makeNode( new audio::MonitorSpectralNode( monitorSpectralFormat ) );
         try{
             mInputDeviceNode->connect( mMonitorSpectralNode );
@@ -73,6 +102,8 @@ namespace hrfm{ namespace io{
             
         }
         
+        cout << "done" << endl;
+        
     }
     
     size_t SiAudioInput::numChannels(){
@@ -92,6 +123,8 @@ namespace hrfm{ namespace io{
     }
     
     void SiAudioInput::update( float decline ){
+        
+        float scale  = 10.0 * SiKORGMIDIInterface::getInstance().nanoKontrolFader[0];
         
         // --- Wave
         
@@ -126,12 +159,12 @@ namespace hrfm{ namespace io{
             // We copy the magnitude spectrum out from the Node on the main thread, once per update:
             mMagSpectrum = mMonitorSpectralNode->getMagSpectrum();
             for( auto spectrum = mMagSpectrum.begin(); spectrum != mMagSpectrum.end(); ++spectrum ) {
-                maxValue = max( maxValue, *spectrum );
+                maxValue = max( maxValue, *spectrum * scale );
             }
             
             for( auto spectrum = mMagSpectrum.begin(); spectrum != mMagSpectrum.end(); ++spectrum ) {
                 
-                _fftValues[i] = max( _fftValues[i] * decline, *spectrum );
+                _fftValues[i] = max( _fftValues[i] * decline, *spectrum * scale );
                 if( _fftValues[i] != _fftValues[i] ){
                     _fftValues[i] = 0;
                 }
@@ -183,18 +216,18 @@ namespace hrfm{ namespace io{
     
     void SiAudioInput::drawFFT( Rectf bounds, ColorA color0, ColorA color1, int length ){
         
-        float width  = bounds.getWidth() / length;
-        float height = bounds.getHeight();
+        float width  = (bounds.x2 - bounds.x1) / ( length - 1 );
+        float height = (bounds.y2 - bounds.y1);
         
         glPushMatrix();
         glTranslatef( bounds.x1, bounds.y1, 0.0f );
         {
             
-            for( int i = 1; i < (length-1); i++ ) {
+            for( int i = 0; i < (length-1); i++ ) {
                 float barY     = _fftValues[i] * height;
                 float nextBarY = _fftValues[i+1] * height;
                 gl::drawLine( Vec2f( i*width, height - barY ), Vec2f( (i+1)*width, height - nextBarY ) );
-                gl::drawLine( Vec2f( i*width, height ), Vec2f( i*width, height - barY ) );
+                //gl::drawLine( Vec2f( i*width, height ), Vec2f( i*width, height - barY ) );
             }
             
             /*

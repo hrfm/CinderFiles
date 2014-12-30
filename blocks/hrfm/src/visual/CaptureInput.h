@@ -56,23 +56,6 @@ namespace hrfm{ namespace io{
         bool faceDetectEnabled();
         vector<DetectRect> getFaces();
         
-        // ========================================================================================
-        //
-        // Optical Flow.
-        //
-        // ========================================================================================
-        
-        bool useOpticalFlow;
-        void setupOpticalFlow( Vec2i textureSize );
-        void updateOpticalFlow( float bias = 1.0, float frameRate = 30.0 );
-        
-        void drawOpticalFlow();
-        ForceMap getForceMap();
-        void drawForceMap();
-        ci::gl::Texture getOpticalFlowTexture();
-        Vec2i getOpticalFlowTextureSize();
-        Rectf getOpticalFlowTextureBounds();
-        
     private:
         
         // --- Video Capture. ---
@@ -87,7 +70,6 @@ namespace hrfm{ namespace io{
         bool mCaptureReflect;
         
         FaceDetect  * mFaceDetect  = NULL;
-        OpticalFlow * mOpticalFlow = NULL;
         
     };
     

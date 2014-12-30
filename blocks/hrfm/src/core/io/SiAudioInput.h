@@ -8,6 +8,7 @@
 
 #include "cinder/app/AppBasic.h"
 #include "SiOscInput.h"
+#include "SiKORGMIDIInterface.h"
 
 #include "cinder/audio/Context.h"
 #include "cinder/audio/MonitorNode.h"
@@ -23,7 +24,10 @@ namespace hrfm{ namespace io{
     class SiAudioInput : public hrfm::utils::Singleton<SiAudioInput>{
     public:
         
+        void showAllDevices();
+        
         void setup( uint16_t count, uint16_t bufferLength = 128 );
+        void setup( string deviceName, uint16_t count, uint16_t bufferLength = 128 );
         
         void  useAudioManager();
         

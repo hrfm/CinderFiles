@@ -115,11 +115,15 @@ namespace hrfm { namespace app{
     }
     
     void AppBase::initAudio( XmlTree &xml ){
+        string deviceName = "*";
+        if( xml.hasAttribute("deviceName") ){
+            deviceName = xml.getAttributeValue<string>("deviceName");
+        }
         if( xml.hasAttribute("bandSize") ){
             useAudio = true;
             int bandSize = xml.getAttributeValue<int>("bandSize");
             cout << "- Setup AudioInput with bandSize " << bandSize << endl;
-            SiAudioInput::getInstance().setup( bandSize );
+            SiAudioInput::getInstance().setup( deviceName, bandSize );
             cout << endl;
         }
     }

@@ -14,7 +14,7 @@ namespace hrfm { namespace io{
         
         void listen( int port );
         
-        int nanoKontrolFader[16];
+        float nanoKontrolFader[16];
         
     private:
         
@@ -25,15 +25,14 @@ namespace hrfm { namespace io{
             hrfm::events::EventDispatcher();
             
             for( int i=0; i< 16;i++ ){
-                nanoKontrolFader[i] = 0;
+                nanoKontrolFader[i] = 1.0;
             }
             
         }
         
         void _onReceiveOscMessage( hrfm::events::OscInputEvent * event ){
             for( int i = 0; i < event->message.getNumArgs(); i++ ){
-                nanoKontrolFader[i] = event->message.getArgAsInt32(i);
-                cout << nanoKontrolFader[i] << endl;
+                nanoKontrolFader[i] = event->message.getArgAsInt32(i) / 128.0f;
             }
         }
         

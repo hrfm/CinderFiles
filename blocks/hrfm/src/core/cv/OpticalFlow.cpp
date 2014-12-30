@@ -42,7 +42,8 @@ namespace hrfm{ namespace cv{
         
         if( 1.0 / frameRate < getElapsedSeconds() - recentTime ){
             
-            ::cv::Mat currentFrame( toOcv( Channel( Surface( mOpticalFlowFBO.getTexture() ) ) ) );
+            //::cv::Mat currentFrame( toOcv( Channel( Surface( mOpticalFlowFBO.getTexture() ) ) ) );
+            ::cv::Mat currentFrame( toOcv( mOpticalFlowFBO.getTexture(), CV_8UC1 ) );
             
             if( mPrevFrame.data ) {
                 if( features.empty() || getElapsedFrames() % 3 == 0 ){
@@ -54,7 +55,6 @@ namespace hrfm{ namespace cv{
             
             mPrevFrame = currentFrame;
             
-            /*
             // --- Update ForceMap. ---
             
             Vec2f from, to, size( mOpticalFlowFBO.getSize() );
@@ -72,13 +72,11 @@ namespace hrfm{ namespace cv{
                 }
             }
             
-            */
-            
             recentTime = getElapsedSeconds();
             
         }
         
-        //mForceMap.update();
+        mForceMap.update();
         
     }
     
