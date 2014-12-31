@@ -4,6 +4,7 @@
 #include <sstream>
 #include "Singleton.h"
 #include "cinder/gl/Fbo.h"
+#include "cinder/Camera.h"
 
 using namespace std;
 using namespace hrfm::utils;
@@ -21,6 +22,9 @@ namespace hrfm{ namespace gl{
         
         virtual ci::gl::Fbo * create( int width, int height, bool cache = true, ci::gl::Fbo::Format format = ci::gl::Fbo::Format() );
         
+        virtual ci::gl::Fbo * beginTmpFbo( int width, int height, ci::CameraPersp * camera = NULL, ci::gl::Fbo::Format format = ci::gl::Fbo::Format() );
+        virtual void endTmpFbo();
+        
     private:
         
         friend class Singleton<SiFboFactory>;
@@ -28,6 +32,9 @@ namespace hrfm{ namespace gl{
         SiFboFactory(){
             std::map<string,ci::gl::Fbo*>();
         }
+        
+        ci::gl::Fbo * _tmpFbo = NULL;
+        ci::Area      _tmpViewport;
         
     };
     
