@@ -14,7 +14,13 @@ namespace hrfm{ namespace visual{ namespace emitter{
     public:
         
         EmittObjectBase(){
+            
             EmitterBase();
+            
+            _alphaFrom = 1.0f;
+            _alphaTo   = 0.0f;
+            _alpha     = 1.0f;
+            
         }
         
         virtual void init( float time ){
@@ -38,10 +44,21 @@ namespace hrfm{ namespace visual{ namespace emitter{
         
     protected:
         
+        virtual void _update(){
+            hrfm::display::DisplayNode::_update();
+            _alpha = _alphaFrom + ( _alphaTo - _alphaFrom ) * progress;
+        }
+        
         virtual void _onAddedToStage( hrfm::events::Event * event ){
             this->startTime = getElapsedSeconds();
             removeEventListener( hrfm::events::Event::ADDED_TO_STAGE, this, &EmittObjectBase::_onAddedToStage );
         }
+        
+        const float _PI = 3.14159265358979323846;
+        
+        float _alphaFrom;
+        float _alphaTo;
+        float _alpha;
         
     };
     

@@ -5,3 +5,4 @@
 #include "EmitterBase.h"
 #include "EmittObjectBase.h"
 #include "EoPolyLine.h"
+#include "EoParticle.h"

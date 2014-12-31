@@ -57,7 +57,8 @@ namespace hrfm{ namespace visual{ namespace emitter{
         
         void _update(){
             
-            _alpha     = _alphaFrom     + ( _alphaTo     - _alphaFrom     ) * progress;
+            EmittObjectBase::_update();
+            
             _radius    = _radiusFrom    + ( _radiusTo    - _radiusFrom    ) * progress;
             _thickness = _thicknessFrom + ( _thicknessTo - _thicknessFrom ) * progress;
             
@@ -103,12 +104,6 @@ namespace hrfm{ namespace visual{ namespace emitter{
         }
         
     private:
-        
-        const float _PI = 3.14159265358979323846;
-        
-        float _alphaFrom;
-        float _alphaTo;
-        float _alpha;
         
         float _radiusFrom;
         float _radiusTo;
