@@ -15,6 +15,7 @@
 #include "EventDispatcher.h"
 #include "SiEventDispatcher.h"
 
+#include "KORGMIDIInterfaceEvent.h"
 #include "OscEvent.h"
 #include "TimeUtilEvent.h"
 #include "TriggerEvent.h"

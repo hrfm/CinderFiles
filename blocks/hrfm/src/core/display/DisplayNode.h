@@ -17,11 +17,12 @@ namespace hrfm{ namespace display{
             x       = 0.0f;
             y       = 0.0f;
             alpha   = 1.0f;
+            visible = true;
             width   = 0.0f;
             height  = 0.0f;
-            visible = true;
             _beforeWidth  = 0.0f;
             _beforeHeight = 0.0f;
+            colorA = ci::ColorA(1.0,1.0,1.0,1.0);
         };
         ~DisplayNode(){};
         
@@ -56,9 +57,12 @@ namespace hrfm{ namespace display{
 
         std::vector<DisplayNode*> children;
         
+        virtual ci::Vec2f getGlobalPosition();
+        
         float x, y, alpha;
         int   width, height;
         bool  visible;
+        ci::ColorA colorA;
         
     protected:
         
@@ -69,10 +73,10 @@ namespace hrfm{ namespace display{
         bool eraseFromChildren( DisplayNode * child );
         
         //! addChild で追加された子要素を更新します.
-        void _updateChildren();
+        virtual void _updateChildren();
         
         //! addChild で追加された子要素を描画します.
-        void _drawChildren();
+        virtual void _drawChildren();
         
         int _beforeWidth;
         int _beforeHeight;
@@ -81,11 +85,11 @@ namespace hrfm{ namespace display{
         
         friend class Stage;
         
-        Stage * _stage;
+        Stage * _stage = NULL;
         virtual void _setStage( Stage * node );
         virtual void _unsetStage();
         
-        DisplayNode * _parent;
+        DisplayNode * _parent = NULL;
         virtual void _setParent( DisplayNode * node );
         virtual void _unsetParent();
         

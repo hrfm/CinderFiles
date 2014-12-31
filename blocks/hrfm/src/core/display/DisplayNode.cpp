@@ -143,10 +143,12 @@ namespace hrfm{ namespace display{
         if( visible == false || alpha <= 0.0f ){
             return;
         }
+        colorA.a = alpha;
         gl::enableAlphaBlending();
         gl::pushMatrices();
         gl::translate( x, y );
         {
+            gl::color( colorA );
             _draw();
             _drawChildren();
         }
@@ -211,6 +213,15 @@ namespace hrfm{ namespace display{
             }
         }
         
+    }
+    
+    ci::Vec2f DisplayNode::getGlobalPosition(){
+        Vec2f pos( x, y );
+        if( hasParent() ){
+            return pos + _parent->getGlobalPosition();
+        }else{
+            return pos;
+        }
     }
     
     //! protected

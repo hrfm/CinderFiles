@@ -208,6 +208,9 @@ namespace hrfm { namespace app{
     void AppBase::draw(){
         ci::gl::clear();
         stage.draw();
+        if( _isDrawFPS ){
+            drawFPS();
+        }
     }
     
     void AppBase::drawFPS( Vec2f position ){
@@ -222,8 +225,12 @@ namespace hrfm { namespace app{
     }
     
     void AppBase::keyDown( ci::app::KeyEvent event ){
-        if( event.getChar() == 'f' )
+        if( event.getChar() == 'f' ){
             ci::app::setFullScreen( ! ci::app::isFullScreen() );
+        }
+        if( event.isControlDown() && event.getChar() == 'd' ){
+            _isDrawFPS = !_isDrawFPS;
+        }
     }
     
     void AppBase::onTrigger( TriggerEvent * event ){

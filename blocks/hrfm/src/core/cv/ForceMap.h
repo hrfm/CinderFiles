@@ -99,6 +99,10 @@ namespace hrfm{ namespace cv{
                 }
                 return mForces[idx]->getForce();
             }
+        
+            Vec2f getForceAtf( float x, float y ){
+                return getForceAt( floor( x * mCols ), floor( y * mRows ) );
+            }
             
             void update(){
                 
@@ -220,18 +224,22 @@ namespace hrfm{ namespace cv{
             void draw( Vec2f size, float lineWidth = 2.0 ){
                 Vec2f force, from;
                 glDisable( GL_TEXTURE_2D );
-                glBegin( GL_LINES );
-                    ci::gl::lineWidth( lineWidth );
-                    for( int x=0; x < mCols; x++ ){
-                        for( int y=0; y < mRows; y++ ){
-                            force  = getForceAt( x, y );
-                            from.x = (float)x / (float)(mCols-1) * size.x;
-                            from.y = (float)y / (float)(mRows-1) * size.y;
-                            ci::gl::vertex( from );
-                            ci::gl::vertex( from + force );
+                {
+                    glBegin( GL_LINES );
+                    {
+                        ci::gl::lineWidth( lineWidth );
+                        for( int x=0; x < mCols; x++ ){
+                            for( int y=0; y < mRows; y++ ){
+                                force  = getForceAt( x, y );
+                                from.x = (float)x / (float)(mCols-1) * size.x;
+                                from.y = (float)y / (float)(mRows-1) * size.y;
+                                ci::gl::vertex( from );
+                                ci::gl::vertex( from + force );
+                            }
                         }
                     }
-                glEnd();
+                    glEnd();
+                }
                 glEnable( GL_TEXTURE_2D );
             }
             

@@ -223,16 +223,16 @@ namespace hrfm{ namespace io{
         glTranslatef( bounds.x1, bounds.y1, 0.0f );
         {
             
+            //*
             for( int i = 0; i < (length-1); i++ ) {
                 float barY     = _fftValues[i] * height;
                 float nextBarY = _fftValues[i+1] * height;
                 gl::drawLine( Vec2f( i*width, height - barY ), Vec2f( (i+1)*width, height - nextBarY ) );
                 //gl::drawLine( Vec2f( i*width, height ), Vec2f( i*width, height - barY ) );
             }
-            
-            /*
-            for( int i = 1; i < (length); i++ ) {
-                float barY = _fft[i] * height;
+            /*/
+            for( int i = 0; i < (length-1); i++ ) {
+                float barY = _fftValues[i] * height;
                 glBegin( GL_QUADS );
                 {
                     gl::color( color0 );

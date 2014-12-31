@@ -57,7 +57,7 @@ namespace hrfm { namespace gl{
                     ci::gl::setViewport( mFbo.getBounds() );
                     ci::gl::setMatricesWindow( mFbo.getWidth(), mFbo.getHeight(), false );
                     //*/
-                    ci::gl::clear();
+                    ci::gl::clear( ColorA(0.0,0.0,0.0,0.0) );
                     mShader.bind();
                     {
                         tex.bind(0);

@@ -42,7 +42,6 @@ namespace hrfm{ namespace cv{
         
         if( 1.0 / frameRate < getElapsedSeconds() - recentTime ){
             
-            //::cv::Mat currentFrame( toOcv( Channel( Surface( mOpticalFlowFBO.getTexture() ) ) ) );
             ::cv::Mat currentFrame( toOcv( mOpticalFlowFBO.getTexture(), CV_8UC1 ) );
             
             if( mPrevFrame.data ) {
@@ -81,6 +80,13 @@ namespace hrfm{ namespace cv{
     }
     
     void OpticalFlow::draw(){
+        draw( mOpticalFlowBounds );
+    }
+    
+    void OpticalFlow::draw( Rectf bounds ){
+        
+        float scaleX = bounds.getWidth() / mOpticalFlowBounds.getWidth();
+        float scaleY = bounds.getHeight() / mOpticalFlowBounds.getHeight();
         
         Vec2f from, to;
         float dist;
@@ -89,9 +95,9 @@ namespace hrfm{ namespace cv{
         gl::lineWidth(2.0);
         glDisable( GL_TEXTURE_2D );
         
-        glColor4f( 1, 1, 0, 0.5f );
-        
+        /*
         vector<::cv::Point2f>::const_iterator featureIt, featureEnd;
+        glColor4f( 1, 1, 0, 0.5f );
         // draw all the old points
         for( featureIt = prevFeatures.begin(), featureEnd = prevFeatures.end(); featureIt != featureEnd; ++featureIt ){
             gl::drawStrokedCircle( fromOcv( *featureIt ), 1 );
@@ -100,22 +106,33 @@ namespace hrfm{ namespace cv{
         for( featureIt = features.begin(), featureEnd = features.end(); featureIt != featureEnd; ++featureIt ){
             gl::drawSolidCircle( fromOcv( *featureIt ), 1 );
         }
+        //*/
+        
         // draw the lines connecting them
         glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
         
         glBegin( GL_LINES );
         {
+            
             for( size_t idx = 0; idx < length; ++idx ) {
                 if( featureStatuses[idx] ) {
+                    
                     from = fromOcv( features[idx] );
+                    from.x *= scaleX;
+                    from.y *= scaleY;
+                    
                     to   = fromOcv( prevFeatures[idx] );
-                    dist = from.distance(to);
-                    if( dist < 40.0 ){
+                    to.x *= scaleX;
+                    to.y *= scaleY;
+                    
+                    if( from.distance(to) < 40.0 ){
                         gl::vertex( from );
                         gl::vertex( to );
                     }
+                    
                 }
             }
+            
         }
         glEnd();
         

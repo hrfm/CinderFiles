@@ -6,12 +6,17 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/date_time/c_local_time_adjustor.hpp>
 
+#include "cinder/app/AppBasic.h"
 #include "Singleton.h"
+#include "Timer.h"
 #include "TimeUtilEvent.h"
+#include "TimerEvent.h"
 
 using namespace std;
 
 namespace hrfm{ namespace utils{
+    
+    class Timer;
     
     struct TimingData{
     public:
@@ -30,6 +35,7 @@ namespace hrfm{ namespace utils{
         int _minutes;
         int _beforeHour;
         int _beforeMinutes;
+        
         
     };
     
@@ -82,6 +88,14 @@ namespace hrfm{ namespace utils{
         
         virtual void removeTiming( const string type, TimingData * timing );
         
+        // --- Timer 管理用.
+        
+        void addTimer( Timer * timer );
+        
+        void removeTimer( Timer * timer );
+        
+        bool eraseFromTimerList( Timer * timer );
+        
     private:
         
         friend class Singleton<SiTimeUtil>;
@@ -98,12 +112,82 @@ namespace hrfm{ namespace utils{
             
         }
         
+        // --- Timer.
+        
+        vector<Timer*> _timerList;
+        
+        // --- TimeUtil.
+        
         const string _days[7] = {"sun","mon","tue","wed","thu","fri","sat"};
         
         struct tm * _timeinfo;
         struct tm * _beforeTimeinfo;
         
         map<const string,list<TimingData*>> _timingList;
+        
+        
+    };
+    
+    class Timer : public hrfm::events::EventDispatcher{
+        
+    public:
+        
+        Timer( float time = 1.0, int count = 0 ){
+            hrfm::events::EventDispatcher();
+            this->time  = time;
+            this->count = count;
+        }
+        
+        virtual void start(){
+            this->startTime    = ci::app::getElapsedSeconds();
+            this->currentCount = 0;
+            SiTimeUtil::getInstance().addTimer( this );
+        }
+        
+        virtual void stop(){
+            SiTimeUtil::getInstance().removeTimer( this );
+        }
+        
+        virtual void update( float elapsedTime ){
+            
+            while( time <= elapsedTime - startTime ){
+                if( _count() ){
+                    break;
+                }
+            }
+            
+        }
+        
+        virtual void setTime( float time, bool reset = false ){
+            this->time      = time;
+            if( reset ){
+                _count();
+                this->startTime = ci::app::getElapsedSeconds();
+            }
+        }
+        
+        float time;
+        int   count;
+        int   currentCount;
+        float startTime;
+        
+    private:
+        
+        bool _count(){
+            
+            dispatchEvent( new hrfm::events::TimerEvent( hrfm::events::TimerEvent::TIMER ) );
+            
+            if( 0 < count && count <= ++currentCount ){
+                dispatchEvent( new hrfm::events::TimerEvent( hrfm::events::TimerEvent::TIMER_COMPLETE ) );
+                stop();
+                return true;
+            }
+            
+            startTime+=time;
+            
+            return false;
+            
+        }
         
     };
     

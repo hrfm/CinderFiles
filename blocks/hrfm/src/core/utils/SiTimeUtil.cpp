@@ -89,6 +89,13 @@ namespace hrfm{ namespace utils{
             
         }
         
+        // --- Timer.
+        
+        float elapsedTime = ci::app::getElapsedSeconds();
+        for( auto itr=_timerList.begin(),end=_timerList.end(); itr!=end; ++itr ){
+            (*itr)->update(elapsedTime);
+        }
+        
     }
     
     tm * SiTimeUtil::getTimeinfo(){
@@ -136,6 +143,28 @@ namespace hrfm{ namespace utils{
     
     void SiTimeUtil::removeTiming( const string type, TimingData * timing ){
         _timingList[type].remove(timing);
+    }
+    
+    // --- Timer
+    
+    void SiTimeUtil::addTimer( Timer * timer ){
+        eraseFromTimerList(timer);
+        _timerList.push_back(timer);
+    }
+    
+    void SiTimeUtil::removeTimer( Timer * timer ){
+        eraseFromTimerList(timer);
+    }
+    
+    inline bool SiTimeUtil::eraseFromTimerList( Timer * timer ){
+        auto itr = std::remove_if(_timerList.begin(),_timerList.end(),[timer](Timer* t)->bool{
+            return t == timer;
+        });
+        if( itr == _timerList.end() ){
+            return false;
+        }
+        _timerList.erase( itr, _timerList.end() );
+        return true;
     }
     
 }}

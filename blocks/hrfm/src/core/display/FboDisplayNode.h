@@ -3,6 +3,7 @@
 #include "hrfm.h"
 #include "cinder/gl/Fbo.h"
 #include "DisplayNode.h"
+#include "SiFboFactory.h"
 
 namespace hrfm{ namespace display{
     
@@ -15,13 +16,24 @@ namespace hrfm{ namespace display{
             this->addEventListener( hrfm::events::Event::RESIZE, this, &FboDisplayNode::_onResize );
         }
         
+        ci::gl::Texture getTexture();
+        
     protected:
         
         ci::gl::Fbo _fbo;
-        ci::Area _tmpViewport;
+        
+        ci::gl::Fbo * _tmpFbo;
+        ci::Area    _tmpViewport;
+        
+        virtual ci::gl::Fbo * _beginTmpFBO();
+        virtual void _endTmpFBO();
         
         virtual void _bindAndPushMatrices();
+        virtual void _bindAndPushMatrices( ci::gl::Fbo * target );
+        
         virtual void _unbindAndPopMatrices();
+        virtual void _unbindAndPopMatrices( ci::gl::Fbo * target );
+        
         virtual void _draw();
         
         virtual void _onResize( hrfm::events::Event * event ){

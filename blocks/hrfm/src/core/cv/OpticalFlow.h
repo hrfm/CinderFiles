@@ -25,6 +25,7 @@ namespace hrfm{ namespace cv{
         void update( ci::gl::Texture texture, float bias = 1.0, float frameRate = 30.0 );
         
         void draw();
+        void draw( Rectf bounds );
         
         ForceMap getForceMap();
         

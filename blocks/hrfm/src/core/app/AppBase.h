@@ -47,7 +47,8 @@ namespace hrfm{ namespace app{
         AppBase(){
             ci::app::AppNative();
             hrfm::events::EventDispatcher();
-            ___font___ = Font("Helvetica",12);
+            this->_isDrawFPS = false;
+            this->___font___ = Font("Helvetica",12);
         }
         ~AppBase(){}
         
@@ -125,6 +126,8 @@ namespace hrfm{ namespace app{
         virtual void onTrigger( TriggerEvent * event );
         
     private:
+        
+        bool _isDrawFPS;
         
         FILE * LOG_FILE;
         Font ___font___;

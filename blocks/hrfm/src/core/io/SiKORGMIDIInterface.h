@@ -2,6 +2,7 @@
 
 #include "SiOscInput.h"
 #include "Singleton.h"
+#include "KORGMIDIInterfaceEvent.h"
 
 namespace hrfm { namespace io{
     
@@ -34,6 +35,26 @@ namespace hrfm { namespace io{
             for( int i = 0; i < event->message.getNumArgs(); i++ ){
                 nanoKontrolFader[i] = event->message.getArgAsInt32(i) / 128.0f;
             }
+        }
+        
+        void _onNanoPadOn( hrfm::events::OscInputEvent * event ){
+            int pad = event->message.getArgAsInt32(0);
+            if( pad % 2 == 0 ){
+                pad = ( pad - 36 ) / 2 + 8;
+            }else{
+                pad = ( pad - 37 ) / 2;
+            }
+            dispatchEvent( new hrfm::events::KORGMIDIInterfaceEvent( hrfm::events::KORGMIDIInterfaceEvent::PAD_ON, pad ) );
+        }
+        
+        void _onNanoPadOff( hrfm::events::OscInputEvent * event ){
+            int pad = event->message.getArgAsInt32(0);
+            if( pad % 2 == 0 ){
+                pad = ( pad - 36 ) / 2 + 8;
+            }else{
+                pad = ( pad - 37 ) / 2;
+            }
+            dispatchEvent( new hrfm::events::KORGMIDIInterfaceEvent( hrfm::events::KORGMIDIInterfaceEvent::PAD_OFF, pad ) );
         }
         
     };
