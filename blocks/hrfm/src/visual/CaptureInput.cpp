@@ -21,11 +21,11 @@ namespace hrfm{ namespace io{
     }
     
     void CaptureInput::update(){
-        //if( mCapture && mCapture->checkNewFrame() ){
+        if( mCapture->checkNewFrame() ){
             if( mFaceDetect ){
                 mFaceDetect->update( mCapture->getSurface().clone() );
             }
-        //}
+        }
     }
     
     Vec2i CaptureInput::getSize(){
