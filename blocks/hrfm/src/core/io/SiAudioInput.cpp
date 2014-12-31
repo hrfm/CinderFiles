@@ -61,8 +61,9 @@ namespace hrfm{ namespace io{
         
         _fftValues     = new float[_bandCount];
         _fftNormalized = new float[_bandCount];
+        _fftRanged     = new float[_bandCount/8];
         
-        auto monitorSpectralFormat = audio::MonitorSpectralNode::Format().windowSize( _bandCount * 2 );
+        auto monitorSpectralFormat = audio::MonitorSpectralNode::Format().windowSize( _bandCount * 8 );
         mMonitorSpectralNode = ctx->makeNode( new audio::MonitorSpectralNode( monitorSpectralFormat ) );
         try{
             mInputDeviceNode->connect( mMonitorSpectralNode );
@@ -122,6 +123,14 @@ namespace hrfm{ namespace io{
         return _fftNormalized;
     }
     
+    float SiAudioInput::getFFTRangedAt( int index ){
+        if( index < _bandCount / 8 ){
+            return _fftRanged[index];
+        }else{
+            return 0.0f;
+        }
+    }
+    
     void SiAudioInput::update( float decline ){
         
         float scale  = 10.0 * SiKORGMIDIInterface::getInstance().nanoKontrolFader[0];
@@ -162,14 +171,40 @@ namespace hrfm{ namespace io{
                 maxValue = max( maxValue, *spectrum * scale );
             }
             
+            if( 1.0 < maxValue ){
+                maxValue = 1.0;
+            }
+            
+            float tmp    = 0;
+            int idx      = 0;
+            int count    = 0;
+            int countMax = 8;
+            
             for( auto spectrum = mMagSpectrum.begin(); spectrum != mMagSpectrum.end(); ++spectrum ) {
+                
+                // --- fft の素の値を格納する.
                 
                 _fftValues[i] = max( _fftValues[i] * decline, *spectrum * scale );
                 if( _fftValues[i] != _fftValues[i] ){
                     _fftValues[i] = 0;
                 }
+                // --- fft の値を maxValue で割った値を格納する.
+                
                 _fftNormalized[i] = _fftValues[i] / maxValue;
                 
+                // --- fft の値を _bandCount / 16 ごとに分けて平均を格納する.
+                
+                if( tmp < _fftValues[i] ){
+                    tmp = _fftValues[i];
+                }
+                
+                if( ++count == countMax ){
+                   _fftRanged[idx++] = tmp;
+                    tmp   = 0.0f;
+                    count = 0;
+                }
+                
+                // ---
                 
                 if( _bandCount <= ++i ){
                     break;
@@ -207,14 +242,10 @@ namespace hrfm{ namespace io{
     // --- Draw method.
     
     void SiAudioInput::drawFFT( Rectf bounds ){
-        drawFFT( bounds, ColorA(1.0,1.0,1.0,1.0), ColorA(1.0,1.0,1.0,1.0), _bandCount );
+        drawFFT( bounds, _bandCount );
     }
     
-    void SiAudioInput::drawFFT( Rectf bounds, ColorA color0, ColorA color1 ){
-        drawFFT( bounds, color0, color1, _bandCount );
-    }
-    
-    void SiAudioInput::drawFFT( Rectf bounds, ColorA color0, ColorA color1, int length ){
+    void SiAudioInput::drawFFT( Rectf bounds, int length ){
         
         float width  = (bounds.x2 - bounds.x1) / ( length - 1 );
         float height = (bounds.y2 - bounds.y1);
@@ -222,61 +253,53 @@ namespace hrfm{ namespace io{
         glPushMatrix();
         glTranslatef( bounds.x1, bounds.y1, 0.0f );
         {
-            
-            //*
             for( int i = 0; i < (length-1); i++ ) {
                 float barY     = _fftValues[i] * height;
                 float nextBarY = _fftValues[i+1] * height;
-                gl::drawLine( Vec2f( i*width, height - barY ), Vec2f( (i+1)*width, height - nextBarY ) );
-                //gl::drawLine( Vec2f( i*width, height ), Vec2f( i*width, height - barY ) );
+                gl::drawLine( Vec2f( i*width, height-barY ), Vec2f( (i+1)*width, height - nextBarY ) );
             }
-            /*/
+        }
+        glPopMatrix();
+        
+    }
+    
+    void SiAudioInput::drawFFTRanged( Rectf bounds ){
+        
+        int   length = _bandCount / 8;
+        
+        float width  = (bounds.x2 - bounds.x1) / ( length - 1 );
+        float height = (bounds.y2 - bounds.y1);
+        
+        glPushMatrix();
+        glTranslatef( bounds.x1, bounds.y1, 0.0f );
+        {
             for( int i = 0; i < (length-1); i++ ) {
-                float barY = _fftValues[i] * height;
-                glBegin( GL_QUADS );
-                {
-                    gl::color( color0 );
-                    glVertex2f( i * width, height );
-                    glVertex2f( i * width + width, height );
-                    gl::color( color1 );
-                    glVertex2f( i * width + width, height - barY );
-                    glVertex2f( i * width, height - barY );
-                }
-                glEnd();
+                float barY = _fftRanged[i] * height;
+                gl::drawStrokedRect(
+                    Rectf( i*width, height-barY, (i+1)*width, height )
+                );
             }
-            //*/
         }
         glPopMatrix();
         
     }
     
     void SiAudioInput::drawWave( Rectf bounds ){
-        drawWave(bounds, Color(1.0,1.0,1.0) );
-    }
-    
-    void SiAudioInput::drawWave( Rectf bounds, Color color ){
         
-        float width  = bounds.getWidth() / (float)_bufferLength;
-        float height = bounds.getHeight();
+        float width  = bounds.getWidth()  / (float)_bufferLength;
+        float height = bounds.getHeight() / 2.0;
         
         PolyLine<Vec2f>	leftBufferLine;
-        //PolyLine<Vec2f>	rightBufferLine;
         
         glPushMatrix();
-        glTranslatef( bounds.x1, bounds.y1, 0.0f );
+        glTranslatef( bounds.x1, bounds.y1 + height, 0.0f );
         {
             for( int i = 0; i < _bufferLength; i++ ) {
-                float x = ( i * width );
-                float y = ( ( _channels[0][i] - 1 ) * - height / 2 );
-                leftBufferLine.push_back( Vec2f( x , y) );
-                /*
-                y = ( ( _channels[1][i] - 1 ) * - height / 2 );
-                rightBufferLine.push_back( Vec2f( x , y) );
-                */
+                float x = i * width;
+                float y = _channels[0][i] * height;
+                leftBufferLine.push_back( Vec2f( x , y ) );
             }
-            gl::color( color );
             gl::draw( leftBufferLine );
-            //gl::draw( rightBufferLine );
         }
         glPopMatrix();
         

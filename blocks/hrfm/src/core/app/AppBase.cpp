@@ -206,11 +206,26 @@ namespace hrfm { namespace app{
     }
     
     void AppBase::draw(){
+        
         ci::gl::clear();
         stage.draw();
-        if( _isDrawFPS ){
+        
+        if( _isDebugMode ){
+            
             drawFPS();
+            
+            if( useAudio ){
+                float w = getWindowWidth();
+                float h = getWindowHeight();
+                Rectf rect( w - 180, h - 70, w - 20, h - 20 );
+                ci::gl::color( ColorA( 1.0, 1.0, 1.0, 1.0 ) );
+                SiAudioInput::getInstance().drawWave( rect );
+                SiAudioInput::getInstance().drawFFT( rect );
+                SiAudioInput::getInstance().drawFFTRanged( rect );
+            }
+            
         }
+        
     }
     
     void AppBase::drawFPS( Vec2f position ){
@@ -229,7 +244,7 @@ namespace hrfm { namespace app{
             ci::app::setFullScreen( ! ci::app::isFullScreen() );
         }
         if( event.isControlDown() && event.getChar() == 'd' ){
-            _isDrawFPS = !_isDrawFPS;
+            _isDebugMode = !_isDebugMode;
         }
     }
     

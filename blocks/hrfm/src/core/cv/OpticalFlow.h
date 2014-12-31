@@ -28,6 +28,7 @@ namespace hrfm{ namespace cv{
         void draw( Rectf bounds );
         
         ForceMap getForceMap();
+        ForceMap * getForceMapPtr();
         
         ci::gl::Texture getTexture();
         Vec2i getSize();

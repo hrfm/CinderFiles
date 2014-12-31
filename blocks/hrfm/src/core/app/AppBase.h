@@ -47,8 +47,8 @@ namespace hrfm{ namespace app{
         AppBase(){
             ci::app::AppNative();
             hrfm::events::EventDispatcher();
-            this->_isDrawFPS = false;
-            this->___font___ = Font("Helvetica",12);
+            this->_isDebugMode = false;
+            this->___font___   = Font("Helvetica",12);
         }
         ~AppBase(){}
         
@@ -127,7 +127,7 @@ namespace hrfm{ namespace app{
         
     private:
         
-        bool _isDrawFPS;
+        bool _isDebugMode;
         
         FILE * LOG_FILE;
         Font ___font___;

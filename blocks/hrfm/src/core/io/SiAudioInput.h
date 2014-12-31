@@ -33,8 +33,12 @@ namespace hrfm{ namespace io{
         
         size_t numChannels();
         const float * getChannelAt( size_t ch );
+        
         float * getFFT();
         float * getFFTNormalized();
+        
+        float getFFTRangedAt( int index );
+        
         float getAudioManagerGain();
         float getAudioManagerFFTAverage();
         
@@ -43,11 +47,11 @@ namespace hrfm{ namespace io{
         // --- draw method.
         
         void drawFFT( Rectf bounds );
-        void drawFFT( Rectf bounds, ColorA color0, ColorA color1 );
-        void drawFFT( Rectf bounds, ColorA color0, ColorA color1, int length );
+        void drawFFT( Rectf bounds, int length );
+        
+        void drawFFTRanged( Rectf bounds );
         
         void drawWave( Rectf bounds );
-        void drawWave( Rectf bounds, Color color );
         
     private:
         
@@ -70,8 +74,9 @@ namespace hrfm{ namespace io{
         uint16_t _bufferLength;
         size_t   _numChannels;
         
-        float *  _fftValues;
-        float *  _fftNormalized;
+        float * _fftValues;
+        float * _fftNormalized;
+        float * _fftRanged;
         
         map<size_t,const float*> _channels;
         

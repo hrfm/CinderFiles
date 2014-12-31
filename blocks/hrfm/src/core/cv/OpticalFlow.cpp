@@ -142,6 +142,10 @@ namespace hrfm{ namespace cv{
         return mForceMap;
     }
     
+    ForceMap * OpticalFlow::getForceMapPtr(){
+        return &mForceMap;
+    }
+    
     gl::Texture OpticalFlow::getTexture(){
         return mOpticalFlowFBO.getTexture();
     }
