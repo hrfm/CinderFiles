@@ -12,16 +12,14 @@ namespace hrfm{ namespace signage{ namespace display{
     
     ScheduledContents::ScheduledContents(){
         DisplayNode();
-        _isPlaying = false;
     }
+    
     ScheduledContents::ScheduledContents( XmlTree &xml ){
         ScheduledContents();
         init(xml);
     }
     
-    ScheduledContents::~ScheduledContents(){
-        
-    }
+    ScheduledContents::~ScheduledContents(){}
     
     void ScheduledContents::init( XmlTree &xml ){
         
@@ -37,6 +35,8 @@ namespace hrfm{ namespace signage{ namespace display{
             XmlTree list = settings.getChild("list");
             
             cout << "--------------------------------" << endl;
+            
+            // --- Create schedule from xml.
             
             for( XmlTree::Iter item = list.begin(); item != list.end(); ++item ){
                 
@@ -74,6 +74,8 @@ namespace hrfm{ namespace signage{ namespace display{
                         MovieTexture * mov = new MovieTexture(path);
                         if( item->hasAttribute("loop") && item->getAttribute("loop").getValue<string>() == "true" ){
                             mov->getMovieGlRef()->setLoop();
+                        }else{
+                            mov->addEventListener(hrfm::events::Event::COMPLETE, this, &ScheduledContents::_onMovieComplete );
                         }
                         
                         _contentList[time] = mov;
@@ -153,6 +155,10 @@ namespace hrfm{ namespace signage{ namespace display{
     
     int ScheduledContents::numSchedule(){
         return _contentList.size();
+    }
+    
+    bool ScheduledContents::isPlaying(){
+        return _isPlaying;
     }
     
     void ScheduledContents::play( string type ){
@@ -247,10 +253,6 @@ namespace hrfm{ namespace signage{ namespace display{
         
     }
     
-    bool ScheduledContents::isPlaying(){
-        return _isPlaying;
-    }
-    
     //! protected:
     
     void ScheduledContents::_update(){
@@ -262,11 +264,18 @@ namespace hrfm{ namespace signage{ namespace display{
     void ScheduledContents::_draw(){}
     
     void ScheduledContents::_onTimer( TimeUtilEvent * event ){
-        
         cout << "SequantialContents::_onTimer("+event->type()+")" << endl;
-        
         play(event->type());
-        
+    }
+    
+    /**
+     * If movie loop setting is false.
+     * Remove content from DisplayNode.
+     */
+    void ScheduledContents::_onMovieComplete( hrfm::events::Event * event ){
+        if( _currentContent && _currentContent->getParent() == this ){
+            removeChild(_currentContent);
+        }
     }
     
 }}}

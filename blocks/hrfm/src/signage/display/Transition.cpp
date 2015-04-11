@@ -55,6 +55,11 @@ namespace hrfm{ namespace signage{ namespace display{
     }
     
     void Transition::start( float time ){
+        if( 10.0 < time ){
+            time = 10.0;
+        }else if( time < 0 ){
+            time = 0;
+        }
         cout << "Transition::start(" << time << ")" << endl;
         _time      = time;
         _startedAt = ci::app::getElapsedSeconds();

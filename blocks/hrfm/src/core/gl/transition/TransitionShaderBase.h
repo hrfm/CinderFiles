@@ -22,7 +22,6 @@ namespace hrfm { namespace gl{
     public:
         
         TransitionShaderBase(){
-            mInterval = 1.0f;
             setSize( 640, 480 );
         };
         
@@ -116,7 +115,8 @@ namespace hrfm { namespace gl{
         
     protected:
         
-        float mInterval;
+        float mInterval = 1.0f;
+        
         ci::gl::GlslProg mShader;
         Vec2f mSize;
         Vec2i mAspect;

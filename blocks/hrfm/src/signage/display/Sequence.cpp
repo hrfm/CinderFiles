@@ -13,11 +13,11 @@ namespace hrfm{ namespace signage{ namespace display{
         _trigger = "";
     }
     
-    Sequence::Sequence( hrfm::display::DisplayNode * content, float time ){
+    Sequence::Sequence( hrfm::display::DisplayNode * content, float duration ){
         Sequence();
-        _content = content;
-        _time    = time;
-        if( _time <= 0.0f ){
+        _content  = content;
+        _duration = duration;
+        if( _duration <= 0.0f ){
             if( EventDispatcher * dispatcher = dynamic_cast<EventDispatcher*>(content) ){
                 dispatcher->addEventListener( hrfm::events::Event::COMPLETE, this, &Sequence::_onContentComplete );
             }else{
@@ -26,9 +26,7 @@ namespace hrfm{ namespace signage{ namespace display{
         }
     }
     
-    Sequence::~Sequence(){
-        
-    }
+    Sequence::~Sequence(){}
     
     void Sequence::setTrigger( string trigger ){
         _trigger = trigger;
@@ -66,9 +64,9 @@ namespace hrfm{ namespace signage{ namespace display{
     }
     
     void Sequence::update(){
-        if( 0.0f < _time ){
+        if( 0.0f < _duration ){
             float elapsed = ci::app::getElapsedSeconds() - _startedAt;
-            if( _time < elapsed ){
+            if( _duration < elapsed ){
                 dispatchEvent( new hrfm::events::Event( hrfm::events::Event::COMPLETE ) );
             }
         }

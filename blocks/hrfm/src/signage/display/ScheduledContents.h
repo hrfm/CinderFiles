@@ -35,11 +35,11 @@ namespace hrfm{ namespace signage{ namespace display{
         
         int numSchedule();
         
+        bool isPlaying();
+        
         void play( string type );
         
         void playRecentContent();
-        
-        bool isPlaying();
         
     protected:
         
@@ -48,7 +48,9 @@ namespace hrfm{ namespace signage{ namespace display{
         
         void _onTimer( hrfm::events::TimeUtilEvent * event );
         
-        bool _isPlaying;
+        bool _isPlaying = false;
+        
+        void _onMovieComplete( hrfm::events::Event * event );
         
     private:
         

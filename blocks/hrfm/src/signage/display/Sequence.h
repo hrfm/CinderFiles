@@ -11,32 +11,54 @@
 
 namespace hrfm{ namespace signage{ namespace display{
     
+    /*
+     
+     Sequence of ScheduledContents or SequentialContents.
+     
+     */
     class Sequence : public hrfm::events::EventDispatcher{
         
     public:
         
         Sequence();
-        Sequence( hrfm::display::DisplayNode * content, float time );
+        Sequence( hrfm::display::DisplayNode * content, float duration );
         ~Sequence();
         
+        void setSize( float width, float height );
+        
+        /**
+         * Set trigger when triggered on play.
+         * @param trigger
+         */
         void setTrigger( string trigger );
         
+        /**
+         * Get reference of contents.
+         * @return hrfm::display::DisplayNode
+         */
         hrfm::display::DisplayNode * getContentRef();
         
+        /**
+         * Play this sequence
+         */
         void play();
+        
+        /**
+         * Stop (Pause) this sequence.
+         */
         void stop();
         
         void update();
-        
-        void setSize( float width, float height );
         
     protected:
         
         void _onContentComplete( hrfm::events::Event * event );
         
-        float _time;
-        float _startedAt;
         hrfm::display::DisplayNode * _content;
+        
+        float  _duration;
+        float  _startedAt;
+        
         string _trigger;
         
     };
