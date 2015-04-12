@@ -18,6 +18,7 @@ namespace hrfm{ namespace utils{
     public:
         
         static ci::Rectf letterBox( ci::Rectf content, ci::Rectf box );
+        static ci::Rectf fullOf( ci::Rectf content, ci::Rectf box );
         
     private:
         

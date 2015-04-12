@@ -2,6 +2,7 @@
 
 #include "AnalogNoiseFilter.h"
 #include "BlurFilter.h"
+#include "CircleMaskFilter.h"
 #include "ColorNoiseFilter.h"
 #include "DigitalNoiseFilter.h"
 #include "EdgeFilter.h"
