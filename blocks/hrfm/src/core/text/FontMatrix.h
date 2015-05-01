@@ -5,6 +5,7 @@
 #include "DisplayNode.h"
 #include "FontManager.h"
 #include "FilterHeaders.h"
+#include "ExFbo.h"
 
 using namespace ci;
 using namespace ci::gl;
@@ -26,10 +27,8 @@ namespace hrfm{ namespace text{
         int   numMatrixCols();
         int   numMatrixRows();
         Vec2i getMatrixSize();
-        
         Vec2i getFboSize();
         Rectf getFboBounds();
-        
         ci::gl::Texture getTexture();
         ci::gl::Texture getFadeTexture();
         
@@ -37,13 +36,12 @@ namespace hrfm{ namespace text{
         
         //! setText で指定した内容を引数で指定した行数ずつ表示します.
         void scroll( int numScroll = 1 );
-        
         //! Matrix のすべての文字をランダムに書き換えます.
         void shuffle();
         
         void update( int numUpdateFont, bool random );
         void update( int numUpdateFont, bool random, int maxCols );
-    
+        
     protected:
         
         virtual void _update();
@@ -60,20 +58,13 @@ namespace hrfm{ namespace text{
         int   _currentCol;
         int   _currentRow;
         
-        ci::gl::Fbo _fbo;
-        
         vector<string> _randomTextList;
         
         FontManager myFontManager;
         
-        
-        
-        ci::gl::Fbo myFboTmp;
-        ci::gl::Fbo myFadeFboTmp;
-        
-        ScrollFilter myFbo;
-        ScrollFilter myFadeFbo;
-        
+        hrfm::gl::ExFbo * fbo;
+        hrfm::gl::ExFbo * fadeFbo;
+        ScrollFilter scrollFilter;
         float mySlideY;
         
     };

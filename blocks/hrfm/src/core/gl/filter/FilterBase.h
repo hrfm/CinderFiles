@@ -28,6 +28,8 @@ namespace hrfm { namespace gl{
         // どのシェーダを使うかはクラスに任せます.
         void setup( Vec2i size ){
             
+            cout << size << endl;
+            
             // Calcurate Aspect Ratio.
             mAspect = getAspectRatio( size );
             
@@ -37,6 +39,22 @@ namespace hrfm { namespace gl{
             // Create Shader.
             mShader = ShaderFactory::create( getVertexShader(), getFragmentShader() );
             
+        }
+        
+        virtual void affect( ci::gl::Texture * tex, Vec2f windowSize, Vec2f resolution, Rectf drawRect ){
+            mShader.bind();
+            {
+                tex->bind(0);
+                mShader.uniform( "tex"       , 0 );
+                mShader.uniform( "time"      , (float)getElapsedSeconds() );
+                mShader.uniform( "windowSize", windowSize );
+                mShader.uniform( "resolution", resolution );
+                prepare();
+                ci::gl::drawSolidRect( drawRect );
+                clear();
+                tex->unbind();
+            }
+            mShader.unbind();
         }
         
         virtual ci::gl::Texture affect( ci::gl::Texture tex ){
@@ -50,27 +68,12 @@ namespace hrfm { namespace gl{
             {
                 ci::gl::pushMatrices();
                 {
-                    //*
                     ci::gl::setViewport( mFbo.getBounds() );
                     ci::gl::setMatricesWindow( mAspect, false );
-                    /*/
-                    ci::gl::setViewport( mFbo.getBounds() );
-                    ci::gl::setMatricesWindow( mFbo.getWidth(), mFbo.getHeight(), false );
-                    //*/
-                    ci::gl::clear( ColorA(0.0,0.0,0.0,0.0) );
-                    mShader.bind();
-                    {
-                        tex.bind(0);
-                        mShader.uniform( "tex"       , 0 );
-                        mShader.uniform( "time"      , (float)getElapsedSeconds() );
-                        mShader.uniform( "windowSize", windowSize );
-                        mShader.uniform( "resolution", resolution );
-                        prepare();
-                        ci::gl::drawSolidRect( Rectf( 0, 0, mAspect.x, mAspect.y ) );
-                        clear();
-                        tex.unbind();
-                    }
-                    mShader.unbind();
+                    //--
+                    //ci::gl::setViewport( mFbo.getBounds() );
+                    //ci::gl::setMatricesWindow( mFbo.getWidth(), mFbo.getHeight(), false );
+                    affect( &tex, windowSize, resolution, Rectf( 0, 0, mAspect.x, mAspect.y ) );
                 }
                 ci::gl::popMatrices();
             }
@@ -126,12 +129,11 @@ namespace hrfm { namespace gl{
         // clear shader, texture, and more. after drawSolidRect to FrameBuffer.
         virtual void clear(){}
         
-        ci::gl::Fbo mFbo;
         ci::gl::GlslProg mShader;
-        
+        float mCycle;
         Vec2i mAspect;
         
-        float mCycle;
+        ci::gl::Fbo mFbo;
         
     private:
         

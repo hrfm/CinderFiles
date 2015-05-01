@@ -60,12 +60,9 @@ namespace hrfm{ namespace text{
         
         // --- Create FBO.
         
-        ci::gl::Fbo::Format format;
-        _fbo = ci::gl::Fbo( _fboSize.x, _fboSize.y, format );
-        myFadeFboTmp = ci::gl::Fbo( _fboSize.x, _fboSize.y, format );
-        
-        myFbo.setup( _fboSize );
-        myFadeFbo.setup( _fboSize );
+        fbo     = new hrfm::gl::ExFbo(_fboSize.x, _fboSize.y);
+        fadeFbo = new hrfm::gl::ExFbo(_fboSize.x, _fboSize.y);
+        scrollFilter.setup( _fboSize );
         
     }
     
@@ -82,11 +79,11 @@ namespace hrfm{ namespace text{
     }
     
     Vec2i FontMatrix::getFboSize(){
-        return _fbo.getSize();
+        return fbo->getSize();
     }
     
     Rectf FontMatrix::getFboBounds(){
-        return _fbo.getBounds();
+        return fbo->getBounds();
     }
     
     void FontMatrix::setText( string text ){
@@ -95,11 +92,11 @@ namespace hrfm{ namespace text{
     }
     
     Texture FontMatrix::getTexture(){
-        return myFbo.getTexture();
+        return fbo->getTexture();
     }
     
     Texture FontMatrix::getFadeTexture(){
-        return myFadeFbo.getTexture();
+        return fadeFbo->getTexture();
     }
     
     void FontMatrix::scroll( int numScroll ){
@@ -112,113 +109,70 @@ namespace hrfm{ namespace text{
         int col = _currentCol;
         int row = _currentRow;
         
-        Rectf fboBounds = getFboBounds();
-        Area viewport   = ci::gl::getViewport();
+        // -----
+        
+        scrollFilter.setUniform( 0, (float)numScroll / (float)_mtxSize.y );
         
         // -----
         
-        _fbo.bindFramebuffer();
-        {
-            ci::gl::pushMatrices();
-            ci::gl::setViewport( (Area)fboBounds );
-            ci::gl::setMatricesWindow( _fboSize, false );
-            {
-                // draw font.
-                for( line = 0; line < numScroll; line++ ){
-                    loop   = true;
-                    text   = "";
-                    filled.push_back( col );
-                    y = row * _fontSize;
-                    while( loop ){
-                        text += myFontManager.setGlyphByNextText();
-                        if( _fboSize.x <= ++col * (_fontSize*0.7) || myFontManager.isLineHead() ){
-                            col = 0;
-                            if( _mtxSize.y < ++row ){
-                                row = 0;
-                            }
-                            loop = false;
-                        }
+        fbo->beginOffscreen()->applyFilter(&scrollFilter);
+        // draw font.
+        for( line = 0; line < numScroll; line++ ){
+            loop   = true;
+            text   = "";
+            y = ( _mtxSize.y - numScroll + line ) * _fontSize;
+            filled.push_back( y );
+            while( loop ){
+                text += myFontManager.setGlyphByNextText();
+                if( _fboSize.x <= ++col * (_fontSize*0.7) || myFontManager.isLineHead() ){
+                    col = 0;
+                    if( _mtxSize.y < ++row ){
+                        row = 0;
                     }
-                    myFontManager.draw( text, Rectf( 0, y, _fboSize.x, y+_fontSize ), 1.0, 1.0, 1.0 );
+                    loop = false;
                 }
             }
-            ci::gl::popMatrices();
+            myFontManager.draw( text, Rectf( 0, y, _fboSize.x, y+_fontSize ), 1.0, 1.0, 1.0 );
         }
-        _fbo.unbindFramebuffer();
-        
-        mySlideY = (float)row / (float)_mtxSize.y;
-        
-        myFadeFboTmp.bindFramebuffer();
-        {
-            ci::gl::pushMatrices();
-            ci::gl::setViewport( (Area)fboBounds );
-            ci::gl::setMatricesWindow( _fboSize, false );
-            {
-                // draw
-                ci::gl::color(0.0f,0.0f,0.0f,0.08f);
-                ci::gl::drawSolidRect(fboBounds);
-                ci::gl::color( 1.0, 1.0, 1.0, 1.0 );
-                vector<int>::iterator it = filled.begin();
-                while( it != filled.end() ){
-                    float y = (*it) * _fontSize;
-                    ci::gl::drawSolidRect( Rectf( 0, y, _fboSize.x, y+_fontSize ) );
-                    it++;
-                }
-            }
-            ci::gl::popMatrices();
-        }
-        myFadeFboTmp.unbindFramebuffer();
-        
-        ci::gl::setViewport( viewport );
-        
-        // --- update properties.
-        
         _currentCol = col;
         _currentRow = row;
+        fbo->endOffscreen();
         
-        myFbo.setUniform( 0, mySlideY );
-        myFbo.affect( _fbo.getTexture() );
+        // -----
         
-        myFadeFbo.setUniform(0, mySlideY );
-        myFadeFbo.affect( myFadeFboTmp.getTexture() );
+        fadeFbo->beginOffscreen()->applyFilter( &scrollFilter );
+        // draw
+        ci::gl::color(0.0f,0.0f,0.0f,0.08f);
+        ci::gl::drawSolidRect(getFboBounds());
+        ci::gl::color( 1.0, 1.0, 1.0, 1.0 );
+        vector<int>::iterator it = filled.begin();
+        while( it != filled.end() ){
+            float y = (*it);
+            ci::gl::drawSolidRect( Rectf( 0, y, _fboSize.x, y+_fontSize ) );
+            it++;
+        }
+        fadeFbo->endOffscreen();
         
     }
     
     void FontMatrix::shuffle(){
         
-        Rectf fboBounds = getFboBounds();
-        Area viewport   = ci::gl::getViewport();
-        
-        // -----
-        
         std::random_device rnd;
         std::mt19937 mt(rnd());
         std::uniform_int_distribution<int> rndm(0,99);
         
-        _fbo.bindFramebuffer();
+        fbo->beginOffscreen();
         {
-            ci::gl::pushMatrices();
-            ci::gl::setViewport( (Area)fboBounds );
-            ci::gl::setMatricesWindow( _fboSize.x, _fboSize.y, false );
-            {
-                // draw font.
-                for( int line = 0; line < _mtxSize.y; line++ ){
-                    int y = line * _fontSize;
-                    myFontManager.draw( _randomTextList.at( rndm(mt) ), Rectf( 0, y, _fboSize.x, y+_fontSize ), 1.0, 1.0, 1.0 );
-                }
+            // draw font.
+            for( int line = 0; line < _mtxSize.y; line++ ){
+                int y = line * _fontSize;
+                myFontManager.draw( _randomTextList.at( rndm(mt) ), Rectf( 0, y, _fboSize.x, y+_fontSize ), 1.0, 1.0, 1.0 );
             }
-            ci::gl::popMatrices();
+            _currentCol = 0;
+            _currentRow = 0;
+            mySlideY    = 0;
         }
-        _fbo.unbindFramebuffer();
-        
-        ci::gl::setViewport(viewport);
-        
-        _currentCol = 0;
-        _currentRow = 0;
-        mySlideY    = 0;
-        
-        myFbo.setUniform( 0, mySlideY );
-        myFbo.affect( _fbo.getTexture() );
+        fbo->endOffscreen();
         
     }
     
@@ -234,6 +188,7 @@ namespace hrfm{ namespace text{
     }
     
     void FontMatrix::update( int numUpdateRow, bool random, int maxCols ){
+        
         if( random == false ){
             
             scroll( numUpdateRow );
@@ -243,80 +198,53 @@ namespace hrfm{ namespace text{
             int currentCol = _currentCol;
             int currentRow = _currentRow;
             
-            Area viewport  = ci::gl::getViewport();
-            Rectf bounds   = getFboBounds();
-            
             float x;
             float y;
             bool  loop;
             string text;
             vector<int> filled;
             
-            _fbo.bindFramebuffer();
+            fbo->beginOffscreen();
             {
-                ci::gl::pushMatrices();
-                ci::gl::setViewport( (Area)bounds );
-                ci::gl::setMatricesWindow( _fboSize.x, _fboSize.y, false );
-                {
-                    // draw font.
-                    for( int line = 0; line < numUpdateRow; line++ ){
-                        loop = true;
-                        filled.push_back( currentCol );
-                        while( loop ){
-                            myFontManager.setRandomGlyph();
-                            x = currentCol * _fontSize;
-                            y = currentRow * _fontSize;
-                            myFontManager.draw( Rectf(x,y,x+_fontSize,y+_fontSize), 1.0, 1.0, 1.0 );
-                            if( _mtxSize.y < ++currentRow ){
-                                currentRow = 0;
-                                if( _mtxSize.x <= ++currentCol ){
-                                    currentCol = 0;
-                                }
-                                loop = false;
+                // draw font.
+                for( int line = 0; line < numUpdateRow; line++ ){
+                    loop = true;
+                    filled.push_back( currentCol );
+                    while( loop ){
+                        myFontManager.setRandomGlyph();
+                        x = currentCol * _fontSize;
+                        y = currentRow * _fontSize;
+                        myFontManager.draw( Rectf(x,y,x+_fontSize,y+_fontSize), 1.0, 1.0, 1.0 );
+                        if( _mtxSize.y < ++currentRow ){
+                            currentRow = 0;
+                            if( _mtxSize.x <= ++currentCol ){
+                                currentCol = 0;
                             }
+                            loop = false;
                         }
                     }
                 }
-                ci::gl::popMatrices();
+                _currentCol = currentCol;
+                _currentRow = currentRow;
             }
-            _fbo.unbindFramebuffer();
+            fbo->endOffscreen();
             
-            myFadeFboTmp.bindFramebuffer();
+            fadeFbo->beginOffscreen();
             {
-                ci::gl::pushMatrices();
-                ci::gl::setViewport( (Area)bounds );
-                ci::gl::setMatricesWindow( _fboSize.x, _fboSize.y, false );
-                {
-                    ci::gl::color(0.0f,0.0f,0.0f,0.02f);
-                    ci::gl::drawSolidRect(bounds);
-                    ci::gl::color( 1.0, 1.0, 1.0, 1.0 );
-                    vector<int>::iterator it = filled.begin();
-                    while( it != filled.end() ){
-                        float x = (*it) * _fontSize;
-                        ci::gl::drawSolidRect( Rectf( x, 0, x+_fontSize, getWindowHeight() ) );
-                        it++;
-                    }
+                ci::gl::color(0.0f,0.0f,0.0f,0.02f);
+                ci::gl::drawSolidRect(getFboBounds());
+                ci::gl::color( 1.0, 1.0, 1.0, 1.0 );
+                vector<int>::iterator it = filled.begin();
+                while( it != filled.end() ){
+                    float x = (*it) * _fontSize;
+                    ci::gl::drawSolidRect( Rectf( x, 0, x+_fontSize, getWindowHeight() ) );
+                    it++;
                 }
-                ci::gl::popMatrices();
             }
-            myFadeFboTmp.unbindFramebuffer();
-            
-            // --- 更新.
-            
-            _currentCol = currentCol;
-            _currentRow = currentRow;
-            
-            myFbo.setUniform( 0, mySlideY );
-            myFbo.affect( _fbo.getTexture() );
-            
-            myFadeFbo.setUniform(0, mySlideY );
-            myFadeFbo.affect( myFadeFboTmp.getTexture() );
-            
-            //*/
-            
-            ci::gl::setViewport(viewport);
+            fadeFbo->endOffscreen();
             
         }
+        
     }
     
     //! protected;
@@ -331,7 +259,7 @@ namespace hrfm{ namespace text{
     
     void FontMatrix::_draw(){
         ci::gl::enableAdditiveBlending();
-        ci::gl::draw( myFbo.getTexture(), getDrawBounds() );
+        ci::gl::draw( fbo->getTexture(), getDrawBounds() );
         ci::gl::disableAlphaBlending();
     }
     

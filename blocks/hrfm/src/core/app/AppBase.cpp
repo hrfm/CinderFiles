@@ -202,6 +202,11 @@ namespace hrfm { namespace app{
     }
     
     void AppBase::updateStage(){
+        vector<DisplayNode*>::iterator it;
+        vector<DisplayNode*>::iterator end = stage.children.end();
+        for( it=stage.children.begin(); it!=end; ++it ){
+            (*it)->setSize( getWindowWidth(), getWindowHeight() );
+        }
         stage.update();
     }
     
