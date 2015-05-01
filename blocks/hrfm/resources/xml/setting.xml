@@ -14,8 +14,8 @@
     
     <prepare
         frameRate     = "120"
-        windowWidth   = "1920"
-        windowHeight  = "1080"
+        windowWidth   = "3840"
+        windowHeight  = "720"
     />
     
     <!-- setup Settings. -->

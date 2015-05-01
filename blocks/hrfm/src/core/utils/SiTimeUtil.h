@@ -8,7 +8,6 @@
 
 #include "cinder/app/AppBasic.h"
 #include "Singleton.h"
-#include "Timer.h"
 #include "TimeUtilEvent.h"
 #include "TimerEvent.h"
 

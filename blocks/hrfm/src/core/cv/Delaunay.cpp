@@ -54,19 +54,19 @@ namespace hrfm{ namespace cv{
         _subDiv2D.getTriangleList( _triangles );
     };
     
-    void Delaunay::draw(){
-        _draw( 1.0, 1.0 );
+    void Delaunay::draw( float threshold, GLint type ){
+        _draw( 1.0, 1.0, threshold, type );
     }
     
-    void Delaunay::draw( Vec2i size ){
-        _draw( (float)size.x / (float)_size.x, (float)size.y / (float)_size.y );
+    void Delaunay::draw( Vec2i size, float threshold, GLint type ){
+        _draw( (float)size.x / (float)_size.x, (float)size.y / (float)_size.y, threshold, type );
     }
     
     //! private:
     
-    void Delaunay::_draw( float scaleX, float scaleY, float threshold ){
+    void Delaunay::_draw( float scaleX, float scaleY, float threshold, GLint type ){
         
-        glBegin(GL_TRIANGLES);
+        glBegin(type);
         
         for( auto it = _triangles.begin(), end=_triangles.end(); it != end; ++it )
         {
@@ -104,9 +104,18 @@ namespace hrfm{ namespace cv{
             int R = color[2];
             
             ci::gl::color( ci::Color( R / 255.0, G / 255.0, B / 255.0 ) );
-            ci::gl::vertex( p1 );
-            ci::gl::vertex( p2 );
-            ci::gl::vertex( p3 );
+            if( type == GL_LINES ){
+                ci::gl::vertex( p1 );
+                ci::gl::vertex( p2 );
+                ci::gl::vertex( p2 );
+                ci::gl::vertex( p3 );
+                ci::gl::vertex( p3 );
+                ci::gl::vertex( p1 );
+            }else{
+                ci::gl::vertex( p1 );
+                ci::gl::vertex( p2 );
+                ci::gl::vertex( p3 );
+            }
             
         }
         

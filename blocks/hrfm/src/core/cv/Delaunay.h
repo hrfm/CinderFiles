@@ -28,12 +28,12 @@ namespace hrfm{ namespace cv{
         
         void update();
         
-        void draw();
-        void draw( Vec2i size );
+        void draw( float threshold = 0.0, GLint type = GL_TRIANGLES );
+        void draw( Vec2i size, float threshold = 0.0, GLint type = GL_TRIANGLES );
         
     private:
         
-        void _draw( float scaleX = 1.0, float scaleY = 1.0, float threshold = 0.0 );
+        void _draw( float scaleX = 1.0, float scaleY = 1.0, float threshold = 0.0, GLint type = GL_TRIANGLES );
         
         pthread_mutex_t _mutex;
         std::thread mThread;
