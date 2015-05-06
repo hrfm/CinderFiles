@@ -19,6 +19,7 @@
 #include "OscEvent.h"
 #include "TimeUtilEvent.h"
 #include "TriggerEvent.h"
+#include "VolumeDetectorEvent.h"
 
 // --- hrfm::gl
 

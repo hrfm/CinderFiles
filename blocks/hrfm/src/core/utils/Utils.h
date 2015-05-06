@@ -4,6 +4,7 @@
 #include "SiFontUtil.h"
 #include "SiTextureMap.h"
 #include "SiTimeUtil.h"
+#include "SiVolumeDetector.h"
 #include "XmlLoader.h"
 
 namespace hrfm{ namespace utils{
