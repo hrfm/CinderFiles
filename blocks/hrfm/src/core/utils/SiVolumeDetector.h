@@ -20,11 +20,17 @@ namespace hrfm{ namespace utils{
         
     public:
         
+        void init( vector<string> * ignoreVolumeList = new vector<string>() );
+        
         /**
          * /Volumes にディスクが新たにマウントされていないかを調べます.
          */
         void check( int throttle = 3 );
+        
+        bool isDetected();
+        
         string getPath();
+        
         void unmount();
         
     private:
@@ -36,6 +42,7 @@ namespace hrfm{ namespace utils{
             _path = "";
         }
         
+        vector<string> * _ignoreVolumeList = NULL;
         string _path;
         unsigned long int _tick = 0;
         

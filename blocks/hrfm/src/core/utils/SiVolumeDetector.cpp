@@ -6,13 +6,22 @@ using namespace hrfm::events;
 namespace hrfm{ namespace utils{
     
     // ======================================================================
-    // SiTimeUtil class.
+    // SiVolumeDetector class.
+    
+    void SiVolumeDetector::init( vector<string> * ignoreVolumeList ){
+        _ignoreVolumeList = ignoreVolumeList;
+        if( _ignoreVolumeList->size() == 0 ){
+            _ignoreVolumeList->push_back("Macintosh HD");
+        }
+    }
     
     void SiVolumeDetector::check( int throttle ){
         
         unsigned long int now = time(NULL);
         
-        // TODO やり方がダサいので直したい
+        if( _ignoreVolumeList == NULL ){
+            init();
+        }
         
         if( throttle < now - _tick ){
             
@@ -24,7 +33,9 @@ namespace hrfm{ namespace utils{
                     for (boost::filesystem::directory_iterator p(dir); p != endItr; ++p) {
                         if (boost::filesystem::is_directory(*p)) {  //ディレクトリの時
                             string filename = p->path().filename().string();
-                            if( filename != "Macintosh HD" ){
+                            // ignoreVolumeListに入っているかを調べる.
+                            auto itr = std::find(_ignoreVolumeList->begin(),_ignoreVolumeList->end(),filename);
+                            if( itr == _ignoreVolumeList->end() ){
                                 volume = p->path().string();
                                 break;
                             }
@@ -48,6 +59,10 @@ namespace hrfm{ namespace utils{
             
         }
         
+    }
+    
+    bool SiVolumeDetector::isDetected(){
+        return _path != "";
     }
     
     string SiVolumeDetector::getPath(){
