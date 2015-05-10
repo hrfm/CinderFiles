@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SiDisplayUtil.h"
+#include "DisplayUtil.h"
 #include "SiFontUtil.h"
 #include "SiTextureMap.h"
 #include "SiTimeUtil.h"
