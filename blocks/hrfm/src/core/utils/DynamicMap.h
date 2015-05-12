@@ -1,7 +1,7 @@
 #pragma once
 
 #include <map>
-#include "cinder/app/AppNative.h"
+#include <string>
 
 using namespace std;
 

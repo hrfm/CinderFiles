@@ -44,13 +44,20 @@ namespace hrfm{ namespace gl{
         return this;
     }
     
+    ExFbo * ExFbo::applyFilter( FilterBase * filter ){
+        beginOffscreen();
+        filter->affect( getTexturePtr(), getSize(), getSize(), getBounds() );
+        return this;
+    }
+    
+    ExFbo * ExFbo::applyFilter( FilterBase * filter, ci::gl::Texture & srcTexture ){
+        beginOffscreen();
+        filter->affect( &srcTexture, getSize(), getSize(), getBounds() );
+        return this;
+    }
     ExFbo * ExFbo::applyFilter( FilterBase * filter, ci::gl::Texture * srcTexture ){
         beginOffscreen();
-        if( srcTexture == NULL ){
-            filter->affect( getTexturePtr(), getSize(), getSize(), getBounds() );
-        }else{
-            filter->affect( srcTexture, getSize(), getSize(), getBounds() );
-        }
+        filter->affect( srcTexture, getSize(), getSize(), getBounds() );
         return this;
     }
     

@@ -15,7 +15,7 @@ namespace hrfm{ namespace display{
         ~Stage(){};
         virtual DisplayNode * addChild( DisplayNode * child );
         virtual void draw();
-        ci::gl::Texture getTexture();
+        ci::gl::Texture & getTexture();
     private:
         ci::gl::Fbo _fbo;
         void _onResize( hrfm::events::Event * event );

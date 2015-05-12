@@ -44,7 +44,7 @@ namespace hrfm{ namespace display{
         
     }
     
-    ci::gl::Texture Stage::getTexture(){
+    ci::gl::Texture & Stage::getTexture(){
         return _fbo.getTexture();
     }
     

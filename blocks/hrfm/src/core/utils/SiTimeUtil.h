@@ -6,7 +6,6 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/date_time/c_local_time_adjustor.hpp>
 
-#include "cinder/app/AppBasic.h"
 #include "Singleton.h"
 #include "TimeUtilEvent.h"
 #include "TimerEvent.h"
