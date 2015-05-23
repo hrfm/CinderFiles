@@ -130,6 +130,8 @@ namespace hrfm{ namespace signage{ namespace display{
             
             _currentContent = NULL;
             
+            _enable = true;
+            
             cout << "--------------------------------" << endl << endl;
             
         }
@@ -163,7 +165,8 @@ namespace hrfm{ namespace signage{ namespace display{
     
     void ScheduledContents::play( string type ){
         
-        if( _contentList.size() == 0 ){
+        if( !_enable || _contentList.size() == 0 ){
+            _clear();
             return;
         }
         
@@ -173,14 +176,7 @@ namespace hrfm{ namespace signage{ namespace display{
         
         _isPlaying = true;
         
-        if( _currentContent ){
-            if( MovieTexture * mov = dynamic_cast<MovieTexture*>(_currentContent) ){
-                mov->stop();
-            }else if( SequentialContents * seq = dynamic_cast<SequentialContents*>(_currentContent) ){
-                seq->stop();
-            }
-            removeChild(_currentContent);
-        }
+        _clear();
         
         _currentContent = _contentList[type];
         
@@ -253,6 +249,15 @@ namespace hrfm{ namespace signage{ namespace display{
         
     }
     
+    void ScheduledContents::enabled(){
+        _enable = true;
+    }
+    
+    void ScheduledContents::disabled(){
+        _enable = false;
+        _clear();
+    }
+    
     //! protected:
     
     void ScheduledContents::_update(){
@@ -274,6 +279,19 @@ namespace hrfm{ namespace signage{ namespace display{
      */
     void ScheduledContents::_onMovieComplete( hrfm::events::Event * event ){
         if( _currentContent && _currentContent->getParent() == this ){
+            removeChild(_currentContent);
+        }
+    }
+    
+    //! private
+    
+    void ScheduledContents::_clear(){
+        if( _currentContent ){
+            if( MovieTexture * mov = dynamic_cast<MovieTexture*>(_currentContent) ){
+                mov->stop();
+            }else if( SequentialContents * seq = dynamic_cast<SequentialContents*>(_currentContent) ){
+                seq->stop();
+            }
             removeChild(_currentContent);
         }
     }

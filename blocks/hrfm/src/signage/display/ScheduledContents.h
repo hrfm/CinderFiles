@@ -41,6 +41,9 @@ namespace hrfm{ namespace signage{ namespace display{
         
         void playRecentContent();
         
+        void enabled();
+        void disabled();
+        
     protected:
         
         virtual void _update();
@@ -54,10 +57,14 @@ namespace hrfm{ namespace signage{ namespace display{
         
     private:
         
+        void _clear();
+        
         hrfm::display::DisplayNode * _currentContent;
         
         map<string,hrfm::display::DisplayNode*> _contentList;
         map<string,string> _triggerList;
+        
+        bool _enable;
         
     };
     
