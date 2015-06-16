@@ -56,7 +56,7 @@ namespace hrfm{ namespace signage{ namespace display{
         
         void _onContentComplete( hrfm::events::Event * event );
         
-        hrfm::display::DisplayNode * _content;
+        hrfm::display::DisplayNode * _content = NULL;
         
         float  _duration;
         float  _startedAt;

@@ -84,6 +84,7 @@ namespace hrfm{ namespace signage{ namespace display{
         {
             seq->stop();
         }
+        
     }
     
     void Sequence::update(){

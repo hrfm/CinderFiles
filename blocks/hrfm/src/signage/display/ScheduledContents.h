@@ -57,7 +57,7 @@ namespace hrfm{ namespace signage{ namespace display{
         
         void _clear();
         
-        hrfm::display::DisplayNode * _currentContent;
+        hrfm::display::DisplayNode * _currentContent = NULL;
         
         map<string,hrfm::display::DisplayNode*> _contentList;
         map<string,string> _triggerList;

@@ -120,7 +120,7 @@ namespace hrfm{ namespace signage{ namespace display{
         }
         
         // Transition の設定の有無に応じて修正.
-        if( _isSetTransition == true ){
+        if( _isSetTransition == true && _transition ){
             
             // トランジションの準備.
             _transition->prepare();
@@ -166,12 +166,15 @@ namespace hrfm{ namespace signage{ namespace display{
     }
     
     void SequentialContents::stop(){
+        
         if( _currentSequence ){
             _currentSequence->stop();
             removeChild(_currentSequence->getContentRef());
         }
+        
         _currentSequence = NULL;
         _isPlaying = false;
+        
     }
     
     void SequentialContents::clear(){
@@ -188,7 +191,7 @@ namespace hrfm{ namespace signage{ namespace display{
         if( _currentSequence ){
             _currentSequence->setSize( width, height );
         }
-        if( _isSetTransition && _transition->running() ){
+        if( _isSetTransition && _transition && _transition->running() ){
             _transition->update();
         }else if( _currentSequence ){
             _currentSequence->update();
@@ -203,7 +206,7 @@ namespace hrfm{ namespace signage{ namespace display{
     
     hrfm::display::DisplayNode * SequentialContents::_createContent( ci::fs::path filepath, bool isLoop ){
         string type = hrfm::utils::getFileType( filepath );
-        if( type == "pic" || type == "mov" ){
+        if( type == hrfm::utils::FILE_TYPE_PIC || type == hrfm::utils::FILE_TYPE_MOV ){
             return _createContent( filepath, type, isLoop );
         }else{
             return NULL;

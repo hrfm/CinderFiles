@@ -71,7 +71,7 @@ namespace hrfm{ namespace signage{ namespace display{
         int _currentIndex;
         
         //! 現在表示しているコンテンツへのポインタ参照.
-        Sequence * _currentSequence;
+        Sequence * _currentSequence = NULL;
         
         //! 表示するコンテンツのリスト.
         vector<Sequence*> _sequenceList;
@@ -80,7 +80,7 @@ namespace hrfm{ namespace signage{ namespace display{
         
         bool _isSetTransition;
         bool _runningTransition;
-        Transition * _transition;
+        Transition * _transition = NULL;
         
     };
     
