@@ -20,6 +20,10 @@ namespace hrfm{ namespace display{
         _texture = tex;
     }
     
+    void TextureNode::setLetterbox(bool flag){
+        _letterbox = flag;
+    }
+    
     gl::Texture TextureNode::getTexture(){
         return _texture;
     }
@@ -28,7 +32,13 @@ namespace hrfm{ namespace display{
     
     void TextureNode::_draw(){
         if( isDrawable() ){
-            gl::draw( getTexture(), getDrawBounds() );
+            if( _letterbox ){
+                Rectf rect = Rectf( 0, 0, getTexture().getWidth(), getTexture().getHeight() );
+                rect = hrfm::utils::DisplayUtil::letterBox( rect, getDrawBounds() );
+                gl::draw( getTexture(), rect );
+            }else{ 
+                gl::draw( getTexture(), getDrawBounds() );
+            }
         }
     }
     

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cinder/app/AppNative.h"
+#include "cinder/app/App.h"
 #include "Cinder/Camera.h"
 #include "cinder/Xml.h"
 #include "cinder/gl/gl.h"

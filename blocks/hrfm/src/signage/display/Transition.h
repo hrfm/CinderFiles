@@ -1,11 +1,7 @@
 #pragma once
 
-#include "cinder/app/App.h"
-#include "hrfm.h"
-#include "Sequence.h"
-
-using namespace hrfm::display;
-using namespace hrfm::gl;
+#include "DisplayNode.h"
+#include "TransitionShaderBase.h"
 
 namespace hrfm{ namespace signage{ namespace display{
     
@@ -16,16 +12,16 @@ namespace hrfm{ namespace signage{ namespace display{
     public:
         
         Transition();
-        Transition( int width, int height, TransitionShaderBase * shader );
-        Transition( ci::Vec2i size, TransitionShaderBase * shader );
+        Transition( int width, int height, hrfm::gl::TransitionShaderBase * shader );
+        Transition( ci::Vec2i size, hrfm::gl::TransitionShaderBase * shader );
         ~Transition();
         
-        virtual void init( int width, int height, TransitionShaderBase * shader );
+        virtual void init( int width, int height, hrfm::gl::TransitionShaderBase * shader );
         virtual void setSize( int width, int height );
         
         virtual void prepare();
-        virtual void setCurrent( DisplayNode * content );
-        virtual void setNext( DisplayNode * content );
+        virtual void setCurrent( hrfm::display::DisplayNode * content );
+        virtual void setNext( hrfm::display::DisplayNode * content );
         virtual void start();
         virtual void start( float time );
         
@@ -41,10 +37,10 @@ namespace hrfm{ namespace signage{ namespace display{
         ci::gl::Fbo * _currentFbo;
         ci::gl::Fbo * _nextFbo;
         
-        TransitionShaderBase * _shader;
+        hrfm::gl::TransitionShaderBase * _shader;
         
-        DisplayNode * _current;
-        DisplayNode * _next;
+        hrfm::display::DisplayNode * _current;
+        hrfm::display::DisplayNode * _next;
         
         float _time;
         float _startedAt;

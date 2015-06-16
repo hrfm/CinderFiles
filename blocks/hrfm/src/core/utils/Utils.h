@@ -9,6 +9,31 @@
 
 namespace hrfm{ namespace utils{
     
+    // -------
+    
+    const static string FILE_TYPE_PIC = "pic";
+    const static string FILE_TYPE_MOV = "mov";
+    
+    static string getFileType( ci::fs::path filepath ){
+        ci::fs::path extension = filepath.extension();
+        if( extension == ".jpg" || extension == ".jpeg" || extension == ".png" || extension == ".gif" ){
+            return FILE_TYPE_PIC;
+        }else if( extension == ".mov" || extension == ".mp4" || extension == ".avi" ){
+            return FILE_TYPE_MOV;
+        }else{
+            return "";
+        }
+    }
+    
+    // --------
+    
+    template <typename Of, typename What>
+    static bool instanceof(const What &w){
+        return dynamic_cast<const Of*>(&w) != 0;
+    }
+    
+    // ----------
+    
     static int GCD( int a, int b ){
         int c;
         if (a < b) {

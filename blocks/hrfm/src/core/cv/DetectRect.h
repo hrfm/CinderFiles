@@ -3,7 +3,6 @@
 #include "cinder/app/AppBasic.h"
 
 using namespace ci;
-using namespace ci::app;
 
 namespace hrfm{ namespace cv{
     

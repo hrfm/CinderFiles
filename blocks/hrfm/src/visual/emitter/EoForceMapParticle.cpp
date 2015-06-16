@@ -1,7 +1,6 @@
 #include "EoForceMapParticle.h"
 
 using namespace ci;
-using namespace ci::app;
 using namespace std;
 using namespace hrfm::events;
 
@@ -36,7 +35,7 @@ namespace hrfm{ namespace visual{ namespace emitter{
         EmittObjectBase::_update();
         
         if( _forceMap ){
-            Vec2f pow = _forceMap->getForceAtf( ( baseX + x ) / (float)getWindowWidth(), ( baseY + y ) / (float)getWindowHeight() );
+            Vec2f pow = _forceMap->getForceAtf( ( baseX + x ) / (float)ci::app::getWindowWidth(), ( baseY + y ) / (float)ci::app::getWindowHeight() );
             _forceX -= pow.x;
             _forceY -= pow.y;
         }

@@ -9,7 +9,6 @@
 
 using namespace ci;
 using namespace ci::gl;
-using namespace ci::app;
 using namespace std;
 
 namespace hrfm { namespace matrix{

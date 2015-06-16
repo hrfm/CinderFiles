@@ -2,13 +2,11 @@
 
 #include <vector>
 #include <boost/algorithm/string.hpp>
-
-#include "cinder/app/App.h"
 #include "cinder/Xml.h"
 
-#include "hrfm.h"
-#include "SequentialContents.h"
+#include "DisplayNode.h"
 #include "SiEventDispatcher.h"
+#include "SequentialContents.h"
 
 namespace hrfm{ namespace signage{ namespace display{
     

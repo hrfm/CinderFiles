@@ -1,10 +1,5 @@
 #include "SequentialContents.h"
 
-using namespace ci;
-using namespace std;
-using namespace hrfm::events;
-using namespace hrfm::utils;
-
 namespace hrfm{ namespace signage{ namespace display{
     
     //! public:
@@ -23,10 +18,9 @@ namespace hrfm{ namespace signage{ namespace display{
     
     void SequentialContents::init( XmlTree &xml ){
         
-        _currentIndex      = 0;
-        _isSetTransition   = false;
+        clear();
         
-        cout << "- SequentialContents::init()" << endl << endl;
+        cout << "- SequentialContents::init(xml)" << endl << endl;
         
         cout << xml << endl;
         
@@ -44,70 +38,21 @@ namespace hrfm{ namespace signage{ namespace display{
             
             for( XmlTree::Iter item = list.begin(); item != list.end(); ++item ){
                 
-                string pathStr = item->getAttribute("src").getValue<string>();
-                fs::path path;
+                string pathStr    = item->getAttribute("src").getValue<string>();
+                const string type = item->getAttribute("type").getValue<string>();
+                float time        = item->getAttribute("time").getValue<float>();
+                bool isLoop       = item->hasAttribute("loop") && item->getAttribute("loop").getValue<string>() == "true";
                 
-                if( pathStr.find("~/") == 0 ){
-                    pathStr.erase(0,2);
-                    path = getDocumentsDirectory() / ".." / pathStr;
-                }else{
-                    path = pathStr;
-                }
+                hrfm::display::DisplayNode * content = _createContent( pathStr, type, isLoop );
                 
-                try{
-                    
-                    const string type = item->getAttribute("type").getValue<string>();
-                    float time = item->getAttribute("time").getValue<float>();
-                    
-                    hrfm::display::DisplayNode * content;
-                    
-                    if( type == "pic" ){
-                        
-                        // 設定されているものが画像の場合
-                        
-                        content = new hrfm::display::ImageTexture( loadImage(path) );
-                        
-                    }else if( type == "mov" ){
-                        
-                        // 設定されている者が動画の場合
-                        
-                        hrfm::display::MovieTexture * mov = new hrfm::display::MovieTexture(path);
-                        if( item->hasAttribute("loop") && item->getAttribute("loop").getValue<string>() == "true" ){
-                            mov->getMovieGlRef()->setLoop();
-                        }
-                        content = mov;
-                        
-                    }else if( type == "seq" ){
-                        
-                        // 設定されているコンテンツがシーケンスの場合
-                        
-                        XmlTree xml = XmlLoader::load( path );
-                        hrfm::signage::display::SequentialContents * seq = new SequentialContents( xml );
-                        content = seq;
-                        
-                    }else if( type == "blank" ){
-                        
-                        // 設定されているコンテンツが blank の場合
-                        
-                        content = new hrfm::display::DisplayNode();
-                        
-                    }else{
-                        
-                        // それ以外の場合は無視.
-                        
-                        continue;
-                        
-                    };
-                    
-                    cout << "[ " << index++ <<  " ] " << time << " -> " << path << endl;
-                    
+                if( content != NULL ){
+                    cout << "[ " << index++ <<  " ] " << time << " -> " << pathStr << endl;
                     if( item->hasAttribute("trigger") ){
                         addContent( content, time, item->getAttributeValue<string>("trigger") );
                     }else{
                         addContent( content, time );
                     }
-
-                }catch(...){}
+                }
                 
             }
             
@@ -119,17 +64,19 @@ namespace hrfm{ namespace signage{ namespace display{
         
     }
     
-    void SequentialContents::addContent( DisplayNode * content, float time ){
-        Sequence * seq = new Sequence( content, time );
-        seq->addEventListener( hrfm::events::Event::COMPLETE, this, &SequentialContents::_onComplete );
-        _sequenceList.push_back( seq );
+    bool SequentialContents::isPlaying(){
+        return _isPlaying;
     }
     
-    void SequentialContents::addContent( DisplayNode * content, float time, string trigger ){
-        Sequence * seq = new Sequence( content, time );
-        seq->setTrigger( trigger );
-        seq->addEventListener( hrfm::events::Event::COMPLETE, this, &SequentialContents::_onComplete );
-        _sequenceList.push_back( seq );
+    int SequentialContents::numSequence(){
+        return _sequenceList.size();
+    }
+    
+    void SequentialContents::setSize( int w, int h ){
+        if( _isSetTransition && ( width != w || height != h ) ){
+            DisplayNode::setSize( w, h );
+            _transition->setSize( w, h );
+        }
     }
     
     void SequentialContents::setTransition( hrfm::signage::display::Transition * transition ){
@@ -138,11 +85,20 @@ namespace hrfm{ namespace signage{ namespace display{
         _transition = transition;
     }
     
-    void SequentialContents::setSize( int w, int h ){
-        if( _isSetTransition && ( width != w || height != h ) ){
-            DisplayNode::setSize( w, h );
-            _transition->setSize( w, h );
+    void SequentialContents::addContent( ci::fs::path filepath, float time, string trigger ){
+        hrfm::display::DisplayNode * content = _createContent(filepath);
+        if( content != NULL ){
+            addContent( content, time, trigger );
         }
+    }
+    
+    void SequentialContents::addContent( DisplayNode * content, float time, string trigger ){
+        Sequence * seq = new Sequence( content, time );
+        if( trigger != "" ){
+            seq->setTrigger( trigger );
+        }
+        seq->addEventListener( hrfm::events::Event::COMPLETE, this, &SequentialContents::_onComplete );
+        _sequenceList.push_back( seq );
     }
     
     void SequentialContents::play( int index ){
@@ -218,12 +174,12 @@ namespace hrfm{ namespace signage{ namespace display{
         _isPlaying = false;
     }
     
-    bool SequentialContents::isPlaying(){
-        return _isPlaying;
-    }
-    
-    int SequentialContents::numSequence(){
-        return _sequenceList.size();
+    void SequentialContents::clear(){
+        stop();
+        _sequenceList.clear();
+        _sequenceList.empty();
+        _currentIndex    = 0;
+        _currentSequence = NULL;
     }
     
     //! protected:
@@ -243,6 +199,54 @@ namespace hrfm{ namespace signage{ namespace display{
         if( _isSetTransition && _transition->running() ){
             ci::gl::draw( _transition->getTexture(), getDrawBounds() );
         }
+    }
+    
+    hrfm::display::DisplayNode * SequentialContents::_createContent( ci::fs::path filepath, bool isLoop ){
+        string type = hrfm::utils::getFileType( filepath );
+        if( type == "pic" || type == "mov" ){
+            return _createContent( filepath, type, isLoop );
+        }else{
+            return NULL;
+        }
+    }
+    
+    hrfm::display::DisplayNode * SequentialContents::_createContent( ci::fs::path filepath, string type, bool isLoop ){
+        
+        string   pathStr = filepath.string();
+        fs::path path;
+        
+        try{
+            
+            if( pathStr.find("~/") == 0 ){
+                pathStr.erase(0,2);
+                path = getDocumentsDirectory() / ".." / pathStr;
+            }else{
+                path = pathStr;
+            }
+            
+            if( type == "pic" ){
+                // 設定されているものが画像の場合
+                return new hrfm::display::ImageTexture(path);
+            }else if( type == "mov" ){
+                // 設定されている者が動画の場合
+                hrfm::display::MovieTexture * mov = new hrfm::display::MovieTexture(path);
+                if( isLoop ){ mov->getMovieGlRef()->setLoop(); }
+                return mov;
+            }else if( type == "seq" ){
+                // 設定されているコンテンツがシーケンスの場合
+                XmlTree xml = XmlLoader::load( path );
+                hrfm::signage::display::SequentialContents * seq = new SequentialContents( xml );
+                //if( isLoop ){ seq->setLoop(); }
+                return seq;
+            }else if( type == "blank" ){
+                // 設定されているコンテンツが blank の場合
+                return new hrfm::display::DisplayNode();
+            }
+            
+        }catch(...){}
+        
+        return NULL;
+        
     }
     
     void SequentialContents::_onComplete( hrfm::events::Event * event ){

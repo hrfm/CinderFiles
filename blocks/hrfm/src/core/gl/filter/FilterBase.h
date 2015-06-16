@@ -10,7 +10,6 @@
 #include "Utils.h"
 
 using namespace ci;
-using namespace ci::app;
 using namespace std;
 using namespace hrfm::utils;
 
@@ -46,7 +45,7 @@ namespace hrfm { namespace gl{
             {
                 tex->bind(0);
                 mShader.uniform( "tex"       , 0 );
-                mShader.uniform( "time"      , (float)getElapsedSeconds() );
+                mShader.uniform( "time"      , (float)ci::app::getElapsedSeconds() );
                 mShader.uniform( "windowSize", windowSize );
                 mShader.uniform( "resolution", resolution );
                 prepare();
@@ -116,11 +115,11 @@ namespace hrfm { namespace gl{
     protected:
         
         virtual DataSourceRef getVertexShader(){
-            return loadResource("../resources/simple_vert.glsl");
+            return ci::app::loadResource("../resources/simple_vert.glsl");
         }
         
         virtual DataSourceRef getFragmentShader(){
-            return loadResource("../resources/simple_frag.glsl");
+            return ci::app::loadResource("../resources/simple_frag.glsl");
         }
         
         // prepare shader, texture, and more. before drawSolidRect to FrameBuffer.

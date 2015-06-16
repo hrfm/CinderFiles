@@ -9,7 +9,6 @@
 
 using namespace std;
 using namespace ci;
-using namespace ci::app;
 
 namespace hrfm{ namespace cv{
     

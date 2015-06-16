@@ -1,7 +1,6 @@
 #include "SiAudioInput.h"
 
 using namespace ci;
-using namespace ci::app;
 using namespace std;
 
 namespace hrfm{ namespace io{

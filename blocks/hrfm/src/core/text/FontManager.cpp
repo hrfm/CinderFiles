@@ -1,7 +1,6 @@
 #include "FontManager.h"
 
 using namespace ci;
-using namespace ci::app;
 using namespace ci::gl;
 using namespace std;
 using namespace hrfm::utils;

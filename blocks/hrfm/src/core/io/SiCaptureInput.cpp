@@ -159,7 +159,7 @@ namespace hrfm { namespace io{
         if( _beforeFrameMap.find(deviceName) == _beforeFrameMap.end() ){
             _beforeFrameMap[deviceName] = 0;
         }else{
-            int currentFrame = getElapsedFrames();
+            int currentFrame = ci::app::getElapsedFrames();
             int beforeFrame  = _beforeFrameMap[deviceName];
             if( beforeFrame < currentFrame ){
                 _beforeFrameMap[deviceName] = currentFrame;
@@ -183,7 +183,7 @@ namespace hrfm { namespace io{
             _beforeTextureBeforeFrameMap[deviceName] = 0;
         }
         
-        int currentFrame = getElapsedFrames();
+        int currentFrame = ci::app::getElapsedFrames();
         int beforeFrame  = _beforeTextureBeforeFrameMap[deviceName];
         
         vector<ci::gl::Texture> * vec = &_textureCacheVectorMap[deviceName];

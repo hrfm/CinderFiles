@@ -1,10 +1,6 @@
 #include "Transition.h"
 #include "SiFboFactory.h"
 
-using namespace hrfm::display;
-using namespace hrfm::events;
-using namespace hrfm::gl;
-
 namespace hrfm{ namespace signage{ namespace display{
     
     //! public:
@@ -12,17 +8,17 @@ namespace hrfm{ namespace signage{ namespace display{
     Transition::Transition(){
         hrfm::events::EventDispatcher();
     };
-    Transition::Transition( ci::Vec2i size, TransitionShaderBase * shader ){
+    Transition::Transition( ci::Vec2i size, hrfm::gl::TransitionShaderBase * shader ){
         hrfm::events::EventDispatcher();
         init( size.x, size.y, shader );
     }
-    Transition::Transition( int width, int height, TransitionShaderBase * shader ){
+    Transition::Transition( int width, int height, hrfm::gl::TransitionShaderBase * shader ){
         hrfm::events::EventDispatcher();
         init( width, height, shader );
     }
     Transition::~Transition(){}
     
-    void Transition::init( int width, int height, TransitionShaderBase * shader ){
+    void Transition::init( int width, int height, hrfm::gl::TransitionShaderBase * shader ){
         _shader = shader;
         setSize( width, height );
     }
@@ -42,11 +38,11 @@ namespace hrfm{ namespace signage{ namespace display{
         _next    = NULL;
     }
     
-    void Transition::setCurrent( DisplayNode * current ){
+    void Transition::setCurrent( hrfm::display::DisplayNode * current ){
         _current = current;
     }
     
-    void Transition::setNext( DisplayNode * next ){
+    void Transition::setNext( hrfm::display::DisplayNode * next ){
         _next = next;
     }
     

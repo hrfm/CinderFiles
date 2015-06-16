@@ -2,7 +2,6 @@
 
 using namespace std;
 using namespace ci;
-using namespace ci::app;
 
 namespace hrfm{ namespace cv{
     
@@ -40,12 +39,12 @@ namespace hrfm{ namespace cv{
         
         ci::gl::setViewport(viewport);
         
-        if( 1.0 / frameRate < getElapsedSeconds() - recentTime ){
+        if( 1.0 / frameRate < ci::app::getElapsedSeconds() - recentTime ){
             
             ::cv::Mat currentFrame( toOcv( mOpticalFlowFBO.getTexture(), CV_8UC1 ) );
             
             if( mPrevFrame.data ) {
-                if( features.empty() || getElapsedFrames() % 3 == 0 ){
+                if( features.empty() || ci::app::getElapsedFrames() % 3 == 0 ){
                     // pick new features once every 30 frames, or the first frame
                     _chooseFeatures( mPrevFrame );
                 }
@@ -71,7 +70,7 @@ namespace hrfm{ namespace cv{
                 }
             }
             
-            recentTime = getElapsedSeconds();
+            recentTime = ci::app::getElapsedSeconds();
             
         }
         

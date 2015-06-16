@@ -11,6 +11,7 @@ namespace hrfm{ namespace display{
     public:
         
         ImageTexture();
+        ImageTexture( ci::fs::path & path );
         ImageTexture( ci::ImageSourceRef ref );
         ~ImageTexture();
         

@@ -32,6 +32,8 @@ namespace hrfm{ namespace display{
         virtual void setSize( int w, int h );
         virtual void setSize( ci::Vec2i size );
         
+        virtual ci::fs::path * getSrcPath();
+        
         virtual ci::Rectf getBounds();
         virtual ci::Rectf getDrawBounds();
         
@@ -92,6 +94,8 @@ namespace hrfm{ namespace display{
         DisplayNode * _parent = NULL;
         virtual void _setParent( DisplayNode * node );
         virtual void _unsetParent();
+        
+        ci::fs::path * _srcPath = NULL;
         
     };
     

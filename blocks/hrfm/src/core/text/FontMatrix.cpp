@@ -2,7 +2,6 @@
 #include <random>
 
 using namespace ci;
-using namespace ci::app;
 using namespace std;
 
 namespace hrfm{ namespace text{
@@ -237,7 +236,7 @@ namespace hrfm{ namespace text{
                 vector<int>::iterator it = filled.begin();
                 while( it != filled.end() ){
                     float x = (*it) * _fontSize;
-                    ci::gl::drawSolidRect( Rectf( x, 0, x+_fontSize, getWindowHeight() ) );
+                    ci::gl::drawSolidRect( Rectf( x, 0, x+_fontSize, ci::app::getWindowHeight() ) );
                     it++;
                 }
             }

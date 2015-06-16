@@ -210,10 +210,10 @@ namespace hrfm{ namespace cv{
                 ci::gl::enableAdditiveBlending();
                 motionFbo.bindFramebuffer();
                     ci::gl::pushMatrices();
-                    ci::gl::setMatricesWindow( getWindowSize(), false );
+                    ci::gl::setMatricesWindow( ci::app::getWindowSize(), false );
                     glColor4f(1.0,1.0,1.0,alpha);
                     //captureInput.drawForceMap();
-                    mParticle.drawLine( getWindowBounds() );
+                    mParticle.drawLine( ci::app::getWindowBounds() );
                     ci::gl::popMatrices();
                 motionFbo.unbindFramebuffer();
                 ci::gl::disableAlphaBlending();
@@ -229,10 +229,10 @@ namespace hrfm{ namespace cv{
                 ci::gl::enableAdditiveBlending();
                 motionFbo.bindFramebuffer();
                     ci::gl::pushMatrices();
-                    ci::gl::setMatricesWindow( getWindowSize(), false );
+                    ci::gl::setMatricesWindow( ci::app::getWindowSize(), false );
                     glColor4f(1.0,1.0,1.0,alpha);
                     //captureInput.drawForceMap();
-                    mParticle.draw( getWindowBounds(), particleSize );
+                    mParticle.draw( ci::app::getWindowBounds(), particleSize );
                     ci::gl::popMatrices();
                 motionFbo.unbindFramebuffer();
                 ci::gl::disableAlphaBlending();
@@ -249,12 +249,12 @@ namespace hrfm{ namespace cv{
                 motionFbo.bindFramebuffer();
                 
                     ci::gl::pushMatrices();
-                    ci::gl::setMatricesWindow( getWindowSize(), false );
+                    ci::gl::setMatricesWindow( ci::app::getWindowSize(), false );
                     
                     ci::gl::color( ColorA( 1.0f, 1.0f, 1.0f, alpha ) );
                     
                     Vec2f pos    = map.getMaxForcePosition();
-                    Vec2f center = Vec2f( pos.x * getWindowWidth(), pos.y * getWindowHeight() );
+                    Vec2f center = Vec2f( pos.x * ci::app::getWindowWidth(), pos.y * ci::app::getWindowHeight() );
                     Vec2f force  = map.getAverageForce();
                     float length = force.length() * audioAverage;
                     
@@ -292,12 +292,12 @@ namespace hrfm{ namespace cv{
                 motionFbo.bindFramebuffer();
                 
                     ci::gl::pushMatrices();
-                    ci::gl::setMatricesWindow( getWindowSize(), false );
+                    ci::gl::setMatricesWindow( ci::app::getWindowSize(), false );
                     
                     ci::gl::color( ColorA( 1.0f, 1.0f, 1.0f, alpha ) );
                     
                     Vec2f pos    = map.getMaxForcePosition();
-                    Vec2f center = Vec2f( pos.x * getWindowWidth(), pos.y * getWindowHeight() );
+                    Vec2f center = Vec2f( pos.x * ci::app::getWindowWidth(), pos.y * ci::app::getWindowHeight() );
                     Vec2f force  = map.getAverageForce();
                     float length = force.length() * audioAverage;
                 

@@ -5,7 +5,6 @@
 #include "cinder/gl/Texture.h"
 
 using namespace ci;
-using namespace ci::app;
 using namespace std;
 
 using namespace hrfm;

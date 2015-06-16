@@ -1,11 +1,5 @@
 #include "ScheduledContents.h"
 
-using namespace ci;
-using namespace std;
-using namespace hrfm::display;
-using namespace hrfm::events;
-using namespace hrfm::utils;
-
 namespace hrfm{ namespace signage{ namespace display{
     
     //! public:
@@ -65,13 +59,13 @@ namespace hrfm{ namespace signage{ namespace display{
                         
                         // 設定されているコンテンツが画像の場合
                         
-                        _contentList[time] = new hrfm::display::ImageTexture( loadImage(path) );
+                        _contentList[time] = new hrfm::display::ImageTexture( path );
                         
                     }else if( type == "mov" ){
                         
                         // 設定されているコンテンツが動画の場合
                         
-                        MovieTexture * mov = new MovieTexture(path);
+                        ::hrfm::display::MovieTexture * mov = new ::hrfm::display::MovieTexture(path);
                         if( item->hasAttribute("loop") && item->getAttribute("loop").getValue<string>() == "true" ){
                             mov->getMovieGlRef()->setLoop();
                         }else{
@@ -182,7 +176,7 @@ namespace hrfm{ namespace signage{ namespace display{
         
         if( _currentContent ){
             
-            if( MovieTexture * mov = dynamic_cast<MovieTexture*>(_currentContent) ){
+            if( ::hrfm::display::MovieTexture * mov = dynamic_cast<::hrfm::display::MovieTexture*>(_currentContent) ){
                 mov->play();
             }else if( SequentialContents * seq = dynamic_cast<SequentialContents*>(_currentContent) ){
                 seq->play();
@@ -268,7 +262,7 @@ namespace hrfm{ namespace signage{ namespace display{
     
     void ScheduledContents::_draw(){}
     
-    void ScheduledContents::_onTimer( TimeUtilEvent * event ){
+    void ScheduledContents::_onTimer( events::TimeUtilEvent * event ){
         cout << "SequantialContents::_onTimer("+event->type()+")" << endl;
         play(event->type());
     }
@@ -287,7 +281,7 @@ namespace hrfm{ namespace signage{ namespace display{
     
     void ScheduledContents::_clear(){
         if( _currentContent ){
-            if( MovieTexture * mov = dynamic_cast<MovieTexture*>(_currentContent) ){
+            if( ::hrfm::display::MovieTexture * mov = dynamic_cast<::hrfm::display::MovieTexture*>(_currentContent) ){
                 mov->stop();
             }else if( SequentialContents * seq = dynamic_cast<SequentialContents*>(_currentContent) ){
                 seq->stop();

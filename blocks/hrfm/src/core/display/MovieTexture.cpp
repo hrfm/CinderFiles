@@ -1,7 +1,5 @@
 #include "MovieTexture.h"
 
-using namespace ci;
-
 namespace hrfm{ namespace display{
     
     // public:
@@ -10,16 +8,17 @@ namespace hrfm{ namespace display{
         TextureNode();
     };
     
-    MovieTexture::MovieTexture( ci::fs::path filePath ){
+    MovieTexture::MovieTexture( ci::fs::path &filePath ){
         MovieTexture();
         init( filePath );
     };
     
     MovieTexture::~MovieTexture(){};
     
-    void MovieTexture::init( ci::fs::path filePath ){
+    void MovieTexture::init( ci::fs::path &filePath ){
         _beforeTime = 0.0f;
-        _movieGlRef = ci::qtime::MovieGl::create( filePath );
+        _srcPath    = &filePath;
+        _movieGlRef = ::ci::qtime::MovieGl::create( filePath );
     }
     
     void MovieTexture::play(){
@@ -32,13 +31,13 @@ namespace hrfm{ namespace display{
         }
     }
     
-    void MovieTexture::play( ci::fs::path filePath ){
+    void MovieTexture::play( ci::fs::path &filePath ){
         stop();
         init( filePath );
         play();
     }
     
-    void MovieTexture::play( ci::qtime::MovieGlRef & movieGlRef ){
+    void MovieTexture::play( ::ci::qtime::MovieGlRef & movieGlRef ){
         stop();
         _movieGlRef = movieGlRef;
         play();
@@ -58,7 +57,7 @@ namespace hrfm{ namespace display{
         return _movieGlRef;
     }
     
-    gl::Texture MovieTexture::getTexture(){
+    ci::gl::Texture MovieTexture::getTexture(){
         return _movieGlRef->getTexture();
     }
     

@@ -1,7 +1,6 @@
 #include "DataLoader.h"
 
 using namespace ci;
-using namespace ci::app;
 using namespace std;
 
 namespace hrfm{ namespace utils{
@@ -42,7 +41,7 @@ namespace hrfm{ namespace utils{
             cout << "DataLoader::loadResource(" << pathStr << ")" << endl;
             
             try{
-                return loadResource( pathStr );
+                return ci::app::loadResource( pathStr );
             }catch(...){
                 cout << "Data [ " << pathStr << " ] is not found." << endl;
                 throw;

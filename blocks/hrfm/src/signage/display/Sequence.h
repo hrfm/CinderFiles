@@ -1,12 +1,12 @@
 #pragma once
 
-#include "cinder/app/App.h"
-
 #include "DisplayNode.h"
 #include "MovieTexture.h"
-#include "EventDispatcher.h"
+#include "ImageTexture.h"
+#include "Event.h"
 #include "SiEventDispatcher.h"
 #include "SequentialContents.h"
+#include "TriggerEvent.h"
 #include "Utils.h"
 
 namespace hrfm{ namespace signage{ namespace display{
@@ -23,6 +23,8 @@ namespace hrfm{ namespace signage{ namespace display{
         Sequence();
         Sequence( hrfm::display::DisplayNode * content, float duration );
         ~Sequence();
+        
+        string getType();
         
         void setSize( float width, float height );
         
@@ -59,6 +61,7 @@ namespace hrfm{ namespace signage{ namespace display{
         float  _duration;
         float  _startedAt;
         
+        string _type;
         string _trigger;
         
     };

@@ -18,7 +18,7 @@ namespace hrfm { namespace gl{
     }
     
     void MatrixTransition::prepare(){
-        double elapsed = getElapsedSeconds();
+        double elapsed = ci::app::getElapsedSeconds();
         if( 0.05 < elapsed - _beforeTime ){
             _matrix.shuffle();
             _beforeTime = elapsed;

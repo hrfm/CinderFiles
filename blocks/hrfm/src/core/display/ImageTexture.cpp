@@ -1,7 +1,5 @@
 #include "ImageTexture.h"
 
-using namespace ci;
-
 namespace hrfm{ namespace display{
     
     // public:
@@ -9,14 +7,19 @@ namespace hrfm{ namespace display{
     ImageTexture::ImageTexture(){
         TextureNode();
     }
-    ImageTexture::ImageTexture( ImageSourceRef ref ){
+    ImageTexture::ImageTexture( ci::fs::path & path ){
+        ImageTexture();
+        _srcPath = &path;
+        init( ci::loadImage(path) );
+    }
+    ImageTexture::ImageTexture( ci::ImageSourceRef ref ){
         ImageTexture();
         init( ref );
     }
     ImageTexture::~ImageTexture(){}
     
-    void ImageTexture::init( ImageSourceRef ref ){
-        _texture = gl::Texture(ref);
+    void ImageTexture::init( ci::ImageSourceRef ref ){
+        _texture = ci::gl::Texture(ref);
         if( width == 0 ){
             width = _texture.getWidth();
         }

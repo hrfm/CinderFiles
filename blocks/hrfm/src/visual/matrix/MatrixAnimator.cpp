@@ -1,7 +1,6 @@
 #include "MatrixAnimator.h"
 
 using namespace ci;
-using namespace ci::app;
 using namespace std;
 
 namespace hrfm{ namespace matrix{
@@ -82,11 +81,11 @@ namespace hrfm{ namespace matrix{
         
         myFbo.bindFramebuffer();
         gl::pushMatrices();
-        gl::setMatricesWindow(getWindowSize(),false);
+        gl::setMatricesWindow(ci::app::getWindowSize(),false);
         
         // フェード処理
         gl::color(0.0f,0.0f,0.0f,0.08f);
-        gl::drawSolidRect(getWindowBounds());
+        gl::drawSolidRect(ci::app::getWindowBounds());
         
         for( int i = 0; i <= len; i++ ){
             

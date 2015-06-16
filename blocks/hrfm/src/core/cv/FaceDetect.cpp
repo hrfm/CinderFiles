@@ -2,7 +2,6 @@
 
 using namespace std;
 using namespace ci;
-using namespace ci::app;
 
 namespace hrfm{ namespace cv{
     
@@ -18,8 +17,8 @@ namespace hrfm{ namespace cv{
         
         //*
         try{
-            mFaceCascade.load( getAssetPath( "haarcascade_frontalface_alt.xml" ).string() );
-            mEyeCascade.load( getAssetPath( "haarcascade_eye.xml" ).string() );
+            mFaceCascade.load( ci::app::getAssetPath( "haarcascade_frontalface_alt.xml" ).string() );
+            mEyeCascade.load( ci::app::getAssetPath( "haarcascade_eye.xml" ).string() );
         }catch(...){
             fs::path path;
             path = getDocumentsDirectory() / "../Desktop" / "haarcascade_frontalface_alt.xml";
@@ -64,7 +63,7 @@ namespace hrfm{ namespace cv{
         
         while(true){
             
-            double elapsedSec = getElapsedSeconds();
+            double elapsedSec = ci::app::getElapsedSeconds();
             
             if( mCloneSurface && 0.1f < elapsedSec - recentSec ){
                 

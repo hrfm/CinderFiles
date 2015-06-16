@@ -3,7 +3,6 @@
 #include "EmitterBase.h"
 
 using namespace ci;
-using namespace ci::app;
 using namespace std;
 using namespace hrfm::events;
 
@@ -26,12 +25,12 @@ namespace hrfm{ namespace visual{ namespace emitter{
         virtual void init( float time ){
             EmitterBase::init();
             this->animateTime = time;
-            this->startTime = getElapsedSeconds();
+            this->startTime = ci::app::getElapsedSeconds();
             addEventListener( hrfm::events::Event::ADDED_TO_STAGE, this, &EmittObjectBase::_onAddedToStage );
         }
         
         virtual void update(){
-            float elapsedTime = getElapsedSeconds();
+            float elapsedTime = ci::app::getElapsedSeconds();
             progress = ( elapsedTime - startTime ) / animateTime;
             if( 1.0f < progress ){
                 removeOwn();
@@ -50,7 +49,7 @@ namespace hrfm{ namespace visual{ namespace emitter{
         }
         
         virtual void _onAddedToStage( hrfm::events::Event * event ){
-            this->startTime = getElapsedSeconds();
+            this->startTime = ci::app::getElapsedSeconds();
             removeEventListener( hrfm::events::Event::ADDED_TO_STAGE, this, &EmittObjectBase::_onAddedToStage );
         }
         
