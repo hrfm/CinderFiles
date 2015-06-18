@@ -128,7 +128,7 @@ namespace hrfm{ namespace display{
     
     void DisplayNode::update(){
         
-        if( visible == false || alpha <= 0.0f ){
+        if( visible == false || colorA.a <= 0.0f ){
             return;
         }
         
@@ -143,21 +143,31 @@ namespace hrfm{ namespace display{
         
     }
     
-    void DisplayNode::draw(){
-        if( visible == false || alpha <= 0.0f ){
+    void DisplayNode::draw( ColorA * drawColor ){
+        if( visible == false || colorA.a <= 0.0f ){
             return;
         }
-        colorA.a = alpha;
-        gl::enableAlphaBlending();
+        ColorA c = ColorA(colorA.r,colorA.g,colorA.b,colorA.a);
+        if( drawColor != NULL ){
+            c.r *= drawColor->r;
+            c.g *= drawColor->g;
+            c.b *= drawColor->b;
+            c.a *= drawColor->a;
+        }
+        if( c.a < 1.0f ){
+            gl::enableAlphaBlending();
+        }
         gl::pushMatrices();
         gl::translate( x, y );
         {
-            gl::color( colorA );
+            gl::color( c );
             _draw();
-            _drawChildren();
+            _drawChildren( &c );
         }
         gl::popMatrices();
-        gl::disableAlphaBlending();
+        if( c.a < 1.0f ){
+            gl::enableAlphaBlending();
+        }
     }
     
     bool DisplayNode::hasParent(){
@@ -206,17 +216,14 @@ namespace hrfm{ namespace display{
         
     }
     
-    void DisplayNode::_drawChildren(){
-        
+    void DisplayNode::_drawChildren( ColorA * drawColor ){
         if( numChildren() == 0 ) return;
-        
         std::vector<DisplayNode*>::iterator it, end;
         for( it = children.begin(), end = children.end(); it!=end; it++ ){
             if( *it!=nullptr ){
-                (*it)->draw();
+                (*it)->draw( drawColor );
             }
         }
-        
     }
     
     ci::Vec2f DisplayNode::getGlobalPosition(){

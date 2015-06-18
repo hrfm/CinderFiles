@@ -33,7 +33,7 @@ namespace hrfm{ namespace visual{ namespace emitter{
         }
         
         virtual void draw(){
-            if( visible == false || alpha <= 0.0f ){
+            if( visible == false || colorA.a <= 0.0f ){
                 return;
             }
             _draw();

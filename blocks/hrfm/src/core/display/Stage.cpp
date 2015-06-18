@@ -21,14 +21,14 @@ namespace hrfm{ namespace display{
         _fbo.bindFramebuffer();
         {
             ci::gl::clear();
-            ci::gl::color( ci::Color( 1.0, 1.0, 1.0) );
+            ci::gl::color( colorA );
             ci::gl::pushMatrices();
             {
                 ci::gl::setViewport( (Area)getBounds() );
                 ci::gl::setMatricesWindow( width, height, false );
                 {
                     _draw();
-                    _drawChildren();
+                    _drawChildren( &colorA );
                 }
             }
             ci::gl::popMatrices();

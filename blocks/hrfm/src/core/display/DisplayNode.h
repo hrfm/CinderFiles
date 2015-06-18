@@ -16,13 +16,12 @@ namespace hrfm{ namespace display{
             hrfm::events::EventDispatcher();
             x       = 0.0f;
             y       = 0.0f;
-            alpha   = 1.0f;
+            colorA  = ci::ColorA(1.0,1.0,1.0,1.0);
             visible = true;
             width   = 0.0f;
             height  = 0.0f;
             _beforeWidth  = 0.0f;
             _beforeHeight = 0.0f;
-            colorA = ci::ColorA(1.0,1.0,1.0,1.0);
         };
         ~DisplayNode(){};
         
@@ -49,7 +48,7 @@ namespace hrfm{ namespace display{
         virtual bool hasChildOf( DisplayNode * child );
         
         virtual void update();
-        virtual void draw();
+        virtual void draw( ci::ColorA * drawColor = NULL );
         
         virtual bool hasParent();
         virtual DisplayNode * getParent();
@@ -61,10 +60,12 @@ namespace hrfm{ namespace display{
         
         virtual ci::Vec2f getGlobalPosition();
         
-        float x, y, alpha;
-        int   width, height;
-        bool  visible;
-        ci::ColorA colorA;
+        // --- PROPERTY -------------
+        float       x, y;
+        int         width, height;
+        bool        visible;
+        ci::ColorA  colorA;
+        // --------------------------
         
     protected:
         
@@ -78,7 +79,7 @@ namespace hrfm{ namespace display{
         virtual void _updateChildren();
         
         //! addChild で追加された子要素を描画します.
-        virtual void _drawChildren();
+        virtual void _drawChildren( ci::ColorA * drawColor = NULL );
         
         int _beforeWidth;
         int _beforeHeight;
