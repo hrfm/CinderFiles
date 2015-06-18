@@ -8,16 +8,16 @@ namespace hrfm{ namespace display{
         TextureNode();
     };
     
-    MovieTexture::MovieTexture( ci::fs::path &filePath ){
+    MovieTexture::MovieTexture( ci::fs::path filePath ){
         MovieTexture();
         init( filePath );
     };
     
     MovieTexture::~MovieTexture(){};
     
-    void MovieTexture::init( ci::fs::path &filePath ){
+    void MovieTexture::init( ci::fs::path filePath ){
         _beforeTime = 0.0f;
-        _srcPath    = &filePath;
+        _srcPath    = filePath;
         _movieGlRef = ::ci::qtime::MovieGl::create( filePath );
     }
     

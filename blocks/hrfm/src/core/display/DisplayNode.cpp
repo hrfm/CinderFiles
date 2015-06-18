@@ -26,7 +26,7 @@ namespace hrfm{ namespace display{
         setSize( size.x, size.y );
     }
     
-    ci::fs::path * DisplayNode::getSrcPath(){
+    ci::fs::path DisplayNode::getSrcPath(){
         return _srcPath;
     }
     

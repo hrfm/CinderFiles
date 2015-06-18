@@ -19,10 +19,10 @@ namespace hrfm{ namespace display{
     public:
         
         MovieTexture();
-        MovieTexture( ci::fs::path &filePath );
+        MovieTexture( ci::fs::path filePath );
         ~MovieTexture();
         
-        void init( ci::fs::path &filePath );
+        void init( ci::fs::path filePath );
         
         virtual ci::qtime::MovieGlRef getMovieGlRef();
         

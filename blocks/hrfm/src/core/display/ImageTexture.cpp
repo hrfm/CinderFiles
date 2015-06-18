@@ -7,9 +7,9 @@ namespace hrfm{ namespace display{
     ImageTexture::ImageTexture(){
         TextureNode();
     }
-    ImageTexture::ImageTexture( ci::fs::path & path ){
+    ImageTexture::ImageTexture( ci::fs::path path ){
         ImageTexture();
-        _srcPath = &path;
+        _srcPath = path;
         init( ci::loadImage(path) );
     }
     ImageTexture::ImageTexture( ci::ImageSourceRef ref ){
