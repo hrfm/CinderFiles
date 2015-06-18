@@ -156,6 +156,8 @@ namespace hrfm{ namespace display{
         }
         if( c.a < 1.0f ){
             gl::enableAlphaBlending();
+        }else{
+            gl::disableAlphaBlending();
         }
         gl::pushMatrices();
         gl::translate( x, y );
@@ -165,9 +167,7 @@ namespace hrfm{ namespace display{
             _drawChildren( &c );
         }
         gl::popMatrices();
-        if( c.a < 1.0f ){
-            gl::enableAlphaBlending();
-        }
+        gl::disableAlphaBlending();
     }
     
     bool DisplayNode::hasParent(){
