@@ -24,8 +24,8 @@ namespace hrfm{ namespace signage{ namespace display{
         }
     }
     
-    void SequentialContents::setLoop(){
-        _isLoop = true;
+    void SequentialContents::setLoop( bool flag ){
+        _isLoop = flag;
     }
     
     void SequentialContents::setTransition( hrfm::signage::display::Transition * transition ){
@@ -117,6 +117,10 @@ namespace hrfm{ namespace signage{ namespace display{
             removeChild(_currentSequence->getContentRef());
         }
         _currentSequence = NULL;
+    }
+    
+    Sequence * SequentialContents::getCurrentSequence(){
+        return _currentSequence;
     }
     
     void SequentialContents::clear(){

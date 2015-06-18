@@ -35,7 +35,7 @@ namespace hrfm{ namespace signage{ namespace display{
         
         virtual void setSize( int w, int h );
         
-        void setLoop();
+        void setLoop( bool flag = true );
         
         void setTransition( Transition * transition );
         
@@ -44,6 +44,8 @@ namespace hrfm{ namespace signage{ namespace display{
         
         void play( int index = 0 );
         void stop();
+        
+        Sequence * getCurrentSequence();
         
         void clear();
         
