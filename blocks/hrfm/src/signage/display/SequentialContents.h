@@ -27,16 +27,15 @@ namespace hrfm{ namespace signage{ namespace display{
     public:
         
         SequentialContents();
-        SequentialContents( ci::XmlTree &xml );
         ~SequentialContents();
-        
-        void init( ci::XmlTree &xml );
-        
-        bool isPlaying();
         
         int numSequence();
         
+        bool isPlaying();
+        
         virtual void setSize( int w, int h );
+        
+        void setLoop();
         
         void setTransition( Transition * transition );
         
@@ -56,7 +55,6 @@ namespace hrfm{ namespace signage{ namespace display{
         // ファイルパスから、それに応じたシーケンス用の DisplayNode を生成します.
         // ファイルがどのようなファイルかは、拡張子から自動的に判断されます.
         hrfm::display::DisplayNode * _createContent( ci::fs::path filepath, bool isLoop = true );
-        
         // ファイルパスとタイプから、それに応じたシーケンス用の DisplayNode を生成します.
         hrfm::display::DisplayNode * _createContent( ci::fs::path filepath, string type, bool isLoop = true );
         
@@ -65,22 +63,24 @@ namespace hrfm{ namespace signage{ namespace display{
         
     private:
         
-        bool _isPlaying;
+        bool _isLoop = false;
         
         //! 現在表示しているコンテンツの _contentList 上の index.
         int _currentIndex;
-        
         //! 現在表示しているコンテンツへのポインタ参照.
         Sequence * _currentSequence = NULL;
-        
         //! 表示するコンテンツのリスト.
         vector<Sequence*> _sequenceList;
         
         //! 表示切り替え時のトランジション.
-        
-        bool _isSetTransition;
         bool _runningTransition;
         Transition * _transition = NULL;
+        
+    
+    public:
+        // 消すかも
+        SequentialContents( ci::XmlTree &xml );
+        void init( ci::XmlTree &xml );
         
     };
     
