@@ -35,6 +35,7 @@ namespace hrfm{ namespace display{
         
         virtual ci::Rectf getBounds();
         virtual ci::Rectf getDrawBounds();
+        virtual ci::Vec2f getAbsolutePosition();
         
         virtual int numChildren();
         

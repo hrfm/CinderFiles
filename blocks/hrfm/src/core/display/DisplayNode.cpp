@@ -38,6 +38,17 @@ namespace hrfm{ namespace display{
         return Rectf( 0, 0, width, height );
     }
     
+    Vec2f DisplayNode::getAbsolutePosition(){
+        Vec2f v = Vec2f( x, y );
+        DisplayNode * p = getParent();
+        while( p != NULL ){
+            v.x += p->x;
+            v.y += p->y;
+            p = p->getParent();
+        }
+        return v;
+    }
+    
     int DisplayNode::numChildren(){
         return children.size();
     }
