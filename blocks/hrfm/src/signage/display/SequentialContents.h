@@ -11,6 +11,8 @@
 #include "Sequence.h"
 #include "Transition.h"
 
+#include "SequenceEvent.h"
+
 namespace hrfm{ namespace signage{ namespace display{
     
     class Transition;

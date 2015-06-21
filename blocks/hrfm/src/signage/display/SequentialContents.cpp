@@ -22,6 +22,9 @@ namespace hrfm{ namespace signage{ namespace display{
         if( _transition && ( width != w || height != h ) ){
             _transition->setSize( w, h );
         }
+        if( _currentSequence != NULL ){
+            _currentSequence->setSize(w,h);
+        }
     }
     
     void SequentialContents::setLoop( bool flag ){
@@ -103,6 +106,7 @@ namespace hrfm{ namespace signage{ namespace display{
                 _currentSequence->addEventListener( hrfm::events::Event::COMPLETE, this, &SequentialContents::_onComplete );
                 _currentSequence->play();
                 addChild( _currentSequence->getContentRef() );
+                this->dispatchEvent( new SequenceEvent(SequenceEvent::PLAY) );
             }
             
             _currentIndex = index;
@@ -147,8 +151,6 @@ namespace hrfm{ namespace signage{ namespace display{
     void SequentialContents::_draw(){
         if( _transition && _transition->running() ){
             ci::gl::draw( _transition->getTexture(), getDrawBounds() );
-        }else{
-            DisplayNode::_draw();
         }
     }
     
@@ -222,6 +224,7 @@ namespace hrfm{ namespace signage{ namespace display{
         cout << "SequentialContents::_onTransitionComplete()" << endl;
         _transition->removeEventListener( hrfm::events::Event::COMPLETE, this, &SequentialContents::_onTransitionComplete );
         addChild( _currentSequence->getContentRef() );
+        this->dispatchEvent( new SequenceEvent(SequenceEvent::PLAY) );
     }
     
     
