@@ -218,26 +218,11 @@ namespace hrfm { namespace app{
     }
     
     void AppBase::draw(){
-        
         ci::gl::clear();
         stage.draw();
-        
         if( _isDebugMode ){
-            
-            drawFPS();
-            
-            if( useAudio ){
-                float w = getWindowWidth();
-                float h = getWindowHeight();
-                Rectf rect( w - 180, h - 70, w - 20, h - 20 );
-                ci::gl::color( ColorA( 1.0, 1.0, 1.0, 1.0 ) );
-                SiAudioInput::getInstance().drawWave( rect );
-                SiAudioInput::getInstance().drawFFT( rect );
-                SiAudioInput::getInstance().drawFFTRanged( rect );
-            }
-            
+            _drawDebug();
         }
-        
     }
     
     void AppBase::drawFPS( Vec2f position ){
@@ -267,6 +252,21 @@ namespace hrfm { namespace app{
     
     void AppBase::onTrigger( TriggerEvent * event ){
         cout << "TRIGGER : " << event->type() << endl;
+    }
+    
+    //!private
+    
+    void AppBase::_drawDebug(){
+        drawFPS();
+        if( useAudio ){
+            float w = getWindowWidth();
+            float h = getWindowHeight();
+            Rectf rect( w - 180, h - 70, w - 20, h - 20 );
+            ci::gl::color( ColorA( 1.0, 1.0, 1.0, 1.0 ) );
+            SiAudioInput::getInstance().drawWave( rect );
+            SiAudioInput::getInstance().drawFFT( rect );
+            SiAudioInput::getInstance().drawFFTRanged( rect );
+        }
     }
     
 }}

@@ -133,6 +133,8 @@ namespace hrfm{ namespace app{
         FILE * LOG_FILE;
         Font ___font___;
         
+        void _drawDebug();
+        
     };
     
 }}
