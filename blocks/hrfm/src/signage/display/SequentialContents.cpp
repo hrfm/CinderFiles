@@ -65,8 +65,10 @@ namespace hrfm{ namespace signage{ namespace display{
             _currentIndex = 0;
         }
         
+        cout << "play" << endl;
+        
         // Transition の設定の有無に応じて修正.
-        if( _transition ){
+        if( _transition != NULL ){
             
             // トランジションの準備.
             _transition->prepare();
@@ -82,6 +84,8 @@ namespace hrfm{ namespace signage{ namespace display{
             // 次に表示をするコンテンツを設定し Transition に委譲する.Transition が完了するまで addChild はしない.
             _currentSequence = _sequenceList.at(index);
             if( _currentSequence ){
+                _currentSequence->setSize( width, height );
+                _currentSequence->addEventListener( hrfm::events::Event::COMPLETE, this, &SequentialContents::_onComplete );
                 _currentSequence->play();
                 _transition->setNext( _currentSequence->getContentRef() );
             }
@@ -142,6 +146,7 @@ namespace hrfm{ namespace signage{ namespace display{
             _currentSequence->setSize( width, height );
         }
         if( _transition && _transition->running() ){
+            cout << "update transition" << endl;
             _transition->update();
         }else if( _currentSequence ){
             _currentSequence->update();

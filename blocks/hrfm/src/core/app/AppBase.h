@@ -128,6 +128,7 @@ namespace hrfm{ namespace app{
     private:
         
         bool _isDebugMode;
+        bool _hideCursor;
         
         FILE * LOG_FILE;
         Font ___font___;

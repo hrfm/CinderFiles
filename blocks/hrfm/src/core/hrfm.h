@@ -53,6 +53,7 @@
 // --- hrfm::app
 
 #include "AppBase.h"
+#include "VJBase.h"
 
 // --- hrfm::cv
 

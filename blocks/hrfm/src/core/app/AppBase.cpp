@@ -112,7 +112,11 @@ namespace hrfm { namespace app{
         }
         if( xml.hasAttribute("hideCursor") && xml.getAttributeValue<string>("hideCursor") == "true" )
         {
+            _hideCursor = true;
             ci::app::AppNative::hideCursor();
+        }else
+        {
+            _hideCursor = false;
         }
     }
     
@@ -249,6 +253,11 @@ namespace hrfm { namespace app{
     void AppBase::keyDown( ci::app::KeyEvent event ){
         if( event.getChar() == 'f' ){
             ci::app::setFullScreen( ! ci::app::isFullScreen() );
+            if( ci::app::isFullScreen() && _hideCursor ){
+                ci::app::AppNative::hideCursor();
+            }else{
+                ci::app::AppNative::showCursor();
+            }
         }
         if( event.isControlDown() && event.getChar() == 'd' ){
             _isDebugMode = !_isDebugMode;

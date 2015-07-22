@@ -33,14 +33,14 @@ namespace hrfm{ namespace signage{ namespace display{
         
     protected:
         
-        ci::gl::Fbo * _fbo;
-        ci::gl::Fbo * _currentFbo;
-        ci::gl::Fbo * _nextFbo;
+        ci::gl::Fbo * _fbo = NULL;
+        ci::gl::Fbo * _currentFbo = NULL;
+        ci::gl::Fbo * _nextFbo = NULL;
         
-        hrfm::gl::TransitionShaderBase * _shader;
+        hrfm::gl::TransitionShaderBase * _shader = NULL;
         
-        hrfm::display::DisplayNode * _current;
-        hrfm::display::DisplayNode * _next;
+        hrfm::display::DisplayNode * _current = NULL;
+        hrfm::display::DisplayNode * _next = NULL;
         
         float _time;
         float _startedAt;
