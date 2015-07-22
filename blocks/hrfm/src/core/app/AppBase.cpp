@@ -105,19 +105,20 @@ namespace hrfm { namespace app{
     }
     
     void AppBase::initWindow(XmlTree &xml){
+        
+        _hideCursor = ( xml.hasAttribute("hideCursor") && xml.getAttributeValue<string>("hideCursor") == "true" );
+        
         if( xml.hasAttribute("fullScreen") && xml.getAttributeValue<string>("fullScreen") == "true" )
         {
             ci::app::setFullScreen(true);
             system( ("open -a "+ci::app::getAppPath().string()).c_str() );
+            if( ci::app::isFullScreen() && _hideCursor ){
+                ci::app::AppNative::hideCursor();
+            }else{
+                ci::app::AppNative::showCursor();
+            }
         }
-        if( xml.hasAttribute("hideCursor") && xml.getAttributeValue<string>("hideCursor") == "true" )
-        {
-            _hideCursor = true;
-            ci::app::AppNative::hideCursor();
-        }else
-        {
-            _hideCursor = false;
-        }
+        
     }
     
     void AppBase::initAudio( XmlTree &xml ){
