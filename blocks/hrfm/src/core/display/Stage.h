@@ -14,7 +14,8 @@ namespace hrfm{ namespace display{
         };
         ~Stage(){};
         virtual DisplayNode * addChild( DisplayNode * child );
-        virtual void draw();
+        virtual void draw(bool offscreen = false);
+        virtual void drawOffscreen();
         ci::gl::Texture & getTexture();
     private:
         ci::gl::Fbo _fbo;

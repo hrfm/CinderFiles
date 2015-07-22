@@ -12,7 +12,7 @@ namespace hrfm{ namespace display{
         return child;
     }
     
-    void Stage::draw(){
+    void Stage::draw( bool offscreen ){
         
         Area viewport = ci::gl::getViewport();
         
@@ -35,13 +35,19 @@ namespace hrfm{ namespace display{
         }
         _fbo.unbindFramebuffer();
         
-        ci::gl::translate( x, y );
-        gl::draw( _fbo.getTexture(), getDrawBounds() );
+        if( !offscreen ){
+            ci::gl::translate( x, y );
+            gl::draw( _fbo.getTexture(), getDrawBounds() );
+        }
         
         ci::gl::disableAlphaBlending();
         
         ci::gl::setViewport(viewport);
         
+    }
+    
+    void Stage::drawOffscreen(){
+        draw(true);
     }
     
     ci::gl::Texture & Stage::getTexture(){
