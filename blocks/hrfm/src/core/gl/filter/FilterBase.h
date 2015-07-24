@@ -40,6 +40,14 @@ namespace hrfm { namespace gl{
             
         }
         
+        virtual void setSize( int w, int h ){
+            mFbo = *SiFboFactory::getInstance().create( w, h, false );
+        }
+        
+        virtual void setSize( Vec2i size ){
+            setSize( size.x, size.y );
+        }
+        
         virtual void affect( ci::gl::Texture * tex, Vec2f windowSize, Vec2f resolution, Rectf drawRect ){
             mShader.bind();
             {

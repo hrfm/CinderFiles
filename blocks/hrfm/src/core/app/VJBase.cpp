@@ -3,10 +3,15 @@
 namespace hrfm { namespace app{
     
     void VJBase::setup(){
+        
         hrfm::app::AppBase::setup();
+        
         hrfm::io::SiKORGMIDIInterface::getInstance().addEventListener(
             hrfm::events::KORGMIDIInterfaceEvent::PAD_ON, this, &VJBase::_onPadOn
         );
+        
+        hrfm::utils::SiBPM::getInstance().start();
+        
     }
     
     void VJBase::setGuide( fs::path filePath ){
@@ -29,6 +34,7 @@ namespace hrfm { namespace app{
         for( it=stage.children.begin(); it!=end; ++it ){
             (*it)->setSize( getWindowWidth(), getWindowHeight() );
         }
+        hrfm::utils::SiBPM::getInstance().update();
         hrfm::app::AppBase::update();
     }
     

@@ -23,16 +23,23 @@ namespace hrfm{ namespace gl{
         ci::gl::Texture * getTexturePtr();
         
         ExFbo * beginOffscreen( bool clear = false );
+        ExFbo * endOffscreen();
+        
         ExFbo * applyFilter( FilterBase * filter );
         ExFbo * applyFilter( FilterBase * filter, ci::gl::Texture & srcTexture );
         ExFbo * applyFilter( FilterBase * filter, ci::gl::Texture * srcTexture );
-        ExFbo * endOffscreen();
         
     protected:
         
+        ci::gl::Texture _getTextureClone();
+        void _beginOffscreen( ci::gl::Fbo * fbo, bool clear = false );
+        void _endOffscreen();
+        
         ci::gl::Fbo * _fbo;
+        ci::gl::Fbo * _bindedFbo = NULL;
         
         bool      isBeginOffscreen;
+        bool      isBeginFilter;
         ci::Area  mTmpViewport;
         
     };

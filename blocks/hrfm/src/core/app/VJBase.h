@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AppBase.h"
+#include "SiBPM.h"
 #include "KORGMIDIInterfaceEvent.h"
 
 namespace hrfm{ namespace app{
