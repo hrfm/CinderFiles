@@ -5,7 +5,6 @@
 
 #include "BeatSquare.h"
 #include "BeatFilterSplit.h"
-#include "BeatFilterPolar.h"
 
 namespace hrfm{ namespace vj{
     

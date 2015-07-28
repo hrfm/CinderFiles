@@ -21,120 +21,50 @@ namespace hrfm { namespace gl{
         
     public:
         
-        FilterBase(){};
+        FilterBase();
+        FilterBase( string fragmentShader );
+        FilterBase( string fragmentShader, string vertexShader );
         
         // 最も基本的な初期化を行います.
         // どのシェーダを使うかはクラスに任せます.
-        void setup( Vec2i size ){
-            
-            cout << size << endl;
-            
-            // Calcurate Aspect Ratio.
-            mAspect = getAspectRatio( size );
-            
-            // Create Fbo.
-            mFbo = *SiFboFactory::getInstance().create( size.x, size.y, false );
-            
-            // Create Shader.
-            mShader = ShaderFactory::create( getVertexShader(), getFragmentShader() );
-            
-        }
+        virtual void setup( Vec2i size );
         
-        virtual void setSize( int w, int h ){
-            mFbo = *SiFboFactory::getInstance().create( w, h, false );
-        }
+        virtual void setSize( int w, int h );
+        virtual void setSize( Vec2i size );
         
-        virtual void setSize( Vec2i size ){
-            setSize( size.x, size.y );
-        }
+        virtual void affect( ci::gl::Texture * tex, Vec2f windowSize, Vec2f resolution, Rectf drawRect );
+        virtual ci::gl::Texture affect( ci::gl::Texture tex );
         
-        virtual void affect( ci::gl::Texture * tex, Vec2f windowSize, Vec2f resolution, Rectf drawRect ){
-            mShader.bind();
-            {
-                tex->bind(0);
-                mShader.uniform( "tex"       , 0 );
-                mShader.uniform( "time"      , (float)ci::app::getElapsedSeconds() );
-                mShader.uniform( "windowSize", windowSize );
-                mShader.uniform( "resolution", resolution );
-                prepare();
-                ci::gl::drawSolidRect( drawRect );
-                clear();
-                tex->unbind();
-            }
-            mShader.unbind();
-        }
+        void draw( Rectf bounds );
         
-        virtual ci::gl::Texture affect( ci::gl::Texture tex ){
-            
-            Area viewport = ci::gl::getViewport();
-            
-            Vec2f windowSize   = mFbo.getSize();
-            Vec2f resolution   = Vec2f( mFbo.getWidth(), mFbo.getHeight() );
-            
-            mFbo.bindFramebuffer();
-            {
-                ci::gl::pushMatrices();
-                {
-                    ci::gl::setViewport( mFbo.getBounds() );
-                    ci::gl::setMatricesWindow( mAspect, false );
-                    //--
-                    //ci::gl::setViewport( mFbo.getBounds() );
-                    //ci::gl::setMatricesWindow( mFbo.getWidth(), mFbo.getHeight(), false );
-                    affect( &tex, windowSize, resolution, Rectf( 0, 0, mAspect.x, mAspect.y ) );
-                }
-                ci::gl::popMatrices();
-            }
-            mFbo.unbindFramebuffer();
-            
-            ci::gl::setViewport( viewport );
-            
-            return mFbo.getTexture();
-            
-        };
+        ci::gl::Texture getTexture();
         
-        void draw( Rectf bounds ){
-            ci::gl::draw( getTexture(), bounds );
-        }
+        void bindTexture( int index );
         
-        ci::gl::Texture getTexture(){
-            return mFbo.getTexture();
-        }
+        void unbindTexture();
         
-        void bindTexture( int index ){
-            mFbo.bindTexture( index );
-        }
+        int getWidth();
         
-        void unbindTexture(){
-            mFbo.unbindTexture();
-        }
+        int getHeight();
         
-        int getWidth(){
-            return mFbo.getWidth();
-        }
-        
-        int getHeight(){
-            return mFbo.getHeight();
-        }
-        
-        Rectf getBounds(){
-            return mFbo.getBounds();
-        }
+        Rectf getBounds();
         
     protected:
         
-        virtual DataSourceRef getVertexShader(){
-            return ci::app::loadResource("../resources/simple_vert.glsl");
-        }
+        void init( string fragmentShader = "simple_frag.glsl", string vertexShader = "simple_vert.glsl");
         
-        virtual DataSourceRef getFragmentShader(){
-            return ci::app::loadResource("../resources/simple_frag.glsl");
-        }
+        virtual DataSourceRef getVertexShader();
+        
+        virtual DataSourceRef getFragmentShader();
         
         // prepare shader, texture, and more. before drawSolidRect to FrameBuffer.
-        virtual void prepare(){}
+        virtual void prepare();
         
         // clear shader, texture, and more. after drawSolidRect to FrameBuffer.
-        virtual void clear(){}
+        virtual void clear();
+        
+        string mFragmentShader;
+        string mVertexShader;
         
         ci::gl::GlslProg mShader;
         float mCycle;

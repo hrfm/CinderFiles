@@ -4,96 +4,185 @@
 uniform sampler2D tex;
 uniform float time;
 uniform vec2 resolution;
-uniform float segments;
+
+uniform float bpm_position;
+
+uniform vec2 segments;
+uniform int  rotate;
 
 void main(void){
     
     vec2 texCoord = gl_FragCoord.xy / resolution;
     
-    vec4 color;
-    
     // ---------------------------------------------------
     
-    if( segments == 1 ){
+    if( segments.x == 1.0 && segments.y == 1.0 ){
         
-        color = texture2D( tex, texCoord.xy );
+        // 分割なしの時. 回転を適用
         
-    }else if( segments == 2 ){
-        
-        // 横2分割 その1
-        texCoord.x *= 2.0;
-        if( 1.0 <= texCoord.x ){
-            texCoord.x = 1.0 - ( texCoord.x - 1.0 );
+        if( rotate == 1 ){
+            texCoord = vec2( texCoord.y, texCoord.x );
+        }else if( rotate == 2 ){
+            texCoord = vec2( 1.0 - texCoord.x, texCoord.y );
+        }else if( rotate == 3 ){
+            texCoord = vec2( 1.0 - texCoord.y, texCoord.x );
         }
-        color = texture2D( tex, texCoord.xy );
         
-    }else if( segments == 3 ){
+    }else if( segments.x == 2.0 && segments.y == 2.0 ){
         
-        // 横2分割 その2
-        texCoord.x *= 2.0;
-        if( 1.0 <= texCoord.x ){
-            texCoord.x -= 1.0;
+        // 4分割の時
+        
+        texCoord.x *= segments.x;
+        texCoord.y *= segments.y;
+        
+        if( rotate == 0 ){
+            
+            if( 1.0 <= mod( texCoord.x, 2.0 ) ){
+                if( 1.0 <= mod( texCoord.y, 2.0 ) ){
+                    texCoord = vec2( 1.0 - mod( texCoord.x, 1.0 ), 1.0 - mod( texCoord.y, 1.0 ) );
+                }else{
+                    texCoord = vec2( mod( texCoord.y, 1.0 ), mod( texCoord.x, 1.0 ) );
+                }
+            }else{
+                if( 1.0 <= mod( texCoord.y, 2.0 ) ){
+                    texCoord = vec2( 1.0 - mod( texCoord.y, 1.0 ), mod( texCoord.x, 1.0 ) );
+                }else{
+                    texCoord = vec2( mod( texCoord.x, 1.0 ), mod( texCoord.y, 1.0 ) );
+                }
+            }
+            
+        }else if( rotate == 1 ){
+            
+            if( 1.0 <= mod( texCoord.x, 2.0 ) ){
+                if( 1.0 <= mod( texCoord.y, 2.0 ) ){
+                    texCoord = vec2( mod( texCoord.y, 1.0 ), mod( texCoord.x, 1.0 ) );
+                }else{
+                    texCoord = vec2( mod( texCoord.x, 1.0 ), mod( texCoord.y, 1.0 ) );
+                }
+            }else{
+                if( 1.0 <= mod( texCoord.y, 2.0 ) ){
+                    texCoord = vec2( 1.0 - mod( texCoord.x, 1.0 ), mod( texCoord.y, 1.0 ) );
+                }else{
+                    texCoord = vec2( 1.0 - mod( texCoord.y, 1.0 ), mod( texCoord.x, 1.0 ) );
+                }
+            }
+            
+        }else if( rotate == 2 ){
+            
+            if( 1.0 <= mod( texCoord.x, 2.0 ) ){
+                if( 1.0 <= mod( texCoord.y, 2.0 ) ){
+                    texCoord = vec2( mod( texCoord.x, 1.0 ), mod( texCoord.y, 1.0 ) );
+                }else{
+                    texCoord = vec2( 1.0 - mod( texCoord.y, 1.0 ), 1.0 - mod( texCoord.x, 1.0 ) );
+                }
+            }else{
+                if( 1.0 <= mod( texCoord.y, 2.0 ) ){
+                    texCoord = vec2( mod( texCoord.y, 1.0 ), 1.0 - mod( texCoord.x, 1.0 ) );
+                }else{
+                    texCoord = vec2( 1.0 - mod( texCoord.x, 1.0 ), 1.0 - mod( texCoord.y, 1.0 ) );
+                }
+            }
+            
+        }else if( rotate == 3 ){
+            
+            if( 1.0 <= mod( texCoord.x, 2.0 ) ){
+                if( 1.0 <= mod( texCoord.y, 2.0 ) ){
+                    texCoord = vec2( 1.0 - mod( texCoord.y, 1.0 ), 1.0 - mod( texCoord.x, 1.0 ) );
+                }else{
+                    texCoord = vec2( 1.0 - mod( texCoord.x, 1.0 ), 1.0 - mod( texCoord.y, 1.0 ) );
+                }
+            }else{
+                if( 1.0 <= mod( texCoord.y, 2.0 ) ){
+                    texCoord = vec2( mod( texCoord.x, 1.0 ), 1.0 - mod( texCoord.y, 1.0 ) );
+                }else{
+                    texCoord = vec2( mod( texCoord.y, 1.0 ), 1.0 - mod( texCoord.x, 1.0 ) );
+                }
+            }
+            
         }else{
-            texCoord.x = 1.0 - texCoord.x;
+            
+            texCoord = mod( texCoord, 1.0 );
+            
         }
-        color = texture2D( tex, texCoord.xy );
         
-    }else if( segments == 4 ){
-        
-        // 縦2分割 その1
-        if( 0.5 < texCoord.y ){
-            texCoord.x = 1.0 - texCoord.x;
-        }
-        texCoord.y = mod( texCoord.y * 2.0, 1.0 );
-        color = texture2D( tex, texCoord.xy );
-        
-    }else if( segments == 5 ){
-        
-        // 縦2分割 その2
-        if( 0.5 > texCoord.y ){
-            texCoord.x = 1.0 - texCoord.x;
-        }
-        texCoord.y = mod( texCoord.y * 2.0, 1.0 );
-        color = texture2D( tex, texCoord.xy );
-        
-    }else if( segments == 6 ){
-        
-        // 4分割
-        texCoord.x = mod( texCoord.x * 2.0, 1.0 );
-        texCoord.y = mod( texCoord.y * 2.0, 1.0 );
-        color = texture2D( tex, texCoord.xy );
         
     }else{
         
-        color = texture2D( tex, texCoord.xy );
+        // 縦か横が2分割の時
+        
+        texCoord.x *= segments.x;
+        texCoord.y *= segments.y;
+        
+        if( rotate == 0 ){
+            
+            // 通常のミラーリング
+            
+            if( 1.0 <= mod( texCoord.x, 2.0 ) || 1.0 <= mod( texCoord.y, 2.0 ) ){
+                texCoord.x = 1.0 - mod( texCoord.x, 1.0 );
+            }else{
+                texCoord.x = mod( texCoord.x, 1.0 );
+            }
+            
+            if( 1.0 <= mod( texCoord.y, 2.0 ) ){
+                texCoord.y = 1.0 - mod( texCoord.y, 1.0 );
+            }else{
+                texCoord.y = mod( texCoord.y, 1.0 );
+            }
+            
+        }else if( rotate == 1 ){
+            
+            if( 1.0 <= mod( texCoord.x, 2.0 ) || 1.0 <= mod( texCoord.y, 2.0 ) ){
+                texCoord.x = mod( texCoord.y, 1.0 );
+            }else{
+                texCoord.x = 1.0 - mod( texCoord.y, 1.0 );
+            }
+            
+            if( 1.0 <= mod( texCoord.y, 2.0 ) ){
+                texCoord.y = 1.0 - mod( texCoord.y, 1.0 );
+            }else{
+                texCoord.y = mod( texCoord.y, 1.0 );
+            }
+            
+        }else if( rotate == 2 ){
+            
+            // 逆ミラーリング
+            
+            if( 1.0 <= mod( texCoord.x, 2.0 ) || 1.0 <= mod( texCoord.y, 2.0 ) ){
+                texCoord.x = mod( texCoord.x, 1.0 );
+            }else{
+                texCoord.x = 1.0 - mod( texCoord.x, 1.0 );
+            }
+            
+            if( 1.0 <= mod( texCoord.y, 2.0 ) ){
+                texCoord.y = mod( texCoord.y, 1.0 );
+            }else{
+                texCoord.y = 1.0 - mod( texCoord.y, 1.0 );
+            }
+            
+        }else if( rotate == 3 ){
+            
+            if( 1.0 <= mod( texCoord.x, 2.0 ) || 1.0 <= mod( texCoord.y, 2.0 ) ){
+                texCoord.x = 1.0 - mod( texCoord.y, 1.0 );
+            }else{
+                texCoord.x = mod( texCoord.y, 1.0 );
+            }
+            
+            if( 1.0 <= mod( texCoord.y, 2.0 ) ){
+                texCoord.y = 1.0 - mod( texCoord.y, 1.0 );
+            }else{
+                texCoord.y = mod( texCoord.y, 1.0 );
+            }
+            
+        }else{
+            
+            texCoord = mod( texCoord, 1.0 );
+            
+        }
         
     }
     
-    
-    
-    /*
-    texCoord.x *= 4;
-    texCoord.y *= 4;
-    
-    vec2 p = mod( texCoord, 1.0 );
-    
-    float x = mod( texCoord.x, 4.0 );
-    
-    if( 3.0 < x ){
-        p = vec2( 1.0 - p.y, p.x );
-    }else if( 2.0 < x ){
-        p = vec2( 1.0 - p.x, p.y );
-    }else if( 1.0 < x ){
-        p = vec2( p.y, p.x );
-    }
-    
-    vec4 color = texture2D( tex, p.xy );
-    
-     
-    */
-    
     // ---------------------------------------------------
     
-    gl_FragColor = color;
+    gl_FragColor = texture2D( tex, texCoord.xy );
     
 }

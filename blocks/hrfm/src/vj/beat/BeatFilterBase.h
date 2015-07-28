@@ -2,6 +2,7 @@
 
 #include "hrfm.h"
 #include "FilterBase.h"
+#include "SiBPM.h"
 
 namespace hrfm{ namespace vj{
 
@@ -9,24 +10,18 @@ namespace hrfm{ namespace vj{
         
     public:
         
-        BeatFilterBase(){
-            hrfm::gl::FilterBase();
-        }
+        BeatFilterBase() : FilterBase(){}
+        BeatFilterBase( string fragmentShader ) : FilterBase( fragmentShader ){}
+        BeatFilterBase( string fragmentShader, string vertexShader ) : FilterBase( fragmentShader, vertexShader ){}
         
-        virtual void update(){
-            
-        }
+        virtual void update(){}
         
     protected:
         
-        /*
         virtual void prepare(){
-            mShader.uniform( "beat",  );
-            mShader.uniform( "r_scale", r_scale );
-            mShader.uniform( "r_min", r_min );
-            mShader.uniform( "r_max", r_max );
+            int position = SiBPM::getInstance().position * 1000000;
+            mShader.uniform( "bpm_position", position / 1000000.0f );
         }
-        //*/
         
     };
     

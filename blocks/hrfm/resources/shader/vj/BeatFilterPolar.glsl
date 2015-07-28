@@ -5,6 +5,8 @@ uniform sampler2D tex;
 uniform float time;
 uniform vec2 resolution;
 
+uniform float bpm_position;
+
 void main(void){
     
     vec2 texCoord = gl_FragCoord.xy / resolution;

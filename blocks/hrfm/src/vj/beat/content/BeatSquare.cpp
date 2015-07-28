@@ -34,6 +34,9 @@ namespace hrfm{ namespace vj{
         float posA = min( 1.0, position / f );
         float posB = max( 0.0, ( position - (1.0-f) ) / f );
         
+        posA *= posA;
+        posB *= posB;
+        
         ci::gl::color(1.0,1.0,1.0);
         Rectf rect = Rectf( 0, 0, width*posA, height );
         ci::gl::drawSolidRect( rect );

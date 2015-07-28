@@ -22,17 +22,20 @@ namespace hrfm{ namespace vj{
         
         // --- Filter. あとで外部から指定するようにする.
         
-        hrfm::vj::BeatFilterBase * f2 = new hrfm::vj::BeatFilterPolar();
-        f2->setup( Vec2i(1024,1024) );
+        hrfm::vj::BeatFilterBase * polar = new hrfm::vj::BeatFilterBase("BeatFilterPolar.glsl");
+        polar->setup( Vec2i(1024,1024) );
         
         hrfm::vj::BeatFilterBase * split = new hrfm::vj::BeatFilterSplit();
         split->setup( Vec2i(1024,1024) );
         
-        addFilter(0,split);
+        hrfm::vj::BeatFilterBase * color = new hrfm::vj::BeatFilterBase("BeatFilterColor.glsl");
+        color->setup( Vec2i(1024,1024) );
+        
+        addFilter(0,polar);
         addFilter(1,split);
         addFilter(2,split);
         addFilter(3,split);
-        //addFilter(4,split);
+        addFilter(4,color);
         
         // ---
         
