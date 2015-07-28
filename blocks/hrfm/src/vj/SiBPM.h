@@ -6,15 +6,20 @@
 
 using namespace std;
 
-namespace hrfm{ namespace utils{
+namespace hrfm{ namespace vj{
     
-    class SiBPM : public Singleton<SiBPM>, public hrfm::events::EventDispatcher{
+    class SiBPM : public hrfm::utils::Singleton<SiBPM>, public hrfm::events::EventDispatcher{
         
     public:
         
+        virtual void setBPM( double bpm );
+        virtual double getBPM();
+        
         virtual void start();
         virtual void start( double bpm );
+        
         virtual void stop();
+        
         virtual void update();
         
         double bpm;
@@ -24,7 +29,7 @@ namespace hrfm{ namespace utils{
         
     private:
         
-        friend class Singleton<SiBPM>;
+        friend class hrfm::utils::Singleton<SiBPM>;
         
         SiBPM(){
             hrfm::events::EventDispatcher();

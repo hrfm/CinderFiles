@@ -199,8 +199,8 @@ namespace hrfm { namespace app{
         }
         
         if( useCapture ){
-            SiCaptureInput::getInstance().update();
-            captureInput.update();
+            //SiCaptureInput::getInstance().update();
+            //captureInput.update();
         }
         
         // --- Update Time. ---

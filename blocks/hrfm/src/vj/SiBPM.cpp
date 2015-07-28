@@ -3,15 +3,23 @@
 using namespace std;
 using namespace hrfm::events;
 
-namespace hrfm{ namespace utils{
+namespace hrfm{ namespace vj{
+    
+    void SiBPM::setBPM( double bpm ){
+        this->bpm = bpm;
+        this->millisecPerBeat = 60.00000 / bpm;
+    }
+    
+    double SiBPM::getBPM(){
+        return this->bpm;
+    }
     
     void SiBPM::start(){
         this->startTime = ci::app::getElapsedSeconds();
     }
     
     void SiBPM::start( double bpm ){
-        this->bpm = bpm;
-        this->millisecPerBeat = 60.00000 / bpm;
+        this->setBPM(bpm);
         start();
     }
     

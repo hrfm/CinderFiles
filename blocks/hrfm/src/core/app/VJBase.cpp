@@ -10,7 +10,7 @@ namespace hrfm { namespace app{
             hrfm::events::KORGMIDIInterfaceEvent::PAD_ON, this, &VJBase::_onPadOn
         );
         
-        hrfm::utils::SiBPM::getInstance().start();
+        hrfm::vj::SiBPM::getInstance().start();
         
     }
     
@@ -34,7 +34,7 @@ namespace hrfm { namespace app{
         for( it=stage.children.begin(); it!=end; ++it ){
             (*it)->setSize( getWindowWidth(), getWindowHeight() );
         }
-        hrfm::utils::SiBPM::getInstance().update();
+        hrfm::vj::SiBPM::getInstance().update();
         hrfm::app::AppBase::update();
     }
     
