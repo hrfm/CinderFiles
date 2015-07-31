@@ -8,6 +8,8 @@ namespace hrfm{ namespace vj{
     void SiBPM::setBPM( double bpm ){
         this->bpm = bpm;
         this->millisecPerBeat = 60.00000 / bpm;
+        this->startTime = ci::app::getElapsedSeconds();
+        this->dispatchEvent( new hrfm::events::Event("bpm") );
     }
     
     double SiBPM::getBPM(){

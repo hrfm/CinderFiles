@@ -114,6 +114,14 @@ namespace hrfm{ namespace io{
         return _channels[ch];
     }
     
+    uint16_t SiAudioInput::getBandCount(){
+        return _bandCount;
+    }
+    
+    uint16_t SiAudioInput::getBufferLength(){
+        return _bufferLength;
+    }
+    
     float * SiAudioInput::getFFT(){
         return _fftValues;
     }

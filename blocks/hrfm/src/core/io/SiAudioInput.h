@@ -33,6 +33,9 @@ namespace hrfm{ namespace io{
         size_t numChannels();
         const float * getChannelAt( size_t ch );
         
+        uint16_t getBandCount();
+        uint16_t getBufferLength();
+        
         float * getFFT();
         float * getFFTNormalized();
         

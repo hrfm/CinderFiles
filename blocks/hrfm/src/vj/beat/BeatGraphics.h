@@ -15,7 +15,8 @@ namespace hrfm{ namespace vj{
         BeatGraphics();
         virtual void setSize( int w, int h );
         virtual void addContent( BeatContentBase * content );
-        virtual void addFilter( int index, BeatFilterBase * filter );
+        virtual void addFilter( BeatFilterBase * filter );
+        virtual void addFilter( BeatFilterBase * filter, int index );
         
     protected:
         

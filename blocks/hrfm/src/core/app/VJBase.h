@@ -26,6 +26,8 @@ namespace hrfm{ namespace app{
         
         hrfm::display::ImageTexture * _guide = NULL;
         
+        double _recentPressSpaceTime = 0.0;
+        
     private:
         
         void _onPadOn( hrfm::events::KORGMIDIInterfaceEvent * event );

@@ -12,7 +12,10 @@ namespace hrfm{ namespace vj{
             hrfm::display::DisplayNode();
         }
         
+        virtual void setup(){}
         virtual void draw( double position, int width, int height ){};
+        
+        bool hasDirection = false;
         
     private:
         

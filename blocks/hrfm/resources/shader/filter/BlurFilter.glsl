@@ -5,73 +5,86 @@ uniform vec2      sample_offset;
 uniform float     attenuation;
 uniform vec2      resolution;
 
+vec4 sumfnc( vec4 base, vec2 pos, vec2 offset ){
+    
+    //*
+    base += texture2D( tex, pos + -5.0 * offset ).rgba * 0.009167927656011385;
+    base += texture2D( tex, pos + -4.5 * offset ).rgba * 0.014053461291849008;
+    base += texture2D( tex, pos + -4.0 * offset ).rgba * 0.020595286319257878;
+    base += texture2D( tex, pos + -3.5 * offset ).rgba * 0.028855245532226279;
+    //*/
+    base += texture2D( tex, pos + -3.0 * offset ).rgba * 0.038650411513543079;
+    base += texture2D( tex, pos + -2.5 * offset ).rgba * 0.049494378859311142;
+    base += texture2D( tex, pos + -2.0 * offset ).rgba * 0.060594058578763078;
+    base += texture2D( tex, pos + -1.5 * offset ).rgba * 0.070921288047096992;
+    base += texture2D( tex, pos + -1.0 * offset ).rgba * 0.079358891804948081;
+    base += texture2D( tex, pos + -0.5 * offset ).rgba * 0.084895951965930902;
+    base += texture2D( tex, pos +  0.0 * offset ).rgba * 0.086826196862124602;
+    base += texture2D( tex, pos +  0.5 * offset ).rgba * 0.084895951965930902;
+    base += texture2D( tex, pos +  1.0 * offset ).rgba * 0.079358891804948081;
+    base += texture2D( tex, pos +  1.5 * offset ).rgba * 0.070921288047096992;
+    base += texture2D( tex, pos +  2.0 * offset ).rgba * 0.060594058578763078;
+    base += texture2D( tex, pos +  2.5 * offset ).rgba * 0.049494378859311142;
+    base += texture2D( tex, pos +  3.0 * offset ).rgba * 0.038650411513543079;
+    //*
+    base += texture2D( tex, pos +  3.5 * offset ).rgba * 0.028855245532226279;
+    base += texture2D( tex, pos +  4.0 * offset ).rgba * 0.020595286319257878;
+    base += texture2D( tex, pos +  4.5 * offset ).rgba * 0.014053461291849008;
+    base += texture2D( tex, pos +  5.0 * offset ).rgba * 0.009167927656011385;
+    //*/
+    
+    return base;
+    
+}
+
 void main(){
     
-    vec4 sum = vec4( 0.0, 0.0, 0.0, 0.0 );
-    
-    // 各テクスチャ上の色を取得.
     vec2 pos = gl_FragCoord.xy / resolution;
     
+    /*
+    
+    vec4 sum = texture2D( tex, pos );
+    sum *= 0.36;
+    sum += texture2D(tex, (gl_FragCoord.xy + vec2(-1.0,  1.0)) / resolution) * 0.04;
+    sum += texture2D(tex, (gl_FragCoord.xy + vec2( 0.0,  1.0)) / resolution) * 0.04;
+    sum += texture2D(tex, (gl_FragCoord.xy + vec2( 1.0,  1.0)) / resolution) * 0.04;
+    sum += texture2D(tex, (gl_FragCoord.xy + vec2(-1.0,  0.0)) / resolution) * 0.04;
+    sum += texture2D(tex, (gl_FragCoord.xy + vec2( 1.0,  0.0)) / resolution) * 0.04;
+    sum += texture2D(tex, (gl_FragCoord.xy + vec2(-1.0, -1.0)) / resolution) * 0.04;
+    sum += texture2D(tex, (gl_FragCoord.xy + vec2( 0.0, -1.0)) / resolution) * 0.04;
+    sum += texture2D(tex, (gl_FragCoord.xy + vec2( 1.0, -1.0)) / resolution) * 0.04;
+    sum += texture2D(tex, (gl_FragCoord.xy + vec2(-2.0,  2.0)) / resolution) * 0.02;
+    sum += texture2D(tex, (gl_FragCoord.xy + vec2(-1.0,  2.0)) / resolution) * 0.02;
+    sum += texture2D(tex, (gl_FragCoord.xy + vec2( 0.0,  2.0)) / resolution) * 0.02;
+    sum += texture2D(tex, (gl_FragCoord.xy + vec2( 1.0,  2.0)) / resolution) * 0.02;
+    sum += texture2D(tex, (gl_FragCoord.xy + vec2( 2.0,  2.0)) / resolution) * 0.02;
+    sum += texture2D(tex, (gl_FragCoord.xy + vec2(-2.0,  1.0)) / resolution) * 0.02;
+    sum += texture2D(tex, (gl_FragCoord.xy + vec2( 2.0,  1.0)) / resolution) * 0.02;
+    sum += texture2D(tex, (gl_FragCoord.xy + vec2(-2.0,  0.0)) / resolution) * 0.02;
+    sum += texture2D(tex, (gl_FragCoord.xy + vec2( 2.0,  0.0)) / resolution) * 0.02;
+    sum += texture2D(tex, (gl_FragCoord.xy + vec2(-2.0, -1.0)) / resolution) * 0.02;
+    sum += texture2D(tex, (gl_FragCoord.xy + vec2( 2.0, -1.0)) / resolution) * 0.02;
+    sum += texture2D(tex, (gl_FragCoord.xy + vec2(-2.0, -2.0)) / resolution) * 0.02;
+    sum += texture2D(tex, (gl_FragCoord.xy + vec2(-1.0, -2.0)) / resolution) * 0.02;
+    sum += texture2D(tex, (gl_FragCoord.xy + vec2( 0.0, -2.0)) / resolution) * 0.02;
+    sum += texture2D(tex, (gl_FragCoord.xy + vec2( 1.0, -2.0)) / resolution) * 0.02;
+    sum += texture2D(tex, (gl_FragCoord.xy + vec2( 2.0, -2.0)) / resolution) * 0.02;
+    
+    /*/
+    
+    vec4 sum = vec4( 0.0, 0.0, 0.0, 0.0 );
     if( 0.0 < sample_offset.x ){
-        
-        vec2 offsetX = vec2( sample_offset.x, 0.0 );
-        
-        sum += texture2D( tex, pos + -10.0 * offsetX ).rgba * 0.009167927656011385;
-        sum += texture2D( tex, pos +  -9.0 * offsetX ).rgba * 0.014053461291849008;
-        sum += texture2D( tex, pos +  -8.0 * offsetX ).rgba * 0.020595286319257878;
-        sum += texture2D( tex, pos +  -7.0 * offsetX ).rgba * 0.028855245532226279;
-        sum += texture2D( tex, pos +  -6.0 * offsetX ).rgba * 0.038650411513543079;
-        sum += texture2D( tex, pos +  -5.0 * offsetX ).rgba * 0.049494378859311142;
-        sum += texture2D( tex, pos +  -4.0 * offsetX ).rgba * 0.060594058578763078;
-        sum += texture2D( tex, pos +  -3.0 * offsetX ).rgba * 0.070921288047096992;
-        sum += texture2D( tex, pos +  -2.0 * offsetX ).rgba * 0.079358891804948081;
-        sum += texture2D( tex, pos +  -1.0 * offsetX ).rgba * 0.084895951965930902;
-        sum += texture2D( tex, pos +   0.0 * offsetX ).rgba * 0.086826196862124602;
-        sum += texture2D( tex, pos +  +1.0 * offsetX ).rgba * 0.084895951965930902;
-        sum += texture2D( tex, pos +  +2.0 * offsetX ).rgba * 0.079358891804948081;
-        sum += texture2D( tex, pos +  +3.0 * offsetX ).rgba * 0.070921288047096992;
-        sum += texture2D( tex, pos +  +4.0 * offsetX ).rgba * 0.060594058578763078;
-        sum += texture2D( tex, pos +  +5.0 * offsetX ).rgba * 0.049494378859311142;
-        sum += texture2D( tex, pos +  +6.0 * offsetX ).rgba * 0.038650411513543079;
-        sum += texture2D( tex, pos +  +7.0 * offsetX ).rgba * 0.028855245532226279;
-        sum += texture2D( tex, pos +  +8.0 * offsetX ).rgba * 0.020595286319257878;
-        sum += texture2D( tex, pos +  +9.0 * offsetX ).rgba * 0.014053461291849008;
-        sum += texture2D( tex, pos + +10.0 * offsetX ).rgba * 0.009167927656011385;
-        
+        sum = sumfnc( sum, pos, vec2( sample_offset.x, 0.0 ) );
     }
-    
     if( 0.0 < sample_offset.y ){
-        
-        vec2 offsetY = vec2( 0.0, sample_offset.y );
-        
-        sum += texture2D( tex, pos + -10.0 * offsetY ).rgba * 0.009167927656011385;
-        sum += texture2D( tex, pos +  -9.0 * offsetY ).rgba * 0.014053461291849008;
-        sum += texture2D( tex, pos +  -8.0 * offsetY ).rgba * 0.020595286319257878;
-        sum += texture2D( tex, pos +  -7.0 * offsetY ).rgba * 0.028855245532226279;
-        sum += texture2D( tex, pos +  -6.0 * offsetY ).rgba * 0.038650411513543079;
-        sum += texture2D( tex, pos +  -5.0 * offsetY ).rgba * 0.049494378859311142;
-        sum += texture2D( tex, pos +  -4.0 * offsetY ).rgba * 0.060594058578763078;
-        sum += texture2D( tex, pos +  -3.0 * offsetY ).rgba * 0.070921288047096992;
-        sum += texture2D( tex, pos +  -2.0 * offsetY ).rgba * 0.079358891804948081;
-        sum += texture2D( tex, pos +  -1.0 * offsetY ).rgba * 0.084895951965930902;
-        sum += texture2D( tex, pos +   0.0 * offsetY ).rgba * 0.086826196862124602;
-        sum += texture2D( tex, pos +  +1.0 * offsetY ).rgba * 0.084895951965930902;
-        sum += texture2D( tex, pos +  +2.0 * offsetY ).rgba * 0.079358891804948081;
-        sum += texture2D( tex, pos +  +3.0 * offsetY ).rgba * 0.070921288047096992;
-        sum += texture2D( tex, pos +  +4.0 * offsetY ).rgba * 0.060594058578763078;
-        sum += texture2D( tex, pos +  +5.0 * offsetY ).rgba * 0.049494378859311142;
-        sum += texture2D( tex, pos +  +6.0 * offsetY ).rgba * 0.038650411513543079;
-        sum += texture2D( tex, pos +  +7.0 * offsetY ).rgba * 0.028855245532226279;
-        sum += texture2D( tex, pos +  +8.0 * offsetY ).rgba * 0.020595286319257878;
-        sum += texture2D( tex, pos +  +9.0 * offsetY ).rgba * 0.014053461291849008;
-        sum += texture2D( tex, pos + +10.0 * offsetY ).rgba * 0.009167927656011385;
-        
+        sum = sumfnc( sum, pos, vec2( 0.0, sample_offset.y ) );
     }
-    
     if( sample_offset.x * sample_offset.y != 0.0 ){
         sum *= 0.5;
     }
     
-    gl_FragColor.rgba = attenuation * sum;
+    //*/
+    
+    gl_FragColor = sum * attenuation;
     
 }
