@@ -11,13 +11,11 @@ namespace hrfm{ namespace vj{
     public:
         
         BeatGraphics();
-        virtual void setPresetByIndex( int index );
         virtual void setSize( int w, int h );
-        
-        virtual void addPreset( BeatPresetBase * preset );
-        
         virtual void addPreFilter( hrfm::gl::FilterBase * filter );
         virtual void addPostFilter( hrfm::gl::FilterBase * filter );
+        virtual void addPreset( BeatPresetBase * preset );
+        virtual void displayPresetAt( int index );
         
     protected:
         

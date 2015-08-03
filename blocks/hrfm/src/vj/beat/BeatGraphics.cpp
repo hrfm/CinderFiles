@@ -18,8 +18,19 @@ namespace hrfm{ namespace vj{
         }
     }
     
-    // 後で消す.
-    void BeatGraphics::setPresetByIndex( int index ){
+    void BeatGraphics::addPreFilter( hrfm::gl::FilterBase * filter ){
+        _preFilter.push_back( filter );
+    }
+    
+    void BeatGraphics::addPostFilter( hrfm::gl::FilterBase * filter ){
+        _postFilter.push_back( filter );
+    }
+    
+    void BeatGraphics::addPreset( BeatPresetBase * preset ){
+        _presetList.push_back(preset);
+    }
+    
+    void BeatGraphics::displayPresetAt( int index ){
         
         if( index < 0 ){
             index = 0;
@@ -44,17 +55,6 @@ namespace hrfm{ namespace vj{
         
     }
     
-    void BeatGraphics::addPreset( BeatPresetBase * preset ){
-        _presetList.push_back(preset);
-    }
-    
-    void BeatGraphics::addPreFilter( hrfm::gl::FilterBase * filter ){
-        _preFilter.push_back( filter );
-    }
-    
-    void BeatGraphics::addPostFilter( hrfm::gl::FilterBase * filter ){
-        _postFilter.push_back( filter );
-    }
     
     // protected
     
