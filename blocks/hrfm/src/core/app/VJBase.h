@@ -24,13 +24,15 @@ namespace hrfm{ namespace app{
         
     protected:
         
-        hrfm::display::ImageTexture * _guide = NULL;
+        virtual void onPadOn( hrfm::events::KORGMIDIInterfaceEvent * event );
+        virtual void onPadOff( hrfm::events::KORGMIDIInterfaceEvent * event );
         
+        hrfm::display::ImageTexture * _guide = NULL;
         double _recentPressSpaceTime = 0.0;
         
     private:
         
-        void _onPadOn( hrfm::events::KORGMIDIInterfaceEvent * event );
+        void _updateBPM();
         
     };
     

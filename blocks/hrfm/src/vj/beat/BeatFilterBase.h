@@ -22,19 +22,25 @@ namespace hrfm{ namespace vj{
             updated = true;
         }
         
-        int type = 2;
+        virtual void setRandom( bool flag ){
+            isRandom = flag ? 1 : 0;
+        }
+        
+        int type = 0;
+        int isRandom = true;
         bool updated;
         
     protected:
         
         virtual void _update( BeatContentBase * content ){
-            type = randInt(3);
+            if( isRandom == true ){
+                type = randInt(3);
+            }
             _content = content;
         }
         
         virtual void prepare(){
-            int position = SiBPM::getInstance().position * 1000000;
-            mShader.uniform( "bpm_position" , position / 1000000.0f );
+            mShader.uniform( "bpm_position" , (float)SiBPM::getInstance().position );
             mShader.uniform( "type", type );
             if( _content != NULL ){
                 mShader.uniform( "has_direction", _content->hasDirection?1:0 );

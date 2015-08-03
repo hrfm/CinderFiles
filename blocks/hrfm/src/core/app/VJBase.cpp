@@ -7,7 +7,10 @@ namespace hrfm { namespace app{
         hrfm::app::AppBase::setup();
         
         hrfm::io::SiKORGMIDIInterface::getInstance().addEventListener(
-            hrfm::events::KORGMIDIInterfaceEvent::PAD_ON, this, &VJBase::_onPadOn
+            hrfm::events::KORGMIDIInterfaceEvent::PAD_ON, this, &VJBase::onPadOn
+        );
+        hrfm::io::SiKORGMIDIInterface::getInstance().addEventListener(
+            hrfm::events::KORGMIDIInterfaceEvent::PAD_OFF, this, &VJBase::onPadOff
         );
         
         hrfm::vj::SiBPM::getInstance().start();
@@ -25,57 +28,40 @@ namespace hrfm { namespace app{
         hrfm::app::AppBase::keyDown(event);
         
         if( _guide && event.getCode() == event.KEY_g ){
-            cout << "hoge" << endl;
             _guide->visible = !_guide->visible;
         }
         
         if( event.getCode() == event.KEY_SPACE ){
-            double now = ci::app::AppNative::getElapsedSeconds();
-            double elapsedTime = now - _recentPressSpaceTime;
-            if( elapsedTime < 3.0 ){
-                hrfm::vj::SiBPM::getInstance().setBPM(60.0/elapsedTime);
-                //cout << elapsedTime << endl;
-            } 
-            _recentPressSpaceTime = now;
+            _updateBPM();
         }
         
     }
     
     void VJBase::update(){
-        vector<DisplayNode*>::iterator it;
-        vector<DisplayNode*>::iterator end = stage.children.end();
-        for( it=stage.children.begin(); it!=end; ++it ){
-            (*it)->setSize( getWindowWidth(), getWindowHeight() );
-        }
-        hrfm::vj::SiBPM::getInstance().update();
         hrfm::app::AppBase::update();
+        hrfm::vj::SiBPM::getInstance().update();
     }
     
     void VJBase::draw(){
         hrfm::app::AppBase::draw();
     }
     
+    void VJBase::onPadOn( hrfm::events::KORGMIDIInterfaceEvent * event ){
+        _updateBPM();
+    }
+    
+    void VJBase::onPadOff( hrfm::events::KORGMIDIInterfaceEvent * event ){}
+    
     // private
     
-    void VJBase::_onPadOn( hrfm::events::KORGMIDIInterfaceEvent * event ){
-        
-        /*
-        float t = getElapsedSeconds();
-        
-        if( event->id == 15 ){
-            if( 30.0 > t - beforeTime ){
-                interval += t - beforeTime;
-                interval /= 2.0;
-                cout << interval << endl;
-            }
-            beforeTime = t;
+    void VJBase::_updateBPM(){
+        double now = ci::app::AppNative::getElapsedSeconds();
+        double elapsedTime = now - _recentPressSpaceTime;
+        if( elapsedTime < 3.0 ){
+            hrfm::vj::SiBPM::getInstance().setBPM(60.0/elapsedTime);
+            //cout << elapsedTime << endl;
         }
-        
-        if( event->id < _contentList.size() ){
-            //change( event->id );
-        }
-        //*/
-        
+        _recentPressSpaceTime = now;
     }
     
 }}

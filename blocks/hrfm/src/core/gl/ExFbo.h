@@ -19,6 +19,10 @@ namespace hrfm{ namespace gl{
         
         ci::Vec2f getSize();
         ci::Rectf getBounds();
+        
+        ci::Vec2i getAspectSize();
+        ci::Rectf getAspectBounds();
+        
         ci::gl::Texture getTexture();
         ci::gl::Texture * getTexturePtr();
         
@@ -32,7 +36,7 @@ namespace hrfm{ namespace gl{
     protected:
         
         ci::gl::Texture _getTextureClone();
-        void _beginOffscreen( ci::gl::Fbo * fbo, bool clear = false );
+        void _beginOffscreen( ci::gl::Fbo * fbo, bool clear = false, bool useAspect = false );
         void _endOffscreen();
         
         ci::gl::Fbo * _fbo;

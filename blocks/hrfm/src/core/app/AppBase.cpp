@@ -83,9 +83,13 @@ namespace hrfm { namespace app{
             }
             if( xml.hasChild("audio") ){
                 this->initAudio(xml.getChild("audio"));
+            }else{
+                useAudio = false;
             }
             if( xml.hasChild("capture") ){
                 this->initCapture(xml.getChild("capture"));
+            }else{
+                useCapture = false;
             }
             if( xml.hasChild("korg") ){
                 this->initKORGMIDIInterface(xml.getChild("korg"));
@@ -139,7 +143,7 @@ namespace hrfm { namespace app{
         
         if( xml.hasAttribute("width") && xml.hasAttribute("height") ){
             
-            useCapture      = true;
+            useCapture        = true;
             Vec2i captureSize = Vec2i( xml.getAttributeValue<int>("width"), xml.getAttributeValue<int>("height") );
             
             int cacheLength = 2;
@@ -227,6 +231,14 @@ namespace hrfm { namespace app{
     
     void AppBase::drawFPS( Vec2f position ){
         ci::gl::drawString( "FPS = " + toString(getAverageFps()) , position, Color::white(), ___font___ );
+    }
+    
+    void AppBase::coutGLInfo(){
+        cout << "Vendor : " << glGetString(GL_VENDOR)     << '\n';
+        cout << "GPU : " << glGetString(GL_RENDERER)   << '\n';
+        cout << "OpenGL ver. " << glGetString(GL_VERSION) << '\n';
+        cout << "Extensions : " << endl;
+        cout << glGetString(GL_EXTENSIONS) << endl;
     }
     
     // === Event Listener. =======================================================

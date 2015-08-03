@@ -12,21 +12,21 @@ vec4 sumfnc( vec4 base, vec2 pos, vec2 offset ){
     base += texture2D( tex, pos + -4.5 * offset ).rgba * 0.014053461291849008;
     base += texture2D( tex, pos + -4.0 * offset ).rgba * 0.020595286319257878;
     base += texture2D( tex, pos + -3.5 * offset ).rgba * 0.028855245532226279;
-    //*/
     base += texture2D( tex, pos + -3.0 * offset ).rgba * 0.038650411513543079;
     base += texture2D( tex, pos + -2.5 * offset ).rgba * 0.049494378859311142;
     base += texture2D( tex, pos + -2.0 * offset ).rgba * 0.060594058578763078;
     base += texture2D( tex, pos + -1.5 * offset ).rgba * 0.070921288047096992;
+    //*/
     base += texture2D( tex, pos + -1.0 * offset ).rgba * 0.079358891804948081;
     base += texture2D( tex, pos + -0.5 * offset ).rgba * 0.084895951965930902;
     base += texture2D( tex, pos +  0.0 * offset ).rgba * 0.086826196862124602;
     base += texture2D( tex, pos +  0.5 * offset ).rgba * 0.084895951965930902;
     base += texture2D( tex, pos +  1.0 * offset ).rgba * 0.079358891804948081;
+    //*
     base += texture2D( tex, pos +  1.5 * offset ).rgba * 0.070921288047096992;
     base += texture2D( tex, pos +  2.0 * offset ).rgba * 0.060594058578763078;
     base += texture2D( tex, pos +  2.5 * offset ).rgba * 0.049494378859311142;
     base += texture2D( tex, pos +  3.0 * offset ).rgba * 0.038650411513543079;
-    //*
     base += texture2D( tex, pos +  3.5 * offset ).rgba * 0.028855245532226279;
     base += texture2D( tex, pos +  4.0 * offset ).rgba * 0.020595286319257878;
     base += texture2D( tex, pos +  4.5 * offset ).rgba * 0.014053461291849008;

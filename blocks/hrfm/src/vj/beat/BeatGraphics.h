@@ -1,10 +1,22 @@
 #pragma once
 
 #include "hrfm.h"
-#include "BeatContentBase.h"
+#include "FilterBase.h"
+#include "BeatPresetBase.h"
 
 #include "BeatSquare.h"
+
+#include "BeatFilterColor.h"
 #include "BeatFilterSplit.h"
+#include "BeatFilterTransField.h"
+#include "BeatFilterTransTunnel.h"
+#include "BeatFilterDot.h"
+#include "BeatFilterScroll.h"
+
+#include "BeatPresetFieldV.h"
+#include "BeatPresetPolar.h"
+#include "BeatPresetSplit.h"
+#include "BeatPresetTunnel.h"
 
 namespace hrfm{ namespace vj{
     
@@ -13,15 +25,21 @@ namespace hrfm{ namespace vj{
     public:
         
         BeatGraphics();
+        virtual void setPresetByIndex( int index );
         virtual void setSize( int w, int h );
-        virtual void addContent( BeatContentBase * content );
-        virtual void addFilter( BeatFilterBase * filter );
-        virtual void addFilter( BeatFilterBase * filter, int index );
+        
+        virtual void addPreset( BeatPresetBase * preset );
+        
+        virtual void addPreFilter( hrfm::gl::FilterBase * filter );
+        virtual void addPostFilter( hrfm::gl::FilterBase * filter );
         
     protected:
         
         virtual void _update();
         virtual void _draw();
+        
+        vector<hrfm::gl::FilterBase*> _preFilter;
+        vector<hrfm::gl::FilterBase*> _postFilter;
         
     private:
         
@@ -29,12 +47,12 @@ namespace hrfm{ namespace vj{
         
         hrfm::gl::ExFbo * _fbo;
         hrfm::vj::SiBPM * _bpm;
+        BeatPresetBase * _preset = NULL;
         
-        vector<hrfm::vj::BeatContentBase*> _contentVector;
-        hrfm::vj::BeatContentBase * _content;
+        vector<BeatPresetBase*> _presetList;
         
-        vector<vector<hrfm::vj::BeatFilterBase*>*> _filterStock;
-        vector<hrfm::vj::BeatFilterBase*> _activeFilters;
+        int _presetOrderPointer;
+        vector<int> _presetOrder;
         
     };
 

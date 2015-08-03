@@ -21,6 +21,14 @@ namespace hrfm{ namespace gl{
         return _fbo->getBounds();
     };
     
+    ci::Vec2i ExFbo::getAspectSize(){
+        return getAspectRatio(getSize());
+    }
+    ci::Rectf ExFbo::getAspectBounds(){
+        Vec2i aspect = getAspectSize();
+        return Rectf( 0, 0, aspect.x, aspect.y );
+    }
+    
     ci::gl::Texture ExFbo::getTexture(){
         return _fbo->getTexture();
     }
@@ -66,12 +74,12 @@ namespace hrfm{ namespace gl{
     ci::gl::Texture ExFbo::_getTextureClone(){
         ci::gl::Fbo * fbo = hrfm::gl::SiFboFactory::getInstance().create(_fbo->getWidth(),_fbo->getHeight());
         _beginOffscreen(fbo,true);
-        ci::gl::draw(_fbo->getTexture());
+            ci::gl::draw(_fbo->getTexture());
         _endOffscreen();
         return fbo->getTexture();
     }
     
-    void ExFbo::_beginOffscreen( ci::gl::Fbo * fbo, bool clear ){
+    void ExFbo::_beginOffscreen( ci::gl::Fbo * fbo, bool clear, bool useAspect ){
         if( _bindedFbo != NULL && _bindedFbo != fbo ){
             _endOffscreen();
         }
@@ -79,8 +87,14 @@ namespace hrfm{ namespace gl{
             mTmpViewport = ci::gl::getViewport();
             fbo->bindFramebuffer();
             ci::gl::pushMatrices();
-            ci::gl::setViewport( (Area)getBounds() );
-            ci::gl::setMatricesWindow( getSize(), false );
+            if( useAspect ){
+                // 特に使っていない
+                ci::gl::setViewport( (Area)getAspectBounds() );
+                ci::gl::setMatricesWindow( getAspectSize(), false );
+            }else{
+                ci::gl::setViewport( (Area)getBounds() );
+                ci::gl::setMatricesWindow( getSize(), false );
+            }
             if( clear == true){
                 ci::gl::clear();
             }

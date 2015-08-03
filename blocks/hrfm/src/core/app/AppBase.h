@@ -96,10 +96,16 @@ namespace hrfm{ namespace app{
         virtual void draw();
         
         /**
-         # for debug.
+         * for debug.
          * @virtual
          */
         virtual void drawFPS( Vec2f position = Vec2f(20.0f,20.0f) );
+        
+        /**
+         * for debug.
+         * @virtual
+         */
+        void coutGLInfo();
         
         // === Event Listener. =======================================================
         
@@ -114,10 +120,11 @@ namespace hrfm{ namespace app{
         //! @override
         virtual void keyDown( ci::app::KeyEvent event );
         
-        
     protected:
         
         Vec2i mWindowSize;
+        bool _isDebugMode;
+        bool _hideCursor;
         
         /**
          * TriggerEvent 発生時の処理.
@@ -125,15 +132,12 @@ namespace hrfm{ namespace app{
          */
         virtual void onTrigger( TriggerEvent * event );
         
-    private:
+        void _drawDebug();
         
-        bool _isDebugMode;
-        bool _hideCursor;
+    private:
         
         FILE * LOG_FILE;
         Font ___font___;
-        
-        void _drawDebug();
         
     };
     

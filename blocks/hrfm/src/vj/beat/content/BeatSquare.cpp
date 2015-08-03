@@ -24,15 +24,24 @@ namespace hrfm{ namespace vj{
         float posB = max( 0.0, ( position - (1.0-f) ) / f );
         //*/
         
-        ci::gl::color(1.0,1.0,1.0);
-        Rectf rect = Rectf(0,0,width,height);
-        rect.scaleCentered( posA );
-        ci::gl::drawSolidRect( rect );
-        
-        ci::gl::color(0.0,0.0,0.0);
-        rect = Rectf(0,0,width,height);
-        rect.scaleCentered( posB );
-        ci::gl::drawSolidRect( rect );
+        glPushMatrix();
+        {
+            
+            ci::gl::translate( Vec2f( width/2.0f, height/2.0f ) );
+            //ci::gl::rotate( 360.0f * position );
+            
+            ci::gl::color(1.0,1.0,1.0);
+            Rectf rect = Rectf(-width/2.0f,-height/2.0f,width/2.0f,height/2.0f);
+            rect.scaleCentered( posA );
+            ci::gl::drawSolidRect( rect );
+            
+            ci::gl::color(0.0,0.0,0.0);
+            rect = Rectf(-width/2.0f,-height/2.0f,width/2.0f,height/2.0f);
+            rect.scaleCentered( posB );
+            ci::gl::drawSolidRect( rect );
+            
+        }
+        glPopMatrix();
         
     }
     
@@ -120,8 +129,6 @@ namespace hrfm{ namespace vj{
     
     void BeatEqualizer::draw( double position, int width, int height ){
         
-        ci::gl::color(1.0,1.0,1.0);
-        
         hrfm::io::SiAudioInput * audio = &hrfm::io::SiAudioInput::getInstance();
         
         int length = 64;
@@ -129,8 +136,15 @@ namespace hrfm{ namespace vj{
         float h = (float)height;
         
         for( int i = 0; i < (length-1); i++ ) {
-            float barY = audio->getFFT()[i] * height/2.0;
-            ci::gl::drawSolidRect( Rectf( i*w, h/2.0 - barY/2.0, (i+1)*w, h/2.0 + barY/2.0 ) );
+            
+            float f = audio->getFFT()[i];
+            float barY = f * height/1.6;
+            
+            ci::gl::color(f,f,f);
+            
+            Rectf rect = Rectf( i*w, h/2.0 - barY/2.0, (i+1)*w, h/2.0 + barY/2.0 );
+            rect.scaleCentered( Vec2f(0.7, 1.0) );
+            ci::gl::drawSolidRect( rect );
         }
         
     }
@@ -155,6 +169,9 @@ namespace hrfm{ namespace vj{
             for( int i = 0; i < buffLength; i++ ) {
                 float x = i * w;
                 float y = audio->getChannelAt(0)[i] * h;
+                if( syncWithPosition ){
+                    y *= position;
+                }
                 leftBufferLine.push_back( Vec2f( x , y ) );
             }
             leftBufferLine.push_back( Vec2f( width , 0 ) );
@@ -163,6 +180,17 @@ namespace hrfm{ namespace vj{
         glPopMatrix();
         ci::gl::lineWidth(1.0);
 
+    }
+    
+    void BeatCapture::draw( double position, int width, int height ){
+        ci::gl::color(1.0,1.0,1.0);
+        /*
+        for( int i=0; i<192; i++ ){
+            for( int j=0; j<108; j++ ){
+                ci::gl::drawCube(Vec3f(1000.0+0.1*i,100.0+0.1*j,0.0), Vec3f(1.0,1.0,1.0));
+            }
+        }
+        */
     }
     
 }}

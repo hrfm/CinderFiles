@@ -80,7 +80,19 @@ namespace hrfm{ namespace vj{
     
     class BeatAudioWave : public hrfm::vj::BeatContentBase{
     public:
-        BeatAudioWave(){
+        BeatAudioWave( bool syncWithPosition = false ){
+            hrfm::vj::BeatContentBase();
+            this->syncWithPosition = syncWithPosition;
+        }
+        virtual void draw( double position, int width, int height );
+        bool syncWithPosition;
+    };
+    
+    // ---
+    
+    class BeatCapture : public hrfm::vj::BeatContentBase{
+    public:
+        BeatCapture(){
             hrfm::vj::BeatContentBase();
         }
         virtual void draw( double position, int width, int height );

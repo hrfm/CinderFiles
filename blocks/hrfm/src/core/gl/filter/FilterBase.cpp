@@ -20,7 +20,7 @@ namespace hrfm { namespace gl{
     // どのシェーダを使うかはクラスに任せます.
     void FilterBase::setup( Vec2i size ){
             
-        cout << size << endl;
+        //cout << size << endl;
         
         // Calcurate Aspect Ratio.
         mAspect = getAspectRatio( size );
@@ -29,7 +29,7 @@ namespace hrfm { namespace gl{
         mFbo = *SiFboFactory::getInstance().create( size.x, size.y, false );
         
         // Create Shader.
-        cout << "FilterBase::setup => " << mFragmentShader << ", " << mVertexShader << endl;
+        //cout << "FilterBase::setup => " << mFragmentShader << ", " << mVertexShader << endl;
         mShader = ShaderFactory::create( getVertexShader(), getFragmentShader() );
         
     }
@@ -119,7 +119,7 @@ namespace hrfm { namespace gl{
     void FilterBase::init(string fragmentShader, string vertexShader ){
         mFragmentShader = fragmentShader;
         mVertexShader   = vertexShader;
-        cout << "init > " << mFragmentShader << ":" << mVertexShader << endl;
+        //cout << "init > " << mFragmentShader << ":" << mVertexShader << endl;
     }
     
     DataSourceRef FilterBase::getVertexShader(){
@@ -128,7 +128,7 @@ namespace hrfm { namespace gl{
     }
     
     DataSourceRef FilterBase::getFragmentShader(){
-        cout << "getFragmentShader : " << mFragmentShader << endl;
+        //cout << "getFragmentShader : " << mFragmentShader << endl;
         return DataLoader::load(mFragmentShader);
         //return ci::app::loadResource(this->_fragmentShader);
     }
