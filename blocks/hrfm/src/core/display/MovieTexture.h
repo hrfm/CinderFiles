@@ -28,6 +28,7 @@ namespace hrfm{ namespace display{
         
         virtual void play();
         virtual void play( ci::fs::path &filePath );
+        virtual void play( string filePath );
         virtual void play( ci::qtime::MovieGlRef & movieGlRef );
         
         virtual void stop();

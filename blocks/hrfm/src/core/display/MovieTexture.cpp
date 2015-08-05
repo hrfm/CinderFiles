@@ -37,6 +37,11 @@ namespace hrfm{ namespace display{
         play();
     }
     
+    void MovieTexture::play( string filePath ){
+        ci::fs::path path = filePath;
+        play( path );
+    }
+    
     void MovieTexture::play( ::ci::qtime::MovieGlRef & movieGlRef ){
         stop();
         _movieGlRef = movieGlRef;
