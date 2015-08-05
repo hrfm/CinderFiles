@@ -60,6 +60,9 @@ namespace hrfm{ namespace vj{
     
     void BeatGraphics::_update(){
         
+        vector<hrfm::gl::FilterBase*>::iterator it;
+        vector<hrfm::gl::FilterBase*>::iterator end;
+        
         _fbo->beginOffscreen();
         {
             ci::gl::clear();
@@ -67,25 +70,24 @@ namespace hrfm{ namespace vj{
             ci::gl::color(1.0,1.0,1.0);
             // --- Pre Filter.
             {
-                vector<hrfm::gl::FilterBase*>::iterator it;
-                vector<hrfm::gl::FilterBase*>::iterator end = _preFilter.end();
+                end = _preFilter.end();
                 for( it=_preFilter.begin(); it!=end; ++it ){
                     _fbo->applyFilter( *it );
                 }
             }
             // --- Apply active filters.
             {
-                vector<hrfm::vj::BeatFilterBase*>::iterator it;
-                vector<hrfm::vj::BeatFilterBase*>::iterator end = _preset->getActiveFilters()->end();
+                end = _preset->getActiveFilters()->end();
                 for( it=_preset->getActiveFilters()->begin(); it!=end; ++it ){
                     _fbo->applyFilter( *it );
-                    (*it)->updated = false;
+                    if( BeatFilterBase * f = dynamic_cast<BeatFilterBase*>( *it ) ){
+                        f->updated = false;
+                    }
                 }
             }
             // --- Post Filter.
             {
-                vector<hrfm::gl::FilterBase*>::iterator it;
-                vector<hrfm::gl::FilterBase*>::iterator end = _postFilter.end();
+                end = _postFilter.end();
                 for( it=_postFilter.begin(); it!=end; ++it ){
                     _fbo->applyFilter( *it );
                 }

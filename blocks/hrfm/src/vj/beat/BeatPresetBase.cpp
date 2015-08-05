@@ -3,7 +3,7 @@
 namespace hrfm{ namespace vj{
     
     BeatPresetBase::BeatPresetBase(){
-        _activeFilters = new vector<BeatFilterBase*>();
+        _activeFilters = new vector<hrfm::gl::FilterBase*>();
     }
     
     BeatPresetBase * BeatPresetBase::addContent( BeatContentBase * content ){
@@ -11,13 +11,13 @@ namespace hrfm{ namespace vj{
         return this;
     }
     
-    BeatPresetBase * BeatPresetBase::addFilter( BeatFilterBase * filter ){
+    BeatPresetBase * BeatPresetBase::addFilter( hrfm::gl::FilterBase * filter ){
         addFilter( filter, _filterStock.size() );
         return this;
     }
-    BeatPresetBase * BeatPresetBase::addFilter( BeatFilterBase * filter, int index ){
+    BeatPresetBase * BeatPresetBase::addFilter( hrfm::gl::FilterBase * filter, int index ){
         while( _filterStock.size() <= index ){
-            _filterStock.push_back( new vector<BeatFilterBase*>() );
+            _filterStock.push_back( new vector<hrfm::gl::FilterBase*>() );
         }
         _filterStock.at(index)->push_back(filter);
         return this;
@@ -27,7 +27,7 @@ namespace hrfm{ namespace vj{
         return _content;
     }
     
-    vector<BeatFilterBase*> * BeatPresetBase::getActiveFilters(){
+    vector<hrfm::gl::FilterBase*> * BeatPresetBase::getActiveFilters(){
         return _activeFilters;
     }
     
@@ -42,15 +42,17 @@ namespace hrfm{ namespace vj{
         
         {
             _activeFilters->clear();
-            vector<vector<hrfm::vj::BeatFilterBase*>*>::iterator it;
-            vector<vector<hrfm::vj::BeatFilterBase*>*>::iterator end = _filterStock.end();
+            vector<vector<hrfm::gl::FilterBase*>*>::iterator it;
+            vector<vector<hrfm::gl::FilterBase*>*>::iterator end = _filterStock.end();
             for( it=_filterStock.begin(); it!=end; ++it ){
                 if( 0 < (*it)->size() ){
-                    BeatFilterBase * filter = (*it)->at( randInt( (*it)->size() ) );
+                    hrfm::gl::FilterBase * filter = (*it)->at( randInt( (*it)->size() ) );
                     if( 0 < width * height && ( filter->getWidth() != width || filter->getHeight() != height ) ){
                         filter->setSize( width, height );
                     }
-                    filter->update( _content );
+                    if( BeatFilterBase * f = dynamic_cast<BeatFilterBase*>( filter ) ){
+                        f->update( _content );
+                    }
                     _activeFilters->push_back( filter );
                 }
             }

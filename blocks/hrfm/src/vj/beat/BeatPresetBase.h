@@ -13,11 +13,11 @@ namespace hrfm{ namespace vj{
         BeatPresetBase();
         
         virtual BeatPresetBase * addContent( BeatContentBase * content );
-        virtual BeatPresetBase * addFilter( BeatFilterBase * filter );
-        virtual BeatPresetBase * addFilter( BeatFilterBase * filter, int index );
+        virtual BeatPresetBase * addFilter( hrfm::gl::FilterBase * filter );
+        virtual BeatPresetBase * addFilter( hrfm::gl::FilterBase * filter, int index );
         
         BeatContentBase * getContent();
-        vector<BeatFilterBase*> * getActiveFilters();
+        vector<hrfm::gl::FilterBase*> * getActiveFilters();
         
         virtual void change( int width, int height );
         
@@ -26,8 +26,8 @@ namespace hrfm{ namespace vj{
         vector<BeatContentBase*> _contentVector;
         BeatContentBase * _content;
         
-        vector<vector<BeatFilterBase*>*> _filterStock;
-        vector<BeatFilterBase*> * _activeFilters;
+        vector<vector<hrfm::gl::FilterBase*>*> _filterStock;
+        vector<hrfm::gl::FilterBase*> * _activeFilters;
         
     };
     

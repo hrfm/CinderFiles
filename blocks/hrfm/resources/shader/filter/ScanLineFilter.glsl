@@ -5,6 +5,24 @@ uniform sampler2D tex;
 uniform float time;
 uniform vec2 resolution;
 
+float sigmoid( float val, float gain ){
+    float v = val - 0.5;
+    return 1.0 / ( 1.0 + exp( -gain * v ) );
+}
+
+void main(void){
+    
+    vec2 texCoord = gl_FragCoord.xy / resolution;
+    
+    vec4 color = texture2D(tex,mod(texCoord,1.0));
+    
+    color *= 1.2 * ( 0.5 + 0.5 * sigmoid( sin( gl_FragCoord.y ), 2 ) );
+    
+    gl_FragColor = color;
+    
+}
+
+/*
 float round( float v ){
     if( v < 0.5 ){
         return 0.0;
@@ -48,3 +66,4 @@ void main(void){
     
     
 }
+//*/
