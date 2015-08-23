@@ -14,10 +14,12 @@ namespace hrfm{ namespace display{
         };
         ~Stage(){};
         virtual DisplayNode * addChild( DisplayNode * child );
+        virtual void setAutoClear( bool flag = true );
         virtual void draw(bool offscreen = false);
         virtual void drawOffscreen();
         ci::gl::Texture & getTexture();
     private:
+        bool _autoClear = true;
         ci::gl::Fbo _fbo;
         void _onResize( hrfm::events::Event * event );
     };

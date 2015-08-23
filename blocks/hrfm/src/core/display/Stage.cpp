@@ -12,6 +12,15 @@ namespace hrfm{ namespace display{
         return child;
     }
     
+    void Stage::setAutoClear( bool flag ){
+        _autoClear = flag;
+        if( _autoClear == false ){
+            _fbo.bindFramebuffer();
+            ci::gl::clear();
+            _fbo.unbindFramebuffer();
+        }
+    }
+    
     void Stage::draw( bool offscreen ){
         
         Area viewport = ci::gl::getViewport();
@@ -20,7 +29,9 @@ namespace hrfm{ namespace display{
         
         _fbo.bindFramebuffer();
         {
-            ci::gl::clear();
+            if( _autoClear == true ){
+                ci::gl::clear();
+            }
             ci::gl::color( colorA );
             ci::gl::pushMatrices();
             {
