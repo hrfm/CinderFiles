@@ -29,9 +29,9 @@ namespace hrfm{ namespace gl{
         ExFbo * beginOffscreen( bool clear = false );
         ExFbo * endOffscreen();
         
-        ExFbo * applyFilter( FilterBase * filter );
-        ExFbo * applyFilter( FilterBase * filter, ci::gl::Texture & srcTexture );
-        ExFbo * applyFilter( FilterBase * filter, ci::gl::Texture * srcTexture );
+        ExFbo * applyFilter( FilterBase * filter, bool clear = true );
+        ExFbo * applyFilter( FilterBase * filter, ci::gl::Texture & srcTexture, bool clear = true );
+        ExFbo * applyFilter( FilterBase * filter, ci::gl::Texture * srcTexture, bool clear = true );
         
     protected:
         
