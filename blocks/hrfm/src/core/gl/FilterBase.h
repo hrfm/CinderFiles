@@ -21,13 +21,15 @@ namespace hrfm { namespace gl{
         
     public:
         
-        FilterBase();
-        FilterBase( string fragmentShader );
-        FilterBase( string fragmentShader, string vertexShader );
+        FilterBase( Vec2i size = Vec2i(256,256) );
+        FilterBase( string fragmentShader, Vec2i size = Vec2i(256,256) );
+        FilterBase( string fragmentShader, string vertexShader, Vec2i size = Vec2i(256,256) );
         
         // 最も基本的な初期化を行います.
         // どのシェーダを使うかはクラスに任せます.
         virtual void setup( Vec2i size );
+        virtual void setup( Vec2i size, string fragmentShader );
+        virtual void setup( Vec2i size, string fragmentShader, string vertexShader );
         
         virtual void setSize( int w, int h );
         virtual void setSize( Vec2i size );

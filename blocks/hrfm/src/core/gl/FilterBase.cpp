@@ -4,22 +4,23 @@ namespace hrfm { namespace gl{
     
     // --- Event for OSC. ---
     
-    FilterBase::FilterBase(){
+    FilterBase::FilterBase( Vec2i size ){
         init();
+        setup( size );
     };
     
-    FilterBase::FilterBase( string fragmentShader ){
-        init( fragmentShader );
+    FilterBase::FilterBase( string fragmentShader, Vec2i size ){
+        setup( size, fragmentShader );
     };
     
-    FilterBase::FilterBase( string fragmentShader, string vertexShader ){
-        init( fragmentShader, vertexShader );
+    FilterBase::FilterBase( string fragmentShader, string vertexShader, Vec2i size ){
+        setup( size, fragmentShader, vertexShader );
     };
     
     // 最も基本的な初期化を行います.
     // どのシェーダを使うかはクラスに任せます.
     void FilterBase::setup( Vec2i size ){
-            
+        
         //cout << size << endl;
         
         // Calcurate Aspect Ratio.
@@ -33,15 +34,22 @@ namespace hrfm { namespace gl{
         mShader = ShaderFactory::create( getVertexShader(), getFragmentShader() );
         
     }
-        
+    void FilterBase::setup( Vec2i size, string fragmentShader ){
+        init( fragmentShader );
+        setup( size );
+    }
+    void FilterBase::setup( Vec2i size, string fragmentShader, string vertexShader ){
+        init( fragmentShader, vertexShader );
+        setup( size );
+    }
+    
     void FilterBase::setSize( int w, int h ){
         mFbo = *SiFboFactory::getInstance().create( w, h, false );
     }
-        
     void FilterBase::setSize( Vec2i size ){
         setSize( size.x, size.y );
     }
-        
+    
     void FilterBase::affect( ci::gl::Texture * tex, Vec2f windowSize, Vec2f resolution, Rectf drawRect ){
         mShader.bind();
         {
