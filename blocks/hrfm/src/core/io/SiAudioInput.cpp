@@ -130,8 +130,16 @@ namespace hrfm{ namespace io{
         return _fftNormalized;
     }
     
+    int SiAudioInput::getFFTRangedLength(){
+        return _bandCount / 8;
+    }
+    
+    float * SiAudioInput::getFFTRanged(){
+        return _fftRanged;
+    }
+    
     float SiAudioInput::getFFTRangedAt( int index ){
-        if( index < _bandCount / 8 ){
+        if( 0 <= index && index < getFFTRangedLength() ){
             return _fftRanged[index];
         }else{
             return 0.0f;

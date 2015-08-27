@@ -39,6 +39,8 @@ namespace hrfm{ namespace io{
         float * getFFT();
         float * getFFTNormalized();
         
+        int   getFFTRangedLength();
+        float * getFFTRanged();
         float getFFTRangedAt( int index );
         
         float getAudioManagerGain();
