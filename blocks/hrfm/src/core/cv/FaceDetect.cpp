@@ -36,6 +36,7 @@ namespace hrfm{ namespace cv{
     }
     
     void FaceDetect::update( Surface surface ){
+        cout << "FaceDetect::update()" << endl;
         if( pthread_mutex_lock(&_mutex) != 0 ){
             if( &surface != nullptr ){
                 mCloneSurface = surface.clone();
@@ -68,6 +69,8 @@ namespace hrfm{ namespace cv{
             if( mCloneSurface && 0.1f < elapsedSec - recentSec ){
                 
                 if( pthread_mutex_lock(&_mutex) != 0 ){
+                    
+                    cout << "updateFaces"<< ci::app::getElapsedSeconds() << endl;
                     
                     try{
                         

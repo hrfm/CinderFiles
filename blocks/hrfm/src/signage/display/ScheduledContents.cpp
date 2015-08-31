@@ -17,6 +17,13 @@ namespace hrfm{ namespace signage{ namespace display{
     
     void ScheduledContents::init( XmlTree &xml ){
         
+        _fbo = new hrfm::gl::ExFbo( 256, 256 );
+        
+        mtx.x = 1;
+        mtx.y = 1;
+        
+        // ---------
+        
         cout << "- ScheduledContents::init()" << endl << endl;
         cout << xml << endl;
         
@@ -72,6 +79,8 @@ namespace hrfm{ namespace signage{ namespace display{
                             mov->addEventListener(hrfm::events::Event::COMPLETE, this, &ScheduledContents::_onMovieComplete );
                         }
                         
+                        //mov->setLetterbox(true);
+                        
                         _contentList[time] = mov;
                         
                     }else if( type == "seq" ){
@@ -112,6 +121,12 @@ namespace hrfm{ namespace signage{ namespace display{
                         addSchedule( time, m, h, item->getAttributeValue<string>("trigger") );
                     }else{
                         addSchedule( time, m, h );
+                    }
+                    
+                    if( item->hasAttribute("cols") ){
+                        _splitList[time] = Vec2i( item->getAttributeValue<int>("cols"), 1 );
+                    }else{
+                        _splitList[time] = Vec2i( 1, 1 );
                     }
                     
                 }catch(...){
@@ -174,6 +189,9 @@ namespace hrfm{ namespace signage{ namespace display{
         
         _currentContent = _contentList[type];
         
+        mtx.x = _splitList[type].x;
+        mtx.y = _splitList[type].y;
+        
         if( _currentContent ){
             
             if( ::hrfm::display::MovieTexture * mov = dynamic_cast<::hrfm::display::MovieTexture*>(_currentContent) ){
@@ -182,7 +200,7 @@ namespace hrfm{ namespace signage{ namespace display{
                 seq->play();
             }
             
-            addChild( _currentContent );
+            //addChild( _currentContent );
             
         }
         
@@ -255,12 +273,29 @@ namespace hrfm{ namespace signage{ namespace display{
     //! protected:
     
     void ScheduledContents::_update(){
-        if( _currentContent ){
-            _currentContent->setSize( width, height);
+        if( _fbo->getSize() != getSize() ){
+            _fbo = new hrfm::gl::ExFbo( width, height );
         }
+        _fbo->beginOffscreen(true);
+        {
+            if( _currentContent ){
+                _currentContent->setSize( width, height);
+                _currentContent->update();
+                _currentContent->draw();
+            }
+        }
+        _fbo->endOffscreen();
     }
     
-    void ScheduledContents::_draw(){}
+    void ScheduledContents::_draw(){
+        float w = width / (float)mtx.x;
+        float h = height / (float)mtx.y;
+        for( int i=0; i<mtx.x; i++ ){
+            for( int j=0; j<mtx.y; j++ ){
+                ci::gl::draw( _fbo->getTexture(), Rectf( w*i, h*j, w*(i+1), h*(j+1) ) );
+            }
+        }
+    }
     
     void ScheduledContents::_onTimer( events::TimeUtilEvent * event ){
         cout << "SequantialContents::_onTimer("+event->type()+")" << endl;
@@ -273,8 +308,11 @@ namespace hrfm{ namespace signage{ namespace display{
      */
     void ScheduledContents::_onMovieComplete( hrfm::events::Event * event ){
         if( _currentContent && _currentContent->getParent() == this ){
-            removeChild(_currentContent);
+            //removeChild(_currentContent);
+            _currentContent = NULL;
         }
+        _fbo->beginOffscreen(true)->endOffscreen();
+        this->dispatchEvent(new hrfm::events::Event("moviecomplete"));
     }
     
     //! private
@@ -286,8 +324,10 @@ namespace hrfm{ namespace signage{ namespace display{
             }else if( SequentialContents * seq = dynamic_cast<SequentialContents*>(_currentContent) ){
                 seq->stop();
             }
-            removeChild(_currentContent);
+            //removeChild(_currentContent);
+            _currentContent = NULL;
         }
+        _fbo->beginOffscreen(true)->endOffscreen();
     }
     
 }}}

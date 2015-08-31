@@ -8,6 +8,9 @@
 #include "SiEventDispatcher.h"
 #include "SequentialContents.h"
 
+#include "ExFbo.h"
+#include "SplitFilter.h"
+
 namespace hrfm{ namespace signage{ namespace display{
     
     /*
@@ -62,7 +65,12 @@ namespace hrfm{ namespace signage{ namespace display{
         map<string,hrfm::display::DisplayNode*> _contentList;
         map<string,string> _triggerList;
         
+        map<string,Vec2i> _splitList;
+        
         bool _enable;
+        
+        hrfm::gl::ExFbo * _fbo;
+        Vec2i mtx;
         
     };
     

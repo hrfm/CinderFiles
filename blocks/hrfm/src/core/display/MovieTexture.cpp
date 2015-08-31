@@ -48,13 +48,15 @@ namespace hrfm{ namespace display{
         play();
     }
     
-    void MovieTexture::stop(){
+    void MovieTexture::stop( bool seekToStart ){
         if( _movieGlRef ){
             _beforeTime = 0;
             if( _movieGlRef->isPlaying() ){
                 _movieGlRef->stop();
             }
-            _movieGlRef->seekToStart();
+            if( seekToStart == true ){
+                _movieGlRef->seekToStart();
+            }
         }
     }
     

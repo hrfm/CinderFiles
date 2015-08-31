@@ -26,6 +26,7 @@ namespace hrfm{ namespace display{
         ~DisplayNode(){};
         
         virtual void setup();
+        virtual void clear();
         
         virtual ci::Vec2i getSize();
         virtual void setSize( int w, int h );

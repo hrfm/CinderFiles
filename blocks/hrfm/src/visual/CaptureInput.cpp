@@ -20,7 +20,7 @@ namespace hrfm{ namespace io{
     }
     
     void CaptureInput::update(){
-        if( mCapture->checkNewFrame() ){
+        if( mCapture->getSurface() ){
             if( mFaceDetect ){
                 mFaceDetect->update( mCapture->getSurface().clone() );
             }

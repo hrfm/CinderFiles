@@ -31,7 +31,7 @@ namespace hrfm{ namespace display{
         virtual void play( string filePath );
         virtual void play( ci::qtime::MovieGlRef & movieGlRef );
         
-        virtual void stop();
+        virtual void stop( bool seekToStart = true );
         
         virtual ci::gl::Texture getTexture();
         

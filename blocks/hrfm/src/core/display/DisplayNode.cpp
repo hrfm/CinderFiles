@@ -8,6 +8,8 @@ namespace hrfm{ namespace display{
     
     void DisplayNode::setup(){}
     
+    void DisplayNode::clear(){}
+    
     Vec2i DisplayNode::getSize(){
         return Vec2f( width, height );
     }
