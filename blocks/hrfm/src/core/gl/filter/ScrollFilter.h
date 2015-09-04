@@ -11,15 +11,13 @@ namespace hrfm { namespace gl{ namespace filter{
         
     public:
         
-        ScrollFilter();
+        ScrollFilter():FilterBase("ScrollFilter.glsl"){};
         
         void setUniform( float scrollX = 0, float scrollY = 0 );
         
     protected:
         
-        DataSourceRef getFragmentShader();
-        
-        void prepare();
+        virtual void prepare();
         
         float _scrollX;
         float _scrollY;

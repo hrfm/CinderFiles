@@ -9,12 +9,13 @@ namespace hrfm { namespace gl{ namespace filter{
     
     class AnalogNoiseFilter : public FilterBase{
     public:
-        AnalogNoiseFilter();
+        AnalogNoiseFilter():FilterBase("AnalogNoiseFilter.glsl"){
+            value = 0;
+        };
         float value;
     protected:
-        DataSourceRef getFragmentShader();
-        void prepare();
-        void clear();
+        virtual void prepare();
+        virtual void clear();
     };
     
 }}}

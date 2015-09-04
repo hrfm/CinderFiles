@@ -11,3 +11,4 @@
 #include "ScanLineNoiseFilter.h"
 #include "SciFiFilter.h"
 #include "ScrollFilter.h"
+#include "SplitFilter.h"

@@ -30,6 +30,8 @@ namespace hrfm{ namespace io{
         
         void  useAudioManager();
         
+        float getVolume();
+        
         size_t numChannels();
         const float * getChannelAt( size_t ch );
         

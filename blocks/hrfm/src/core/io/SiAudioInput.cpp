@@ -106,6 +106,14 @@ namespace hrfm{ namespace io{
         
     }
     
+    float SiAudioInput::getVolume(){
+        if( _enabled ){
+            return mMonitorNode->getVolume();
+        }else{
+            return 0.5;
+        }
+    }
+    
     size_t SiAudioInput::numChannels(){
         return _numChannels;
     }

@@ -11,11 +11,9 @@ namespace hrfm { namespace gl{ namespace filter{
         
     public:
         
-        SciFiFilter();
+        SciFiFilter():FilterBase("SciFiFilter.glsl"){};
         
     protected:
-        
-        DataSourceRef getFragmentShader();
         
     };
     

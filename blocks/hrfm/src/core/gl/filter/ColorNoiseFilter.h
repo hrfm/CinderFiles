@@ -8,11 +8,12 @@ using namespace hrfm::utils;
 namespace hrfm { namespace gl{ namespace filter{
     class ColorNoiseFilter : public FilterBase{
     public:
-        ColorNoiseFilter();
+        ColorNoiseFilter():FilterBase("ColorNoiseFilter.glsl"){
+            value = 0.0;
+        };
         float value;
     protected:
-        DataSourceRef getFragmentShader();
-        void prepare();
-        void clear();
+        virtual void prepare();
+        virtual void clear();
     };
 }}}

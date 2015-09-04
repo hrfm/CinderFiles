@@ -3,6 +3,7 @@
 #include "TextureNode.h"
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Texture.h"
+#include "DataLoader.h"
 
 namespace hrfm{ namespace display{
     
