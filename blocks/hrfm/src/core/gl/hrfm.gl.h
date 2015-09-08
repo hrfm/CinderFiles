@@ -3,6 +3,7 @@
 #include "cinder/gl/Texture.h"
 #include "SiFboFactory.h"
 #include "ShaderFactory.h"
+#include "VboStage.h"
 
 using namespace std;
 using namespace hrfm::utils;
