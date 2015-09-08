@@ -21,19 +21,17 @@ namespace hrfm { namespace gl{
     }
     
     void FilterBase::affect( ci::gl::Texture * tex, Vec2f windowSize, Vec2f resolution, Rectf drawRect ){
-        mShader.bind();
+        tex->bind(0);
+        begin();
         {
-            tex->bind(0);
             mShader.uniform( "tex"       , 0 );
             mShader.uniform( "time"      , (float)ci::app::getElapsedSeconds() );
             mShader.uniform( "windowSize", windowSize );
             mShader.uniform( "resolution", resolution );
-            prepare();
             ci::gl::drawSolidRect( drawRect );
-            clear();
-            tex->unbind();
         }
-        mShader.unbind();
+        end();
+        tex->unbind();
     }
     
     ci::gl::Texture FilterBase::affect( ci::gl::Texture tex ){
