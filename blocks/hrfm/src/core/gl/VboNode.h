@@ -6,6 +6,7 @@
 #include "cinder/app/AppNative.h"
 
 #include "EventDispatcher.h"
+#include "ShaderBase.h"
 
 namespace hrfm{ namespace gl{
     
@@ -37,6 +38,8 @@ namespace hrfm{ namespace gl{
         
         virtual ci::Matrix44f getRotation();
         virtual void setRotation( ci::Matrix44f rotation );
+        
+        virtual void setShader( hrfm::gl::ShaderBase * shader );
         
         virtual int numChildren();
         
@@ -86,6 +89,8 @@ namespace hrfm{ namespace gl{
     protected:
         
         friend class VboStage;
+        
+        hrfm::gl::ShaderBase * _shader = NULL;
         
         VboStage * _stage = NULL;
         virtual void _setStage( VboStage * node );

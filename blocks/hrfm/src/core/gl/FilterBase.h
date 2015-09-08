@@ -8,6 +8,7 @@
 #include "SiFboFactory.h"
 #include "ShaderFactory.h"
 #include "Utils.h"
+#include "ShaderBase.h"
 
 using namespace ci;
 using namespace std;
@@ -17,19 +18,21 @@ namespace hrfm { namespace gl{
     
     // --- Event for OSC. ---
     
-    class FilterBase{
+    class FilterBase:public ShaderBase{
         
     public:
         
-        FilterBase( Vec2i size = Vec2i(256,256) );
-        FilterBase( string fragmentShader, Vec2i size = Vec2i(256,256) );
-        FilterBase( string fragmentShader, string vertexShader, Vec2i size = Vec2i(256,256) );
+        FilterBase( Vec2i size = Vec2i(256,256) ):ShaderBase(){
+            setup( size );
+        };
+        FilterBase( string fragmentShader, Vec2i size = Vec2i(256,256) ):ShaderBase(fragmentShader){
+            setup( size );
+        };
+        FilterBase( string fragmentShader, string vertexShader, Vec2i size = Vec2i(256,256) ):ShaderBase(fragmentShader,vertexShader){
+            setup( size );
+        };
         
-        // 最も基本的な初期化を行います.
-        // どのシェーダを使うかはクラスに任せます.
         virtual void setup( Vec2i size );
-        virtual void setup( Vec2i size, string fragmentShader );
-        virtual void setup( Vec2i size, string fragmentShader, string vertexShader );
         
         virtual void setSize( int w, int h );
         virtual void setSize( Vec2i size );
@@ -40,24 +43,14 @@ namespace hrfm { namespace gl{
         void draw( Rectf bounds );
         
         ci::gl::Texture getTexture();
-        
         void bindTexture( int index );
-        
         void unbindTexture();
         
         int getWidth();
-        
         int getHeight();
-        
         Rectf getBounds();
         
     protected:
-        
-        void init( string fragmentShader = "simple_frag.glsl", string vertexShader = "simple_vert.glsl");
-        
-        virtual DataSourceRef getVertexShader();
-        
-        virtual DataSourceRef getFragmentShader();
         
         // prepare shader, texture, and more. before drawSolidRect to FrameBuffer.
         virtual void prepare();
@@ -65,13 +58,8 @@ namespace hrfm { namespace gl{
         // clear shader, texture, and more. after drawSolidRect to FrameBuffer.
         virtual void clear();
         
-        string mFragmentShader;
-        string mVertexShader;
-        
-        ci::gl::GlslProg mShader;
         float mCycle;
         Vec2i mAspect;
-        
         ci::gl::Fbo mFbo;
         
     private:

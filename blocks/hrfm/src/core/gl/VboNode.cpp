@@ -34,6 +34,10 @@ namespace hrfm{ namespace gl{
         }
     }
     
+    void VboNode::setShader( hrfm::gl::ShaderBase * shader ){
+        _shader = shader;
+    }
+    
     int VboNode::numChildren(){
         return children.size();
     }
@@ -181,11 +185,30 @@ namespace hrfm{ namespace gl{
         ci::gl::pushMatrices();
         {
             ci::gl::translate( Vec3f( x, y, z ) );
-            ci::gl::scale( this->scale );
             ci::gl::rotate( this->rotation );
-            ci::gl::enableWireframe();
-            ci::gl::draw( *this->mesh );
-            ci::gl::disableWireframe();
+            ci::gl::scale( this->scale );
+            //ci::gl::enableWireframe();
+            if( _shader != NULL ){
+                _shader->begin();
+                
+                GLfloat lightpos[] = { 0.0f, 0.0f, -1000.0f, 1.0f }; /* 位置　　　 */
+                GLfloat lightcol[] = { 1.0f, 1.0f, 1.0f, 1.0f }; /* 直接光強度 */
+                GLfloat lightamb[] = { 0.1f, 0.1f, 0.1f, 1.0f }; /* 環境光強度 */
+                
+                glEnable(GL_LIGHTING);
+                glEnable(GL_LIGHT0);
+                glLightfv(GL_LIGHT0, GL_DIFFUSE, lightcol);
+                glLightfv(GL_LIGHT0, GL_SPECULAR, lightcol);
+                glLightfv(GL_LIGHT0, GL_AMBIENT, lightamb);
+                glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+
+                
+                ci::gl::draw( *this->mesh );
+                _shader->end();
+            }else{
+                ci::gl::draw( *this->mesh );
+            }
+            //ci::gl::disableWireframe();
         }
         ci::gl::pushMatrices();
     };

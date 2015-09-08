@@ -4,43 +4,13 @@ namespace hrfm { namespace gl{
     
     // --- Event for OSC. ---
     
-    FilterBase::FilterBase( Vec2i size ){
-        init();
-        setup( size );
-    };
-    
-    FilterBase::FilterBase( string fragmentShader, Vec2i size ){
-        setup( size, fragmentShader );
-    };
-    
-    FilterBase::FilterBase( string fragmentShader, string vertexShader, Vec2i size ){
-        setup( size, fragmentShader, vertexShader );
-    };
-    
     // 最も基本的な初期化を行います.
     // どのシェーダを使うかはクラスに任せます.
     void FilterBase::setup( Vec2i size ){
-        
-        //cout << size << endl;
-        
         // Calcurate Aspect Ratio.
         mAspect = getAspectRatio( size );
-        
         // Create Fbo.
         mFbo = *SiFboFactory::getInstance().create( size.x, size.y, false );
-        
-        // Create Shader.
-        //cout << "FilterBase::setup => " << mFragmentShader << ", " << mVertexShader << endl;
-        mShader = ShaderFactory::create( getVertexShader(), getFragmentShader() );
-        
-    }
-    void FilterBase::setup( Vec2i size, string fragmentShader ){
-        init( fragmentShader );
-        setup( size );
-    }
-    void FilterBase::setup( Vec2i size, string fragmentShader, string vertexShader ){
-        init( fragmentShader, vertexShader );
-        setup( size );
     }
     
     void FilterBase::setSize( int w, int h ){
@@ -124,23 +94,6 @@ namespace hrfm { namespace gl{
     
     // protected
     
-    void FilterBase::init(string fragmentShader, string vertexShader ){
-        mFragmentShader = fragmentShader;
-        mVertexShader   = vertexShader;
-        //cout << "init > " << mFragmentShader << ":" << mVertexShader << endl;
-    }
-    
-    DataSourceRef FilterBase::getVertexShader(){
-        return DataLoader::load(mVertexShader);
-        //return ci::app::loadResource(this->_vertexShader);
-    }
-    
-    DataSourceRef FilterBase::getFragmentShader(){
-        //cout << "getFragmentShader : " << mFragmentShader << endl;
-        return DataLoader::load(mFragmentShader);
-        //return ci::app::loadResource(this->_fragmentShader);
-    }
-        
     // prepare shader, texture, and more. before drawSolidRect to FrameBuffer.
     void FilterBase::prepare(){}
     
