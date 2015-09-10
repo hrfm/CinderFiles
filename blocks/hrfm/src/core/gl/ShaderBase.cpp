@@ -27,6 +27,10 @@ namespace hrfm { namespace gl{
         mShader.unbind();
     }
     
+    ci::gl::GlslProg * ShaderBase::getGlslProgPtr(){
+        return &mShader;
+    }
+
     // protected
     
     void ShaderBase::initShader(string fragmentShader, string vertexShader ){

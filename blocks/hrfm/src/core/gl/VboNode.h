@@ -4,6 +4,8 @@
 
 #include "cinder/Camera.h"
 #include "cinder/app/AppNative.h"
+#include "cinder/gl/Material.h"
+#include "cinder/gl/Light.h"
 
 #include "EventDispatcher.h"
 #include "ShaderBase.h"
@@ -17,10 +19,8 @@ namespace hrfm{ namespace gl{
     public:
         
         VboNode( ci::gl::VboMesh * mesh = NULL ):hrfm::events::EventDispatcher(){
-            x = 0.0f;
-            y = 0.0f;
-            z = 0.0f;
-            scale   = ci::Vec3f(1.0f,1.0f,1.0f);
+            position = ci::Vec3f(0.0f,0.0f,0.0f);
+            scale    = ci::Vec3f(1.0f,1.0f,1.0f);
             rotation.setToIdentity();
             colorA  = ci::ColorA(1.0,1.0,1.0,1.0);
             visible = true;
@@ -33,13 +33,19 @@ namespace hrfm{ namespace gl{
         
         virtual ci::Vec3f getAbsolutePosition();
         
+        virtual ci::Vec3f getPosition();
+        virtual void setPosition( ci::Vec3f position );
+        
         virtual ci::Vec3f getScale();
+        virtual void setScale( float scale );
         virtual void setScale( ci::Vec3f scale );
         
         virtual ci::Matrix44f getRotation();
         virtual void setRotation( ci::Matrix44f rotation );
         
+        virtual void setEnableWireframe( bool flag );
         virtual void setShader( hrfm::gl::ShaderBase * shader );
+        virtual void setMaterial( ci::gl::Material * material );
         
         virtual int numChildren();
         
@@ -64,8 +70,7 @@ namespace hrfm{ namespace gl{
         std::vector<VboNode*> children;
         
         // --- PROPERTY -------------
-        float x, y, z;
-        ci::Vec3f scale;
+        ci::Vec3f position, scale;
         ci::Matrix44f rotation;
         bool  visible;
         ci::ColorA colorA;
@@ -90,7 +95,9 @@ namespace hrfm{ namespace gl{
         
         friend class VboStage;
         
+        bool _enableWireframe = false;
         hrfm::gl::ShaderBase * _shader = NULL;
+        ci::gl::Material * _material = NULL;
         
         VboStage * _stage = NULL;
         virtual void _setStage( VboStage * node );

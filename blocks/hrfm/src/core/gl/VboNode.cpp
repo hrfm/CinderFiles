@@ -10,10 +10,19 @@ namespace hrfm{ namespace gl{
     
     void VboNode::clear(){}
     
+    Vec3f VboNode::getPosition(){
+        return this->position;
+    }
+    void VboNode::setPosition( Vec3f position ){
+        this->position = position;
+    }
+    
     Vec3f VboNode::getScale(){
         return this->scale;
     }
-    
+    void VboNode::setScale( float scale ){
+        this->scale = Vec3f( scale, scale, scale );
+    }
     void VboNode::setScale( Vec3f scale ){
         this->scale = scale;
     }
@@ -26,16 +35,23 @@ namespace hrfm{ namespace gl{
     }
     
     Vec3f VboNode::getAbsolutePosition(){
-        Vec3f pos( x, y, z );
         if( hasParent() ){
-            return pos + _parent->getAbsolutePosition();
+            return position + _parent->getAbsolutePosition();
         }else{
-            return pos;
+            return position;
         }
+    }
+    
+    void VboNode::setEnableWireframe( bool flag ){
+        _enableWireframe = flag;
     }
     
     void VboNode::setShader( hrfm::gl::ShaderBase * shader ){
         _shader = shader;
+    }
+    
+    void VboNode::setMaterial( ci::gl::Material * material ){
+        _material = material;
     }
     
     int VboNode::numChildren(){
@@ -69,44 +85,28 @@ namespace hrfm{ namespace gl{
     }
     
     VboNode * VboNode::addChildAt( VboNode * child, int index ){
-        
         if( numChildren() < index || index < 0 ){
-            
             throw;
-            
         }else if( numChildren() == index ){
-            
             return addChild(child);
-            
         }else{
-            
             std::vector<VboNode*>::iterator itr = children.begin() + index;
-            
             if( *itr != child ){
                 eraseFromChildren(child);
                 children.insert(itr, child);
             }
-            
             return child;
-            
         }
-        
     }
     
     VboNode * VboNode::removeChildAt( int index ){
-        
         if( numChildren() <= index || index < 0 ){
-            
             throw;
-            
         }else{
-            
             std::vector<VboNode*>::iterator itr = children.begin() + index;
             children.erase(itr);
             return *itr;
-            
         }
-        
     }
     
     VboNode * VboNode::removeOwn(){
@@ -150,14 +150,9 @@ namespace hrfm{ namespace gl{
         }else{
             ci::gl::disableAlphaBlending();
         }
-        ci::gl::pushMatrices();
-        {
-            ci::gl::translate( x, y );
-            ci::gl::color( c );
-            _draw( camera );
-            _drawChildren( camera, &c );
-        }
-        ci::gl::popMatrices();
+        ci::gl::color( c );
+        _draw( camera );
+        _drawChildren( camera, &c );
         ci::gl::disableAlphaBlending();
     }
     
@@ -182,35 +177,23 @@ namespace hrfm{ namespace gl{
     void VboNode::_update( ci::CameraPersp * camera ){};
     
     void VboNode::_draw( ci::CameraPersp * camera ){
+        
+        if( _enableWireframe  ) ci::gl::enableWireframe();
+        if( _material != NULL ) _material->apply();
+        
         ci::gl::pushMatrices();
         {
-            ci::gl::translate( Vec3f( x, y, z ) );
+            ci::gl::translate( this->position );
             ci::gl::rotate( this->rotation );
             ci::gl::scale( this->scale );
-            //ci::gl::enableWireframe();
-            if( _shader != NULL ){
-                _shader->begin();
-                
-                GLfloat lightpos[] = { 0.0f, 0.0f, -1000.0f, 1.0f }; /* 位置　　　 */
-                GLfloat lightcol[] = { 1.0f, 1.0f, 1.0f, 1.0f }; /* 直接光強度 */
-                GLfloat lightamb[] = { 0.1f, 0.1f, 0.1f, 1.0f }; /* 環境光強度 */
-                
-                glEnable(GL_LIGHTING);
-                glEnable(GL_LIGHT0);
-                glLightfv(GL_LIGHT0, GL_DIFFUSE, lightcol);
-                glLightfv(GL_LIGHT0, GL_SPECULAR, lightcol);
-                glLightfv(GL_LIGHT0, GL_AMBIENT, lightamb);
-                glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
-
-                
-                ci::gl::draw( *this->mesh );
-                _shader->end();
-            }else{
-                ci::gl::draw( *this->mesh );
-            }
-            //ci::gl::disableWireframe();
+            if( _shader != NULL ) _shader->begin();
+            ci::gl::draw( *this->mesh );
+            if( _shader != NULL ) _shader->end();
         }
-        ci::gl::pushMatrices();
+        ci::gl::popMatrices();
+        
+        if( _enableWireframe  ) ci::gl::disableWireframe();
+        
     };
     
     inline bool VboNode::eraseFromChildren( VboNode * child ){
@@ -225,16 +208,13 @@ namespace hrfm{ namespace gl{
     }
     
     void VboNode::_updateChildren( ci::CameraPersp * camera ){
-        
         if( numChildren() == 0 ) return;
-        
         std::vector<VboNode*>::iterator it, end;
         for( it = children.begin(), end = children.end(); it!=end; it++ ){
             if( *it!=nullptr ){
                 (*it)->update( camera );
             }
         }
-        
     }
     
     void VboNode::_drawChildren( ci::CameraPersp * camera, ColorA * drawColor ){

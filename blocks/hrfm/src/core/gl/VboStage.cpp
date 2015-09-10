@@ -32,7 +32,15 @@ namespace hrfm{ namespace gl{
     void VboStage::setSize( Vec2i size ){
         setSize( size.x, size.y );
     }
-
+    
+    void VboStage::addLight( ci::gl::Light * light ){
+        eraseLightFromLights(light);
+        _lights.push_back(light);
+    }
+    void VboStage::removeLight( ci::gl::Light * light ){
+        eraseLightFromLights(light);
+    }
+    
     VboNode * VboStage::addChild( VboNode * child ){
         eraseFromChildren(child);
         child->_setStage(this);
@@ -43,7 +51,12 @@ namespace hrfm{ namespace gl{
     
     void VboStage::update(){
         
+        vector<ci::gl::Light*>::iterator it, end;
+        
         Area viewport = ci::gl::getViewport();
+        
+        ci::gl::enableDepthWrite();
+        ci::gl::enableDepthRead();
         
         ci::gl::enableAlphaBlending();
         {
@@ -52,17 +65,33 @@ namespace hrfm{ namespace gl{
                 ci::gl::clear();
                 ci::gl::pushMatrices();
                 {
+                    
                     ci::gl::setViewport( (Area)_fbo.getBounds() );
                     ci::gl::setMatrices( *camera );
+                    if( 0 < _lights.size() ){
+                        glEnable( GL_LIGHTING );
+                        for( it = _lights.begin(), end = _lights.end(); it!=end; it++ ){
+                            (*it)->enable();
+                        }
+                    }
                     _updateChildren( camera );
-                    ci::gl::color( colorA );
                     _drawChildren( camera, &colorA );
+                    if( 0 < _lights.size() ){
+                        for( it = _lights.begin(), end = _lights.end(); it!=end; it++ ){
+                            (*it)->disable();
+                        }
+                        glDisable( GL_LIGHTING );
+                    }
+                    
                 }
                 ci::gl::popMatrices();
             }
             _fbo.unbindFramebuffer();
         }
         ci::gl::disableAlphaBlending();
+        
+        ci::gl::disableDepthRead();
+        ci::gl::disableDepthWrite();
         
         ci::gl::setViewport(viewport);
         
@@ -74,6 +103,19 @@ namespace hrfm{ namespace gl{
     
     ci::gl::Texture & VboStage::getTexture(){
         return _fbo.getTexture();
+    }
+    
+    // --- Private
+    
+    inline bool VboStage::eraseLightFromLights( ci::gl::Light * light ){
+        auto itr = std::remove_if(_lights.begin(),_lights.end(),[light](ci::gl::Light* d)->bool{
+            return d == light;
+        });
+        if( itr == _lights.end() ){
+            return false;
+        }
+        _lights.erase( itr, _lights.end() );
+        return true;
     }
     
     void VboStage::_onResize( hrfm::events::Event * event ){

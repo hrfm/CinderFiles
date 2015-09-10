@@ -28,6 +28,8 @@ namespace hrfm { namespace gl{
         virtual void begin();
         virtual void end();
         
+        ci::gl::GlslProg * getGlslProgPtr();
+        
     protected:
         
         void initShader( string fragmentShader = "simple_frag.glsl", string vertexShader = "simple_vert.glsl");

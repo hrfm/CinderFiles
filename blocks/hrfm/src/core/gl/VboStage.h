@@ -7,6 +7,7 @@
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Texture.h"
 #include "cinder/gl/Fbo.h"
+#include "cinder/gl/Light.h"
 
 #include "Utils.h"
 
@@ -38,6 +39,9 @@ namespace hrfm{ namespace gl{
         
         virtual VboNode * addChild( VboNode * child );
         
+        virtual void addLight( ci::gl::Light * light );
+        virtual void removeLight( ci::gl::Light * light );
+        
         virtual void update();
         virtual void draw();
         
@@ -52,10 +56,13 @@ namespace hrfm{ namespace gl{
         
         ci::gl::Fbo _fbo;
         void _onResize( hrfm::events::Event * event );
+        bool eraseLightFromLights( ci::gl::Light * light );
         
         float _fov;
         int _beforeWidth;
         int _beforeHeight;
+        
+        vector<ci::gl::Light*> _lights;
         
     };
     
