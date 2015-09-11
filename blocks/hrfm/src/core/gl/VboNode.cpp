@@ -145,14 +145,28 @@ namespace hrfm{ namespace gl{
             c.b *= drawColor->b;
             c.a *= drawColor->a;
         }
-        if( c.a < 1.0f ){
+        //if( c.a < 1.0f ){
             ci::gl::enableAlphaBlending();
-        }else{
-            ci::gl::disableAlphaBlending();
-        }
+        //}else{
+            //ci::gl::disableAlphaBlending();
+        //}
         ci::gl::color( c );
-        _draw( camera );
-        _drawChildren( camera, &c );
+        
+        ci::gl::pushMatrices();
+        {
+            ci::gl::translate( this->position );
+            ci::gl::rotate( this->rotation );
+            ci::gl::scale( this->scale );
+            if( _enableWireframe  ) ci::gl::enableWireframe();
+            if( _material != NULL ) _material->apply();
+            if( _shader != NULL ) _shader->begin();
+            _draw( camera );
+            if( _shader != NULL ) _shader->end();
+            if( _enableWireframe  ) ci::gl::disableWireframe();
+            _drawChildren( camera, &c );
+        }
+        ci::gl::popMatrices();
+        
         ci::gl::disableAlphaBlending();
     }
     
@@ -177,23 +191,7 @@ namespace hrfm{ namespace gl{
     void VboNode::_update( ci::CameraPersp * camera ){};
     
     void VboNode::_draw( ci::CameraPersp * camera ){
-        
-        if( _enableWireframe  ) ci::gl::enableWireframe();
-        if( _material != NULL ) _material->apply();
-        
-        ci::gl::pushMatrices();
-        {
-            ci::gl::translate( this->position );
-            ci::gl::rotate( this->rotation );
-            ci::gl::scale( this->scale );
-            if( _shader != NULL ) _shader->begin();
-            ci::gl::draw( *this->mesh );
-            if( _shader != NULL ) _shader->end();
-        }
-        ci::gl::popMatrices();
-        
-        if( _enableWireframe  ) ci::gl::disableWireframe();
-        
+        ci::gl::draw( *this->mesh );
     };
     
     inline bool VboNode::eraseFromChildren( VboNode * child ){

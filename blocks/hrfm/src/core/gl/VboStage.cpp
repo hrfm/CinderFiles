@@ -82,7 +82,6 @@ namespace hrfm{ namespace gl{
                         }
                         glDisable( GL_LIGHTING );
                     }
-                    
                 }
                 ci::gl::popMatrices();
             }

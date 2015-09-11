@@ -4,8 +4,9 @@
 
 #include "cinder/Camera.h"
 #include "cinder/app/AppNative.h"
-#include "cinder/gl/Material.h"
 #include "cinder/gl/Light.h"
+#include "cinder/gl/Material.h"
+#include "cinder/gl/Vbo.h"
 
 #include "EventDispatcher.h"
 #include "ShaderBase.h"
