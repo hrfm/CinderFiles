@@ -5,10 +5,12 @@ namespace hrfm { namespace gl{ namespace filter{
     //! protected:
     
     void DigitalNoiseFilter::prepare(){
-        mShader.uniform( "value", value );
+        FilterBase::prepare();
         mShader.uniform( "vertical", isVertical );
     }
     
-    void DigitalNoiseFilter::clear(){}
+    void DigitalNoiseFilter::clear(){
+        FilterBase::clear();
+    }
     
 }}}

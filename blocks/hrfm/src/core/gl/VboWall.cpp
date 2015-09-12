@@ -14,13 +14,15 @@ namespace hrfm{ namespace gl{
         int step = 100;
         float stepX = 1.0 / (float)step;
         
+        float radian = 3.141592653589;
+        
         for (int i = 0; i < step; i++){
             
-            float x0 = cos(x*3.14)*-0.5;
-            float x1 = cos((x+stepX)*3.14)*-0.5;
+            float x0 = cos(x*radian)*-0.5;
+            float x1 = cos((x+stepX)*radian)*-0.5;
             
-            float z0 = sin(x*3.14);
-            float z1 = sin((x+stepX)*3.14);
+            float z0 = sin(x*radian);
+            float z1 = sin((x+stepX)*radian);
             
             m->appendVertex(Vec3f(x0,-0.5,z0));
             m->appendTexCoord(Vec2f(x0+0.5,0));

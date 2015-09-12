@@ -30,6 +30,12 @@ namespace hrfm { namespace gl{
         
         ci::gl::GlslProg * getGlslProgPtr();
         
+        virtual void setStrength( float strength );
+        virtual float getStrength();
+        
+        virtual bool isEnabled();
+        virtual void setEnabled(bool enabled);
+        
     protected:
         
         void initShader( string fragmentShader = "simple_frag.glsl", string vertexShader = "simple_vert.glsl");
@@ -42,6 +48,8 @@ namespace hrfm { namespace gl{
         // clear shader, texture, and more. after drawSolidRect to FrameBuffer.
         virtual void clear();
         
+        float _strength = 1.0;
+        bool _enabled   = true;
         string mFragmentShader;
         string mVertexShader;
         ci::gl::GlslProg mShader;

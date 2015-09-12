@@ -53,6 +53,9 @@ namespace hrfm{ namespace gl{
     void VboNode::setMaterial( ci::gl::Material * material ){
         _material = material;
     }
+    ci::gl::Material * VboNode::getMaterial(){
+        return _material;
+    }
     
     int VboNode::numChildren(){
         return children.size();

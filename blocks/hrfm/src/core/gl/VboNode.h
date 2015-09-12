@@ -47,6 +47,7 @@ namespace hrfm{ namespace gl{
         virtual void setEnableWireframe( bool flag );
         virtual void setShader( hrfm::gl::ShaderBase * shader );
         virtual void setMaterial( ci::gl::Material * material );
+        virtual ci::gl::Material * getMaterial();
         
         virtual int numChildren();
         

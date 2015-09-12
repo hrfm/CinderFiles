@@ -52,20 +52,26 @@ namespace hrfm{ namespace gl{
     // === FILTER ===
     
     ExFbo * ExFbo::applyFilter( FilterBase * filter, bool clear ){
-        ci::gl::Texture tex = _getTextureClone();
-        beginOffscreen(clear);
-        filter->affect( &tex, getSize(), getSize(), getBounds() );
+        if( filter->isEnabled() ){
+            ci::gl::Texture tex = _getTextureClone();
+            beginOffscreen(clear);
+            filter->affect( &tex, getSize(), getSize(), getBounds() );
+        }
         return this;
     }
     
     ExFbo * ExFbo::applyFilter( FilterBase * filter, ci::gl::Texture & srcTexture, bool clear ){
-        beginOffscreen(clear);
-        filter->affect( &srcTexture, getSize(), getSize(), getBounds() );
+        if( filter->isEnabled() ){
+            beginOffscreen(clear);
+            filter->affect( &srcTexture, getSize(), getSize(), getBounds() );
+        }
         return this;
     }
     ExFbo * ExFbo::applyFilter( FilterBase * filter, ci::gl::Texture * srcTexture, bool clear ){
-        beginOffscreen(clear);
-        filter->affect( srcTexture, getSize(), getSize(), getBounds() );
+        if( filter->isEnabled() ){
+            beginOffscreen(clear);
+            filter->affect( srcTexture, getSize(), getSize(), getBounds() );
+        }
         return this;
     }
     

@@ -21,6 +21,11 @@ namespace hrfm { namespace gl{
     }
     
     void FilterBase::affect( ci::gl::Texture * tex, Vec2f windowSize, Vec2f resolution, Rectf drawRect ){
+        
+        if( !isEnabled() ){
+            return;
+        }
+        
         tex->bind(0);
         begin();
         {
@@ -32,9 +37,14 @@ namespace hrfm { namespace gl{
         }
         end();
         tex->unbind();
+        
     }
     
     ci::gl::Texture FilterBase::affect( ci::gl::Texture tex ){
+        
+        if( !isEnabled() ){
+            return tex;
+        }
         
         Area viewport = ci::gl::getViewport();
         
@@ -93,9 +103,13 @@ namespace hrfm { namespace gl{
     // protected
     
     // prepare shader, texture, and more. before drawSolidRect to FrameBuffer.
-    void FilterBase::prepare(){}
+    void FilterBase::prepare(){
+        ShaderBase::prepare();
+    }
     
     // clear shader, texture, and more. after drawSolidRect to FrameBuffer.
-    void FilterBase::clear(){}
+    void FilterBase::clear(){
+        ShaderBase::clear();
+    }
     
 }}

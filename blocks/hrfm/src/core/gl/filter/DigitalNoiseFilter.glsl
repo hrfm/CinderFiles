@@ -4,7 +4,7 @@
 uniform sampler2D tex;
 uniform float     time;
 uniform vec2      resolution;
-uniform float     value;
+uniform float     strength;
 uniform int       vertical;
 
 void main(void){
@@ -17,8 +17,8 @@ void main(void){
         // --- ヨコノイズ
         float y = floor( texCoord.y / 0.02 ) * 0.02 + 0.2;
         
-        float val = sin( sin( y ) * ( value * value ) * 100 );
-        val = floor( val / (1.0-value) ) * 0.005;
+        float val = sin( sin( y ) * ( strength * strength ) * 100 );
+        val = floor( val / (1.0-strength) ) * 0.005;
         
         texCoord.x = mod( ( texCoord.x + val ), 1.0 );
         
@@ -28,8 +28,8 @@ void main(void){
         
         float x = floor( texCoord.x / 0.02 ) * 0.02 + 0.2;
         
-        float val = sin( sin( x ) * ( value * value ) * 100 );
-        val = floor( val / (1.0-value) ) * 0.001;
+        float val = sin( sin( x ) * ( strength * strength ) * 100 );
+        val = floor( val / (1.0-strength) ) * 0.001;
         
         texCoord.y = mod( ( texCoord.y + val ), 1.0 );
         

@@ -10,10 +10,13 @@ namespace hrfm { namespace gl{ namespace filter{
     //! protected:
     
     void BlurFilter::prepare(){
+        FilterBase::prepare();
         mShader.uniform( "sample_offset", mSampleOffset );
         mShader.uniform( "attenuation"  , mAttenuation );
     }
     
-    void BlurFilter::clear(){}
+    void BlurFilter::clear(){
+        FilterBase::clear();
+    }
     
 }}}
