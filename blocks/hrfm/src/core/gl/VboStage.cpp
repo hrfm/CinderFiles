@@ -33,20 +33,20 @@ namespace hrfm{ namespace gl{
         setSize( size.x, size.y );
     }
     
-    void VboStage::addLight( ci::gl::Light * light ){
-        eraseLightFromLights(light);
-        _lights.push_back(light);
-    }
-    void VboStage::removeLight( ci::gl::Light * light ){
-        eraseLightFromLights(light);
-    }
-    
     VboNode * VboStage::addChild( VboNode * child ){
         eraseFromChildren(child);
         child->_setStage(this);
         child->_setParent(this);
         children.push_back(child);
         return child;
+    }
+    
+    void VboStage::addLight( ci::gl::Light * light ){
+        eraseLightFromLights(light);
+        _lights.push_back(light);
+    }
+    void VboStage::removeLight( ci::gl::Light * light ){
+        eraseLightFromLights(light);
     }
     
     void VboStage::update(){
@@ -62,7 +62,7 @@ namespace hrfm{ namespace gl{
         {
             _fbo.bindFramebuffer();
             {
-                ci::gl::clear();
+                ci::gl::clear( ColorA(0.0,0.0,0.0,0.0) );
                 ci::gl::pushMatrices();
                 {
                     
@@ -98,6 +98,10 @@ namespace hrfm{ namespace gl{
     
     void VboStage::draw(){
         ci::gl::draw( _fbo.getTexture(), Rectf( 0, 0, width, height ) );
+    }
+    
+    void VboStage::draw( ci::Rectf bounds ){
+        ci::gl::draw( _fbo.getTexture(), bounds );
     }
     
     ci::gl::Texture & VboStage::getTexture(){

@@ -33,7 +33,7 @@ namespace hrfm { namespace io{
         
         void _onReceiveOscMessage( hrfm::events::OscInputEvent * event ){
             for( int i = 0; i < event->message.getNumArgs(); i++ ){
-                nanoKontrolFader[i] = event->message.getArgAsInt32(i) / 128.0f;
+                nanoKontrolFader[i] = event->message.getArgAsInt32(i) / 127.0f;
             }
         }
         

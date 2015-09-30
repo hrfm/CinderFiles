@@ -25,6 +25,11 @@ namespace hrfm{ namespace io{
         
         void showAllDevices();
         
+        void  setWaveBias( float bias );
+        float getWaveBias();
+        void  setFFTBias( float bias );
+        float getFFTBias();
+        
         void setup( uint16_t count, uint16_t bufferLength = 128 );
         void setup( string deviceName, uint16_t count, uint16_t bufferLength = 128 );
         
@@ -71,6 +76,8 @@ namespace hrfm{ namespace io{
         void onFFTAverage( OscInputEvent * event);
         void onAudioGain( OscInputEvent * event);
         
+        float _waveBias;
+        float _fftBias;
         bool _enabled;
         
         float _audioGain;

@@ -102,7 +102,7 @@ namespace hrfm{ namespace gl{
                 ci::gl::setMatricesWindow( getSize(), false );
             }
             if( clear == true){
-                ci::gl::clear();
+                ci::gl::clear( ColorA(0.0,0.0,0.0,0.0) );
             }
             _bindedFbo = fbo;
         }

@@ -30,6 +30,8 @@ namespace hrfm{ namespace io{
         _enabled      = true;
         _bandCount    = count;
         _bufferLength = bufferLength;
+        _waveBias     = 1.0f;
+        _fftBias      = 1.0f;
         
         // --- Create Sound Context.
         
@@ -106,9 +108,25 @@ namespace hrfm{ namespace io{
         
     }
     
+    void SiAudioInput::setWaveBias( float bias ){
+        _waveBias = bias;
+    }
+    
+    float SiAudioInput::getWaveBias(){
+        return _waveBias;
+    }
+    
+    void SiAudioInput::setFFTBias( float bias ){
+        _fftBias = bias;
+    }
+    
+    float SiAudioInput::getFFTBias(){
+        return _fftBias;
+    }
+    
     float SiAudioInput::getVolume(){
         if( _enabled ){
-            return mMonitorNode->getVolume();
+            return mMonitorNode->getVolume() * _waveBias;
         }else{
             return 0.5;
         }
@@ -156,7 +174,7 @@ namespace hrfm{ namespace io{
     
     void SiAudioInput::update( float decline ){
         
-        float scale  = 10.0 * SiKORGMIDIInterface::getInstance().nanoKontrolFader[0];
+        float scale = 10.0 * _fftBias;
         
         // --- Wave
         
@@ -164,7 +182,16 @@ namespace hrfm{ namespace io{
             
             const audio::Buffer &buffer = mMonitorNode->getBuffer();
             for( size_t ch = 0; ch < buffer.getNumChannels(); ch++ ) {
-                _channels[ch] = buffer.getChannel(ch);
+                const float * channel = buffer.getChannel(ch);
+                if( _waveBias != 1.0 ){
+                    float * list = new float[_bandCount*2];
+                    for( int i = 0, len = _bandCount*2; i < len; i++ ){
+                        list[i] = channel[i] * _waveBias;
+                    }
+                    _channels[ch] = list;
+                }else{
+                    _channels[ch] = channel;
+                }
             }
             
         }else{

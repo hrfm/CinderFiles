@@ -49,6 +49,10 @@ namespace hrfm{ namespace gl{
         virtual void setMaterial( ci::gl::Material * material );
         virtual ci::gl::Material * getMaterial();
         
+        virtual void addTexture( ci::gl::Texture * tex );
+        virtual void removeTexture( ci::gl::Texture * tex );
+        //virtual void setTextureAt( int index, ci::gl::Texture * tex );
+        
         virtual int numChildren();
         
         virtual VboNode * addChild( VboNode * child );
@@ -81,6 +85,8 @@ namespace hrfm{ namespace gl{
         
     protected:
         
+        virtual void _appendVertex( ci::TriMesh & m, Vec3f v0, Vec3f v1, Vec3f v2 );
+        
         virtual void _update( ci::CameraPersp * camera );
         virtual void _draw( ci::CameraPersp * camera );
         
@@ -100,6 +106,9 @@ namespace hrfm{ namespace gl{
         bool _enableWireframe = false;
         hrfm::gl::ShaderBase * _shader = NULL;
         ci::gl::Material * _material = NULL;
+        
+        vector<ci::gl::Texture*> _textures;
+        bool eraseTextureFromList( ci::gl::Texture * tex );
         
         VboStage * _stage = NULL;
         virtual void _setStage( VboStage * node );

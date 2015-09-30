@@ -1,6 +1,7 @@
 #pragma once
 
 #include "VboNode.h"
+#include "SiAudioInput.h"
 
 namespace hrfm{ namespace gl{
     
@@ -11,7 +12,7 @@ namespace hrfm{ namespace gl{
         VboWall():VboNode(){};
         ~VboWall(){};
         
-        virtual void setup();
+        virtual void setup( Vec2i segments, bool curve = false, float noise = false );
         virtual void clear();
         
         void setTexture( ci::gl::Texture * tex );
@@ -20,9 +21,6 @@ namespace hrfm{ namespace gl{
         
         virtual void _update( ci::CameraPersp * camera );
         virtual void _draw( ci::CameraPersp * camera );
-        
-    private:
-        
         ci::gl::Texture * _texture = NULL;
         
     };

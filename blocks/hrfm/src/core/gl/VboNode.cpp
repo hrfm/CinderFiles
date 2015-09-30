@@ -57,6 +57,14 @@ namespace hrfm{ namespace gl{
         return _material;
     }
     
+    void VboNode::addTexture( ci::gl::Texture * tex ){
+        eraseTextureFromList(tex);
+        _textures.push_back(tex);
+    }
+    void VboNode::removeTexture( ci::gl::Texture * tex ){
+        eraseTextureFromList(tex);
+    }
+    
     int VboNode::numChildren(){
         return children.size();
     }
@@ -155,18 +163,50 @@ namespace hrfm{ namespace gl{
         //}
         ci::gl::color( c );
         
+        vector<ci::gl::Texture*>::iterator it, end;
+        
         ci::gl::pushMatrices();
         {
             ci::gl::translate( this->position );
             ci::gl::rotate( this->rotation );
             ci::gl::scale( this->scale );
+            
             if( _enableWireframe  ) ci::gl::enableWireframe();
+            
             if( _material != NULL ) _material->apply();
-            if( _shader != NULL ) _shader->begin();
+            
+            if( _shader != NULL ){
+                _shader->begin();
+                _shader->getGlslProgPtr()->uniform( "alpha", colorA.a );
+                if( 0 < _textures.size() ){
+                    int texIdx = 0;
+                    for( it = _textures.begin(), end = _textures.end(); it!=end; it++ ){
+                        (*it)->bind(texIdx);
+                        _shader->getGlslProgPtr()->uniform( "texture"+toString(texIdx), texIdx );
+                    }
+                }
+            }else{
+                if( 0 < _textures.size() ){
+                    for( it = _textures.begin(), end = _textures.end(); it!=end; it++ ){
+                        (*it)->bind();
+                    }
+                }
+            }
+            
             _draw( camera );
-            if( _shader != NULL ) _shader->end();
-            if( _enableWireframe  ) ci::gl::disableWireframe();
+            
+            if( 0 < _textures.size() ){
+                for( it = _textures.begin(), end = _textures.end(); it!=end; it++ ){
+                    (*it)->unbind();
+                }
+            }
+            
             _drawChildren( camera, &c );
+            
+            if( _shader != NULL ) _shader->end();
+            
+            if( _enableWireframe  ) ci::gl::disableWireframe();
+            
         }
         ci::gl::popMatrices();
         
@@ -190,6 +230,24 @@ namespace hrfm{ namespace gl{
     }
     
     //! protected:
+    
+    void VboNode::_appendVertex( ci::TriMesh & m, Vec3f v0, Vec3f v1, Vec3f v2 ){
+        
+        Vec3f v01 = v1-v0;
+        Vec3f v02 = v2-v0;
+        Vec3f norm = v01.cross(v02);
+        
+        m.appendVertex(v0);
+        m.appendNormal(norm);
+        m.appendVertex(v1);
+        m.appendNormal(norm);
+        m.appendVertex(v2);
+        m.appendNormal(norm);
+        
+        int numberVertices = m.getNumVertices();
+        m.appendTriangle( numberVertices - 3, numberVertices - 2, numberVertices - 1 );
+        
+    }
     
     void VboNode::_update( ci::CameraPersp * camera ){};
     
@@ -229,6 +287,17 @@ namespace hrfm{ namespace gl{
     }
     
     //! protected
+    
+    inline bool VboNode::eraseTextureFromList( ci::gl::Texture * tex ){
+        auto itr = std::remove_if(_textures.begin(),_textures.end(),[tex](ci::gl::Texture* t)->bool{
+            return t == tex;
+        });
+        if( itr == _textures.end() ){
+            return false;
+        }
+        _textures.erase( itr, _textures.end() );
+        return true;
+    }
     
     void VboNode::_setParent( VboNode * node ){
         if( !hasParent() ){

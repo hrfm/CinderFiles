@@ -15,7 +15,7 @@ void main(void){
     if( vertical == 0 ){
         
         // --- ヨコノイズ
-        float y = floor( texCoord.y / 0.02 ) * 0.02 + 0.2;
+        float y = floor( texCoord.y / 0.002 ) * 0.002 + 0.2;
         
         float val = sin( sin( y ) * ( strength * strength ) * 100 );
         val = floor( val / (1.0-strength) ) * 0.005;
@@ -26,7 +26,7 @@ void main(void){
         
         // --- タテノイズ
         
-        float x = floor( texCoord.x / 0.02 ) * 0.02 + 0.2;
+        float x = floor( texCoord.x / 0.002 ) * 0.002 + 0.2;
         
         float val = sin( sin( x ) * ( strength * strength ) * 100 );
         val = floor( val / (1.0-strength) ) * 0.001;
