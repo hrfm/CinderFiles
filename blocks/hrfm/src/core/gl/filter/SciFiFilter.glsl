@@ -4,6 +4,7 @@
 uniform sampler2D tex;
 uniform float time;
 uniform vec2 resolution;
+uniform float strength;
 
 void main(void){
     
@@ -15,9 +16,9 @@ void main(void){
     color.xyz = color.xyz + ( vec3(chroma) - color.xyz ) * 0.8;
     
     // --- 青っぽく変換
-    color.x *= 0.7;
-    color.y *= 1.2;
-    color.z *= 1.6;
+    color.x += ( color.x*0.7 - color.x ) * strength;
+    color.y += ( color.y*1.2 - color.y ) * strength;
+    color.z += ( color.z*1.6 - color.y ) * strength;
     
     // ---------- Color.
     gl_FragColor = color;

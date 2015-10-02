@@ -14,7 +14,8 @@ void main(void){
     vec4 tmpColor;
     vec4 color = texture2D( tex, texCoord );
     
-    /*
+    //*
+    
     texCoord2.x = texCoord.x + strength / 10;
     color.x = texture2D( tex, texCoord2 ).x;
     

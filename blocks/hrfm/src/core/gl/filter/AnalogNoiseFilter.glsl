@@ -12,7 +12,7 @@ float rand(vec2 co){
 
 void main(void){
     
-    /*
+    //*
 	vec2 texCoord = gl_FragCoord.xy / resolution;
     float cycle = mod( time / 300.0, 1.0 );
     
@@ -22,7 +22,9 @@ void main(void){
     texCoord.x = mod( texCoord.x + tanValue + sinValue, 1.0 );
     
     gl_FragColor = texture2D( tex, texCoord );// * rand( gl_FragCoord.xy );
-    //*/
+    /*/
+     
+    // ULTRA2015 の時にこっちを使った。
     
     vec2 texCoord = gl_FragCoord.xy / resolution;
     float cycle = mod( time / 10.0, 1.0 );
@@ -31,6 +33,6 @@ void main(void){
     
     gl_FragColor = texture2D( tex, texCoord );
 
-     
+    //*/
     
 }

@@ -6,11 +6,25 @@
 using namespace hrfm::utils;
 
 namespace hrfm { namespace gl{ namespace filter{
+    
     class OrbitalFilter : public FilterBase{
+        
     public:
         
-        OrbitalFilter();
-        OrbitalFilter( ci::gl::Texture tex_speed );
+        OrbitalFilter():FilterBase("OrbitalFilter.glsl"){
+            r_scale = 1.0;
+            r_min   = 0.0;
+            r_max   = 1.0;
+            _speedTex = ci::gl::Texture( 1, 1 );
+        };
+        
+        OrbitalFilter( ci::gl::Texture tex_speed ):FilterBase("OrbitalFilter.glsl"){
+            r_scale = 1.0;
+            r_min   = 0.0;
+            r_max   = 1.0;
+            _speedTex = tex_speed;
+        }
+        
         void setSpeedTex( ci::gl::Texture tex_speed );
         
         float r_min;
@@ -18,11 +32,14 @@ namespace hrfm { namespace gl{ namespace filter{
         float r_scale;
         
     protected:
-        DataSourceRef getFragmentShader();
+        
         void prepare();
         void clear();
+        
     private:
+        
         ci::gl::Texture _speedTex;
+        
     };
     
 }}}
