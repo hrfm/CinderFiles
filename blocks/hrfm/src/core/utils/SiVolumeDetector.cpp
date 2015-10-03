@@ -52,7 +52,7 @@ namespace hrfm{ namespace utils{
                     cout << "path is not correct" << endl;
                 }
             }catch(...){
-                cout << "error" << endl;
+                cout << "SiVolumeDetector::check error!" << endl;
             }
             
             _tick = now;
