@@ -87,6 +87,17 @@ namespace hrfm{ namespace signage{ namespace display{
         
     }
     
+    void  Sequence::setVolume( float volume ){
+        _volume = volume;
+        if( ::hrfm::display::MovieTexture * mov = dynamic_cast<::hrfm::display::MovieTexture*>(_content) )
+        {
+            mov->setVolume( volume );
+        }
+    }
+    float Sequence::getVolume(){
+        return _volume;
+    }
+    
     void Sequence::update(){
         if( 0.0f < _duration )
         {

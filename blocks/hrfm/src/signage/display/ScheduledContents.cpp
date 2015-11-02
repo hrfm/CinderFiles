@@ -73,10 +73,17 @@ namespace hrfm{ namespace signage{ namespace display{
                         // 設定されているコンテンツが動画の場合
                         
                         ::hrfm::display::MovieTexture * mov = new ::hrfm::display::MovieTexture(path);
+                        
+                        // loop = true の場合はループ再生する.
                         if( item->hasAttribute("loop") && item->getAttribute("loop").getValue<string>() == "true" ){
                             mov->getMovieGlRef()->setLoop();
                         }else{
                             mov->addEventListener(hrfm::events::Event::COMPLETE, this, &ScheduledContents::_onMovieComplete );
+                        }
+                        
+                        // silent = true の場合は音量を0にする.
+                        if( item->hasAttribute("silent") && item->getAttribute("silent").getValue<string>() == "true" ){
+                            mov->setSilent( true );
                         }
                         
                         //mov->setLetterbox(true);

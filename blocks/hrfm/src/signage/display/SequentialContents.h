@@ -47,6 +47,9 @@ namespace hrfm{ namespace signage{ namespace display{
         void play( int index = 0 );
         void stop();
         
+        void  setVolume( float volume );
+        float getVolume();
+        
         Sequence * getCurrentSequence();
         
         void clear();
@@ -58,12 +61,14 @@ namespace hrfm{ namespace signage{ namespace display{
         
         // ファイルパスから、それに応じたシーケンス用の DisplayNode を生成します.
         // ファイルがどのようなファイルかは、拡張子から自動的に判断されます.
-        hrfm::display::DisplayNode * _createContent( ci::fs::path filepath, bool isLoop = true );
+        hrfm::display::DisplayNode * _createContent( ci::fs::path filepath, bool isLoop = true, bool isSilent = false );
         // ファイルパスとタイプから、それに応じたシーケンス用の DisplayNode を生成します.
-        hrfm::display::DisplayNode * _createContent( ci::fs::path filepath, string type, bool isLoop = true );
+        hrfm::display::DisplayNode * _createContent( ci::fs::path filepath, string type, bool isLoop = true, bool isSilent = false );
         
         void _onComplete( hrfm::events::Event * event );
         void _onTransitionComplete( hrfm::events::Event * event );
+        
+        float _volume = 1.0;
         
     private:
         

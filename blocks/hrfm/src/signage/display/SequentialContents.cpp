@@ -127,6 +127,13 @@ namespace hrfm{ namespace signage{ namespace display{
         _currentSequence = NULL;
     }
     
+    void  SequentialContents::setVolume( float volume ){
+        _volume = volume;
+    }
+    float SequentialContents::getVolume(){
+        return _volume;
+    }
+    
     Sequence * SequentialContents::getCurrentSequence(){
         return _currentSequence;
     }
@@ -144,6 +151,7 @@ namespace hrfm{ namespace signage{ namespace display{
     void SequentialContents::_update(){
         if( _currentSequence ){
             _currentSequence->setSize( width, height );
+            _currentSequence->setVolume( _volume );
         }
         if( _transition && _transition->running() ){
             cout << "update transition" << endl;
@@ -159,16 +167,16 @@ namespace hrfm{ namespace signage{ namespace display{
         }
     }
     
-    hrfm::display::DisplayNode * SequentialContents::_createContent( ci::fs::path filepath, bool isLoop ){
+    hrfm::display::DisplayNode * SequentialContents::_createContent( ci::fs::path filepath, bool isLoop, bool isSilent ){
         string type = hrfm::utils::getFileType( filepath );
         if( type == hrfm::utils::FILE_TYPE_PIC || type == hrfm::utils::FILE_TYPE_MOV ){
-            return _createContent( filepath, type, isLoop );
+            return _createContent( filepath, type, isLoop, isSilent );
         }else{
             return NULL;
         }
     }
     
-    hrfm::display::DisplayNode * SequentialContents::_createContent( ci::fs::path filepath, string type, bool isLoop ){
+    hrfm::display::DisplayNode * SequentialContents::_createContent( ci::fs::path filepath, string type, bool isLoop, bool isSilent ){
         
         string   pathStr = filepath.string();
         fs::path path;
@@ -191,6 +199,7 @@ namespace hrfm{ namespace signage{ namespace display{
                 // 設定されている者が動画の場合
                 hrfm::display::MovieTexture * mov = new hrfm::display::MovieTexture(path);
                 if( isLoop ){ mov->getMovieGlRef()->setLoop(); }
+                if( isSilent ){ mov->setSilent(true); }
                 mov->setLetterbox(true);
                 return mov;
             }else if( type == "seq" ){
@@ -274,8 +283,9 @@ namespace hrfm{ namespace signage{ namespace display{
                 const string type = item->getAttribute("type").getValue<string>();
                 float time        = item->getAttribute("time").getValue<float>();
                 bool isLoop       = item->hasAttribute("loop") && item->getAttribute("loop").getValue<string>() == "true";
+                bool isSilent     = item->hasAttribute("silent") && item->getAttribute("silent").getValue<string>() == "true";
                 
-                hrfm::display::DisplayNode * content = _createContent( pathStr, type, isLoop );
+                hrfm::display::DisplayNode * content = _createContent( pathStr, type, isLoop, isSilent );
                 
                 if( content != NULL ){
                     cout << "[ " << index++ <<  " ] " << time << " -> " << pathStr << endl;

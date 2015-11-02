@@ -33,6 +33,12 @@ namespace hrfm{ namespace display{
         
         virtual void stop( bool seekToStart = true );
         
+        virtual void setVolume( float volume );
+        virtual float getVolume();
+        
+        virtual bool isSilent();
+        virtual void setSilent(bool flag);
+        
         virtual ci::gl::Texture getTexture();
         
     protected:
@@ -40,6 +46,7 @@ namespace hrfm{ namespace display{
         virtual void _update();
         
         float _beforeTime;
+        bool  _isSilent = false;
         
     private:
         

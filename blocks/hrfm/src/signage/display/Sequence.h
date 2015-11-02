@@ -50,6 +50,9 @@ namespace hrfm{ namespace signage{ namespace display{
          */
         void stop();
         
+        void  setVolume( float volume );
+        float getVolume();
+        
         void update();
         
     protected:
@@ -63,6 +66,8 @@ namespace hrfm{ namespace signage{ namespace display{
         
         string _type;
         string _trigger;
+        
+        float _volume = 1.0;
         
     };
 

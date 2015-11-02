@@ -60,6 +60,32 @@ namespace hrfm{ namespace display{
         }
     }
     
+    void  MovieTexture::setVolume( float volume ){
+        if( _isSilent ){
+            _movieGlRef->setVolume(0.0);
+        }else{
+            _movieGlRef->setVolume(volume);
+        }
+    }
+    
+    float MovieTexture::getVolume(){
+        if( _isSilent ){
+            return 0;
+        }else{
+            return _movieGlRef->getVolume();
+        }
+    }
+    
+    bool MovieTexture::isSilent(){
+        return _isSilent;
+    }
+    void MovieTexture::setSilent(bool flag){
+        _isSilent = flag;
+        if( _isSilent ){
+            _movieGlRef->setVolume(0.0);
+        }
+    }
+    
     ci::qtime::MovieGlRef MovieTexture::getMovieGlRef(){
         return _movieGlRef;
     }
