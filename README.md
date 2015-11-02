@@ -12,8 +12,17 @@ Check out this repo and add blocks directory into your project.
 
 ## required
 
-This repo required https://github.com/hrfm/cpplib  
+### hrfm/cpplib
+
+https://github.com/hrfm/cpplib  
+
 Check out ``cpplib`` and add path into your project.
+
+### cinder/Cinder-OpenCV
+
+https://github.com/cinder/Cinder-OpenCV
+
+### Cinder/blocks/OSC
 
 # Namespace
 
