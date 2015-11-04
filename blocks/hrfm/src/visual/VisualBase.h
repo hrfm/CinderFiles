@@ -24,11 +24,11 @@ namespace hrfm { namespace visual{
                 FlFboDisplayObject();
             };
             
-            VisualBase( AppBase * app, Vec2i resolution ){
+            VisualBase( AppBase * app, ivec2 resolution ){
                 FlFboDisplayObject( app, resolution );
             }
         
-            virtual void setup( AppBase * app, Vec2i resolution ){
+            virtual void setup( AppBase * app, ivec2 resolution ){
                 FlFboDisplayObject::setup( app, resolution );
             };
             

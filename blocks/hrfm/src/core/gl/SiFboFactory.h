@@ -20,9 +20,9 @@ namespace hrfm{ namespace gl{
         
     public:
         
-        virtual ci::gl::Fbo * create( int width, int height, bool cache = true, ci::gl::Fbo::Format format = ci::gl::Fbo::Format() );
+        virtual ci::gl::FboRef create( int width, int height, bool cache = true, ci::gl::Fbo::Format format = ci::gl::Fbo::Format() );
         
-        virtual ci::gl::Fbo * beginTmpFbo( int width, int height, ci::CameraPersp * camera = NULL, ci::gl::Fbo::Format format = ci::gl::Fbo::Format() );
+        virtual ci::gl::FboRef beginTmpFbo( int width, int height, ci::CameraPersp * camera = NULL, ci::gl::Fbo::Format format = ci::gl::Fbo::Format() );
         virtual void endTmpFbo();
         
     private:
@@ -33,8 +33,8 @@ namespace hrfm{ namespace gl{
             std::map<string,ci::gl::Fbo*>();
         }
         
-        ci::gl::Fbo * _tmpFbo = NULL;
-        ci::Area      _tmpViewport;
+        ci::gl::FboRef _tmpFbo = NULL;
+        ci::Area       _tmpViewport;
         
     };
     

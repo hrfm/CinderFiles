@@ -76,9 +76,9 @@ namespace hrfm{ namespace visual{ namespace emitter{
             
             ci::gl::color( colorA );
             
-            Vec2f center = Vec2f( baseX + x, baseY + y );
+            vec2 center = vec2( baseX + x, baseY + y );
             
-            glBegin( GL_TRIANGLE_STRIP );
+            ci::gl::begin( GL_TRIANGLE_STRIP );
             {
                 float r, rad, c, s;
                 for( int i=0; i <= _segments; i++ ){
@@ -88,17 +88,17 @@ namespace hrfm{ namespace visual{ namespace emitter{
                     s   = sin(rad);
                     
                     r   = _radius + _thickness/2.0f;
-                    ci::gl::vertex( Vec2f( center.x + r*c, center.y + r*s ) );
+                    ci::gl::vertex( vec2( center.x + r*c, center.y + r*s ) );
                     
                     r   = _radius - _thickness/2.0f;
                     if( r < 0 ){
                         r = 0;
                     }
-                    ci::gl::vertex( Vec2f( center.x + r*c, center.y + r*s ) );
+                    ci::gl::vertex( vec2( center.x + r*c, center.y + r*s ) );
                     
                 }
             }
-            glEnd();
+            ci::gl::end();
             
         }
         

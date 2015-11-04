@@ -2,7 +2,7 @@
 
 namespace hrfm{ namespace gl{
     
-    ci::gl::Fbo * SiFboFactory::create( int width, int height, bool cache, ci::gl::Fbo::Format format ){
+    ci::gl::FboRef SiFboFactory::create( int width, int height, bool cache, ci::gl::Fbo::Format format ){
         
         if( cache ){
             
@@ -10,9 +10,8 @@ namespace hrfm{ namespace gl{
             
             if( this->find(key) == this->end() ){
                 //cout << "SiFboFactory::create( " << width << ", " << height << " ) => Set fbo to Cache" << endl;
-                ci::gl::Fbo * fbo;
-                fbo = new ci::gl::Fbo( width, height, format );
-                this->insert( map<string,ci::gl::Fbo*>::value_type( key, fbo ) );
+                ci::gl::FboRef fbo = ci::gl::Fbo::create( width, height, format );
+                this->insert( map<string,ci::gl::FboRef>::value_type( key, fbo ) );
             }else{
                 //cout << "SiFboFactory::create( " << width << ", " << height << " ) => Get fbo from cache." << endl;
             }
@@ -22,13 +21,13 @@ namespace hrfm{ namespace gl{
         }else{
             
             //cout << "SiFboFactory::create( " << width << ", " << height << " )" << endl;
-            return new ci::gl::Fbo( width, height, format );
+            return ci::gl::Fbo::create( width, height, format );
             
         }
         
     }
     
-    ci::gl::Fbo * SiFboFactory::beginTmpFbo( int width, int height, ci::CameraPersp * camera, ci::gl::Fbo::Format format ){
+    ci::gl::FboRef SiFboFactory::beginTmpFbo( int width, int height, ci::CameraPersp * camera, ci::gl::Fbo::Format format ){
         
         if( _tmpFbo ){
             throw "Temporary FBO is already exists. You should call endTmpFBO before call this method.";

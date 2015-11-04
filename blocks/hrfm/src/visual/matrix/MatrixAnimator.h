@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cinder/app/AppBasic.h"
+#include "cinder/app/App.h"
 #include "cinder/Rand.h"
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Fbo.h"
@@ -15,11 +15,11 @@ namespace hrfm { namespace matrix{
     
     class BaseMatrixAnimator{
     public:
-        virtual void setup( Vec2i size, int cellSize ){
+        virtual void setup( ivec2 size, int cellSize ){
             // init Property.
             setup( size, cellSize, cellSize );
         };
-        virtual void setup( Vec2i size, int colSize, int rowSize ){
+        virtual void setup( ivec2 size, int colSize, int rowSize ){
             // init Property.
             mySize = size;
             myCols = ceil( (float)size.x / (float)colSize );
@@ -28,25 +28,25 @@ namespace hrfm { namespace matrix{
             myRowSize = (float)mySize.y / (float)myRows;
             // init Fbo.
             ci::gl::Fbo::Format format;
-            myFbo = ci::gl::Fbo( size.x, size.y, format );
+            myFbo = ci::gl::Fbo::create( size.x, size.y, format );
         };
         virtual void update( Channel32f * mChannel ){};
-        ci::gl::Texture getTexture(){
-            return myFbo.getTexture();
+        ci::gl::TextureRef getTexture(){
+            return myFbo->getColorTexture();
         }
         void bindTexture( int index ){
-            myFbo.bindTexture(index);
+            myFbo->bindTexture(index);
         }
         void unbindTexture(){
-            myFbo.unbindTexture();
+            myFbo->unbindTexture();
         }
     protected:
-        Vec2i mySize;
+        ivec2 mySize;
         int myCols;
         int myRows;
         float myColSize;
         float myRowSize;
-        ci::gl::Fbo myFbo;
+        ci::gl::FboRef myFbo;
     };
     
     class MatrixAnimator : public BaseMatrixAnimator {
@@ -54,7 +54,7 @@ namespace hrfm { namespace matrix{
         MatrixAnimator(){
             BaseMatrixAnimator();
         }
-        void setup( Vec2i size, int cellSize );
+        void setup( ivec2 size, int cellSize );
         void update( Channel32f * mChannel );
     private:
         int myNumLines;
@@ -66,8 +66,8 @@ namespace hrfm { namespace matrix{
         WaveMatrixAnimator(){
             BaseMatrixAnimator();
         }
-        void setup( Vec2i size, int cellSize );
-        void setup( Vec2i size, int colSize, int rowSize );
+        void setup( ivec2 size, int cellSize );
+        void setup( ivec2 size, int colSize, int rowSize );
         void update( Channel32f * mChannel );
         void addWaveAt( int col, float pow = 0.08f, float decline = 0.82, float t = 30 ){
             myWaveNodes[col]->addWave(pow, decline, t);

@@ -63,12 +63,12 @@ namespace hrfm{ namespace visual{ namespace emitter{
             
             ci::gl::color( colorA );
             
-            Vec2f center = Vec2f( baseX + x, baseY + y );
+            vec2 center = vec2( baseX + x, baseY + y );
             
             int num = 10;
             
             ci::gl::enableAlphaBlending();
-            glBegin( GL_TRIANGLE_FAN );
+            ci::gl::begin( GL_TRIANGLE_FAN );
             {
                 
                 float r = _radius * 10.0f * audioInput->getFFTRangedAt(_idx);
@@ -79,28 +79,28 @@ namespace hrfm{ namespace visual{ namespace emitter{
                 float rad, c, s;
                 float step = 360.f / (float)num * _PI / 180.f;
                 
-                ci::gl::vertex( Vec2f( center.x, center.y ) );
+                ci::gl::vertex( vec2( center.x, center.y ) );
                 for( int i=0; i <= num; i++ ){
                     rad = step * (float)i;
                     c   = cos(rad);
                     s   = sin(rad);
-                    ci::gl::vertex( Vec2f( center.x + r*c, center.y + r*s ) );
+                    ci::gl::vertex( vec2( center.x + r*c, center.y + r*s ) );
                 }
                 
                 r += 10.0 * audioInput->getFFTRangedAt(1);
                 colorA.a *= 0.5;
                 ci::gl::color( colorA );
                 
-                ci::gl::vertex( Vec2f( center.x, center.y ) );
+                ci::gl::vertex( vec2( center.x, center.y ) );
                 for( int i=0; i <= num; i++ ){
                     rad = step * (float)i;
                     c   = cos(rad);
                     s   = sin(rad);
-                    ci::gl::vertex( Vec2f( center.x + r*c, center.y + r*s ) );
+                    ci::gl::vertex( vec2( center.x + r*c, center.y + r*s ) );
                 }
                 
             }
-            glEnd();
+            ci::gl::end();
             ci::gl::disableAlphaBlending();
             
         }

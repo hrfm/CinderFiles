@@ -90,7 +90,7 @@ namespace hrfm{ namespace display{
         return _movieGlRef;
     }
     
-    ci::gl::Texture MovieTexture::getTexture(){
+    ci::gl::TextureRef MovieTexture::getTexture(){
         return _movieGlRef->getTexture();
     }
     

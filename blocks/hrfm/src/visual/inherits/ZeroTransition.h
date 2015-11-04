@@ -18,7 +18,7 @@ namespace hrfm{ namespace visual{
                 VisualTransitionBase();
             };
         
-            void init( Vec2i size, float transitionTime ){
+            void init( ivec2 size, float transitionTime ){
                 VisualTransitionBase::init( size, 0.0 );
             };
             

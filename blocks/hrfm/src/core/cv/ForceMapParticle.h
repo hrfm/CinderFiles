@@ -18,7 +18,7 @@ namespace hrfm{ namespace cv{
                 vy = 0;
             }
             
-            void update( Vec2f force ){
+            void update( vec2 force ){
                 
                 mBeforePos.set( x, y );
                 
@@ -56,28 +56,28 @@ namespace hrfm{ namespace cv{
                 mVec.set( vx, vy );
             }
             
-            Vec2f getPosition(){
+            vec2 getPosition(){
                 return mPos;
             }
             
-            Vec2f getBeforePosition(){
+            vec2 getBeforePosition(){
                 return mBeforePos;
             }
             
-            Vec2f getAccel(){
+            vec2 getAccel(){
                 return mAccel;
             }
         
-            Vec2f getVec(){
+            vec2 getVec(){
                 return mVec;
             }
             
         private :
         
-            Vec2f mPos;
-            Vec2f mBeforePos;
-            Vec2f mAccel;
-            Vec2f mVec;
+            vec2 mPos;
+            vec2 mBeforePos;
+            vec2 mAccel;
+            vec2 mVec;
         
             // 位置
             double x;
@@ -111,14 +111,14 @@ namespace hrfm{ namespace cv{
                 vector<Particle*>::iterator it;
                 const std::vector<Particle*>::const_iterator & end = particles.end();
                 for (it = particles.begin(); it != end; ++it) {
-                    Vec2f force = map.getForce((*it)->getPosition()) / 3000.0f;
+                    vec2 force = map.getForce((*it)->getPosition()) / 3000.0f;
                     (*it)->update( force );
                 }
             }
         
             void draw( Rectf bounds, float particleSize ){
                 
-                Vec2i size = bounds.getSize();
+                ivec2 size = bounds.getSize();
                 
                 ci::gl::pushMatrices();
                 ci::gl::translate( bounds.x1, bounds.y1, 0 );
@@ -135,7 +135,7 @@ namespace hrfm{ namespace cv{
                             alpha = 0.2;
                         }
                         glColor4f(1.0,1.0,1.0,alpha);
-                        ci::gl::drawSolidCircle( (*it)->getPosition() * Vec2f(size), particleSize * alpha );
+                        ci::gl::drawSolidCircle( (*it)->getPosition() * vec2(size), particleSize * alpha );
                     }
                 }
                 
@@ -145,13 +145,13 @@ namespace hrfm{ namespace cv{
             
             void drawLine( Rectf bounds ){
                 
-                Vec2i size = bounds.getSize();
+                ivec2 size = bounds.getSize();
                 
                 ci::gl::pushMatrices();
                 ci::gl::translate( bounds.x1, bounds.y1, 0 );
                 
-                glDisable( GL_TEXTURE_2D );
-                glBegin( GL_LINES );
+                ci::gl::disable( GL_TEXTURE_2D );
+                ci::gl::begin( GL_LINES );
                     vector<Particle*>::iterator it;
                     const std::vector<Particle*>::const_iterator & end = particles.end();
                     for (it = particles.begin(); it != end; ++it) {
@@ -164,12 +164,12 @@ namespace hrfm{ namespace cv{
                                 alpha = 1.0;
                             }
                             glColor4f(1.0,1.0,1.0,alpha);
-                            ci::gl::vertex( (*it)->getBeforePosition()* Vec2f(size) );
-                            ci::gl::vertex( (*it)->getPosition()* Vec2f(size) );
+                            ci::gl::vertex( (*it)->getBeforePosition()* vec2(size) );
+                            ci::gl::vertex( (*it)->getPosition()* vec2(size) );
                         }
                     }
-                glEnd();
-                glEnable( GL_TEXTURE_2D );
+                ci::gl::end();
+                ci::gl::enable( GL_TEXTURE_2D );
                 
                 ci::gl::popMatrices();
                 
@@ -189,7 +189,7 @@ namespace hrfm{ namespace cv{
         
             ActiveEffect(){}
             
-            void setup( Vec2i size ){
+            void setup( ivec2 size ){
                 ci::gl::Fbo::Format format;
                 motionFbo = ci::gl::Fbo( size.x, size.y, format );
             }
@@ -253,15 +253,15 @@ namespace hrfm{ namespace cv{
                     
                     ci::gl::color( ColorA( 1.0f, 1.0f, 1.0f, alpha ) );
                     
-                    Vec2f pos    = map.getMaxForcePosition();
-                    Vec2f center = Vec2f( pos.x * ci::app::getWindowWidth(), pos.y * ci::app::getWindowHeight() );
-                    Vec2f force  = map.getAverageForce();
+                    vec2 pos    = map.getMaxForcePosition();
+                    vec2 center = vec2( pos.x * ci::app::getWindowWidth(), pos.y * ci::app::getWindowHeight() );
+                    vec2 force  = map.getAverageForce();
                     float length = force.length() * audioAverage;
                     
                     if( 30.0 < length ){
                         for( int i = 0; i < 20; i++ ){
                             ci::gl::lineWidth(randFloat()*3);
-                            Vec2f pos = center + Vec2f(randFloat()*1920.0-960.f, randFloat()*1000.0-500.f);
+                            vec2 pos = center + vec2(randFloat()*1920.0-960.f, randFloat()*1000.0-500.f);
                             ci::gl::drawLine( pos, pos +  force * 300.0f );
                             ci::gl::drawLine( pos, pos + -force * 300.0f );
                         }
@@ -269,7 +269,7 @@ namespace hrfm{ namespace cv{
                         for( int i = 0; i < 40; i++ ){
                             ci::gl::lineWidth(randFloat()* 10);
                             float radian = 6.28 * randFloat();
-                            Vec2f pos = Vec2f(cos(radian), sin(radian));
+                            vec2 pos = vec2(cos(radian), sin(radian));
                             ci::gl::drawLine( center + pos * ( 100 + 400.0 * randFloat() ), center + pos * 2000 );
                         }
                     }
@@ -296,15 +296,15 @@ namespace hrfm{ namespace cv{
                     
                     ci::gl::color( ColorA( 1.0f, 1.0f, 1.0f, alpha ) );
                     
-                    Vec2f pos    = map.getMaxForcePosition();
-                    Vec2f center = Vec2f( pos.x * ci::app::getWindowWidth(), pos.y * ci::app::getWindowHeight() );
-                    Vec2f force  = map.getAverageForce();
+                    vec2 pos    = map.getMaxForcePosition();
+                    vec2 center = vec2( pos.x * ci::app::getWindowWidth(), pos.y * ci::app::getWindowHeight() );
+                    vec2 force  = map.getAverageForce();
                     float length = force.length() * audioAverage;
                 
                     if( 10.0 < length ){
                         for( int i = 0; i < 10; i++ ){
                             ci::gl::lineWidth(randFloat()* 5);
-                            ___drawKaminari___( center + Vec2f( randFloat(-30,30),randFloat(-30,30) ), 6.28 * randFloat() );
+                            ___drawKaminari___( center + vec2( randFloat(-30,30),randFloat(-30,30) ), 6.28 * randFloat() );
                         }
                     }
                     
@@ -317,11 +317,11 @@ namespace hrfm{ namespace cv{
                 
             }
         
-            void ___drawKaminari___( Vec2f from, float firstAngle ){
-                Vec2f to;
+            void ___drawKaminari___( vec2 from, float firstAngle ){
+                vec2 to;
                 float angle = firstAngle;
                 for( int i=0; i< 70; i++ ){
-                    to = from + Vec2f( cos(angle), sin(angle) ) * (10.0f+30.0f*randFloat());
+                    to = from + vec2( cos(angle), sin(angle) ) * (10.0f+30.0f*randFloat());
                     ci::gl::drawLine( from, to );
                     from = to;
                     angle += 1.0 * randFloat() - 0.5;

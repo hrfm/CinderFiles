@@ -7,7 +7,7 @@ namespace hrfm{ namespace gl{
     
     //! public:
     
-    void VboSphere::setup( Vec2i segments, bool curve, float noise ){
+    void VboSphere::setup( ivec2 segments, bool curve, float noise ){
         
         ci::TriMesh * m = new ci::TriMesh();
         
@@ -19,12 +19,12 @@ namespace hrfm{ namespace gl{
         float radian = 3.141592653589;
         
         //*
-        vector<Vec3f> vertices;
+        vector<vec3> vertices;
         for (int row = 0; row <= segments.y; row++){
             x = 0.0;
             for (int col = 0; col <= segments.x; col++){
                 vertices.push_back(
-                    Vec3f(
+                    vec3(
                         x-0.5 + stepX*randFloat(-noise,noise),
                         y-0.5 + stepY*randFloat(-noise,noise),
                         0.0 + randFloat(-noise,noise)*stepX
@@ -43,43 +43,43 @@ namespace hrfm{ namespace gl{
                 continue;
             }
             
-            Vec3f v0 = vertices.at(i);
-            Vec3f v1 = vertices.at(i+1);
-            Vec3f v2 = vertices.at(i+segments.x+1);
-            Vec3f v3 = vertices.at(i+segments.x+2);
+            vec3 v0 = vertices.at(i);
+            vec3 v1 = vertices.at(i+1);
+            vec3 v2 = vertices.at(i+segments.x+1);
+            vec3 v3 = vertices.at(i+segments.x+2);
             
             {
-                Vec3f v01 = v1-v0;
-                Vec3f v02 = v2-v0;
-                Vec3f norm = v01.cross(v02);
+                vec3 v01 = v1-v0;
+                vec3 v02 = v2-v0;
+                vec3 norm = v01.cross(v02);
                 
                 m->appendVertex(v0);
                 m->appendNormal(norm);
-                m->appendTexCoord(Vec2f(v0.x+0.5,1.0-(v0.y+0.5)));
+                m->appendTexCoord(vec2(v0.x+0.5,1.0-(v0.y+0.5)));
                 m->appendVertex(v1);
                 m->appendNormal(norm);
-                m->appendTexCoord(Vec2f(v1.x+0.5,1.0-(v1.y+0.5)));
+                m->appendTexCoord(vec2(v1.x+0.5,1.0-(v1.y+0.5)));
                 m->appendVertex(v2);
                 m->appendNormal(norm);
-                m->appendTexCoord(Vec2f(v2.x+0.5,1.0-(v2.y+0.5)));
+                m->appendTexCoord(vec2(v2.x+0.5,1.0-(v2.y+0.5)));
                 numberVertices = m->getNumVertices();
                 m->appendTriangle( numberVertices - 3, numberVertices - 2, numberVertices - 1 );
             }
             
             {
-                Vec3f v01 = v2-v3;
-                Vec3f v02 = v1-v3;
-                Vec3f norm = v01.cross(v02);
+                vec3 v01 = v2-v3;
+                vec3 v02 = v1-v3;
+                vec3 norm = v01.cross(v02);
 
                 m->appendVertex(v3);
                 m->appendNormal(norm);
-                m->appendTexCoord(Vec2f(v3.x+0.5,1.0-(v3.y+0.5)));
+                m->appendTexCoord(vec2(v3.x+0.5,1.0-(v3.y+0.5)));
                 m->appendVertex(v2);
                 m->appendNormal(norm);
-                m->appendTexCoord(Vec2f(v2.x+0.5,1.0-(v2.y+0.5)));
+                m->appendTexCoord(vec2(v2.x+0.5,1.0-(v2.y+0.5)));
                 m->appendVertex(v1);
                 m->appendNormal(norm);
-                m->appendTexCoord(Vec2f(v1.x+0.5,1.0-(v1.y+0.5)));
+                m->appendTexCoord(vec2(v1.x+0.5,1.0-(v1.y+0.5)));
                 numberVertices = m->getNumVertices();
                 m->appendTriangle( numberVertices - 3, numberVertices - 2, numberVertices - 1 );
                 
@@ -99,17 +99,17 @@ namespace hrfm{ namespace gl{
             float z0 = sin(x*radian);
             float z1 = sin((x+stepX)*radian);
             
-            m->appendVertex(Vec3f(x0,-0.5,z0));
-            m->appendTexCoord(Vec2f(x0+0.5,0));
+            m->appendVertex(vec3(x0,-0.5,z0));
+            m->appendTexCoord(vec2(x0+0.5,0));
             
-            m->appendVertex(Vec3f(x1,-0.5,z1));
-            m->appendTexCoord(Vec2f(x1+0.5, 0));
+            m->appendVertex(vec3(x1,-0.5,z1));
+            m->appendTexCoord(vec2(x1+0.5, 0));
             
-            m->appendVertex(Vec3f(x1,0.5,z1));
-            m->appendTexCoord(Vec2f(x1+0.5, 1));
+            m->appendVertex(vec3(x1,0.5,z1));
+            m->appendTexCoord(vec2(x1+0.5, 1));
             
-            m->appendVertex(Vec3f(x0,0.5,z0));
-            m->appendTexCoord(Vec2f(x0+0.5, 1));
+            m->appendVertex(vec3(x0,0.5,z0));
+            m->appendTexCoord(vec2(x0+0.5, 1));
             
             int numberVertices = m->getNumVertices();
             

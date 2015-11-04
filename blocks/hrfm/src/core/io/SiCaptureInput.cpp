@@ -35,8 +35,8 @@ namespace hrfm { namespace io{
             // --- texture cache.
             
             _textureCacheLengthMap[deviceName] = max( 2, cacheLength );
-            _textureCacheVectorMap[deviceName] = vector<ci::gl::Texture>();
-            _textureCacheVectorMap[deviceName].push_back( ci::gl::Texture(1, 1) );
+            _textureCacheVectorMap[deviceName] = vector<ci::gl::Texture2dRef>();
+            _textureCacheVectorMap[deviceName].push_back( ci::gl::Texture2d::create(1, 1) );
             
         }catch( ... ) {
             cout << "Failed to initialize capture" << std::endl;
@@ -53,10 +53,10 @@ namespace hrfm { namespace io{
     
     //! --- サイズの取得
     
-    ci::Vec2i SiCaptureInput::getSize(){
+    ci::ivec2 SiCaptureInput::getSize(){
         return getSize( _defaultDeviceName );
     }
-    ci::Vec2i SiCaptureInput::getSize( string deviceName ){
+    ci::ivec2 SiCaptureInput::getSize( string deviceName ){
         return _captureRefMap[deviceName]->getSize();
     }
     
@@ -82,57 +82,48 @@ namespace hrfm { namespace io{
     
     // --- Surface の取得
     
-    ci::Surface SiCaptureInput::getSurface(){
+    ci::Surface8uRef SiCaptureInput::getSurface(){
         return getSurface( _defaultDeviceName );
     }
-    ci::Surface SiCaptureInput::getSurface( string deviceName ){
+    ci::Surface8uRef SiCaptureInput::getSurface( string deviceName ){
         return _captureRefMap[deviceName]->getSurface();
     }
     
     // --- Texture の取得
     
-    ci::gl::Texture SiCaptureInput::getTexture( int cacheAt ){
+    ci::gl::Texture2dRef SiCaptureInput::getTexture( int cacheAt ){
         return getTexture( _defaultDeviceName, cacheAt );
     }
-    ci::gl::Texture SiCaptureInput::getTexture( string deviceName, int cacheAt ){
-        return *getTexturePtr( deviceName, cacheAt );
-    }
-    
-    // --- 指定したサイズで Texture を取得
-    
-    ci::gl::Texture SiCaptureInput::getResizedTexture( Vec2i size, int cacheAt ){
-        return getResizedTexture( size, _defaultDeviceName, cacheAt );
-    }
-    ci::gl::Texture SiCaptureInput::getResizedTexture( Vec2i size, string deviceName, int cacheAt ){
-        return hrfm::gl::resizeTexture( getTexturePtr(deviceName, cacheAt), size );
-    }
-    
-    // --- Texture のポインタを取得
-    
-    ci::gl::Texture * SiCaptureInput::getTexturePtr( int cacheAt ){
-        return getTexturePtr( _defaultDeviceName, cacheAt );
-    }
-    ci::gl::Texture * SiCaptureInput::getTexturePtr( string deviceName, int cacheAt ){
+    ci::gl::Texture2dRef SiCaptureInput::getTexture( string deviceName, int cacheAt ){
         int numCached = getNumCached(deviceName);
         if( numCached < cacheAt + 1 ){
             cacheAt = numCached - 1;
         }
-        return &_textureCacheVectorMap[deviceName].at( _textureCacheVectorMap[deviceName].size() - (cacheAt+1) );
+        return _textureCacheVectorMap[deviceName].at( _textureCacheVectorMap[deviceName].size() - (cacheAt+1) );
+    }
+    
+    // --- 指定したサイズで Texture を取得
+    
+    ci::gl::Texture2dRef SiCaptureInput::getResizedTexture( ivec2 size, int cacheAt ){
+        return getResizedTexture( size, _defaultDeviceName, cacheAt );
+    }
+    ci::gl::Texture2dRef SiCaptureInput::getResizedTexture( ivec2 size, string deviceName, int cacheAt ){
+        return hrfm::gl::resizeTexture( getTexture(deviceName, cacheAt), size );
     }
     
     // --- 前フレームとの差分テクスチャを取得
     
-    ci::gl::Texture SiCaptureInput::getDiffTexture(){
+    ci::gl::Texture2dRef SiCaptureInput::getDiffTexture(){
         return getDiffTexture( _defaultDeviceName );
     }
-    ci::gl::Texture SiCaptureInput::getDiffTexture( string deviceName ){
+    ci::gl::Texture2dRef SiCaptureInput::getDiffTexture( string deviceName ){
         if( _diffFboMap.find(deviceName) == _diffFboMap.end() ){
-            ci::Vec2i size = getCaptureRef(deviceName)->getSize();
+            ci::ivec2 size = getCaptureRef(deviceName)->getSize();
             ci::gl::Fbo::Format format;
-            ci::gl::Fbo fbo = ci::gl::Fbo( size.x, size.y, format );
+            ci::gl::FboRef fbo = ci::gl::Fbo::create( size.x, size.y, format );
             _diffFboMap[deviceName] = fbo;
         }
-        return _diffFboMap[deviceName].getTexture();
+        return _diffFboMap[deviceName]->getColorTexture();
     }
     
     // --- 何フレーム分キャプチャを行ったかを取得
@@ -155,7 +146,7 @@ namespace hrfm { namespace io{
     
     //! protected
     
-    ci::gl::Texture SiCaptureInput::_updateTexture( string deviceName ){
+    ci::gl::Texture2dRef SiCaptureInput::_updateTexture( string deviceName ){
         if( _beforeFrameMap.find(deviceName) == _beforeFrameMap.end() ){
             _beforeFrameMap[deviceName] = 0;
         }else{
@@ -163,10 +154,11 @@ namespace hrfm { namespace io{
             int beforeFrame  = _beforeFrameMap[deviceName];
             if( beforeFrame < currentFrame ){
                 _beforeFrameMap[deviceName] = currentFrame;
-                vector<ci::gl::Texture> * vec = &_textureCacheVectorMap[deviceName];
+                vector<ci::gl::Texture2dRef> * vec = &_textureCacheVectorMap[deviceName];
                 if( getCaptureRef(deviceName)->checkNewFrame() ){
-                    vec->push_back( ci::gl::Texture( getSurface( deviceName ) ) );
+                    vec->push_back( ci::gl::Texture2d::create( *getSurface( deviceName ), ci::gl::Texture::Format().loadTopDown() ) );
                 }else{
+                    // Diff 用に取っているが3フレ以上同じだった場合不要な処理
                     vec->push_back( getTexture(deviceName) );
                 }
                 if( _textureCacheLengthMap[deviceName] < vec->size() ){
@@ -177,7 +169,7 @@ namespace hrfm { namespace io{
         return getTexture(deviceName);
     }
     
-    ci::gl::Texture SiCaptureInput::_updateDiffTexture( string deviceName ){
+    ci::gl::Texture2dRef SiCaptureInput::_updateDiffTexture( string deviceName ){
         
         if( _beforeTextureBeforeFrameMap.find(deviceName) == _beforeTextureBeforeFrameMap.end() ){
             _beforeTextureBeforeFrameMap[deviceName] = 0;
@@ -186,52 +178,52 @@ namespace hrfm { namespace io{
         int currentFrame = ci::app::getElapsedFrames();
         int beforeFrame  = _beforeTextureBeforeFrameMap[deviceName];
         
-        vector<ci::gl::Texture> * vec = &_textureCacheVectorMap[deviceName];
+        vector<ci::gl::Texture2dRef> * vec = &_textureCacheVectorMap[deviceName];
         
         if( beforeFrame != currentFrame ){
             
             if( 1 < vec->size() ){
                 
-                Area viewport = ci::gl::getViewport();
+                //!!!!!!!! Area viewport = ci::gl::getViewport();
                 
                 if( _diffFboMap.find(deviceName) == _diffFboMap.end() ){
-                    ci::Vec2i size = getCaptureRef(deviceName)->getSize();
+                    ci::ivec2 size = getCaptureRef(deviceName)->getSize();
                     ci::gl::Fbo::Format format;
-                    ci::gl::Fbo fbo = ci::gl::Fbo( size.x, size.y, format );
+                    ci::gl::FboRef fbo = ci::gl::Fbo::create( size.x, size.y, format );
                     _diffFboMap[deviceName] = fbo;
                 }
                 
-                ci::gl::Texture * tex   = getTexturePtr(deviceName);
-                ci::gl::Texture * b4Tex = getTexturePtr(deviceName,1);
-                ci::gl::Fbo     fbo     = _diffFboMap[deviceName];
+                ci::gl::Texture2dRef tex   = getTexture(deviceName);
+                ci::gl::Texture2dRef b4Tex = getTexture(deviceName,1);
+                ci::gl::FboRef       fbo   = _diffFboMap[deviceName];
                 
                 // 前フレームとの差分を取得する.
-                fbo.bindFramebuffer();
+                fbo->bindFramebuffer();
                 {
                     ci::gl::pushMatrices();
-                    ci::gl::setViewport( fbo.getBounds() );
-                    ci::gl::setMatricesWindow( fbo.getSize(), false );
+                    //!!!!! ci::gl::setViewport( fbo.getBounds() );
+                    ci::gl::setMatricesWindow( fbo->getSize(), false );
                     {
                         ci::gl::clear();
                         ci::gl::color(1.0f,1.0f,1.0f);
                         b4Tex->bind(0);
                         tex->bind(1);
-                        _diffShader.bind();
+                        _diffShader->bind();
                         {
-                            _diffShader.uniform("tex0", 0);
-                            _diffShader.uniform("tex1", 1);
-                            _diffShader.uniform("resolution", Vec2f(fbo.getSize()) );
-                            ci::gl::drawSolidRect( fbo.getBounds() );
+                            _diffShader->uniform("tex0", 0);
+                            _diffShader->uniform("tex1", 1);
+                            _diffShader->uniform("resolution", vec2(fbo->getSize()) );
+                            ci::gl::drawSolidRect( fbo->getBounds() );
                         }
-                        _diffShader.unbind();
+                        //!!!!!!!! _diffShader->unbind();
                         tex->unbind();
                         b4Tex->unbind();
                     }
                     ci::gl::popMatrices();
                 }
-                fbo.unbindFramebuffer();
+                fbo->unbindFramebuffer();
                 
-                ci::gl::setViewport(viewport);
+                //!!!!! ci::gl::setViewport(viewport);
                 
             }
             

@@ -10,8 +10,8 @@ namespace hrfm{ namespace display{
     
     void DisplayNode::clear(){}
     
-    Vec2i DisplayNode::getSize(){
-        return Vec2f( width, height );
+    ivec2 DisplayNode::getSize(){
+        return ivec2( width, height );
     }
     
     void DisplayNode::setSize( int w, int h ){
@@ -24,7 +24,7 @@ namespace hrfm{ namespace display{
         }
     }
     
-    void DisplayNode::setSize( Vec2i size ){
+    void DisplayNode::setSize( ivec2 size ){
         setSize( size.x, size.y );
     }
     
@@ -40,8 +40,8 @@ namespace hrfm{ namespace display{
         return Rectf( 0, 0, width, height );
     }
     
-    Vec2f DisplayNode::getAbsolutePosition(){
-        Vec2f v = Vec2f( x, y );
+    vec2 DisplayNode::getAbsolutePosition(){
+        vec2 v = vec2( x, y );
         DisplayNode * p = getParent();
         while( p != NULL ){
             v.x += p->x;
@@ -168,19 +168,19 @@ namespace hrfm{ namespace display{
             c.a *= drawColor->a;
         }
         if( c.a < 1.0f ){
-            gl::enableAlphaBlending();
+            ci::gl::enableAlphaBlending();
         }else{
-            gl::disableAlphaBlending();
+            ci::gl::disableAlphaBlending();
         }
-        gl::pushMatrices();
-        gl::translate( x, y );
+        ci::gl::pushMatrices();
+        ci::gl::translate( x, y );
         {
-            gl::color( c );
+            ci::gl::color( c );
             _draw();
             _drawChildren( &c );
         }
-        gl::popMatrices();
-        gl::disableAlphaBlending();
+        ci::gl::popMatrices();
+        ci::gl::disableAlphaBlending();
     }
     
     bool DisplayNode::hasParent(){
@@ -239,8 +239,8 @@ namespace hrfm{ namespace display{
         }
     }
     
-    ci::Vec2f DisplayNode::getGlobalPosition(){
-        Vec2f pos( x, y );
+    ci::vec2 DisplayNode::getGlobalPosition(){
+        vec2 pos( x, y );
         if( hasParent() ){
             return pos + _parent->getGlobalPosition();
         }else{

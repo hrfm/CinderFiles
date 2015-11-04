@@ -12,12 +12,12 @@ namespace hrfm { namespace gl{ namespace filter{
         BlurFilter():FilterBase("BlurFilter.glsl"){
             
         };
-        void setUniform( Vec2f sample_offset, float attenuation );
+        void setUniform( vec2 sample_offset, float attenuation );
     protected:
         DataSourceRef getFragmentShader();
         void prepare();
         void clear();
-        Vec2f mSampleOffset;
+        vec2 mSampleOffset;
         float mAttenuation;
     };
     

@@ -22,12 +22,12 @@ namespace hrfm{ namespace text{
         
         FontMatrix();
         
-        void setup( Vec2i fboSize, int fontSize, const string fontName, string text = "" );
+        void setup( ivec2 fboSize, int fontSize, const string fontName, string text = "" );
         
         int   numMatrixCols();
         int   numMatrixRows();
-        Vec2i getMatrixSize();
-        Vec2i getFboSize();
+        ivec2 getMatrixSize();
+        ivec2 getFboSize();
         Rectf getFboBounds();
         ci::gl::Texture getTexture();
         ci::gl::Texture getFadeTexture();
@@ -52,9 +52,9 @@ namespace hrfm{ namespace text{
         string _text;
         float _measureX;
         
-        Vec2i _fboSize;
+        ivec2 _fboSize;
         int   _fontSize;
-        Vec2i _mtxSize;
+        ivec2 _mtxSize;
         int   _currentCol;
         int   _currentRow;
         

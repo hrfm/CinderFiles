@@ -15,13 +15,13 @@ namespace hrfm{ namespace visual{
         
         public :
         
-            ShaderVisual( AppBase * app, Vec2i resolution, string fragment ){
+            ShaderVisual( AppBase * app, ivec2 resolution, string fragment ){
                 VisualBase();
                 setup( app, resolution );
                 addVisual(fragment);
             };
             
-            ShaderVisual( AppBase * app, Vec2i resolution, vector<string> fragments ){
+            ShaderVisual( AppBase * app, ivec2 resolution, vector<string> fragments ){
                 VisualBase();
                 setup( app, resolution );
                 vector<string>::iterator it = fragments.begin();
@@ -31,7 +31,7 @@ namespace hrfm{ namespace visual{
                 }
             };
             
-            void setup( AppBase * app, Vec2i resolution ){
+            void setup( AppBase * app, ivec2 resolution ){
                 cout << "- Setup ShaderVisual " << resolution << endl;
                 VisualBase::setup( app, resolution );
             };
@@ -63,8 +63,8 @@ namespace hrfm{ namespace visual{
                 }
                 
                 float iGlobalTime = (float)getElapsedSeconds();
-                Vec2f iResolution = Vec2f( mOutputFbo.getWidth(), mOutputFbo.getHeight() );
-                Vec2f iMouse      = Vec2f( 0, 0 );
+                vec2 iResolution = vec2( mOutputFbo.getWidth(), mOutputFbo.getHeight() );
+                vec2 iMouse      = vec2( 0, 0 );
                 
                 float average = mAppBase->audioInput.getAudioManagerFFTAverage();
                 float fader0  = mAppBase->getFaderValueAt(4) * mAppBase->getFaderValueAt(12) * 3.0;

@@ -6,7 +6,7 @@ namespace hrfm { namespace gl{ namespace filter{
     
     void DigitalNoiseFilter::prepare(){
         FilterBase::prepare();
-        mShader.uniform( "vertical", isVertical );
+        mShader->uniform( "vertical", isVertical );
     }
     
     void DigitalNoiseFilter::clear(){

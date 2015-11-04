@@ -22,12 +22,12 @@ namespace hrfm{ namespace io{
     void CaptureInput::update(){
         if( mCapture->getSurface() ){
             if( mFaceDetect ){
-                mFaceDetect->update( mCapture->getSurface().clone() );
+                mFaceDetect->update( mCapture->getSurface()->clone() );
             }
         }
     }
     
-    Vec2i CaptureInput::getSize(){
+    ivec2 CaptureInput::getSize(){
         return mCapture->getSize();
     }
     
@@ -35,11 +35,11 @@ namespace hrfm{ namespace io{
         return mCapture->getBounds();
     }
     
-    ci::gl::Texture CaptureInput::getCaptureTexture(){
+    ci::gl::TextureRef CaptureInput::getCaptureTexture(){
         return SiCaptureInput::getInstance().getTexture( _deviceName );
     }
     
-    ci::gl::Texture CaptureInput::getDiffTexture(){
+    ci::gl::TextureRef CaptureInput::getDiffTexture(){
         return SiCaptureInput::getInstance().getDiffTexture( _deviceName );
     }
     
@@ -53,7 +53,7 @@ namespace hrfm{ namespace io{
     //
     // ========================================================================================
     
-    void CaptureInput::setupFaceDetect( Vec2i textureSize ){
+    void CaptureInput::setupFaceDetect( ivec2 textureSize ){
         if( mFaceDetect == NULL ){
             mFaceDetect = new FaceDetect( textureSize );
         }

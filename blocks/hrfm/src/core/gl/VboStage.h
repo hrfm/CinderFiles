@@ -7,7 +7,7 @@
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Texture.h"
 #include "cinder/gl/Fbo.h"
-#include "cinder/gl/Light.h"
+//#include "cinder/gl/Light.h"
 
 #include "Utils.h"
 
@@ -33,20 +33,20 @@ namespace hrfm{ namespace gl{
         float getFov();
         void setFov( float fov );
         
-        ci::Vec2i getSize();
+        ci::ivec2 getSize();
         void setSize( int w, int h );
-        void setSize( ci::Vec2i size );
+        void setSize( ci::ivec2 size );
         
         virtual VboNode * addChild( VboNode * child );
         
-        virtual void addLight( ci::gl::Light * light );
-        virtual void removeLight( ci::gl::Light * light );
+        //!!!!! virtual void addLight( ci::gl::Light * light );
+        //!!!!! virtual void removeLight( ci::gl::Light * light );
         
         virtual void update();
         virtual void draw();
         virtual void draw( ci::Rectf bounds );
         
-        ci::gl::Texture & getTexture();
+        ci::gl::Texture2dRef getTexture();
         
         float width, height;
         ci::CameraPersp * camera;
@@ -55,15 +55,15 @@ namespace hrfm{ namespace gl{
         
     private:
         
-        ci::gl::Fbo _fbo;
+        ci::gl::FboRef _fbo;
         void _onResize( hrfm::events::Event * event );
-        bool eraseLightFromLights( ci::gl::Light * light );
+        //!!!!! bool eraseLightFromLights( ci::gl::Light * light );
         
         float _fov;
         int _beforeWidth;
         int _beforeHeight;
         
-        vector<ci::gl::Light*> _lights;
+        //!!!!! vector<ci::gl::Light*> _lights;
         
     };
     

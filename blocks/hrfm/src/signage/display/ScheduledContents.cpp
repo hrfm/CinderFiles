@@ -131,9 +131,9 @@ namespace hrfm{ namespace signage{ namespace display{
                     }
                     
                     if( item->hasAttribute("cols") ){
-                        _splitList[time] = Vec2i( item->getAttributeValue<int>("cols"), 1 );
+                        _splitList[time] = ivec2( item->getAttributeValue<int>("cols"), 1 );
                     }else{
-                        _splitList[time] = Vec2i( 1, 1 );
+                        _splitList[time] = ivec2( 1, 1 );
                     }
                     
                 }catch(...){
@@ -280,7 +280,7 @@ namespace hrfm{ namespace signage{ namespace display{
     //! protected:
     
     void ScheduledContents::_update(){
-        if( _fbo->getSize() != getSize() ){
+        if( _fbo->getSize() != (vec2)getSize() ){
             _fbo = new hrfm::gl::ExFbo( width, height );
         }
         _fbo->beginOffscreen(true);

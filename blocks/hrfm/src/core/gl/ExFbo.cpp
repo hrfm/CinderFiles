@@ -13,7 +13,7 @@ namespace hrfm{ namespace gl{
         return _fbo;
     }
     
-    ci::Vec2f ExFbo::getSize(){
+    ci::vec2 ExFbo::getSize(){
         return _fbo->getSize();
     };
     
@@ -21,20 +21,16 @@ namespace hrfm{ namespace gl{
         return _fbo->getBounds();
     };
     
-    ci::Vec2i ExFbo::getAspectSize(){
+    ci::ivec2 ExFbo::getAspectSize(){
         return getAspectRatio(getSize());
     }
     ci::Rectf ExFbo::getAspectBounds(){
-        Vec2i aspect = getAspectSize();
+        ivec2 aspect = getAspectSize();
         return Rectf( 0, 0, aspect.x, aspect.y );
     }
     
-    ci::gl::Texture ExFbo::getTexture(){
-        return _fbo->getTexture();
-    }
-    
-    ci::gl::Texture * ExFbo::getTexturePtr(){
-        return &(_fbo->getTexture());
+    ci::gl::TextureRef ExFbo::getTexture(){
+        return _fbo->getColorTexture();
     }
     
     ExFbo * ExFbo::beginOffscreen( bool clear ){
@@ -80,9 +76,9 @@ namespace hrfm{ namespace gl{
     ci::gl::Texture ExFbo::_getTextureClone(){
         ci::gl::Fbo * fbo = hrfm::gl::SiFboFactory::getInstance().create(_fbo->getWidth(),_fbo->getHeight());
         _beginOffscreen(fbo,true);
-            ci::gl::draw(_fbo->getTexture());
+            ci::gl::draw(_fbo->getColorTexture());
         _endOffscreen();
-        return fbo->getTexture();
+        return fbo->getColorTexture();
     }
     
     void ExFbo::_beginOffscreen( ci::gl::Fbo * fbo, bool clear, bool useAspect ){

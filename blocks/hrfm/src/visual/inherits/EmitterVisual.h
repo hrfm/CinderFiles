@@ -38,7 +38,7 @@ namespace hrfm{ namespace visual{
             
         protected :
         
-            Vec3f mPosition;
+            vec3 mPosition;
             bool  mAlive;
             
     };
@@ -53,15 +53,15 @@ namespace hrfm{ namespace visual{
             
             EmitterVisual( AppBase * app ){
                 VisualBase();
-                setup( app, Vec2i( 640, 480 ) );
+                setup( app, ivec2( 640, 480 ) );
             };
             
-            EmitterVisual( AppBase * app, Vec2i resolution ){
+            EmitterVisual( AppBase * app, ivec2 resolution ){
                 VisualBase();
                 setup( app, resolution );
             };
             
-            virtual void setup( AppBase * app, Vec2i resolution ){
+            virtual void setup( AppBase * app, ivec2 resolution ){
                 VisualBase::setup( app, resolution );
             };
             

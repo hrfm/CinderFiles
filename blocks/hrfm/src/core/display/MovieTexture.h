@@ -3,10 +3,7 @@
 #include "TextureNode.h"
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Texture.h"
-
-#ifndef _QT__
-#include "cinder/qtime/QuickTime.h"
-#endif
+#include "cinder/qtime/QuickTimeGl.h"
 
 namespace hrfm{ namespace display{
     
@@ -39,7 +36,7 @@ namespace hrfm{ namespace display{
         virtual bool isSilent();
         virtual void setSilent(bool flag);
         
-        virtual ci::gl::Texture getTexture();
+        virtual ci::gl::TextureRef getTexture();
         
     protected:
         

@@ -15,32 +15,30 @@ namespace hrfm{ namespace gl{
         
         ~ExFbo(){};
         
-        ci::gl::Fbo * getFboPtr();
+        ci::gl::FboRef getFboRef();
         
-        ci::Vec2f getSize();
+        ci::vec2 getSize();
         ci::Rectf getBounds();
         
-        ci::Vec2i getAspectSize();
+        ci::ivec2 getAspectSize();
         ci::Rectf getAspectBounds();
         
-        ci::gl::Texture getTexture();
-        ci::gl::Texture * getTexturePtr();
+        ci::gl::TextureRef getTexture();
         
         ExFbo * beginOffscreen( bool clear = false );
         ExFbo * endOffscreen();
         
         ExFbo * applyFilter( FilterBase * filter, bool clear = true );
-        ExFbo * applyFilter( FilterBase * filter, ci::gl::Texture & srcTexture, bool clear = true );
-        ExFbo * applyFilter( FilterBase * filter, ci::gl::Texture * srcTexture, bool clear = true );
+        ExFbo * applyFilter( FilterBase * filter, ci::gl::TextureRef srcTexture, bool clear = true );
         
     protected:
         
-        ci::gl::Texture _getTextureClone();
-        void _beginOffscreen( ci::gl::Fbo * fbo, bool clear = false, bool useAspect = false );
+        ci::gl::TextureRef _getTextureClone();
+        void _beginOffscreen( ci::gl::FboRef fbo, bool clear = false, bool useAspect = false );
         void _endOffscreen();
         
-        ci::gl::Fbo * _fbo;
-        ci::gl::Fbo * _bindedFbo = NULL;
+        ci::gl::FboRef _fbo;
+        ci::gl::FboRef _bindedFbo = NULL;
         
         bool      isBeginOffscreen;
         bool      isBeginFilter;

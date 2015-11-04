@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cinder/app/AppBasic.h"
+#include "cinder/app/App.h"
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Fbo.h"
 #include "Cinder/gl/GlslProg.h"
@@ -22,27 +22,27 @@ namespace hrfm { namespace gl{
         
     public:
         
-        FilterBase( Vec2i size = Vec2i(256,256) ):ShaderBase(){
+        FilterBase( ivec2 size = ivec2(256,256) ):ShaderBase(){
             setup( size );
         };
-        FilterBase( string fragmentShader, Vec2i size = Vec2i(256,256) ):ShaderBase(fragmentShader){
+        FilterBase( string fragmentShader, ivec2 size = ivec2(256,256) ):ShaderBase(fragmentShader){
             setup( size );
         };
-        FilterBase( string fragmentShader, string vertexShader, Vec2i size = Vec2i(256,256) ):ShaderBase(fragmentShader,vertexShader){
+        FilterBase( string fragmentShader, string vertexShader, ivec2 size = ivec2(256,256) ):ShaderBase(fragmentShader,vertexShader){
             setup( size );
         };
         
-        virtual void setup( Vec2i size );
+        virtual void setup( ivec2 size );
         
         virtual void setSize( int w, int h );
-        virtual void setSize( Vec2i size );
+        virtual void setSize( ivec2 size );
         
-        virtual void affect( ci::gl::Texture * tex, Vec2f windowSize, Vec2f resolution, Rectf drawRect );
-        virtual ci::gl::Texture affect( ci::gl::Texture tex );
+        virtual void affect( ci::gl::TextureRef tex, vec2 windowSize, vec2 resolution, Rectf drawRect );
+        virtual ci::gl::TextureRef affect( ci::gl::TextureRef tex );
         
         void draw( Rectf bounds );
         
-        ci::gl::Texture getTexture();
+        ci::gl::TextureRef getTexture();
         void bindTexture( int index );
         void unbindTexture();
         
@@ -59,8 +59,8 @@ namespace hrfm { namespace gl{
         virtual void clear();
         
         float mCycle;
-        Vec2i mAspect;
-        ci::gl::Fbo mFbo;
+        ivec2 mAspect;
+        ci::gl::FboRef mFbo;
         
     private:
         

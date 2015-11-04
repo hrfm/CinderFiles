@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cinder/app/AppBasic.h"
+#include "cinder/app/App.h"
 #include "cinder/Capture.h"
 #include "cinder/gl/Fbo.h"
 #include "cinder/gl/Texture.h"
@@ -32,13 +32,13 @@ namespace hrfm{ namespace io{
         
         void update();
         
-        Vec2i getSize();
+        ivec2 getSize();
         Rectf getBounds();
         
         bool isCaptureAvailable();
         
-        ci::gl::Texture getCaptureTexture();
-        ci::gl::Texture getDiffTexture();
+        ci::gl::TextureRef getCaptureTexture();
+        ci::gl::TextureRef getDiffTexture();
         
         //void bindTexture( int index );
         //void unbindTexture();
@@ -51,7 +51,7 @@ namespace hrfm{ namespace io{
         //
         // ========================================================================================
         
-        void setupFaceDetect( Vec2i textureSize = Vec2i(480,270) );
+        void setupFaceDetect( ivec2 textureSize = ivec2(480,270) );
         bool faceDetectEnabled();
         vector<DetectRect> getFaces();
         
@@ -62,7 +62,7 @@ namespace hrfm{ namespace io{
         string     _deviceName;
         CaptureRef mCapture;
         
-        Vec2i mCaptureSize;
+        ivec2 mCaptureSize;
         Rectf mDrawBounds;
         
         bool mCaptureAvailable;

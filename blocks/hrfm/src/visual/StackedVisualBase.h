@@ -14,12 +14,12 @@ namespace hrfm { namespace visual{
         
     public:
         
-        StackedVisualBase( AppBase * app, Vec2i resolution, vector<VisualBase*> visuals ){
+        StackedVisualBase( AppBase * app, ivec2 resolution, vector<VisualBase*> visuals ){
             VisualBase();
             setup( app, resolution, visuals );
         };
         
-        virtual void setup( AppBase * app, Vec2i resolution, vector<VisualBase*> visuals ){
+        virtual void setup( AppBase * app, ivec2 resolution, vector<VisualBase*> visuals ){
             VisualBase::setup( app, resolution );
             mVisuals = visuals;
         };

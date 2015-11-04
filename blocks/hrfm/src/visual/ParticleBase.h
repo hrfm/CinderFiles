@@ -15,14 +15,14 @@ namespace hrfm { namespace visual{
     public:
         
         ParticleBase(){
-            setup( Vec3f( 0.0, 0.0, 0.0 ) );
+            setup( vec3( 0.0, 0.0, 0.0 ) );
         };
         
-        ParticleBase( Vec3f position ){
+        ParticleBase( vec3 position ){
             setup( position );
         }
         
-        virtual void setup( Vec3f position ){
+        virtual void setup( vec3 position ){
             mQuat.set( 0, position.x, position.y, position.z );
             mQuat.identity();
             mQuat.normalize();
@@ -37,7 +37,7 @@ namespace hrfm { namespace visual{
             float sinTheta = sin( theta / 2.0 );
             
             Quatf Q,R,quat;
-            Vec3f QPol;
+            vec3 QPol;
             
             QPol = mPol * sinTheta;
             Q.set( cos( theta/2.0 ), QPol.x, QPol.y, QPol.z );
@@ -60,11 +60,11 @@ namespace hrfm { namespace visual{
             
         };
         
-        virtual Vec3f getPosition(){
+        virtual vec3 getPosition(){
             return mPosition;
         }
         
-        virtual Vec3f getRecentPosition(){
+        virtual vec3 getRecentPosition(){
             return mRecentPosition;
         }
         
@@ -75,9 +75,9 @@ namespace hrfm { namespace visual{
     protected:
         
         Quatf   mQuat;
-        Vec3f   mPol;
-        Vec3f   mPosition;
-        Vec3f   mRecentPosition;
+        vec3   mPol;
+        vec3   mPosition;
+        vec3   mRecentPosition;
         
     };
     

@@ -20,7 +20,7 @@ namespace hrfm{ namespace display{
         ci::gl::Texture & getTexture();
     private:
         bool _autoClear = true;
-        ci::gl::Fbo _fbo;
+        ci::gl::FboRef _fbo;
         void _onResize( hrfm::events::Event * event );
     };
     

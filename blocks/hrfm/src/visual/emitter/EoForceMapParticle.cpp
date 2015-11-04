@@ -35,7 +35,7 @@ namespace hrfm{ namespace visual{ namespace emitter{
         EmittObjectBase::_update();
         
         if( _forceMap ){
-            Vec2f pow = _forceMap->getForceAtf( ( baseX + x ) / (float)ci::app::getWindowWidth(), ( baseY + y ) / (float)ci::app::getWindowHeight() );
+            vec2 pow = _forceMap->getForceAtf( ( baseX + x ) / (float)ci::app::getWindowWidth(), ( baseY + y ) / (float)ci::app::getWindowHeight() );
             _forceX -= pow.x;
             _forceY -= pow.y;
         }
@@ -52,28 +52,28 @@ namespace hrfm{ namespace visual{ namespace emitter{
         
         ci::gl::color( colorA );
         
-        Vec2f center = Vec2f( baseX + x, baseY + y );
+        vec2 center = vec2( baseX + x, baseY + y );
         
         int num = 10;
         
         ci::gl::enableAlphaBlending();
-        glBegin( GL_TRIANGLE_FAN );
+        ci::gl::begin( GL_TRIANGLE_FAN );
         {
             
             float r = _forceLength;
             float rad, c, s;
             float step = 360.f / (float)num * _PI / 180.f;
             
-            ci::gl::vertex( Vec2f( center.x, center.y ) );
+            ci::gl::vertex( vec2( center.x, center.y ) );
             for( int i=0; i <= num; i++ ){
                 rad = step * (float)i;
                 c   = cos(rad);
                 s   = sin(rad);
-                ci::gl::vertex( Vec2f( center.x + r*c, center.y + r*s ) );
+                ci::gl::vertex( vec2( center.x + r*c, center.y + r*s ) );
             }
             
         }
-        glEnd();
+        ci::gl::end();
         ci::gl::disableAlphaBlending();
         
     }

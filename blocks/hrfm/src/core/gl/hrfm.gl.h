@@ -10,28 +10,28 @@ using namespace hrfm::utils;
 
 namespace hrfm{ namespace gl{
     
-    static ci::gl::Texture resizeTexture( ci::gl::Texture * texture, Vec2i size ){
+    static ci::gl::Texture2dRef resizeTexture( ci::gl::Texture2dRef texture, ivec2 size ){
         
-        ci::gl::Fbo * fbo = hrfm::gl::SiFboFactory::getInstance().create( size.x, size.y );
+        ci::gl::FboRef fbo = hrfm::gl::SiFboFactory::getInstance().create( size.x, size.y );
         
-        ci::Area viewport = ci::gl::getViewport();
+        std::pair<ivec2,ivec2> viewport = ci::gl::getViewport();
         
         fbo->bindFramebuffer();
         {
             ci::gl::pushMatrices();
-            ci::gl::setViewport( fbo->getBounds() );
+            //ci::gl::setViewport( fbo->getBounds() );
             ci::gl::setMatricesWindow( fbo->getSize(), false );
             {
                 ci::gl::color( Color( 1.0, 1.0, 1.0 ) );
-                ci::gl::draw( *texture, fbo->getBounds() );
+                ci::gl::draw( texture, fbo->getBounds() );
             }
             ci::gl::popMatrices();
         }
         fbo->unbindFramebuffer();
         
-        ci::gl::setViewport(viewport);
+        //ci::gl::setViewport(viewport);
         
-        return fbo->getTexture();
+        return fbo->getColorTexture();
         
     }
     

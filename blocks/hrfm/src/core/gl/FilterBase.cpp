@@ -6,21 +6,21 @@ namespace hrfm { namespace gl{
     
     // 最も基本的な初期化を行います.
     // どのシェーダを使うかはクラスに任せます.
-    void FilterBase::setup( Vec2i size ){
+    void FilterBase::setup( ivec2 size ){
         // Calcurate Aspect Ratio.
         mAspect = getAspectRatio( size );
         // Create Fbo.
-        mFbo = *SiFboFactory::getInstance().create( size.x, size.y, false );
+        mFbo = SiFboFactory::getInstance().create( size.x, size.y, false );
     }
     
     void FilterBase::setSize( int w, int h ){
-        mFbo = *SiFboFactory::getInstance().create( w, h, false );
+        mFbo = SiFboFactory::getInstance().create( w, h, false );
     }
-    void FilterBase::setSize( Vec2i size ){
+    void FilterBase::setSize( ivec2 size ){
         setSize( size.x, size.y );
     }
     
-    void FilterBase::affect( ci::gl::Texture * tex, Vec2f windowSize, Vec2f resolution, Rectf drawRect ){
+    void FilterBase::affect( ci::gl::TextureRef tex, vec2 windowSize, vec2 resolution, Rectf drawRect ){
         
         if( !isEnabled() ){
             return;
@@ -29,10 +29,10 @@ namespace hrfm { namespace gl{
         tex->bind(0);
         begin();
         {
-            mShader.uniform( "tex"       , 0 );
-            mShader.uniform( "time"      , (float)ci::app::getElapsedSeconds() );
-            mShader.uniform( "windowSize", windowSize );
-            mShader.uniform( "resolution", resolution );
+            mShader->uniform( "tex"       , 0 );
+            mShader->uniform( "time"      , (float)ci::app::getElapsedSeconds() );
+            mShader->uniform( "windowSize", windowSize );
+            mShader->uniform( "resolution", resolution );
             ci::gl::drawSolidRect( drawRect );
         }
         end();
@@ -40,7 +40,7 @@ namespace hrfm { namespace gl{
         
     }
     
-    ci::gl::Texture FilterBase::affect( ci::gl::Texture tex ){
+    ci::gl::TextureRef FilterBase::affect( ci::gl::TextureRef tex ){
         
         if( !isEnabled() ){
             return tex;
@@ -48,8 +48,8 @@ namespace hrfm { namespace gl{
         
         Area viewport = ci::gl::getViewport();
         
-        Vec2f windowSize   = mFbo.getSize();
-        Vec2f resolution   = Vec2f( mFbo.getWidth(), mFbo.getHeight() );
+        vec2 windowSize   = mFbo.getSize();
+        vec2 resolution   = vec2( mFbo.getWidth(), mFbo.getHeight() );
         
         mFbo.bindFramebuffer();
         {
@@ -68,7 +68,7 @@ namespace hrfm { namespace gl{
         
         ci::gl::setViewport( viewport );
         
-        return mFbo.getTexture();
+        return mFbo->getColorTexture();
         
     };
 

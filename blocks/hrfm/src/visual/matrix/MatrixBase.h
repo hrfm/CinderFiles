@@ -15,14 +15,14 @@ namespace hrfm { namespace matrix{
         
         MatrixBase();
         
-        void setup( Vec2i segments );
+        void setup( ivec2 segments );
         
         int numCols();
         int numRows();
         
     private:
         
-        ci::gl::Fbo * _matrixFbo;
+        ci::gl::FboRef _matrixFbo;
         
     };
     

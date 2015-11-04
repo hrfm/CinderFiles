@@ -19,7 +19,7 @@ namespace hrfm { namespace gl{
     
     void ShaderBase::begin(){
         if( isEnabled() ){
-            mShader.bind();
+            mShader->bind();
             prepare();
         }
     }
@@ -27,12 +27,12 @@ namespace hrfm { namespace gl{
     void ShaderBase::end(){
         if( isEnabled() ){
             clear();
-            mShader.unbind();
+            //!!!!!!!! mShader->unbind();
         }
     }
     
-    ci::gl::GlslProg * ShaderBase::getGlslProgPtr(){
-        return &mShader;
+    ci::gl::GlslProgRef ShaderBase::getGlslProgRef(){
+        return mShader;
     }
     
     void ShaderBase::setStrength( float strength ){
@@ -71,8 +71,8 @@ namespace hrfm { namespace gl{
         
     // prepare shader, texture, and more. before drawSolidRect to FrameBuffer.
     void ShaderBase::prepare(){
-        mShader.uniform("time",(float)ci::app::getElapsedSeconds());
-        mShader.uniform("strength",_strength);
+        mShader->uniform("time",(float)ci::app::getElapsedSeconds());
+        mShader->uniform("strength",_strength);
     }
     
     // clear shader, texture, and more. after drawSolidRect to FrameBuffer.

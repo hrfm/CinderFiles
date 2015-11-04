@@ -25,29 +25,32 @@ namespace hrfm{ namespace gl{
         
         // --- From DataSourceRef.
         
-        static ci::gl::GlslProg create(
-                                       DataSourceRef vertex,
-                                       DataSourceRef fragment = DataSourceRef(),
-                                       DataSourceRef geometry = DataSourceRef(),
-                                       GLint geometryInputType = GL_POINTS,
-                                       GLint geometryOutputType = GL_TRIANGLES,
-                                       GLint geometryOutputVertices = 0
-                                       );
+        static ci::gl::GlslProgRef create(
+                                          DataSourceRef vertex,
+                                          DataSourceRef fragment=DataSourceRef(),
+                                          DataSourceRef geometry=DataSourceRef(),
+                                          DataSourceRef tessEval=DataSourceRef(),
+                                          DataSourceRef tessCtrl=DataSourceRef()
+                                          );
+        
+        // --- From const string.
+        
+        static ci::gl::GlslProgRef create(
+                                          const std::string &vertex,
+                                          const std::string &fragment=std::string(),
+                                          const std::string &geometry=std::string(),
+                                          const std::string &tessEval=std::string(),
+                                          const std::string &tessCtrl=std::string()
+                                          );
         
         // --- From fs::path.
         
-        static ci::gl::GlslProg create( fs::path vertex );
-        static ci::gl::GlslProg create( fs::path vertex, fs::path fragment );
-        static ci::gl::GlslProg create(
-                                       fs::path vertex,
-                                       fs::path fragment,
-                                       fs::path geometry,
-                                       GLint geometryInputType = GL_POINTS,
-                                       GLint geometryOutputType = GL_TRIANGLES,
-                                       GLint geometryOutputVertices = 0
-                                       );
+        static ci::gl::GlslProgRef create( fs::path vertex );
+        static ci::gl::GlslProgRef create( fs::path vertex, fs::path fragment );
+        static ci::gl::GlslProgRef create( fs::path vertex, fs::path fragment, fs::path geometry );
+        static ci::gl::GlslProgRef create( fs::path vertex, fs::path fragment, fs::path geometry, fs::path tessEval );
+        static ci::gl::GlslProgRef create( fs::path vertex, fs::path fragment, fs::path geometry, fs::path tessEval, fs::path tessCtrl );
         
-        // --- From const char*.
         
     private:
         

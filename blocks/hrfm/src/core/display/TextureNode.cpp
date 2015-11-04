@@ -13,18 +13,18 @@ namespace hrfm{ namespace display{
     TextureNode::~TextureNode(){}
     
     bool TextureNode::isDrawable(){
-        return ( getTexture() != nullptr && getTexture().getWidth() != 0 && getTexture().getHeight() != 0 );
+        return ( getTexture() != nullptr && getTexture()->getWidth() != 0 && getTexture()->getHeight() != 0 );
     }
     
     void TextureNode::setLetterbox(bool flag){
         _letterbox = flag;
     }
     
-    void TextureNode::setTexture( ci::gl::Texture tex ){
+    void TextureNode::setTexture( ci::gl::TextureRef tex ){
         _texture = tex;
     }
     
-    gl::Texture TextureNode::getTexture(){
+    gl::TextureRef TextureNode::getTexture(){
         return _texture;
     }
     
@@ -33,7 +33,7 @@ namespace hrfm{ namespace display{
     void TextureNode::_draw(){
         if( isDrawable() ){
             if( _letterbox ){
-                Rectf rect = Rectf( 0, 0, getTexture().getWidth(), getTexture().getHeight() );
+                Rectf rect = Rectf( 0, 0, getTexture()->getWidth(), getTexture()->getHeight() );
                 rect = hrfm::utils::DisplayUtil::letterBox( rect, getDrawBounds() );
                 gl::draw( getTexture(), rect );
             }else{ 

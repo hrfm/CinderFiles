@@ -3,24 +3,24 @@
 namespace hrfm{ namespace display{
     
     void FboDisplayNode::_draw(){
-        ci::gl::draw( _fbo.getTexture(), getDrawBounds() );
+        ci::gl::draw( _fbo->getColorTexture(), getDrawBounds() );
     }
     
-    ci::gl::Texture FboDisplayNode::getTexture(){
-        return _fbo.getTexture();
+    ci::gl::TextureRef FboDisplayNode::getTexture(){
+        return _fbo->getColorTexture();
     }
     
     // --- push matrices 周り都度書くのが面倒なのでここに書いておく.
     
     void FboDisplayNode::_bindAndPushMatrices(){
-        _bindAndPushMatrices( &_fbo );
+        _bindAndPushMatrices( _fbo );
     }
     
     void FboDisplayNode::_bindAndPushMatrices( ci::CameraPersp cam ){
-        _bindAndPushMatrices( &_fbo, cam );
+        _bindAndPushMatrices( _fbo, cam );
     }
 
-    void FboDisplayNode::_bindAndPushMatrices( ci::gl::Fbo * fbo ){
+    void FboDisplayNode::_bindAndPushMatrices( ci::gl::FboRef fbo ){
         _tmpViewport = ci::gl::getViewport();
         fbo->bindFramebuffer();
         ci::gl::pushMatrices();
@@ -28,7 +28,7 @@ namespace hrfm{ namespace display{
         ci::gl::setMatricesWindow( fbo->getWidth(), fbo->getHeight(), false );
     }
     
-    void FboDisplayNode::_bindAndPushMatrices( ci::gl::Fbo * fbo, ci::CameraPersp cam ){
+    void FboDisplayNode::_bindAndPushMatrices( ci::gl::FboRef fbo, ci::CameraPersp cam ){
         _tmpViewport = ci::gl::getViewport();
         fbo->bindFramebuffer();
         ci::gl::pushMatrices();
@@ -36,10 +36,10 @@ namespace hrfm{ namespace display{
     }
     
     void FboDisplayNode::_unbindAndPopMatrices(){
-        _unbindAndPopMatrices( &_fbo );
+        _unbindAndPopMatrices( _fbo );
     }
     
-    void FboDisplayNode::_unbindAndPopMatrices( ci::gl::Fbo * fbo ){
+    void FboDisplayNode::_unbindAndPopMatrices( ci::gl::FboRef fbo ){
         ci::gl::popMatrices();
         fbo->unbindFramebuffer();
         ci::gl::setViewport( _tmpViewport );

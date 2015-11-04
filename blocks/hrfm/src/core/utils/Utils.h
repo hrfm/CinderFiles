@@ -49,7 +49,7 @@ namespace hrfm{ namespace utils{
         return a;
     }
     
-    static ci::Vec2i getAspectRatio( ci::Vec2i resolution ){
+    static ci::ivec2 getAspectRatio( ci::ivec2 resolution ){
         return resolution / GCD( resolution.x, resolution.y );
     }
     

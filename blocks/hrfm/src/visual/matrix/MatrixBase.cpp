@@ -8,7 +8,7 @@ namespace hrfm { namespace matrix{
         
     }
     
-    void MatrixBase::setup( Vec2i segments ){
+    void MatrixBase::setup( ivec2 segments ){
         _matrixFbo = SiFboFactory::getInstance().create( segments.x, segments.y );
     }
     

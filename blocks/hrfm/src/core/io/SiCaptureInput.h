@@ -22,8 +22,8 @@ namespace hrfm { namespace io{
         
         void              setDefaultDeviceName( string deviceName );
         
-        ci::Vec2i         getSize();
-        ci::Vec2i         getSize( string deviceName );
+        ci::ivec2         getSize();
+        ci::ivec2         getSize( string deviceName );
         
         int               getNumCached();
         int               getNumCached( string deviceName );
@@ -37,25 +37,25 @@ namespace hrfm { namespace io{
         ci::CaptureRef    getCaptureRef();
         ci::CaptureRef    getCaptureRef( string deviceName );
         
-        ci::Surface       getSurface();
-        ci::Surface       getSurface( string deviceName );
+        ci::Surface8uRef  getSurface();
+        ci::Surface8uRef  getSurface( string deviceName );
         
-        ci::gl::Texture   getTexture( int cacheAt = 0 );
-        ci::gl::Texture   getTexture( string deviceName, int cacheAt = 0 );
+        ci::gl::Texture2dRef getTexture( int cacheAt = 0 );
+        ci::gl::Texture2dRef getTexture( string deviceName, int cacheAt = 0 );
         
-        ci::gl::Texture   getResizedTexture( Vec2i size, int cacheAt = 0 );
-        ci::gl::Texture   getResizedTexture( Vec2i size, string deviceName, int cacheAt = 0 );
+        ci::gl::Texture2dRef getResizedTexture( ivec2 size, int cacheAt = 0 );
+        ci::gl::Texture2dRef getResizedTexture( ivec2 size, string deviceName, int cacheAt = 0 );
         
-        ci::gl::Texture * getTexturePtr( int cacheAt = 0 );
-        ci::gl::Texture * getTexturePtr( string deviceName, int cacheAt = 0 );
+        //ci::gl::Texture * getTexturePtr( int cacheAt = 0 );
+        //ci::gl::Texture * getTexturePtr( string deviceName, int cacheAt = 0 );
         
-        ci::gl::Texture   getDiffTexture();
-        ci::gl::Texture   getDiffTexture( string deviceName );
+        ci::gl::Texture2dRef getDiffTexture();
+        ci::gl::Texture2dRef getDiffTexture( string deviceName );
         
     protected:
         
-        virtual ci::gl::Texture _updateTexture( string deviceName );
-        virtual ci::gl::Texture _updateDiffTexture( string deviceName );
+        virtual ci::gl::Texture2dRef _updateTexture( string deviceName );
+        virtual ci::gl::Texture2dRef _updateDiffTexture( string deviceName );
         
         string _defaultDeviceName = "*";
         
@@ -65,7 +65,7 @@ namespace hrfm { namespace io{
         
         SiCaptureInput(){
             hrfm::events::EventDispatcher();
-            _diffShader = hrfm::gl::ShaderFactory::create( "simple_vert.glsl", "diff_frag.glsl" );
+            _diffShader = hrfm::gl::ShaderFactory::create( fs::path("simple_vert.glsl"), fs::path("diff_frag.glsl") );
         }
         
         map<string,ci::CaptureRef> _captureRefMap;
@@ -74,11 +74,11 @@ namespace hrfm { namespace io{
         map<string,int> _beforeFrameMap;
         map<string,int> _beforeTextureBeforeFrameMap;
         
-        map<string,int>                     _textureCacheLengthMap;
-        map<string,vector<ci::gl::Texture>> _textureCacheVectorMap;
+        map<string,int>                          _textureCacheLengthMap;
+        map<string,vector<ci::gl::Texture2dRef>> _textureCacheVectorMap;
         
-        ci::gl::GlslProg        _diffShader;
-        map<string,ci::gl::Fbo> _diffFboMap;
+        ci::gl::GlslProgRef        _diffShader;
+        map<string,ci::gl::FboRef> _diffFboMap;
         
     };
     

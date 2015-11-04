@@ -65,12 +65,12 @@ namespace hrfm{ namespace signage{ namespace display{
         map<string,hrfm::display::DisplayNode*> _contentList;
         map<string,string> _triggerList;
         
-        map<string,Vec2i> _splitList;
+        map<string,ivec2> _splitList;
         
         bool _enable;
         
         hrfm::gl::ExFbo * _fbo;
-        Vec2i mtx;
+        ivec2 mtx;
         
     };
     

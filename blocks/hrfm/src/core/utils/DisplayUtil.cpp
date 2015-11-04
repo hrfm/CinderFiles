@@ -34,7 +34,7 @@ namespace hrfm{ namespace utils{
         
     }
     
-    ci::Rectf DisplayUtil::letterBox( ci::Rectf content, ci::Vec2f size ){
+    ci::Rectf DisplayUtil::letterBox( ci::Rectf content, ci::vec2 size ){
         ci::Rectf bounds = content;
         float wScale = size.x / (float)content.getWidth();
         float hScale = size.y / (float)content.getHeight();

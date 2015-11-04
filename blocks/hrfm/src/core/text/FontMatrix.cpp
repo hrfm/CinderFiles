@@ -13,7 +13,7 @@ namespace hrfm{ namespace text{
         mySlideY    = 0;
     }
     
-    void FontMatrix::setup( Vec2i fboSize, int fontSize, const string fontName, string text ){
+    void FontMatrix::setup( ivec2 fboSize, int fontSize, const string fontName, string text ){
         
         _fboSize  = fboSize;
         _fontSize = fontSize;
@@ -42,7 +42,7 @@ namespace hrfm{ namespace text{
                 break;
             }
         }
-        _mtxSize  = Vec2i( length, ceil( _fboSize.y / fontSize ) );
+        _mtxSize  = ivec2( length, ceil( _fboSize.y / fontSize ) );
         
         // --- Generate random text.
         
@@ -73,11 +73,11 @@ namespace hrfm{ namespace text{
         return _mtxSize.y;
     }
     
-    Vec2i FontMatrix::getMatrixSize(){
+    ivec2 FontMatrix::getMatrixSize(){
         return _mtxSize;
     }
     
-    Vec2i FontMatrix::getFboSize(){
+    ivec2 FontMatrix::getFboSize(){
         return fbo->getSize();
     }
     

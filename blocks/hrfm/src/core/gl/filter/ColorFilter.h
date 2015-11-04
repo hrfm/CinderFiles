@@ -7,16 +7,16 @@ namespace hrfm { namespace gl{ namespace filter{
     public:
         
         ColorFilter():FilterBase("ColorFilter.glsl"){
-            color = Vec3f(1.0f,1.0f,1.0f);
+            color = vec3(1.0f,1.0f,1.0f);
         };
         
-        ci::Vec3f color;
+        ci::vec3 color;
         
     protected:
         
         virtual void prepare(){
             FilterBase::prepare();
-            mShader.uniform("color", color );
+            mShader->uniform("color", color );
         }
         
     };

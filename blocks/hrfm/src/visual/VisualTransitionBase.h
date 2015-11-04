@@ -19,7 +19,7 @@ namespace hrfm { namespace visual{
             mStartTime = -1.0;
         };
         
-        virtual void init( Vec2i size, float transitionTime ){
+        virtual void init( ivec2 size, float transitionTime ){
             ci::gl::Fbo::Format format;
             mResolution = size;
             mAspect     = getAspectRatio( size );
@@ -129,8 +129,8 @@ namespace hrfm { namespace visual{
     protected:
         
         ci::gl::Fbo mOutputFbo;
-        Vec2i       mResolution;
-        Vec2i       mAspect;
+        ivec2       mResolution;
+        ivec2       mAspect;
         float       mTransTime;
         
         double      mStartTime;

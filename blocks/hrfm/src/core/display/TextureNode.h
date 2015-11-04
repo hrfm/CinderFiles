@@ -18,15 +18,15 @@ namespace hrfm{ namespace display{
         virtual bool isDrawable();
         
         void setLetterbox( bool flag );
-        void setTexture( ci::gl::Texture tex );
-        virtual ci::gl::Texture getTexture();
+        void setTexture( ci::gl::TextureRef tex );
+        virtual ci::gl::TextureRef getTexture();
         
     protected:
         
         virtual void _draw();
         
         bool _letterbox;
-        ci::gl::Texture _texture;
+        ci::gl::TextureRef _texture;
         
     private:
         

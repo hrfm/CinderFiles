@@ -10,20 +10,20 @@ namespace hrfm{ namespace gl{
     
     void VboNode::clear(){}
     
-    Vec3f VboNode::getPosition(){
+    vec3 VboNode::getPosition(){
         return this->position;
     }
-    void VboNode::setPosition( Vec3f position ){
+    void VboNode::setPosition( vec3 position ){
         this->position = position;
     }
     
-    Vec3f VboNode::getScale(){
+    vec3 VboNode::getScale(){
         return this->scale;
     }
     void VboNode::setScale( float scale ){
-        this->scale = Vec3f( scale, scale, scale );
+        this->scale = vec3( scale, scale, scale );
     }
-    void VboNode::setScale( Vec3f scale ){
+    void VboNode::setScale( vec3 scale ){
         this->scale = scale;
     }
     
@@ -34,7 +34,7 @@ namespace hrfm{ namespace gl{
         this->rotation = rotation;
     }
     
-    Vec3f VboNode::getAbsolutePosition(){
+    vec3 VboNode::getAbsolutePosition(){
         if( hasParent() ){
             return position + _parent->getAbsolutePosition();
         }else{
@@ -231,11 +231,11 @@ namespace hrfm{ namespace gl{
     
     //! protected:
     
-    void VboNode::_appendVertex( ci::TriMesh & m, Vec3f v0, Vec3f v1, Vec3f v2 ){
+    void VboNode::_appendVertex( ci::TriMesh & m, vec3 v0, vec3 v1, vec3 v2 ){
         
-        Vec3f v01 = v1-v0;
-        Vec3f v02 = v2-v0;
-        Vec3f norm = v01.cross(v02);
+        vec3 v01 = v1-v0;
+        vec3 v02 = v2-v0;
+        vec3 norm = v01.cross(v02);
         
         m.appendVertex(v0);
         m.appendNormal(norm);

@@ -11,7 +11,7 @@ namespace hrfm{ namespace gl{
         VboSphere():VboWall(){};
         ~VboSphere(){};
         
-        virtual void setup( Vec2i segments, bool curve = false, float noise = false );
+        virtual void setup( ivec2 segments, bool curve = false, float noise = false );
         
     protected:
         

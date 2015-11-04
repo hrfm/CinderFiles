@@ -40,12 +40,12 @@ namespace hrfm{ namespace app{
      And capable configured by settings xml files.
      
      */
-    class AppBase : public ci::app::AppNative, public hrfm::events::EventDispatcher{
+    class AppBase : public ci::app::App, public hrfm::events::EventDispatcher{
         
     public:
         
         AppBase(){
-            ci::app::AppNative();
+            ci::app::App();
             hrfm::events::EventDispatcher();
             this->_isDebugMode = false;
             this->___font___   = Font("Helvetica",12);
@@ -84,8 +84,8 @@ namespace hrfm{ namespace app{
         virtual void initCapture( XmlTree &xml );
         virtual void initKORGMIDIInterface( XmlTree &xml );
         
-        virtual Vec2i getWindowSize();
-        virtual Vec2i getWindowAspect();
+        virtual ivec2 getWindowSize();
+        virtual ivec2 getWindowAspect();
         
         //! @override
         virtual void update();
@@ -99,7 +99,7 @@ namespace hrfm{ namespace app{
          * for debug.
          * @virtual
          */
-        virtual void drawFPS( Vec2f position = Vec2f(20.0f,20.0f) );
+        virtual void drawFPS( vec2 position = vec2(20.0f,20.0f) );
         
         /**
          * for debug.
@@ -122,7 +122,7 @@ namespace hrfm{ namespace app{
         
     protected:
         
-        Vec2i mWindowSize;
+        ivec2 mWindowSize;
         bool _isDebugMode;
         bool _hideCursor;
         

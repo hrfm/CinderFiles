@@ -1,19 +1,24 @@
-#include "cinder/app/AppBasic.h"
+#include "cinder/app/App.h"
+#include "cinder/app/RendererGl.h"
+#include "cinder/gl/gl.h"
 #include <list>
+
+#include "hrfm.h"
+#include "hrfm.gl.h"
 
 using namespace ci;
 using namespace ci::app;
 using namespace std;
 
 // We'll create a new Cinder Application by deriving from the AppBasic class
-class BasicApp : public AppBasic {
+class BasicApp : public hrfm::app::AppBase {
   public:
 	void mouseDrag( MouseEvent event );
 	void keyDown( KeyEvent event );
 	void draw();
 
 	// This will maintain a list of points which we will draw line segments between
-	list<Vec2f>		mPoints;
+	list<vec2>		mPoints;
 };
 
 void BasicApp::mouseDrag( MouseEvent event )
@@ -29,15 +34,17 @@ void BasicApp::keyDown( KeyEvent event )
 
 void BasicApp::draw()
 {
-	gl::clear( Color( 0.1f, 0.1f, 0.15f ) );
+    ci::gl::clear( Color( 0.1f, 0.1f, 0.15f ) );
 
-	gl::color( 1.0f, 0.5f, 0.25f );	
-	gl::begin( GL_LINE_STRIP );
+	ci::gl::color( 1.0f, 0.5f, 0.25f );
+	ci::gl::begin( GL_LINE_STRIP );
 	for( auto pointIter = mPoints.begin(); pointIter != mPoints.end(); ++pointIter ) {
-		gl::vertex( *pointIter );
+		ci::gl::vertex( *pointIter );
 	}
-	gl::end();
+	ci::gl::end();
 }
 
-// This line tells Cinder to actually create the application
-CINDER_APP_BASIC( BasicApp, RendererGl )
+CINDER_APP( BasicApp, RendererGl( RendererGl::Options().msaa( 16 ) ), []( App::Settings *settings ) {
+    //	settings->enableHighDensityDisplay();
+    settings->setWindowSize( 640, 480 );
+} )

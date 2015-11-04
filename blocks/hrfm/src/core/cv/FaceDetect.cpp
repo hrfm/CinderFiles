@@ -7,7 +7,7 @@ namespace hrfm{ namespace cv{
     
     // ========================================================================================= //
     
-    FaceDetect::FaceDetect( Vec2i textureSize, int calcScale ){
+    FaceDetect::FaceDetect( ivec2 textureSize, int calcScale ){
         
         cout << endl << "- Setup FaceDetect." << endl;
         

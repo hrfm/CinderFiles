@@ -28,7 +28,7 @@ namespace hrfm {
                 }
                 
                 float getPosition(){
-                    return mPower * mA * sin( (pi*2.0) * (m_t/mT) );
+                    return mPower * mA * sin( (3.141592653589*2.0) * (m_t/mT) );
                 }
                 
                 bool update(){

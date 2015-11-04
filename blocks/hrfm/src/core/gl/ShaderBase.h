@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cinder/app/AppBasic.h"
+#include "cinder/app/App.h"
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Fbo.h"
 #include "Cinder/gl/GlslProg.h"
@@ -28,7 +28,7 @@ namespace hrfm { namespace gl{
         virtual void begin();
         virtual void end();
         
-        ci::gl::GlslProg * getGlslProgPtr();
+        ci::gl::GlslProgRef getGlslProgRef();
         
         virtual void setStrength( float strength );
         virtual float getStrength();
@@ -52,7 +52,7 @@ namespace hrfm { namespace gl{
         bool _enabled   = true;
         string mFragmentShader;
         string mVertexShader;
-        ci::gl::GlslProg mShader;
+        ci::gl::GlslProgRef mShader;
         
     private:
         

@@ -13,7 +13,7 @@ namespace hrfm{ namespace signage{ namespace display{
         
         Transition();
         Transition( int width, int height, hrfm::gl::TransitionShaderBase * shader );
-        Transition( ci::Vec2i size, hrfm::gl::TransitionShaderBase * shader );
+        Transition( ci::ivec2 size, hrfm::gl::TransitionShaderBase * shader );
         ~Transition();
         
         virtual void init( int width, int height, hrfm::gl::TransitionShaderBase * shader );
@@ -29,13 +29,13 @@ namespace hrfm{ namespace signage{ namespace display{
         
         virtual void update();
         
-        virtual ci::gl::Texture getTexture();
+        virtual ci::gl::TextureRef getTexture();
         
     protected:
         
-        ci::gl::Fbo * _fbo = NULL;
-        ci::gl::Fbo * _currentFbo = NULL;
-        ci::gl::Fbo * _nextFbo = NULL;
+        ci::gl::FboRef _fbo = NULL;
+        ci::gl::FboRef _currentFbo = NULL;
+        ci::gl::FboRef _nextFbo = NULL;
         
         hrfm::gl::TransitionShaderBase * _shader = NULL;
         

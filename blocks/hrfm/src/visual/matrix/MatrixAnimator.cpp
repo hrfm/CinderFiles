@@ -7,7 +7,7 @@ namespace hrfm{ namespace matrix{
     
     // ==== MatrixAnimator ============================================================
     
-    void MatrixAnimator::setup( Vec2i size, int cellSize ){
+    void MatrixAnimator::setup( ivec2 size, int cellSize ){
         this->BaseMatrixAnimator::setup(size,cellSize);
         myNumLines = 512;
         for( int i = 0; i < myNumLines; i++ ){
@@ -49,11 +49,11 @@ namespace hrfm{ namespace matrix{
     
     // ==== WaveMatrixAnimator ============================================================
     
-    void WaveMatrixAnimator::setup( Vec2i size, int cellSize ){
+    void WaveMatrixAnimator::setup( ivec2 size, int cellSize ){
         setup( size, cellSize, cellSize );
     }
     
-    void WaveMatrixAnimator::setup( Vec2i size, int colSize, int rowSize ){
+    void WaveMatrixAnimator::setup( ivec2 size, int colSize, int rowSize ){
         this->BaseMatrixAnimator::setup( size, colSize, rowSize );
         for( int i = 0; i < myCols; i++ ){
             myWaveNodes.push_back( new WaveNode() );
@@ -67,7 +67,7 @@ namespace hrfm{ namespace matrix{
     void WaveMatrixAnimator::update( Channel32f * mChannel ){
         
         float p;
-        Vec2i mVec2i;
+        ivec2 mivec2;
         int len = myWaveNodes.size() - 1;
         float mChannelWidth  = mChannel->getWidth();
         float mChannelHeight = mChannel->getHeight();
@@ -106,9 +106,9 @@ namespace hrfm{ namespace matrix{
             y2 = floor( y2 / myRowSize ) * myRowSize;
             
             for( int y = y2; y < mySize.y; y++ ){
-                mVec2i.x = floor( ( x1 / mySize.x ) * mChannelWidth );
-                mVec2i.y = floor( ( (float)y / mySize.y ) * mChannelHeight );
-                if( 0.0 < mChannel->getValue(mVec2i) ){
+                mivec2.x = floor( ( x1 / mySize.x ) * mChannelWidth );
+                mivec2.y = floor( ( (float)y / mySize.y ) * mChannelHeight );
+                if( 0.0 < mChannel->getValue(mivec2) ){
                     addWaveAt(i);
                     break;
                 }

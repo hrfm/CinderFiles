@@ -8,7 +8,7 @@
 namespace hrfm{ namespace display{
     
     class ImageTexture : public TextureNode{
-        
+    
     public:
         
         ImageTexture();

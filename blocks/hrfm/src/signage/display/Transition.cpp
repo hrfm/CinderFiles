@@ -8,7 +8,7 @@ namespace hrfm{ namespace signage{ namespace display{
     Transition::Transition(){
         hrfm::events::EventDispatcher();
     };
-    Transition::Transition( ci::Vec2i size, hrfm::gl::TransitionShaderBase * shader ){
+    Transition::Transition( ci::ivec2 size, hrfm::gl::TransitionShaderBase * shader ){
         hrfm::events::EventDispatcher();
         init( size.x, size.y, shader );
     }
@@ -75,7 +75,7 @@ namespace hrfm{ namespace signage{ namespace display{
             progress = 1.0;
         }
         
-        Area viewport = ci::gl::getViewport();
+        //!!!!!! Area viewport = ci::gl::getViewport();
         
         // --- Draw current into _currentFbo.
         
@@ -86,7 +86,7 @@ namespace hrfm{ namespace signage{ namespace display{
                 _current->update();
                 ci::gl::pushMatrices();
                 {
-                    ci::gl::setViewport( (Area)_currentFbo->getBounds() );
+                    //!!!!!!! ci::gl::setViewport( (Area)_currentFbo->getBounds() );
                     ci::gl::setMatricesWindow( _currentFbo->getWidth(), _currentFbo->getHeight(), false );
                     {
                         ci::gl::color( ColorA( 1.0, 1.0, 1.0, 1.0 ) );
@@ -107,7 +107,7 @@ namespace hrfm{ namespace signage{ namespace display{
                 _next->update();
                 ci::gl::pushMatrices();
                 {
-                    ci::gl::setViewport( (Area)_next->getBounds() );
+                    //!!!!!!!!! ci::gl::setViewport( (Area)_next->getBounds() );
                     ci::gl::setMatricesWindow( _next->width, _next->height, false );
                     {
                         ci::gl::color( ColorA( 1.0, 1.0, 1.0, 1.0 ) );
@@ -128,11 +128,11 @@ namespace hrfm{ namespace signage{ namespace display{
             ci::gl::clear();
             ci::gl::pushMatrices();
             {
-                ci::gl::setViewport( (Area)_fbo->getBounds() );
+                //!!!!!!! ci::gl::setViewport( (Area)_fbo->getBounds() );
                 ci::gl::setMatricesWindow( _fbo->getWidth(), _fbo->getHeight(), false );
                 {
                     _shader->bindShader();
-                    _shader->affect( _currentFbo->getTexture(), _nextFbo->getTexture(), progress );
+                    //!!!!!!! _shader->affect( _currentFbo->getColorTexture(), _nextFbo->getColorTexture(), progress );
                     _shader->unbindShader();
                     /*
                     ci::gl::enableAdditiveBlending();
@@ -155,12 +155,12 @@ namespace hrfm{ namespace signage{ namespace display{
             dispatchEvent( new hrfm::events::Event( hrfm::events::Event::COMPLETE ) );
         }
         
-        ci::gl::setViewport(viewport);
+        //!!!!!!! ci::gl::setViewport(viewport);
         
     }
     
-    ci::gl::Texture Transition::getTexture(){
-        return _fbo->getTexture();
+    ci::gl::TextureRef Transition::getTexture(){
+        return _fbo->getColorTexture();
     }
     
     //! protected:

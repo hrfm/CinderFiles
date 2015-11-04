@@ -13,13 +13,13 @@ namespace hrfm{ namespace utils{
      std::map を拡張し Singleton で何処からでも特定の Texture にアクセス出来るようにするクラスです.
      
      */
-    class SiTextureMap : public Singleton<SiTextureMap>, public std::map<string, ci::gl::Texture>{
+    class SiTextureMap : public Singleton<SiTextureMap>, public std::map<string, ci::gl::TextureBaseRef>{
         
     public:
         
-        virtual ci::gl::Texture getTexture( string key );
+        virtual ci::gl::TextureBaseRef getTexture( string key );
         
-        virtual void addTexture( string key, ci::gl::Texture tex );
+        virtual void addTexture( string key, ci::gl::TextureBaseRef tex );
         
         virtual void removeTexture( string key );
         

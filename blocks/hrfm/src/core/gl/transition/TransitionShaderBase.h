@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cinder/app/AppBasic.h"
+#include "cinder/app/App.h"
 #include "cinder/gl/gl.h"
 #include "Cinder/gl/GlslProg.h"
 #include "cinder/Xml.h"
@@ -31,10 +31,10 @@ namespace hrfm { namespace gl{
         }
         
         virtual void setSize( int width, int height ){
-            setSize( Vec2f( width, height ) );
+            setSize( vec2( width, height ) );
         }
         
-        virtual void setSize( Vec2f size ){
+        virtual void setSize( vec2 size ){
             mSize   = size;
             mAspect = getAspectRatio( size );
         }
@@ -52,18 +52,18 @@ namespace hrfm { namespace gl{
         }
         
         virtual void bindShader(){
-            mShader.bind();
+            mShader->bind();
         }
         
         virtual void bindTexture( const ci::gl::Texture & current, const ci::gl::Texture & next ){
             
             current.bind(0);
             _bindedTex.push_back(current);
-            mShader.uniform( "currentTex", 0 );
+            mShader->uniform( "currentTex", 0 );
             
             next.bind(1);
             _bindedTex.push_back( next );
-            mShader.uniform( "nextTex", 1 );
+            mShader->uniform( "nextTex", 1 );
             
         }
         
@@ -76,7 +76,7 @@ namespace hrfm { namespace gl{
             
             tex.bind( index );
             _bindedTex.push_back( tex );
-            mShader.uniform( uniform_key, index );
+            mShader->uniform( uniform_key, index );
             
         }
         
@@ -89,8 +89,8 @@ namespace hrfm { namespace gl{
             if( _bindedTex.size() < 2 ){
                 throw;
             }
-            mShader.uniform( "resolution", mSize );
-            mShader.uniform( "progress"  , progress );
+            mShader->uniform( "resolution", mSize );
+            mShader->uniform( "progress"  , progress );
             ci::gl::drawSolidRect( Rectf( 0, 0, mSize.x, mSize.y ) );
         };
         
@@ -104,7 +104,8 @@ namespace hrfm { namespace gl{
             }
             _bindedTex.clear();
             
-            mShader.unbind();
+            //!!!!! 不要になった？
+            //!!!!! mShader->unbind();
             
         }
         
@@ -112,9 +113,9 @@ namespace hrfm { namespace gl{
         
         float mInterval = 1.0f;
         
-        ci::gl::GlslProg mShader;
-        Vec2f mSize;
-        Vec2i mAspect;
+        ci::gl::GlslProgRef mShader;
+        vec2 mSize;
+        ivec2 mAspect;
         std::vector<ci::gl::Texture> _bindedTex;
         
     private:

@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include <sstream>
-#include "cinder/app/AppBasic.h"
+#include "cinder/app/App.h"
 #include "cinder/gl/Texture.h"
 #include "cinder/gl/TextureFont.h"
 #include "cinder/Font.h"
@@ -36,7 +36,7 @@ namespace hrfm{ namespace text{
         void setRandomFont();
         void setRandomGlyph();
         
-        Vec2f measureString( string txt );
+        vec2 measureString( string txt );
         
         // 改行が起こった場合 true
         string setGlyphByNextText();

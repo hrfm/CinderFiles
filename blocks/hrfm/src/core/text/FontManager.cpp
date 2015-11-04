@@ -29,7 +29,7 @@ namespace hrfm { namespace text{
         myCurrentLineIndex = 0;
     }
     
-    Vec2f FontManager::measureString( string text ){
+    vec2 FontManager::measureString( string text ){
         return _textureFontRef->measureString(text);
     }
     
@@ -126,7 +126,7 @@ namespace hrfm { namespace text{
         gl::color( r, g, b );
         try{
             _textureFontRef->drawString( text, bounds );
-            //Vec2f(bounds.x1+(fontSize*(1/3)),bounds.y1+(fontSize*0.8)));
+            //vec2(bounds.x1+(fontSize*(1/3)),bounds.y1+(fontSize*0.8)));
         }catch(...){
             cout << "error" << endl;
         }

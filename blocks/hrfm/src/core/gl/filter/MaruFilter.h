@@ -11,7 +11,7 @@ namespace hrfm{ namespace gl{ namespace filter{
     
     public:
         
-        MaruFilter( Vec2f mtx = Vec2f( 320, 180 ) ):FilterBase("MaruFilter.glsl"){
+        MaruFilter( ci::vec2 mtx = ci::vec2( 320, 180 ) ):FilterBase("MaruFilter.glsl"){
             _mtx = mtx;
         };
         
@@ -27,13 +27,13 @@ namespace hrfm{ namespace gl{ namespace filter{
         
         virtual void prepare(){
             FilterBase::prepare();
-            mShader.uniform("matrix", _mtx / floor(10*_strength) );
+            mShader->uniform("matrix", _mtx / floor(10*_strength) );
             if( _enableMaskTexture ){
                 _tex->bind(1);
-                mShader.uniform("useTexture", 1 );
-                mShader.uniform("maskTex", 1 );
+                mShader->uniform("useTexture", 1 );
+                mShader->uniform("maskTex", 1 );
             }else{
-                mShader.uniform("useTexture", 0 );
+                mShader->uniform("useTexture", 0 );
             }
         }
         
@@ -45,7 +45,7 @@ namespace hrfm{ namespace gl{ namespace filter{
         
     private:
         
-        Vec2f _mtx;
+        ci::vec2 _mtx;
         
         ci::gl::Texture * _tex = NULL;
         bool _enableMaskTexture;

@@ -7,7 +7,7 @@ namespace hrfm{ namespace cv{
     
     //! public:
 
-    Delaunay::Delaunay( Vec2i size ){
+    Delaunay::Delaunay( ivec2 size ){
         
         // SIFTまたはSURFを使う場合はこれを呼び出す．
         //::cv::initModule_nonfree();
@@ -18,7 +18,7 @@ namespace hrfm{ namespace cv{
     };
     Delaunay::~Delaunay(){};
     
-    void Delaunay::init( Vec2i size ){
+    void Delaunay::init( ivec2 size ){
         _size = size;
         _subDiv2D.initDelaunay( ::cv::Rect(0,0,_size.x,_size.y) );
     }
@@ -30,9 +30,9 @@ namespace hrfm{ namespace cv{
         _subDiv2D.insert( points );
     }
     
-    void Delaunay::insertPoint( ci::gl::Texture texture ){
+    void Delaunay::insertPoint( ci::gl::TextureRef texture ){
         
-        _img = ::cv::Mat( toOcv( texture, CV_8UC3 ) );
+        //!!!!!!! _img = ::cv::Mat( toOcv( texture, CV_8UC3 ) );
         
         // 特徴点抽出の実行
         vector<::cv::KeyPoint> keypoint;
@@ -44,7 +44,7 @@ namespace hrfm{ namespace cv{
             points.push_back( it->pt );
         }
         
-        init( texture.getSize() );
+        init( texture->getSize() );
         this->insertPoint( points );
         
     }
@@ -57,7 +57,7 @@ namespace hrfm{ namespace cv{
         _draw( 1.0, 1.0, threshold, type );
     }
     
-    void Delaunay::draw( Vec2i size, float threshold, GLint type ){
+    void Delaunay::draw( ivec2 size, float threshold, GLint type ){
         _draw( (float)size.x / (float)_size.x, (float)size.y / (float)_size.y, threshold, type );
     }
     
@@ -65,19 +65,19 @@ namespace hrfm{ namespace cv{
     
     void Delaunay::_draw( float scaleX, float scaleY, float threshold, GLint type ){
         
-        glBegin(type);
+        ci::gl::begin(type);
         
         for( auto it = _triangles.begin(), end=_triangles.end(); it != end; ++it )
         {
             
             ::cv::Vec6f &vec = *it;
             
-            Vec2f p1( vec[0] * scaleX, vec[1] * scaleY );
-            Vec2f p2( vec[2] * scaleX, vec[3] * scaleY );
-            Vec2f p3( vec[4] * scaleX, vec[5] * scaleY );
+            vec2 p1( vec[0] * scaleX, vec[1] * scaleY );
+            vec2 p2( vec[2] * scaleX, vec[3] * scaleY );
+            vec2 p3( vec[4] * scaleX, vec[5] * scaleY );
             
             if( 0 < threshold ){
-                if( threshold < (p1-p2).length() || threshold < (p2-p3).length() || threshold < (p3-p1).length() ){
+                if( threshold < ci::length(p1-p2) || threshold < ci::length(p2-p3) || threshold < ci::length(p3-p1) ){
                     continue;
                 }
             }
@@ -118,7 +118,7 @@ namespace hrfm{ namespace cv{
             
         }
         
-        glEnd();
+        ci::gl::end();
         
     }
     

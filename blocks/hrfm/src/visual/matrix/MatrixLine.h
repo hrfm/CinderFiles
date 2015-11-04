@@ -46,10 +46,10 @@ namespace hrfm {
                 
                 // ユーザインタラクションの定義.
                 // 背景差分法で動きがあった場所の動きを変化させる.
-                mVec2i.x = floor( ( myCol / myCols ) * mChannelWidth );
-                mVec2i.y = floor( ( myRow / myRows ) * mChannelHeight );
+                mivec2.x = floor( ( myCol / myCols ) * mChannelWidth );
+                mivec2.y = floor( ( myRow / myRows ) * mChannelHeight );
                 
-                if( 0.0 < mChannel->getValue( mVec2i ) ){
+                if( 0.0 < mChannel->getValue( mivec2 ) ){
                     float rand = randFloat();
                     float speed = randFloat(1.0,2.0);
                     if( rand < 0.25 ){
@@ -141,7 +141,7 @@ namespace hrfm {
             float mySpeedY;
             
             // 内部的に使う geom
-            Vec2i mVec2i;
+            ivec2 mivec2;
             Rectf mRectf;
             
         };

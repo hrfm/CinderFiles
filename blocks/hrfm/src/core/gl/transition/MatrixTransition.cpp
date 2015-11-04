@@ -12,7 +12,7 @@ namespace hrfm { namespace gl{
         
         _beforeTime = 0.0;
         
-        _matrix.setup( Vec2i( 3840, 720 ), 20, "OCRAStd" );
+        _matrix.setup( ivec2( 3840, 720 ), 20, "OCRAStd" );
         _matrix.shuffle();
         
     }
@@ -31,7 +31,7 @@ namespace hrfm { namespace gl{
     }
     
     void MatrixTransition::affect( float progress ){
-        mShader.uniform("segments", Vec2f( _matrix.getMatrixSize() ) );
+        mShader->uniform("segments", vec2( _matrix.getMatrixSize() ) );
         TransitionShaderBase::affect(progress);
     }
     

@@ -6,7 +6,7 @@
 #include "cinder/gl/GlslProg.h"
 #include "cinder/Rand.h"
 
-#include "cinder/app/AppBasic.h"
+#include "cinder/app/App.h"
 #include "SiOscInput.h"
 #include "SiKORGMIDIInterface.h"
 

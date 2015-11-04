@@ -3,9 +3,9 @@
 #include <list>
 
 #include "cinder/Camera.h"
-#include "cinder/app/AppNative.h"
-#include "cinder/gl/Light.h"
-#include "cinder/gl/Material.h"
+#include "cinder/app/App.h"
+//#include "cinder/gl/Light.h"
+//#include "cinder/gl/Material.h"
 #include "cinder/gl/Vbo.h"
 
 #include "EventDispatcher.h"
@@ -20,9 +20,9 @@ namespace hrfm{ namespace gl{
     public:
         
         VboNode( ci::gl::VboMesh * mesh = NULL ):hrfm::events::EventDispatcher(){
-            position = ci::Vec3f(0.0f,0.0f,0.0f);
-            scale    = ci::Vec3f(1.0f,1.0f,1.0f);
-            rotation.setToIdentity();
+            position = ci::vec3(0.0f,0.0f,0.0f);
+            scale    = ci::vec3(1.0f,1.0f,1.0f);
+            rotation = mat4();
             colorA  = ci::ColorA(1.0,1.0,1.0,1.0);
             visible = true;
             this->mesh = mesh;
@@ -32,26 +32,26 @@ namespace hrfm{ namespace gl{
         virtual void setup();
         virtual void clear();
         
-        virtual ci::Vec3f getAbsolutePosition();
+        virtual ci::vec3 getAbsolutePosition();
         
-        virtual ci::Vec3f getPosition();
-        virtual void setPosition( ci::Vec3f position );
+        virtual ci::vec3 getPosition();
+        virtual void setPosition( ci::vec3 position );
         
-        virtual ci::Vec3f getScale();
+        virtual ci::vec3 getScale();
         virtual void setScale( float scale );
-        virtual void setScale( ci::Vec3f scale );
+        virtual void setScale( ci::vec3 scale );
         
-        virtual ci::Matrix44f getRotation();
-        virtual void setRotation( ci::Matrix44f rotation );
+        virtual ci::mat4 getRotation();
+        virtual void setRotation( ci::mat4 rotation );
         
         virtual void setEnableWireframe( bool flag );
         virtual void setShader( hrfm::gl::ShaderBase * shader );
-        virtual void setMaterial( ci::gl::Material * material );
-        virtual ci::gl::Material * getMaterial();
+        //virtual void setMaterial( ci::gl::Material * material );
+        //virtual ci::gl::Material * getMaterial();
         
         virtual void addTexture( ci::gl::Texture * tex );
         virtual void removeTexture( ci::gl::Texture * tex );
-        //virtual void setTextureAt( int index, ci::gl::Texture * tex );
+        virtual void setTextureAt( int index, ci::gl::Texture * tex );
         
         virtual int numChildren();
         
@@ -76,8 +76,8 @@ namespace hrfm{ namespace gl{
         std::vector<VboNode*> children;
         
         // --- PROPERTY -------------
-        ci::Vec3f position, scale;
-        ci::Matrix44f rotation;
+        ci::vec3 position, scale;
+        ci::mat4 rotation;
         bool  visible;
         ci::ColorA colorA;
         ci::gl::VboMesh * mesh;
@@ -85,7 +85,7 @@ namespace hrfm{ namespace gl{
         
     protected:
         
-        virtual void _appendVertex( ci::TriMesh & m, Vec3f v0, Vec3f v1, Vec3f v2 );
+        virtual void _appendVertex( ci::TriMesh & m, vec3 v0, vec3 v1, vec3 v2 );
         
         virtual void _update( ci::CameraPersp * camera );
         virtual void _draw( ci::CameraPersp * camera );
@@ -105,7 +105,7 @@ namespace hrfm{ namespace gl{
         
         bool _enableWireframe = false;
         hrfm::gl::ShaderBase * _shader = NULL;
-        ci::gl::Material * _material = NULL;
+        //ci::gl::Material * _material = NULL;
         
         vector<ci::gl::Texture*> _textures;
         bool eraseTextureFromList( ci::gl::Texture * tex );

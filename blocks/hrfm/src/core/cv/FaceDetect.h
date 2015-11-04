@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cinder/app/AppBasic.h"
+#include "cinder/app/App.h"
 #include "CinderOpenCV.h"
 #include "DetectRect.h"
 #include "XmlLoader.h"
@@ -14,7 +14,7 @@ namespace hrfm{ namespace cv{
         
     public:
         
-        FaceDetect( Vec2i textureSize = Vec2i( 320, 240 ), int calcScale = 3 );
+        FaceDetect( ivec2 textureSize = ivec2( 320, 240 ), int calcScale = 3 );
         ~FaceDetect();
         
         void update( Surface surface );

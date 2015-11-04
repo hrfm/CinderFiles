@@ -12,7 +12,7 @@ namespace hrfm{ namespace gl{
         VboWall():VboNode(){};
         ~VboWall(){};
         
-        virtual void setup( Vec2i segments, bool curve = false, float noise = false );
+        virtual void setup( ivec2 segments, bool curve = false, float noise = false );
         virtual void clear();
         
         void setTexture( ci::gl::Texture * tex );

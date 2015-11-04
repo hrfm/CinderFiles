@@ -23,7 +23,7 @@ namespace hrfm { namespace gl{ namespace filter{
         virtual void prepare(){
             FilterBase::prepare();
             _tex->bind(1);
-            mShader.uniform( "maskTex", 1 );
+            mShader->uniform( "maskTex", 1 );
         }
         
         virtual void clear(){

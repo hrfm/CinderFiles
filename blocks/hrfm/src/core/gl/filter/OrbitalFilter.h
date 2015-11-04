@@ -15,17 +15,17 @@ namespace hrfm { namespace gl{ namespace filter{
             r_scale = 1.0;
             r_min   = 0.0;
             r_max   = 1.0;
-            _speedTex = ci::gl::Texture( 1, 1 );
+            _speedTex = ci::gl::Texture2d::create( 1, 1 );
         };
         
-        OrbitalFilter( ci::gl::Texture tex_speed ):FilterBase("OrbitalFilter.glsl"){
+        OrbitalFilter( ci::gl::Texture2dRef tex_speed ):FilterBase("OrbitalFilter.glsl"){
             r_scale = 1.0;
             r_min   = 0.0;
             r_max   = 1.0;
             _speedTex = tex_speed;
         }
         
-        void setSpeedTex( ci::gl::Texture tex_speed );
+        void setSpeedTex( ci::gl::Texture2dRef tex_speed );
         
         float r_min;
         float r_max;
@@ -38,7 +38,7 @@ namespace hrfm { namespace gl{ namespace filter{
         
     private:
         
-        ci::gl::Texture _speedTex;
+        ci::gl::Texture2dRef _speedTex;
         
     };
     

@@ -19,12 +19,12 @@ namespace hrfm{ namespace display{
     ImageTexture::~ImageTexture(){}
     
     void ImageTexture::init( ci::ImageSourceRef ref ){
-        _texture = ci::gl::Texture(ref);
+        _texture = ci::gl::Texture::create(ref);
         if( width == 0 ){
-            width = _texture.getWidth();
+            width = _texture->getWidth();
         }
         if( height == 0 ){
-            height = _texture.getHeight();
+            height = _texture->getHeight();
         }
     }
     

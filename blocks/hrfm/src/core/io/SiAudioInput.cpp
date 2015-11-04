@@ -306,7 +306,7 @@ namespace hrfm{ namespace io{
             for( int i = 0; i < (length-1); i++ ) {
                 float barY     = _fftValues[i] * height;
                 float nextBarY = _fftValues[i+1] * height;
-                gl::drawLine( Vec2f( i*width, height-barY ), Vec2f( (i+1)*width, height - nextBarY ) );
+                gl::drawLine( vec2( i*width, height-barY ), vec2( (i+1)*width, height - nextBarY ) );
             }
         }
         glPopMatrix();
@@ -339,7 +339,7 @@ namespace hrfm{ namespace io{
         float width  = bounds.getWidth()  / (float)_bufferLength;
         float height = bounds.getHeight() / 2.0;
         
-        PolyLine<Vec2f>	leftBufferLine;
+        PolyLine<vec2>	leftBufferLine;
         
         glPushMatrix();
         glTranslatef( bounds.x1, bounds.y1 + height, 0.0f );
@@ -347,7 +347,7 @@ namespace hrfm{ namespace io{
             for( int i = 0; i < _bufferLength; i++ ) {
                 float x = i * width;
                 float y = _channels[0][i] * height;
-                leftBufferLine.push_back( Vec2f( x , y ) );
+                leftBufferLine.push_back( vec2( x , y ) );
             }
             gl::draw( leftBufferLine );
         }

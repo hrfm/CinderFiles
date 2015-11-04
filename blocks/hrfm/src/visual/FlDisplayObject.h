@@ -88,12 +88,12 @@ namespace fl{ namespace display{
             FlDisplayObject();
         }
         
-        FlFboDisplayObject( AppBase * app, Vec2i fboSize ){
+        FlFboDisplayObject( AppBase * app, ivec2 fboSize ){
             FlDisplayObject();
             setup( app, fboSize );
         }
         
-        virtual void setup( AppBase * app, Vec2i fboSize ){
+        virtual void setup( AppBase * app, ivec2 fboSize ){
             FlDisplayObject::setup(app);
             ci::gl::Fbo::Format format;
             mFbo        = ci::gl::Fbo( fboSize.x, fboSize.y, format );
@@ -144,8 +144,8 @@ namespace fl{ namespace display{
         
         ci::gl::Fbo mFbo;
         ci::gl::Fbo mOutputFbo;
-        Vec2i   mFboSize;
-        Vec2i   mFboAspect;
+        ivec2   mFboSize;
+        ivec2   mFboAspect;
         
     };
     

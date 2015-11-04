@@ -57,7 +57,7 @@ namespace hrfm { namespace app{
             
             // Set this app's WindowSize from xml.
             if( prepare.hasAttribute("windowWidth") && prepare.hasAttribute("windowHeight") ){
-                mWindowSize = Vec2i( prepare.getAttributeValue<int>("windowWidth"), prepare.getAttributeValue<int>("windowHeight") );
+                mWindowSize = ivec2( prepare.getAttributeValue<int>("windowWidth"), prepare.getAttributeValue<int>("windowHeight") );
             }else{
                 mWindowSize = settings->getWindowSize();
             }
@@ -144,7 +144,7 @@ namespace hrfm { namespace app{
         if( xml.hasAttribute("width") && xml.hasAttribute("height") ){
             
             useCapture        = true;
-            Vec2i captureSize = Vec2i( xml.getAttributeValue<int>("width"), xml.getAttributeValue<int>("height") );
+            ivec2 captureSize = ivec2( xml.getAttributeValue<int>("width"), xml.getAttributeValue<int>("height") );
             
             int cacheLength = 2;
             if( xml.hasAttribute("cacheLength") ){
@@ -175,11 +175,11 @@ namespace hrfm { namespace app{
     
     // === Setter / Getter =======================================================
     
-    Vec2i AppBase::getWindowSize(){
+    ivec2 AppBase::getWindowSize(){
         return mWindowSize;
     }
     
-    Vec2i AppBase::getWindowAspect(){
+    ivec2 AppBase::getWindowAspect(){
         return hrfm::utils::getAspectRatio( mWindowSize );
     }
     
@@ -229,7 +229,7 @@ namespace hrfm { namespace app{
         }
     }
     
-    void AppBase::drawFPS( Vec2f position ){
+    void AppBase::drawFPS( vec2 position ){
         ci::gl::drawString( "FPS = " + toString(getAverageFps()) , position, Color::white(), ___font___ );
     }
     

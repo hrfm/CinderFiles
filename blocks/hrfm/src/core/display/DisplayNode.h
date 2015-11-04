@@ -1,7 +1,8 @@
 #pragma once
 
 #include <list>
-#include "cinder/app/AppNative.h"
+#include "cinder/app/App.h"
+#include "cinder/gl/gl.h"
 #include "EventDispatcher.h"
 
 namespace hrfm{ namespace display{
@@ -28,15 +29,15 @@ namespace hrfm{ namespace display{
         virtual void setup();
         virtual void clear();
         
-        virtual ci::Vec2i getSize();
+        virtual ci::ivec2 getSize();
         virtual void setSize( int w, int h );
-        virtual void setSize( ci::Vec2i size );
+        virtual void setSize( ci::ivec2 size );
         
         virtual ci::fs::path getSrcPath();
         
         virtual ci::Rectf getBounds();
         virtual ci::Rectf getDrawBounds();
-        virtual ci::Vec2f getAbsolutePosition();
+        virtual ci::vec2 getAbsolutePosition();
         
         virtual int numChildren();
         
@@ -60,7 +61,7 @@ namespace hrfm{ namespace display{
 
         std::vector<DisplayNode*> children;
         
-        virtual ci::Vec2f getGlobalPosition();
+        virtual ci::vec2 getGlobalPosition();
         
         // --- PROPERTY -------------
         float       x, y;

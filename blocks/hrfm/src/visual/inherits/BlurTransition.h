@@ -23,7 +23,7 @@ namespace hrfm{ namespace visual{
                 VisualTransitionBase();
             };
         
-            void init( Vec2i size, float transitionTime ){
+            void init( ivec2 size, float transitionTime ){
                 VisualTransitionBase::init( size, transitionTime );
                 mBlurEffectV.setup( size );
                 mBlurEffectH.setup( size );
@@ -34,29 +34,29 @@ namespace hrfm{ namespace visual{
                 ci::gl::Texture inputTex;
                 
                 inputTex = mCurrent->output();
-                mBlurEffectV.setUniform(Vec2f(0.00,0.01*mProgress), 1.0);
-                mBlurEffectH.setUniform(Vec2f(0.01*mProgress,0.00), 1.0);
+                mBlurEffectV.setUniform(vec2(0.00,0.01*mProgress), 1.0);
+                mBlurEffectH.setUniform(vec2(0.01*mProgress,0.00), 1.0);
                 mBlurEffectH.affect( ( mBlurEffectV.affect( inputTex ) ) );
                 
                 mOutputFbo.bindFramebuffer();
                     ci::gl::clear();
                     ci::gl::enableAdditiveBlending();
                     ci::gl::pushMatrices();
-                    ci::gl::setMatricesWindow( Vec2i( mResolution.x, mResolution.y ), false );
+                    ci::gl::setMatricesWindow( ivec2( mResolution.x, mResolution.y ), false );
                         ci::gl::color( ColorA( 1.0f, 1.0f, 1.0f, 1.0f - mProgress ) );
                         ci::gl::draw( mBlurEffectH.getTexture() );
                     ci::gl::popMatrices();
                 mOutputFbo.unbindFramebuffer();
                 
                 inputTex = mNext->output();
-                mBlurEffectV.setUniform(Vec2f(0.00,0.01*(1.0f-mProgress)), 1.0);
-                mBlurEffectH.setUniform(Vec2f(0.01*(1.0f-mProgress),0.00), 1.0);
+                mBlurEffectV.setUniform(vec2(0.00,0.01*(1.0f-mProgress)), 1.0);
+                mBlurEffectH.setUniform(vec2(0.01*(1.0f-mProgress),0.00), 1.0);
                 mBlurEffectH.affect( ( mBlurEffectV.affect( inputTex ) ) );
                 
                 mOutputFbo.bindFramebuffer();
                     ci::gl::enableAdditiveBlending();
                     ci::gl::pushMatrices();
-                    ci::gl::setMatricesWindow( Vec2i( mResolution.x, mResolution.y ), false );
+                    ci::gl::setMatricesWindow( ivec2( mResolution.x, mResolution.y ), false );
                         ci::gl::color( ColorA( 1.0f, 1.0f, 1.0f, mProgress ) );
                         ci::gl::draw( mBlurEffectH.getTexture(), getWindowBounds() );
                     ci::gl::popMatrices();

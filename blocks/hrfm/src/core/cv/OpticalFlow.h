@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cinder/app/AppBasic.h"
+#include "cinder/app/App.h"
 #include "cinder/gl/Fbo.h"
 #include "cinder/gl/Texture.h"
 #include "cinder/gl/GlslProg.h"
@@ -18,10 +18,10 @@ namespace hrfm{ namespace cv{
         
     public:
         
-        OpticalFlow( Vec2i textureSize, int forceMapScale = 4 );
+        OpticalFlow( ivec2 textureSize, int forceMapScale = 4 );
         ~OpticalFlow(){};
         
-        void update( ci::gl::Texture texture, float bias = 1.0, float frameRate = 30.0 );
+        void update( ci::gl::TextureRef texture, float bias = 1.0, float frameRate = 30.0 );
         
         void draw();
         void draw( Rectf bounds );
@@ -29,8 +29,8 @@ namespace hrfm{ namespace cv{
         ForceMap getForceMap();
         ForceMap * getForceMapPtr();
         
-        ci::gl::Texture getTexture();
-        Vec2i getSize();
+        ci::gl::TextureRef getTexture();
+        ivec2 getSize();
         Rectf getBounds();
         
         vector<::cv::Point2f> prevFeatures, features;
@@ -47,7 +47,7 @@ namespace hrfm{ namespace cv{
         
         static const int MAX_FEATURES = 256;
         
-        ci::gl::Fbo   mOpticalFlowFBO;
+        ci::gl::FboRef mOpticalFlowFBO;
         Rectf     mOpticalFlowBounds;
         ::cv::Mat mPrevFrame;
         ForceMap  mForceMap;

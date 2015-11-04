@@ -5,13 +5,13 @@ using namespace ci;
 
 namespace hrfm{ namespace cv{
     
-    OpticalFlow::OpticalFlow( Vec2i textureSize, int forceMapScale ){
+    OpticalFlow::OpticalFlow( ivec2 textureSize, int forceMapScale ){
         
         // --- Create FBO. ---
         
         ci::gl::Fbo::Format captureFormat;
-        mOpticalFlowFBO    = ci::gl::Fbo( textureSize.x, textureSize.y, captureFormat );
-        mOpticalFlowBounds = mOpticalFlowFBO.getBounds();
+        mOpticalFlowFBO    = ci::gl::Fbo::create( textureSize.x, textureSize.y, captureFormat );
+        mOpticalFlowBounds = mOpticalFlowFBO->getBounds();
         
         // --- Create ForceMap. ---
         
@@ -19,29 +19,30 @@ namespace hrfm{ namespace cv{
         
     }
     
-    void OpticalFlow::update( gl::Texture texture, float bias, float frameRate ){
+    void OpticalFlow::update( gl::TextureRef texture, float bias, float frameRate ){
         
-        Area viewport = ci::gl::getViewport();
+        //!!!!!! Area viewport = ci::gl::getViewport();
         
-        mOpticalFlowFBO.bindFramebuffer();
+        mOpticalFlowFBO->bindFramebuffer();
         {
             gl::pushMatrices();
-            ci::gl::setViewport( mOpticalFlowFBO.getBounds() );
-            ci::gl::setMatricesWindow( mOpticalFlowFBO.getWidth(), mOpticalFlowBounds.getHeight(), false );
+            //!!!!!! ci::gl::setViewport( mOpticalFlowFBO->getBounds() );
+            ci::gl::setMatricesWindow( mOpticalFlowFBO->getWidth(), mOpticalFlowBounds.getHeight(), false );
             {
                 gl::clear();
                 gl::color(1.0f,1.0f,1.0f);
-                gl::draw( texture, mOpticalFlowBounds );
+                //!!!!!!!! gl::draw( texture, mOpticalFlowBounds );
             }
             gl::popMatrices();
         }
-        mOpticalFlowFBO.unbindFramebuffer();
+        mOpticalFlowFBO->unbindFramebuffer();
         
-        ci::gl::setViewport(viewport);
+        //!!!!!!!! ci::gl::setViewport(viewport);
         
+        /* !!!!!!!!!!
         if( 1.0 / frameRate < ci::app::getElapsedSeconds() - recentTime ){
             
-            ::cv::Mat currentFrame( toOcv( mOpticalFlowFBO.getTexture(), CV_8UC1 ) );
+            ::cv::Mat currentFrame( toOcv( mOpticalFlowFBO->getColorTexture(), CV_8UC1 ) );
             
             if( mPrevFrame.data ) {
                 if( features.empty() || ci::app::getElapsedFrames() % 3 == 0 ){
@@ -55,7 +56,7 @@ namespace hrfm{ namespace cv{
             
             // --- Update ForceMap. ---
             
-            Vec2f from, to, size( mOpticalFlowFBO.getSize() );
+            vec2 from, to, size( mOpticalFlowFBO->getSize() );
             float dist;
             
             int max = features.size();
@@ -63,7 +64,7 @@ namespace hrfm{ namespace cv{
                 if( featureStatuses[idx] ) {
                     from = fromOcv( features[idx] );
                     to   = fromOcv( prevFeatures[idx] );
-                    dist = from.distance(to);
+                    dist = ci::distance(from,to);
                     if( 10.f < dist && dist < 50.0f ){
                         mForceMap.addForce( from / size, ( to - from ) * bias );
                     }
@@ -73,6 +74,7 @@ namespace hrfm{ namespace cv{
             recentTime = ci::app::getElapsedSeconds();
             
         }
+        //*/
         
         mForceMap.update();
         
@@ -87,9 +89,8 @@ namespace hrfm{ namespace cv{
         float scaleX = bounds.getWidth() / mOpticalFlowBounds.getWidth();
         float scaleY = bounds.getHeight() / mOpticalFlowBounds.getHeight();
         
-        Vec2f from, to;
-        float dist;
-        int length = features.size();
+        vec2 from, to;
+        int  length = features.size();
         
         gl::lineWidth(2.0);
         glDisable( GL_TEXTURE_2D );
@@ -108,9 +109,9 @@ namespace hrfm{ namespace cv{
         //*/
         
         // draw the lines connecting them
-        glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+        ci::gl::color( ColorA( 1.0f, 1.0f, 1.0f, 1.0f ) );
         
-        glBegin( GL_LINES );
+        ci::gl::begin( GL_LINES );
         {
             
             for( size_t idx = 0; idx < length; ++idx ) {
@@ -124,7 +125,7 @@ namespace hrfm{ namespace cv{
                     to.x *= scaleX;
                     to.y *= scaleY;
                     
-                    if( from.distance(to) < 40.0 ){
+                    if( distance(from,to) < 40.0 ){
                         gl::vertex( from );
                         gl::vertex( to );
                     }
@@ -133,7 +134,7 @@ namespace hrfm{ namespace cv{
             }
             
         }
-        glEnd();
+        ci::gl::end();
         
     }
     
@@ -145,16 +146,16 @@ namespace hrfm{ namespace cv{
         return &mForceMap;
     }
     
-    gl::Texture OpticalFlow::getTexture(){
-        return mOpticalFlowFBO.getTexture();
+    gl::TextureRef OpticalFlow::getTexture(){
+        return mOpticalFlowFBO->getColorTexture();
     }
     
-    Vec2i OpticalFlow::getSize(){
-        return mOpticalFlowFBO.getSize();
+    ivec2 OpticalFlow::getSize(){
+        return mOpticalFlowFBO->getSize();
     }
     
     Rectf OpticalFlow::getBounds(){
-        return mOpticalFlowFBO.getBounds();
+        return mOpticalFlowFBO->getBounds();
     }
     
     //! private
