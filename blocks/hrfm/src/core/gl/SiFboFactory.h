@@ -3,6 +3,8 @@
 #include <map>
 #include <sstream>
 #include "Singleton.h"
+#include "cinder/app/App.h"
+#include "cinder/gl/gl.h"
 #include "cinder/gl/Fbo.h"
 #include "cinder/Camera.h"
 
@@ -16,7 +18,7 @@ namespace hrfm{ namespace gl{
      std::map を拡張し Singleton で何処からでも特定の Texture にアクセス出来るようにするクラスです.
      
      */
-    class SiFboFactory : public Singleton<SiFboFactory>, public std::map<string, ci::gl::Fbo*>{
+    class SiFboFactory : public Singleton<SiFboFactory>, public std::map<string, ci::gl::FboRef>{
         
     public:
         
@@ -34,7 +36,7 @@ namespace hrfm{ namespace gl{
         }
         
         ci::gl::FboRef _tmpFbo = NULL;
-        ci::Area       _tmpViewport;
+        std::pair<ci::ivec2,ci::ivec2> _tmpViewport;
         
     };
     

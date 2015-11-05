@@ -184,7 +184,7 @@ namespace hrfm { namespace io{
             
             if( 1 < vec->size() ){
                 
-                //!!!!!!!! Area viewport = ci::gl::getViewport();
+                std::pair<ivec2,ivec2> viewport = ci::gl::getViewport();
                 
                 if( _diffFboMap.find(deviceName) == _diffFboMap.end() ){
                     ci::ivec2 size = getCaptureRef(deviceName)->getSize();
@@ -201,29 +201,26 @@ namespace hrfm { namespace io{
                 fbo->bindFramebuffer();
                 {
                     ci::gl::pushMatrices();
-                    //!!!!! ci::gl::setViewport( fbo.getBounds() );
+                    ci::gl::viewport( ivec2(0), fbo->getSize() );
                     ci::gl::setMatricesWindow( fbo->getSize(), false );
                     {
                         ci::gl::clear();
                         ci::gl::color(1.0f,1.0f,1.0f);
-                        b4Tex->bind(0);
-                        tex->bind(1);
-                        _diffShader->bind();
+                        ci::gl::ScopedGlslProg    scpGlslProg( _diffShader );
+                        ci::gl::ScopedTextureBind scpTexBind0( b4Tex, 0 );
+                        ci::gl::ScopedTextureBind scpTexBind1( tex, 1 );
                         {
                             _diffShader->uniform("tex0", 0);
                             _diffShader->uniform("tex1", 1);
                             _diffShader->uniform("resolution", vec2(fbo->getSize()) );
                             ci::gl::drawSolidRect( fbo->getBounds() );
                         }
-                        //!!!!!!!! _diffShader->unbind();
-                        tex->unbind();
-                        b4Tex->unbind();
                     }
                     ci::gl::popMatrices();
                 }
                 fbo->unbindFramebuffer();
                 
-                //!!!!! ci::gl::setViewport(viewport);
+                ci::gl::viewport(viewport);
                 
             }
             

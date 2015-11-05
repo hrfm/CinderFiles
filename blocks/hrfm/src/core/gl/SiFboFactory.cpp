@@ -38,12 +38,12 @@ namespace hrfm{ namespace gl{
         _tmpViewport = ci::gl::getViewport();
         
         _tmpFbo->bindFramebuffer();
-        ci::gl::pushMatrices();
         
+        ci::gl::pushMatrices();
         if( camera != NULL ){
             ci::gl::setMatrices( *camera );
         }else{
-            ci::gl::setViewport( ci::Area( 0, 0, width, height ) );
+            ci::gl::viewport( ci::ivec2(0), ci::ivec2(width,height) );
             ci::gl::setMatricesWindow( width, height, false );
         }
         
@@ -61,9 +61,9 @@ namespace hrfm{ namespace gl{
         
         _tmpFbo->unbindFramebuffer();
         
-        ci::gl::setViewport( _tmpViewport );
+        ci::gl::viewport( _tmpViewport );
         
-        _tmpFbo      = NULL;
+        _tmpFbo = NULL;
         
     }
     

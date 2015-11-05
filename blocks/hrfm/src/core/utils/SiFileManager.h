@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Singleton.h"
+#include "cinder/app/App.h"
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <regex>
