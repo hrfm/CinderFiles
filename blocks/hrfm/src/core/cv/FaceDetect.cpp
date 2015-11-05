@@ -35,11 +35,12 @@ namespace hrfm{ namespace cv{
         
     }
     
-    void FaceDetect::update( Surface surface ){
+    void FaceDetect::update( Surface8uRef surface ){
         cout << "FaceDetect::update()" << endl;
         if( pthread_mutex_lock(&_mutex) != 0 ){
-            if( &surface != nullptr ){
-                mCloneSurface = surface.clone();
+            if( surface != NULL ){
+                //!!!!!!!! clone じゃないとあかんかも？
+                mCloneSurface = surface;
             }
             pthread_mutex_unlock(&_mutex);
         }
@@ -66,7 +67,7 @@ namespace hrfm{ namespace cv{
             
             double elapsedSec = ci::app::getElapsedSeconds();
             
-            if( mCloneSurface && 0.1f < elapsedSec - recentSec ){
+            if( mCloneSurface != NULL && 0.1f < elapsedSec - recentSec ){
                 
                 if( pthread_mutex_lock(&_mutex) != 0 ){
                     
@@ -77,12 +78,14 @@ namespace hrfm{ namespace cv{
                         const int calcScale = _calcScale; // calculate the image at half scale
                         
                         // create a grayscale copy of the input image
-                        ::cv::Mat grayCameraImage( toOcv( mCloneSurface, CV_8UC1 ) );
+                        // ::cv::Mat grayCameraImage( toOcv( &mCloneSurface, CV_8UC1 ) );
+                        //!!!!!! 下にしてみたけど動くか？
+                        ::cv::Mat grayCameraImage( toOcv( *mCloneSurface ) );
                         
                         //*
                         // scale it to half size, as dictated by the calcScale constant
-                        int scaledWidth = mCloneSurface.getWidth() / calcScale;
-                        int scaledHeight = mCloneSurface.getHeight() / calcScale;
+                        int scaledWidth  = mCloneSurface->getWidth() / calcScale;
+                        int scaledHeight = mCloneSurface->getHeight() / calcScale;
                         ::cv::Mat smallImg( scaledHeight, scaledWidth, CV_8UC1 );
                         ::cv::resize( grayCameraImage, smallImg, smallImg.size(), 0, 0, ::cv::INTER_LINEAR );
                         

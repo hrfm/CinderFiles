@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include "cinder/app/App.h"
+#include "cinder/gl/gl.h"
 #include "cinder/gl/Texture.h"
 #include "cinder/gl/TextureFont.h"
 #include "cinder/Font.h"

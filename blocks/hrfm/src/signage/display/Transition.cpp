@@ -75,7 +75,7 @@ namespace hrfm{ namespace signage{ namespace display{
             progress = 1.0;
         }
         
-        //!!!!!! Area viewport = ci::gl::getViewport();
+        std::pair<ivec2,ivec2> viewport = ci::gl::getViewport();
         
         // --- Draw current into _currentFbo.
         
@@ -86,7 +86,7 @@ namespace hrfm{ namespace signage{ namespace display{
                 _current->update();
                 ci::gl::pushMatrices();
                 {
-                    //!!!!!!! ci::gl::setViewport( (Area)_currentFbo->getBounds() );
+                    ci::gl::viewport( ivec2(0), _currentFbo->getSize() );
                     ci::gl::setMatricesWindow( _currentFbo->getWidth(), _currentFbo->getHeight(), false );
                     {
                         ci::gl::color( ColorA( 1.0, 1.0, 1.0, 1.0 ) );
@@ -107,7 +107,7 @@ namespace hrfm{ namespace signage{ namespace display{
                 _next->update();
                 ci::gl::pushMatrices();
                 {
-                    //!!!!!!!!! ci::gl::setViewport( (Area)_next->getBounds() );
+                    ci::gl::viewport( ivec2(0), _next->getSize() );
                     ci::gl::setMatricesWindow( _next->width, _next->height, false );
                     {
                         ci::gl::color( ColorA( 1.0, 1.0, 1.0, 1.0 ) );
@@ -128,7 +128,7 @@ namespace hrfm{ namespace signage{ namespace display{
             ci::gl::clear();
             ci::gl::pushMatrices();
             {
-                //!!!!!!! ci::gl::setViewport( (Area)_fbo->getBounds() );
+                ci::gl::viewport( ivec2(0), _fbo->getSize() );
                 ci::gl::setMatricesWindow( _fbo->getWidth(), _fbo->getHeight(), false );
                 {
                     _shader->bindShader();
@@ -155,7 +155,7 @@ namespace hrfm{ namespace signage{ namespace display{
             dispatchEvent( new hrfm::events::Event( hrfm::events::Event::COMPLETE ) );
         }
         
-        //!!!!!!! ci::gl::setViewport(viewport);
+        ci::gl::viewport(viewport);
         
     }
     

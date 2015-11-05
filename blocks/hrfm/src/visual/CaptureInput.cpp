@@ -22,7 +22,7 @@ namespace hrfm{ namespace io{
     void CaptureInput::update(){
         if( mCapture->getSurface() ){
             if( mFaceDetect ){
-                mFaceDetect->update( mCapture->getSurface()->clone() );
+                mFaceDetect->update( mCapture->getSurface() );
             }
         }
     }

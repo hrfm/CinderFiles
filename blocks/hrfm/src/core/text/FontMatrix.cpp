@@ -90,11 +90,11 @@ namespace hrfm{ namespace text{
         myFontManager.setText(text);
     }
     
-    Texture FontMatrix::getTexture(){
+    TextureRef FontMatrix::getTexture(){
         return fbo->getTexture();
     }
     
-    Texture FontMatrix::getFadeTexture(){
+    TextureRef FontMatrix::getFadeTexture(){
         return fadeFbo->getTexture();
     }
     

@@ -1,5 +1,6 @@
 #include "AppBase.h"
 #include <iostream>
+#include "cinder/Utilities.h"
 
 // === NAMESPACE ===================================================================================================
 
@@ -13,16 +14,16 @@ using namespace hrfm::io;
 
 namespace hrfm { namespace app{
     
-    void AppBase::prepareSettings( Settings *settings ){
+    void AppBase::setup(){
         
         // --- Load XML for Settings. --------------------------------------------
         
         string path = "setting.xml";
         
-        for( int i=0; i<getArgs().size(); i++ ){
-            string key = getArgs().at(i);
+        for( int i=0; i<getCommandLineArgs().size(); i++ ){
+            string key = getCommandLineArgs().at(i);
             if( key == "-xml" || key == "-x" ){
-                path = getArgs().at(++i);
+                path = getCommandLineArgs().at(++i);
                 break;
             }
         }
@@ -41,7 +42,7 @@ namespace hrfm { namespace app{
         
         // --- Start preparing. --------------------------------------------------
         
-        cout << "--- AppBase::prepareSettings() -----------------------------------------" << endl << endl;
+        cout << "--- AppBase::prepareSettings(ver 0.8.x) -----------------------------------------" << endl << endl;
         cout << "Setting xml from \"" << path << "\"" <<  endl << endl;
         cout << _settingXml;
         
@@ -51,26 +52,20 @@ namespace hrfm { namespace app{
             
             // Set this app's FrameRate from xml.
             if( prepare.hasAttribute("frameRate") ){
-                settings->setFrameRate( prepare.getAttributeValue<float>("frameRate") );
+                setFrameRate( prepare.getAttributeValue<float>("frameRate") );
             }
-            cout << "FrameRate  : " << settings->getFrameRate() << endl;
+            cout << "FrameRate  : " << getFrameRate() << endl;
             
             // Set this app's WindowSize from xml.
             if( prepare.hasAttribute("windowWidth") && prepare.hasAttribute("windowHeight") ){
                 mWindowSize = ivec2( prepare.getAttributeValue<int>("windowWidth"), prepare.getAttributeValue<int>("windowHeight") );
             }else{
-                mWindowSize = settings->getWindowSize();
+                mWindowSize = getWindowSize();
             }
-            settings->setWindowSize( mWindowSize.x, mWindowSize.y );
-            cout << "WindowSize : " << settings->getWindowSize() << endl << endl;
+            setWindowSize( mWindowSize.x, mWindowSize.y );
+            cout << "WindowSize : " << getWindowSize() << endl << endl;
             
         }
-        
-        cout << "------------------------------------------------------------------------" << endl << endl;
-        
-    }
-    
-    void AppBase::setup(){
         
         cout << "--- AppBase::setup() ---------------------------------------------------" << endl << endl;
         
@@ -117,9 +112,9 @@ namespace hrfm { namespace app{
             ci::app::setFullScreen(true);
             system( ("open -a "+ci::app::getAppPath().string()).c_str() );
             if( ci::app::isFullScreen() && _hideCursor ){
-                ci::app::AppNative::hideCursor();
+                ci::app::App::hideCursor();
             }else{
-                ci::app::AppNative::showCursor();
+                ci::app::App::showCursor();
             }
         }
         
@@ -228,7 +223,7 @@ namespace hrfm { namespace app{
             _drawDebug();
         }
     }
-    
+
     void AppBase::drawFPS( vec2 position ){
         ci::gl::drawString( "FPS = " + toString(getAverageFps()) , position, Color::white(), ___font___ );
     }
@@ -252,9 +247,9 @@ namespace hrfm { namespace app{
         if( event.getChar() == 'f' ){
             ci::app::setFullScreen( ! ci::app::isFullScreen() );
             if( ci::app::isFullScreen() && _hideCursor ){
-                ci::app::AppNative::hideCursor();
+                ci::app::App::hideCursor();
             }else{
-                ci::app::AppNative::showCursor();
+                ci::app::App::showCursor();
             }
         }
         if( event.isControlDown() && event.getChar() == 'd' ){

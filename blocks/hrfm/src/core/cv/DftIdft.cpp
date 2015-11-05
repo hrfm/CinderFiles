@@ -15,9 +15,11 @@ namespace hrfm{ namespace cv{
     
     void DftIdft::init( string file ){
         
+        /*!!!!!!!
+        
         // --- DFT
         
-        src_img = ::cv::Mat( toOcv( ci::gl::Texture( loadImage( DataLoader::load(file) ) ), CV_8UC1 ) );
+        src_img = ::cv::Mat( toOcv( ci::gl::Texture::create( loadImage( DataLoader::load(file) ) ), CV_8UC1 ) );
         
         ::cv::Size s_size = src_img.size();
         src_cols          = s_size.width;
@@ -37,6 +39,8 @@ namespace hrfm{ namespace cv{
         
         _calcMagImage();
         
+        //*/
+        
     }
     
     void DftIdft::update(){
@@ -53,9 +57,9 @@ namespace hrfm{ namespace cv{
         mag_img.convertTo(mag_mt, CV_32F);
         idft_img.convertTo(idft_mt, CV_32F);
         
-        ci::gl::draw( ci::gl::Texture( fromOcv(src_img) ), ci::Rectf(   0.0, 0.0, _size, _size ) );
-        ci::gl::draw( ci::gl::Texture( fromOcv(mag_mt)  ), ci::Rectf( _size, 0.0, _size*2.0, _size ) );
-        ci::gl::draw( ci::gl::Texture( fromOcv(idft_mt) ), ci::Rectf( _size*2.0, 0.0, _size*3.0, _size ) );
+        ci::gl::draw( ci::gl::Texture::create( fromOcv(src_img) ), ci::Rectf(   0.0, 0.0, _size, _size ) );
+        ci::gl::draw( ci::gl::Texture::create( fromOcv(mag_mt)  ), ci::Rectf( _size, 0.0, _size*2.0, _size ) );
+        ci::gl::draw( ci::gl::Texture::create( fromOcv(idft_mt) ), ci::Rectf( _size*2.0, 0.0, _size*3.0, _size ) );
         
     }
     

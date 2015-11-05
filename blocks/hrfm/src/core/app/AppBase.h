@@ -1,11 +1,10 @@
 #pragma once
 
 #include "cinder/app/App.h"
-#include "Cinder/Camera.h"
-#include "cinder/Xml.h"
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Texture.h"
-
+#include "Cinder/Camera.h"
+#include "cinder/Xml.h"
 #include "cinder/Rand.h"
 
 // --- Inputs ---
@@ -44,9 +43,7 @@ namespace hrfm{ namespace app{
         
     public:
         
-        AppBase(){
-            ci::app::App();
-            hrfm::events::EventDispatcher();
+        AppBase() : ci::app::App(), hrfm::events::EventDispatcher(){
             this->_isDebugMode = false;
             this->___font___   = Font("Helvetica",12);
         }
@@ -69,15 +66,6 @@ namespace hrfm{ namespace app{
         // ===========================================================================
         // === METHOD. ===============================================================
         
-        /**
-         * ローカルにおいてある設定ファイル resoureces/setting.xml を読み込み
-         * 主にモニタサイズやフレームレートなどハードウェアに関係した設定を行います.
-         * @virtual
-         * @override
-         */
-        virtual void prepareSettings( Settings *settings );
-        
-        //! @override
         virtual void setup();
         virtual void initWindow( XmlTree &xml );
         virtual void initAudio( XmlTree &xml );
@@ -87,7 +75,6 @@ namespace hrfm{ namespace app{
         virtual ivec2 getWindowSize();
         virtual ivec2 getWindowAspect();
         
-        //! @override
         virtual void update();
         virtual void updateIO();
         virtual void updateStage();
@@ -95,41 +82,26 @@ namespace hrfm{ namespace app{
         //! @override
         virtual void draw();
         
-        /**
-         * for debug.
-         * @virtual
-         */
+        // for debug
         virtual void drawFPS( vec2 position = vec2(20.0f,20.0f) );
-        
-        /**
-         * for debug.
-         * @virtual
-         */
         void coutGLInfo();
         
         // === Event Listener. =======================================================
         
-        /**
-         * アプリのウィンドウサイズに変更があった際の処理.
-         * camera のパースペクティブをウィンドウのアスペクト比にあわせる.
-         * @virtual
-         * @override
-         */
+        // アプリのウィンドウサイズに変更があった際の処理.
+        // camera のパースペクティブをウィンドウのアスペクト比にあわせる.
         virtual void resize();
         
         //! @override
         virtual void keyDown( ci::app::KeyEvent event );
-        
+         
     protected:
         
         ivec2 mWindowSize;
         bool _isDebugMode;
         bool _hideCursor;
         
-        /**
-         * TriggerEvent 発生時の処理.
-         * @virtual
-         */
+        // TriggerEvent 発生時の処理.
         virtual void onTrigger( TriggerEvent * event );
         
         void _drawDebug();

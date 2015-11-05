@@ -24,7 +24,7 @@ namespace hrfm{ namespace display{
         ci::gl::FboRef _fbo;
         
         ci::gl::FboRef _tmpFbo;
-        ci::Area    _tmpViewport;
+        std::pair<ci::ivec2,ci::ivec2> _tmpViewport;
         
         virtual void _bindAndPushMatrices();
         virtual void _bindAndPushMatrices( ci::CameraPersp cam );

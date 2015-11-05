@@ -49,17 +49,17 @@ namespace hrfm{ namespace gl{
             vec3 v3 = vertices.at(i+segments.x+2);
             
             {
-                vec3 v01 = v1-v0;
-                vec3 v02 = v2-v0;
-                vec3 norm = v01.cross(v02);
+                vec3 v01  = v1-v0;
+                vec3 v02  = v2-v0;
+                vec3 norm = ci::cross(v01,v02);
                 
-                m->appendVertex(v0);
+                m->appendPosition(v0);
                 m->appendNormal(norm);
                 m->appendTexCoord(vec2(v0.x+0.5,1.0-(v0.y+0.5)));
-                m->appendVertex(v1);
+                m->appendPosition(v1);
                 m->appendNormal(norm);
                 m->appendTexCoord(vec2(v1.x+0.5,1.0-(v1.y+0.5)));
-                m->appendVertex(v2);
+                m->appendPosition(v2);
                 m->appendNormal(norm);
                 m->appendTexCoord(vec2(v2.x+0.5,1.0-(v2.y+0.5)));
                 numberVertices = m->getNumVertices();
@@ -67,17 +67,17 @@ namespace hrfm{ namespace gl{
             }
             
             {
-                vec3 v01 = v2-v3;
-                vec3 v02 = v1-v3;
-                vec3 norm = v01.cross(v02);
-
-                m->appendVertex(v3);
+                vec3 v01  = v2-v3;
+                vec3 v02  = v1-v3;
+                vec3 norm = ci::cross(v01,v02);
+                
+                m->appendPosition(v3);
                 m->appendNormal(norm);
                 m->appendTexCoord(vec2(v3.x+0.5,1.0-(v3.y+0.5)));
-                m->appendVertex(v2);
+                m->appendPosition(v2);
                 m->appendNormal(norm);
                 m->appendTexCoord(vec2(v2.x+0.5,1.0-(v2.y+0.5)));
-                m->appendVertex(v1);
+                m->appendPosition(v1);
                 m->appendNormal(norm);
                 m->appendTexCoord(vec2(v1.x+0.5,1.0-(v1.y+0.5)));
                 numberVertices = m->getNumVertices();
@@ -99,16 +99,16 @@ namespace hrfm{ namespace gl{
             float z0 = sin(x*radian);
             float z1 = sin((x+stepX)*radian);
             
-            m->appendVertex(vec3(x0,-0.5,z0));
+            m->appendPosition(vec3(x0,-0.5,z0));
             m->appendTexCoord(vec2(x0+0.5,0));
             
-            m->appendVertex(vec3(x1,-0.5,z1));
+            m->appendPosition(vec3(x1,-0.5,z1));
             m->appendTexCoord(vec2(x1+0.5, 0));
             
-            m->appendVertex(vec3(x1,0.5,z1));
+            m->appendPosition(vec3(x1,0.5,z1));
             m->appendTexCoord(vec2(x1+0.5, 1));
             
-            m->appendVertex(vec3(x0,0.5,z0));
+            m->appendPosition(vec3(x0,0.5,z0));
             m->appendTexCoord(vec2(x0+0.5, 1));
             
             int numberVertices = m->getNumVertices();
@@ -122,8 +122,9 @@ namespace hrfm{ namespace gl{
         
         //*/
         
-        this->mesh = new ci::gl::VboMesh( *m );
+        this->mesh = ci::gl::VboMesh::create(*m);
         
+        /* !!!!!!!!!
         ci::gl::Material * material = new ci::gl::Material();
         material->setAmbient( Color::black() );
         material->setDiffuse( Color(1.0,1.0,1.0) );
@@ -132,6 +133,7 @@ namespace hrfm{ namespace gl{
         material->setShininess( 128.0f );
         
         this->setMaterial(material);
+        //*/
         
     }
     

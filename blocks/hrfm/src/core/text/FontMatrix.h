@@ -29,8 +29,8 @@ namespace hrfm{ namespace text{
         ivec2 getMatrixSize();
         ivec2 getFboSize();
         Rectf getFboBounds();
-        ci::gl::Texture getTexture();
-        ci::gl::Texture getFadeTexture();
+        ci::gl::TextureRef getTexture();
+        ci::gl::TextureRef getFadeTexture();
         
         void setText( string text );
         

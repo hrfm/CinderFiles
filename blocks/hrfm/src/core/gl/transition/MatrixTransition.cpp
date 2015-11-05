@@ -25,7 +25,7 @@ namespace hrfm { namespace gl{
         }
     }
     
-    void MatrixTransition::bindTexture( const ci::gl::Texture & current, const ci::gl::Texture & next ){
+    void MatrixTransition::bindTexture( const ci::gl::TextureRef current, const ci::gl::TextureRef next ){
         TransitionShaderBase::bindTexture( current, next );
         addBindingTexture( "matrixTex", _matrix.getTexture() );
     }

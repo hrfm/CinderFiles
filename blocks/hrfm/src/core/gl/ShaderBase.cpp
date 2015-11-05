@@ -53,17 +53,17 @@ namespace hrfm { namespace gl{
         mTessCtrlPath  = tessCtrl;
         mShader = ShaderFactory::create( getVertexShader(), getFragmentShader(), getGeometoryShader(), getTessEvalShader(), getTessCtrlShader() );
     }
-    std::string loadShader( fs::path srcPath ){
+    DataSourceRef loadShader( fs::path srcPath ){
         if( srcPath != "" ){
-            return ci::loadString( DataLoader::load(srcPath) );
+            return DataLoader::load(srcPath);
         }else{
-            return std::string();
+            return DataSourceRef();
         }
     }
-    std::string ShaderBase::getVertexShader()   { return this->loadShader( mVertexPath    ); }
-    std::string ShaderBase::getFragmentShader() { return this->loadShader( mFragmentPath  ); }
-    std::string ShaderBase::getGeometoryShader(){ return this->loadShader( mGeometoryPath ); }
-    std::string ShaderBase::getTessEvalShader() { return this->loadShader( mTessEvalPath  ); }
-    std::string ShaderBase::getTessCtrlShader() { return this->loadShader( mTessCtrlPath  ); }
+    DataSourceRef ShaderBase::getVertexShader()   { return this->loadShader( mVertexPath    ); }
+    DataSourceRef ShaderBase::getFragmentShader() { return this->loadShader( mFragmentPath  ); }
+    DataSourceRef ShaderBase::getGeometoryShader(){ return this->loadShader( mGeometoryPath ); }
+    DataSourceRef ShaderBase::getTessEvalShader() { return this->loadShader( mTessEvalPath  ); }
+    DataSourceRef ShaderBase::getTessCtrlShader() { return this->loadShader( mTessCtrlPath  ); }
     
 }}

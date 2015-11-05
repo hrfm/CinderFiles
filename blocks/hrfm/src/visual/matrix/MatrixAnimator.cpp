@@ -20,17 +20,17 @@ namespace hrfm{ namespace matrix{
         float mChannelWidth  = mChannel->getWidth();
         float mChannelHeight = mChannel->getHeight();
         
-        Area viewport = ci::gl::getViewport();
+        std::pair<ivec2,ivec2> viewport = ci::gl::getViewport();
         
-        myFbo.bindFramebuffer();
+        myFbo->bindFramebuffer();
         {
             gl::pushMatrices();
-            gl::setViewport( myFbo.getBounds() );
-            gl::setMatricesWindow( myFbo.getSize(), false );
+            gl::viewport( ivec2(0), myFbo->getSize() );
+            gl::setMatricesWindow( myFbo->getSize(), false );
             {
                 // --- フェード処理
                 gl::color(0.0f,0.0f,0.0f,0.02f);
-                gl::drawSolidRect( myFbo.getBounds() );
+                gl::drawSolidRect( myFbo->getBounds() );
                 // update and draw MatrixLine.
                 vector<MatrixLine*>::iterator it  = myMatrixLines.begin();
                 vector<MatrixLine*>::iterator end = myMatrixLines.end();
@@ -41,9 +41,9 @@ namespace hrfm{ namespace matrix{
             }
             gl::popMatrices();
         }
-        myFbo.unbindFramebuffer();
+        myFbo->unbindFramebuffer();
         
-        ci::gl::setViewport(viewport);
+        ci::gl::viewport(viewport);
         
     }
     
@@ -79,7 +79,7 @@ namespace hrfm{ namespace matrix{
             it++;
         }
         
-        myFbo.bindFramebuffer();
+        myFbo->bindFramebuffer();
         gl::pushMatrices();
         gl::setMatricesWindow(ci::app::getWindowSize(),false);
         
@@ -129,7 +129,7 @@ namespace hrfm{ namespace matrix{
         }
         
         gl::popMatrices();
-        myFbo.unbindFramebuffer();
+        myFbo->unbindFramebuffer();
         
     }
     

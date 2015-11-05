@@ -6,10 +6,10 @@ using namespace ci;
 namespace hrfm{ namespace gl{
     
     ExFbo::ExFbo( int width, int height, ci::CameraPersp * camera, ci::gl::Fbo::Format format ){
-        _fbo = new ci::gl::Fbo( width, height, format );
+        _fbo = ci::gl::Fbo::create( width, height, format );
     }
     
-    ci::gl::Fbo * ExFbo::getFboPtr(){
+    ci::gl::FboRef ExFbo::getFbo(){
         return _fbo;
     }
     
@@ -49,21 +49,14 @@ namespace hrfm{ namespace gl{
     
     ExFbo * ExFbo::applyFilter( FilterBase * filter, bool clear ){
         if( filter->isEnabled() ){
-            ci::gl::Texture tex = _getTextureClone();
+            ci::gl::TextureRef tex = _getTextureClone();
             beginOffscreen(clear);
-            filter->affect( &tex, getSize(), getSize(), getBounds() );
+            filter->affect( tex, getSize(), getSize(), getBounds() );
         }
         return this;
     }
     
-    ExFbo * ExFbo::applyFilter( FilterBase * filter, ci::gl::Texture & srcTexture, bool clear ){
-        if( filter->isEnabled() ){
-            beginOffscreen(clear);
-            filter->affect( &srcTexture, getSize(), getSize(), getBounds() );
-        }
-        return this;
-    }
-    ExFbo * ExFbo::applyFilter( FilterBase * filter, ci::gl::Texture * srcTexture, bool clear ){
+    ExFbo * ExFbo::applyFilter( FilterBase * filter, ci::gl::TextureRef srcTexture, bool clear ){
         if( filter->isEnabled() ){
             beginOffscreen(clear);
             filter->affect( srcTexture, getSize(), getSize(), getBounds() );
@@ -73,15 +66,15 @@ namespace hrfm{ namespace gl{
     
     // !protected
     
-    ci::gl::Texture ExFbo::_getTextureClone(){
-        ci::gl::Fbo * fbo = hrfm::gl::SiFboFactory::getInstance().create(_fbo->getWidth(),_fbo->getHeight());
+    ci::gl::TextureRef ExFbo::_getTextureClone(){
+        ci::gl::FboRef fbo = hrfm::gl::SiFboFactory::getInstance().create(_fbo->getWidth(),_fbo->getHeight());
         _beginOffscreen(fbo,true);
             ci::gl::draw(_fbo->getColorTexture());
         _endOffscreen();
         return fbo->getColorTexture();
     }
     
-    void ExFbo::_beginOffscreen( ci::gl::Fbo * fbo, bool clear, bool useAspect ){
+    void ExFbo::_beginOffscreen( ci::gl::FboRef fbo, bool clear, bool useAspect ){
         if( _bindedFbo != NULL && _bindedFbo != fbo ){
             _endOffscreen();
         }
@@ -91,10 +84,10 @@ namespace hrfm{ namespace gl{
             ci::gl::pushMatrices();
             if( useAspect ){
                 // 特に使っていない
-                ci::gl::setViewport( (Area)getAspectBounds() );
+                ci::gl::viewport( ivec2(0), getSize() );
                 ci::gl::setMatricesWindow( getAspectSize(), false );
             }else{
-                ci::gl::setViewport( (Area)getBounds() );
+                ci::gl::viewport( ivec2(0), getSize() );
                 ci::gl::setMatricesWindow( getSize(), false );
             }
             if( clear == true){
@@ -108,7 +101,7 @@ namespace hrfm{ namespace gl{
         if( _bindedFbo != NULL ){
             ci::gl::popMatrices();
             _bindedFbo->unbindFramebuffer();
-            ci::gl::setViewport(mTmpViewport);
+            ci::gl::viewport(mTmpViewport);
             _bindedFbo = NULL;
         }
     }

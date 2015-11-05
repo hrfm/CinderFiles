@@ -8,8 +8,8 @@ namespace hrfm { namespace gl{ namespace filter{
     }
     
     void ScrollFilter::prepare(){
-        mShader.uniform( "scrollX", _scrollX );
-        mShader.uniform( "scrollY", _scrollY );
+        mShader->uniform( "scrollX", _scrollX );
+        mShader->uniform( "scrollY", _scrollY );
     }
     
 }}}

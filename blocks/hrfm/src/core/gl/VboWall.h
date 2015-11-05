@@ -15,13 +15,13 @@ namespace hrfm{ namespace gl{
         virtual void setup( ivec2 segments, bool curve = false, float noise = false );
         virtual void clear();
         
-        void setTexture( ci::gl::Texture * tex );
+        void setTexture( ci::gl::TextureRef tex );
         
     protected:
         
         virtual void _update( ci::CameraPersp * camera );
         virtual void _draw( ci::CameraPersp * camera );
-        ci::gl::Texture * _texture = NULL;
+        ci::gl::TextureRef _texture = NULL;
         
     };
     

@@ -32,7 +32,8 @@ namespace hrfm{ namespace cv{
     
     void Delaunay::insertPoint( ci::gl::TextureRef texture ){
         
-        //!!!!!!! _img = ::cv::Mat( toOcv( texture, CV_8UC3 ) );
+        // _img = ::cv::Mat( toOcv( texture, CV_8UC3 ) );
+        // !!!!!!
         
         // 特徴点抽出の実行
         vector<::cv::KeyPoint> keypoint;

@@ -19,7 +19,7 @@ namespace hrfm{ namespace gl{
     
     public:
         
-        VboNode( ci::gl::VboMesh * mesh = NULL ):hrfm::events::EventDispatcher(){
+        VboNode( ci::gl::VboMeshRef mesh = NULL ):hrfm::events::EventDispatcher(){
             position = ci::vec3(0.0f,0.0f,0.0f);
             scale    = ci::vec3(1.0f,1.0f,1.0f);
             rotation = mat4();
@@ -49,9 +49,9 @@ namespace hrfm{ namespace gl{
         //virtual void setMaterial( ci::gl::Material * material );
         //virtual ci::gl::Material * getMaterial();
         
-        virtual void addTexture( ci::gl::Texture * tex );
-        virtual void removeTexture( ci::gl::Texture * tex );
-        virtual void setTextureAt( int index, ci::gl::Texture * tex );
+        virtual void addTexture( ci::gl::TextureRef tex );
+        virtual void removeTexture( ci::gl::TextureRef tex );
+        virtual void setTextureAt( int index, ci::gl::TextureRef tex );
         
         virtual int numChildren();
         
@@ -80,12 +80,12 @@ namespace hrfm{ namespace gl{
         ci::mat4 rotation;
         bool  visible;
         ci::ColorA colorA;
-        ci::gl::VboMesh * mesh;
+        ci::gl::VboMeshRef mesh;
         // --------------------------
         
     protected:
         
-        virtual void _appendVertex( ci::TriMesh & m, vec3 v0, vec3 v1, vec3 v2 );
+        virtual void _appendVertex( ci::TriMeshRef m, vec3 v0, vec3 v1, vec3 v2 );
         
         virtual void _update( ci::CameraPersp * camera );
         virtual void _draw( ci::CameraPersp * camera );
@@ -107,8 +107,8 @@ namespace hrfm{ namespace gl{
         hrfm::gl::ShaderBase * _shader = NULL;
         //ci::gl::Material * _material = NULL;
         
-        vector<ci::gl::Texture*> _textures;
-        bool eraseTextureFromList( ci::gl::Texture * tex );
+        vector<ci::gl::TextureRef> _textures;
+        bool eraseTextureFromList( ci::gl::TextureRef tex );
         
         VboStage * _stage = NULL;
         virtual void _setStage( VboStage * node );

@@ -17,7 +17,7 @@ namespace hrfm{ namespace cv{
         FaceDetect( ivec2 textureSize = ivec2( 320, 240 ), int calcScale = 3 );
         ~FaceDetect();
         
-        void update( Surface surface );
+        void update( Surface8uRef surface );
         void setCalcScale( int scale );
         vector<DetectRect> getFaces();
         
@@ -31,7 +31,7 @@ namespace hrfm{ namespace cv{
         
         std::thread mThread;
         double recentSec;
-        Surface mCloneSurface;
+        Surface8uRef mCloneSurface = NULL;
         ::cv::CascadeClassifier	mFaceCascade, mEyeCascade;
         vector<DetectRect>      mFaces, mEyes;
         

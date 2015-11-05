@@ -1,3 +1,5 @@
+#version 150
+
 varying vec4 vColor;
 varying vec3 normal;
 uniform float time;

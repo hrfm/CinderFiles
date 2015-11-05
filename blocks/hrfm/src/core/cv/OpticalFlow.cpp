@@ -21,23 +21,23 @@ namespace hrfm{ namespace cv{
     
     void OpticalFlow::update( gl::TextureRef texture, float bias, float frameRate ){
         
-        //!!!!!! Area viewport = ci::gl::getViewport();
+        std::pair<ivec2,ivec2> viewport = ci::gl::getViewport();
         
         mOpticalFlowFBO->bindFramebuffer();
         {
             gl::pushMatrices();
-            //!!!!!! ci::gl::setViewport( mOpticalFlowFBO->getBounds() );
+            ci::gl::viewport( ivec2(0), mOpticalFlowFBO->getSize() );
             ci::gl::setMatricesWindow( mOpticalFlowFBO->getWidth(), mOpticalFlowBounds.getHeight(), false );
             {
                 gl::clear();
                 gl::color(1.0f,1.0f,1.0f);
-                //!!!!!!!! gl::draw( texture, mOpticalFlowBounds );
+                gl::draw( texture, mOpticalFlowBounds );
             }
             gl::popMatrices();
         }
         mOpticalFlowFBO->unbindFramebuffer();
         
-        //!!!!!!!! ci::gl::setViewport(viewport);
+        ci::gl::viewport(viewport);
         
         /* !!!!!!!!!!
         if( 1.0 / frameRate < ci::app::getElapsedSeconds() - recentTime ){

@@ -15,7 +15,7 @@ namespace hrfm{ namespace gl{
         
         ~ExFbo(){};
         
-        ci::gl::FboRef getFboRef();
+        ci::gl::FboRef getFbo();
         
         ci::vec2 getSize();
         ci::Rectf getBounds();
@@ -42,7 +42,7 @@ namespace hrfm{ namespace gl{
         
         bool      isBeginOffscreen;
         bool      isBeginFilter;
-        ci::Area  mTmpViewport;
+        std::pair<ivec2,ivec2> mTmpViewport;
         
     };
     

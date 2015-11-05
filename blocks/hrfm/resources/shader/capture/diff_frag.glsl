@@ -1,5 +1,8 @@
 #version 120
 
+varying vec4 vColor;
+varying vec3 normal;
+
 // Textures
 uniform sampler2D tex0;
 uniform sampler2D tex1;

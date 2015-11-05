@@ -24,7 +24,7 @@ namespace hrfm{ namespace display{
         _tmpViewport = ci::gl::getViewport();
         fbo->bindFramebuffer();
         ci::gl::pushMatrices();
-        ci::gl::setViewport( fbo->getBounds() );
+        ci::gl::viewport( ci::ivec2(0), fbo->getSize() );
         ci::gl::setMatricesWindow( fbo->getWidth(), fbo->getHeight(), false );
     }
     
@@ -42,7 +42,7 @@ namespace hrfm{ namespace display{
     void FboDisplayNode::_unbindAndPopMatrices( ci::gl::FboRef fbo ){
         ci::gl::popMatrices();
         fbo->unbindFramebuffer();
-        ci::gl::setViewport( _tmpViewport );
+        ci::gl::viewport( _tmpViewport );
     }
     
 }}

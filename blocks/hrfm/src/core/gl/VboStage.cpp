@@ -56,7 +56,7 @@ namespace hrfm{ namespace gl{
         
         //!!!!!!! vector<ci::gl::Light*>::iterator it, end;
         
-        //!!!!!!! Area viewport = ci::gl::getViewport();
+        std::pair<ivec2,ivec2> viewport = ci::gl::getViewport();
         
         ci::gl::enableDepthWrite();
         ci::gl::enableDepthRead();
@@ -69,7 +69,7 @@ namespace hrfm{ namespace gl{
                 ci::gl::pushMatrices();
                 {
                     
-                    //!!!!!!! ci::gl::setViewport( (Area)_fbo->getBounds() );
+                    ci::gl::viewport( ivec2(0), _fbo->getSize() );
                     ci::gl::setMatrices( *camera );
                     /*!!!!!!!
                     if( 0 < _lights.size() ){
@@ -99,7 +99,7 @@ namespace hrfm{ namespace gl{
         ci::gl::disableDepthRead();
         ci::gl::disableDepthWrite();
         
-        //!!!!!! ci::gl::setViewport(viewport);
+        ci::gl::viewport(viewport);
         
     }
     

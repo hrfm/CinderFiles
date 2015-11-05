@@ -18,7 +18,7 @@ namespace hrfm { namespace gl{
         
         virtual void prepare();
         
-        virtual void bindTexture( const ci::gl::Texture & current, const ci::gl::Texture & next );
+        virtual void bindTexture( const ci::gl::TextureRef current, const ci::gl::TextureRef next );
         
         virtual void affect( float progress );
         

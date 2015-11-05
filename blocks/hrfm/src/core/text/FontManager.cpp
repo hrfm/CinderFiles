@@ -121,9 +121,9 @@ namespace hrfm { namespace text{
     }
     
     void FontManager::draw( string text, Rectf bounds, float r, float g, float b ){
-        gl::color(0.0f,0.0f,0.0f);
-        gl::drawSolidRect( bounds );
-        gl::color( r, g, b );
+        ci::gl::color(0.0f,0.0f,0.0f);
+        ci::gl::drawSolidRect( bounds );
+        ci::gl::color( r, g, b );
         try{
             _textureFontRef->drawString( text, bounds );
             //vec2(bounds.x1+(fontSize*(1/3)),bounds.y1+(fontSize*0.8)));

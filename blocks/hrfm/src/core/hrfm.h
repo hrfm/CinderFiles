@@ -3,7 +3,6 @@
 // --- hrfm::display
 
 #include "DisplayNode.h"
-#include "FboDisplayNode.h"
 #include "TextureNode.h"
 #include "ImageTexture.h"
 #include "MovieTexture.h"
