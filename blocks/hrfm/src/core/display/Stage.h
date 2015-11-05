@@ -17,7 +17,7 @@ namespace hrfm{ namespace display{
         virtual void setAutoClear( bool flag = true );
         virtual void draw(bool offscreen = false);
         virtual void drawOffscreen();
-        ci::gl::Texture & getTexture();
+        ci::gl::TextureRef getTexture();
     private:
         bool _autoClear = true;
         ci::gl::FboRef _fbo;

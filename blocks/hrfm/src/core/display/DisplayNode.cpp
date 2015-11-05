@@ -40,93 +40,21 @@ namespace hrfm{ namespace display{
         return Rectf( 0, 0, width, height );
     }
     
-    vec2 DisplayNode::getAbsolutePosition(){
-        vec2 v = vec2( x, y );
-        DisplayNode * p = getParent();
-        while( p != NULL ){
-            v.x += p->x;
-            v.y += p->y;
-            p = p->getParent();
+    ci::vec2 DisplayNode::getAbsolutePosition(){
+        return this->getGlobalPosition();
+    }
+    
+    ci::vec2 DisplayNode::getGlobalPosition(){
+        ci::vec2 pos( x, y );
+        if( hasParent() ){
+            return pos + _parent->getGlobalPosition();
+        }else{
+            return pos;
         }
-        return v;
     }
     
     int DisplayNode::numChildren(){
         return children.size();
-    }
-    
-    DisplayNode * DisplayNode::addChild( DisplayNode * child ){
-        
-        eraseFromChildren(child);
-        
-        if( hasStage() ){
-            child->_setStage(_stage);
-        }
-        child->_setParent(this);
-        
-        children.push_back(child);
-        
-        return child;
-        
-    }
-    
-    DisplayNode * DisplayNode::removeChild( DisplayNode * child ){
-        
-        if( eraseFromChildren(child) ){
-            child->_unsetStage();
-            child->_unsetParent();
-        }
-        
-        return child;
-        
-    }
-    
-    DisplayNode * DisplayNode::addChildAt( DisplayNode * child, int index ){
-        
-        if( numChildren() < index || index < 0 ){
-            
-            throw;
-            
-        }else if( numChildren() == index ){
-            
-            return addChild(child);
-            
-        }else{
-            
-            std::vector<DisplayNode*>::iterator itr = children.begin() + index;
-            
-            if( *itr != child ){
-                eraseFromChildren(child);
-                children.insert(itr, child);
-            }
-            
-            return child;
-            
-        }
-        
-    }
-    
-    DisplayNode * DisplayNode::removeChildAt( int index ){
-        
-        if( numChildren() <= index || index < 0 ){
-            
-            throw;
-            
-        }else{
-            
-            std::vector<DisplayNode*>::iterator itr = children.begin() + index;
-            children.erase(itr);
-            return *itr;
-            
-        }
-        
-    }
-    
-    DisplayNode * DisplayNode::removeOwn(){
-        if( hasParent() ){
-            getParent()->removeChild(this);
-        }
-        return this;
     }
     
     bool DisplayNode::hasChildOf( DisplayNode * child ){
@@ -139,21 +67,59 @@ namespace hrfm{ namespace display{
         return true;
     }
     
+    DisplayNode * DisplayNode::addChild( DisplayNode * child ){
+        eraseFromChildren(child);
+        if( hasStage() ){ child->_setStage(_stage); }
+        child->_setParent(this);
+        children.push_back(child);
+        return child;
+    }
+    
+    DisplayNode * DisplayNode::addChildAt( DisplayNode * child, int index ){
+        if( numChildren() < index || index < 0 ){
+            throw;
+        }else if( numChildren() == index ){
+            return addChild(child);
+        }
+        std::vector<DisplayNode*>::iterator itr = children.begin() + index;
+        if( *itr != child ){
+            eraseFromChildren(child);
+            children.insert(itr, child);
+        }
+        return child;
+    }
+    
+    DisplayNode * DisplayNode::removeChild( DisplayNode * child ){
+        if( eraseFromChildren(child) ){
+            child->_unsetStage();
+            child->_unsetParent();
+        }
+        return child;
+    }
+    
+    DisplayNode * DisplayNode::removeChildAt( int index ){
+        if( numChildren() <= index || index < 0 ){ throw; }
+        std::vector<DisplayNode*>::iterator itr = children.begin() + index;
+        children.erase(itr);
+        return *itr;
+    }
+    
+    DisplayNode * DisplayNode::removeOwn(){
+        if( hasParent() ){ getParent()->removeChild(this); }
+        return this;
+    }
+    
     void DisplayNode::update(){
-        
         if( visible == false || colorA.a <= 0.0f ){
             return;
         }
-        
         if( _beforeWidth != width || _beforeHeight != height ){
             dispatchEvent( new hrfm::events::Event( hrfm::events::Event::RESIZE ) );
             _beforeWidth  = width;
             _beforeHeight = height;
         }
-        
         _update();
         _updateChildren();
-        
     }
     
     void DisplayNode::draw( ColorA * drawColor ){
@@ -173,8 +139,8 @@ namespace hrfm{ namespace display{
             ci::gl::disableAlphaBlending();
         }
         ci::gl::pushMatrices();
-        ci::gl::translate( x, y );
         {
+            ci::gl::translate( x, y );
             ci::gl::color( c );
             _draw();
             _drawChildren( &c );
@@ -201,10 +167,6 @@ namespace hrfm{ namespace display{
     
     //! protected:
     
-    void DisplayNode::_update(){}
-    
-    void DisplayNode::_draw(){};
-    
     inline bool DisplayNode::eraseFromChildren( DisplayNode * child ){
         auto itr = std::remove_if(children.begin(),children.end(),[child](DisplayNode* d)->bool{
             return d == child;
@@ -216,6 +178,7 @@ namespace hrfm{ namespace display{
         return true;
     }
     
+    void DisplayNode::_update(){}
     void DisplayNode::_updateChildren(){
         
         if( numChildren() == 0 ) return;
@@ -229,6 +192,7 @@ namespace hrfm{ namespace display{
         
     }
     
+    void DisplayNode::_draw(){};
     void DisplayNode::_drawChildren( ColorA * drawColor ){
         if( numChildren() == 0 ) return;
         std::vector<DisplayNode*>::iterator it, end;
@@ -238,17 +202,6 @@ namespace hrfm{ namespace display{
             }
         }
     }
-    
-    ci::vec2 DisplayNode::getGlobalPosition(){
-        vec2 pos( x, y );
-        if( hasParent() ){
-            return pos + _parent->getGlobalPosition();
-        }else{
-            return pos;
-        }
-    }
-    
-    //! protected
     
     void DisplayNode::_setParent( DisplayNode * node ){
         if( !hasParent() ){
@@ -269,43 +222,35 @@ namespace hrfm{ namespace display{
     }
     
     void DisplayNode::_setStage( Stage * stage ){
-        
         if( !hasStage() ){
             _stage = stage;
             dispatchEvent( new hrfm::events::Event(hrfm::events::Event::ADDED_TO_STAGE) );
         }else{
             _stage = stage;
         }
-        
         if( numChildren() == 0 ) return;
-        
         std::vector<DisplayNode*>::iterator it, end;
         for( it = children.begin(), end = children.end(); it!=end; it++ ){
             if( *it!=nullptr ){
                 (*it)->_setStage( stage );
             }
         }
-        
     }
     
     void DisplayNode::_unsetStage(){
-        
         if( hasStage() ){
             _stage = NULL;
             dispatchEvent( new hrfm::events::Event(hrfm::events::Event::REMOVED_FROM_STAGE) );
         }else{
             _stage = NULL;
         }
-        
         if( numChildren() == 0 ) return;
-        
         std::vector<DisplayNode*>::iterator it, end;
         for( it = children.begin(), end = children.end(); it!=end; it++ ){
             if( *it!=nullptr ){
                 (*it)->_unsetStage();
             }
         }
-        
     }
     
 }}

@@ -15,19 +15,19 @@ namespace hrfm{ namespace display{
     void Stage::setAutoClear( bool flag ){
         _autoClear = flag;
         if( _autoClear == false ){
-            _fbo.bindFramebuffer();
+            _fbo->bindFramebuffer();
             ci::gl::clear();
-            _fbo.unbindFramebuffer();
+            _fbo->unbindFramebuffer();
         }
     }
     
     void Stage::draw( bool offscreen ){
         
-        Area viewport = ci::gl::getViewport();
+        std::pair<ivec2,ivec2> viewport = ci::gl::getViewport();
         
         ci::gl::enableAlphaBlending();
         
-        _fbo.bindFramebuffer();
+        _fbo->bindFramebuffer();
         {
             if( _autoClear == true ){
                 ci::gl::clear();
@@ -35,7 +35,7 @@ namespace hrfm{ namespace display{
             ci::gl::color( colorA );
             ci::gl::pushMatrices();
             {
-                ci::gl::setViewport( (Area)getBounds() );
+                ci::gl::viewport( ivec2(0), getSize() );
                 ci::gl::setMatricesWindow( width, height, false );
                 {
                     _draw();
@@ -44,16 +44,16 @@ namespace hrfm{ namespace display{
             }
             ci::gl::popMatrices();
         }
-        _fbo.unbindFramebuffer();
+        _fbo->unbindFramebuffer();
         
         if( !offscreen ){
             ci::gl::translate( x, y );
-            gl::draw( _fbo.getTexture(), getDrawBounds() );
+            gl::draw( getTexture(), getDrawBounds() );
         }
         
         ci::gl::disableAlphaBlending();
         
-        ci::gl::setViewport(viewport);
+        ci::gl::viewport(viewport);
         
     }
     
@@ -61,14 +61,14 @@ namespace hrfm{ namespace display{
         draw(true);
     }
     
-    ci::gl::Texture & Stage::getTexture(){
-        return _fbo.getTexture();
+    ci::gl::TextureRef Stage::getTexture(){
+        return _fbo->getColorTexture();
     }
     
     void Stage::_onResize( hrfm::events::Event * event ){
         cout << "_onResize" << endl;
         ci::gl::Fbo::Format format;
-        _fbo = ci::gl::Fbo( width, height, format );
+        _fbo = ci::gl::Fbo::create( width, height, format );
     }
     
 }}
