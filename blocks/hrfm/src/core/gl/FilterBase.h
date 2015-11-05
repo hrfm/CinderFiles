@@ -25,10 +25,10 @@ namespace hrfm { namespace gl{
         FilterBase( ivec2 size = ivec2(256,256) ):ShaderBase(){
             setup( size );
         };
-        FilterBase( string fragmentShader, ivec2 size = ivec2(256,256) ):ShaderBase(fragmentShader){
+        FilterBase( fs::path fragment, ivec2 size = ivec2(256,256) ):ShaderBase(fragment){
             setup( size );
         };
-        FilterBase( string fragmentShader, string vertexShader, ivec2 size = ivec2(256,256) ):ShaderBase(fragmentShader,vertexShader){
+        FilterBase( fs::path fragment, fs::path vertex, ivec2 size = ivec2(256,256) ):ShaderBase(fragment,vertex){
             setup( size );
         };
         

@@ -21,38 +21,48 @@ namespace hrfm { namespace gl{
         
     public:
         
+        // --------------------------------------------------------------------------------------------
+        
         ShaderBase();
-        ShaderBase( string fragmentShader );
-        ShaderBase( string fragmentShader, string vertexShader );
+        ShaderBase( ci::gl::GlslProgRef shader );
+        ShaderBase( fs::path fragment, fs::path vertex="simple_vert.glsl", fs::path geometory="", fs::path tessEval="", fs::path tessCtrl="" );
         
-        virtual void begin();
-        virtual void end();
+        ci::gl::GlslProgRef getGlslProg();
         
-        ci::gl::GlslProgRef getGlslProgRef();
+        virtual void  setEnabled(bool enabled);
+        virtual bool  isEnabled();
         
-        virtual void setStrength( float strength );
+        virtual void  setStrength( float strength );
         virtual float getStrength();
-        
-        virtual bool isEnabled();
-        virtual void setEnabled(bool enabled);
-        
-    protected:
-        
-        void initShader( string fragmentShader = "simple_frag.glsl", string vertexShader = "simple_vert.glsl");
-        virtual DataSourceRef getVertexShader();
-        virtual DataSourceRef getFragmentShader();
         
         // prepare shader, texture, and more. before drawSolidRect to FrameBuffer.
         virtual void prepare();
-        
         // clear shader, texture, and more. after drawSolidRect to FrameBuffer.
         virtual void clear();
         
-        float _strength = 1.0;
-        bool _enabled   = true;
-        string mFragmentShader;
-        string mVertexShader;
+    protected:
+        
+        // --------------------------------------------------------------------------------------------
+        
         ci::gl::GlslProgRef mShader;
+        float _strength = 1.0;
+        bool  _enabled   = true;
+        
+        // --------------------------------------------------------------------------------------------
+        
+        fs::path mFragmentPath;
+        fs::path mVertexPath;
+        fs::path mGeometoryPath;
+        fs::path mTessEvalPath;
+        fs::path mTessCtrlPath;
+        
+        virtual void initShader( fs::path fragment, fs::path vertex, fs::path geometory, fs::path tessEval, fs::path tessCtrl );
+        virtual std::string loadShader( fs::path );
+        virtual std::string getVertexShader();
+        virtual std::string getFragmentShader();
+        virtual std::string getGeometoryShader();
+        virtual std::string getTessEvalShader();
+        virtual std::string getTessCtrlShader();
         
     private:
         

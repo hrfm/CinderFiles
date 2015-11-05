@@ -3,6 +3,6 @@
 namespace hrfm { namespace gl{ namespace filter{
     class AnalogNoiseFilter : public FilterBase{
     public:
-        AnalogNoiseFilter():FilterBase("AnalogNoiseFilter.glsl"){};
+        AnalogNoiseFilter():FilterBase(fs::path("AnalogNoiseFilter.glsl")){};
     };
 }}}

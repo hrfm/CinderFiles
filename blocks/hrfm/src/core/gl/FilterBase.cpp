@@ -26,8 +26,9 @@ namespace hrfm { namespace gl{
             return;
         }
         
-        tex->bind(0);
-        begin();
+        ci::gl::ScopedGlslProg    scpGp( mShader );
+        ci::gl::ScopedTextureBind scpTb( tex, 0 );
+        prepare();
         {
             mShader->uniform( "tex"       , 0 );
             mShader->uniform( "time"      , (float)ci::app::getElapsedSeconds() );
@@ -35,8 +36,7 @@ namespace hrfm { namespace gl{
             mShader->uniform( "resolution", resolution );
             ci::gl::drawSolidRect( drawRect );
         }
-        end();
-        tex->unbind();
+        clear();
         
     }
     
@@ -46,27 +46,15 @@ namespace hrfm { namespace gl{
             return tex;
         }
         
-        Area viewport = ci::gl::getViewport();
+        ci::gl::ScopedFramebuffer scpFbo( mFbo );
+        ci::gl::ScopedViewport    scpVp( ivec2(0), mFbo->getSize() );
         
-        vec2 windowSize   = mFbo.getSize();
-        vec2 resolution   = vec2( mFbo.getWidth(), mFbo.getHeight() );
-        
-        mFbo.bindFramebuffer();
+        ci::gl::pushMatrices();
         {
-            ci::gl::pushMatrices();
-            {
-                ci::gl::setViewport( mFbo.getBounds() );
-                ci::gl::setMatricesWindow( mAspect, false );
-                //--
-                //ci::gl::setViewport( mFbo.getBounds() );
-                //ci::gl::setMatricesWindow( mFbo.getWidth(), mFbo.getHeight(), false );
-                affect( &tex, windowSize, resolution, Rectf( 0, 0, mAspect.x, mAspect.y ) );
-            }
-            ci::gl::popMatrices();
+            ci::gl::setMatricesWindow( ci::app::toPixels( mFbo->getSize() ) );
+            affect( tex, mFbo->getSize(), mFbo->getSize(), Rectf( 0, 0, mAspect.x, mAspect.y ) );
         }
-        mFbo.unbindFramebuffer();
-        
-        ci::gl::setViewport( viewport );
+        ci::gl::popMatrices();
         
         return mFbo->getColorTexture();
         
@@ -76,29 +64,13 @@ namespace hrfm { namespace gl{
         ci::gl::draw( getTexture(), bounds );
     }
     
-    ci::gl::Texture FilterBase::getTexture(){
-        return mFbo.getTexture();
-    }
+    ci::gl::TextureRef FilterBase::getTexture(){ return mFbo->getColorTexture(); }
+    void FilterBase::bindTexture( int index ){ mFbo->bindTexture( index ); }
+    void FilterBase::unbindTexture(){ mFbo->unbindTexture(); }
     
-    void FilterBase::bindTexture( int index ){
-        mFbo.bindTexture( index );
-    }
-    
-    void FilterBase::unbindTexture(){
-        mFbo.unbindTexture();
-    }
-    
-    int FilterBase::getWidth(){
-        return mFbo.getWidth();
-    }
-    
-    int FilterBase::getHeight(){
-        return mFbo.getHeight();
-    }
-    
-    Rectf FilterBase::getBounds(){
-        return mFbo.getBounds();
-    }
+    int   FilterBase::getWidth() { return mFbo->getWidth(); }
+    int   FilterBase::getHeight(){ return mFbo->getHeight(); }
+    Rectf FilterBase::getBounds(){ return mFbo->getBounds(); }
     
     // protected
     

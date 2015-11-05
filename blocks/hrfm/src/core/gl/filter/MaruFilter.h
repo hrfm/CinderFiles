@@ -11,7 +11,7 @@ namespace hrfm{ namespace gl{ namespace filter{
     
     public:
         
-        MaruFilter( ci::vec2 mtx = ci::vec2( 320, 180 ) ):FilterBase("MaruFilter.glsl"){
+        MaruFilter( ci::vec2 mtx = ci::vec2( 320, 180 ) ):FilterBase(fs::path("MaruFilter.glsl")){
             _mtx = mtx;
         };
         

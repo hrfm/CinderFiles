@@ -2,73 +2,37 @@
 
 namespace hrfm { namespace gl{
     
-    // --- Event for OSC. ---
+    // ----------------------------------------------------------------------------------------------
+    // public
     
     ShaderBase::ShaderBase(){
-        initShader();
-        mShader = ShaderFactory::create( getVertexShader(), getFragmentShader() );
+        mShader = ci::gl::getStockShader( ci::gl::ShaderDef().color() );
     }
-    ShaderBase::ShaderBase( string fragmentShader ){
-        initShader( fragmentShader );
-        mShader = ShaderFactory::create( getVertexShader(), getFragmentShader() );
+    ShaderBase::ShaderBase( ci::gl::GlslProgRef shader ){
+        mShader = shader;
     };
-    ShaderBase::ShaderBase( string fragmentShader, string vertexShader ){
-        initShader( fragmentShader, vertexShader );
-        mShader = ShaderFactory::create( getVertexShader(), getFragmentShader() );
+    ShaderBase::ShaderBase( fs::path fragment, fs::path vertex, fs::path geometory, fs::path tessEval, fs::path tessCtrl ){
+        initShader( fragment, vertex, geometory, tessEval, tessCtrl );
     };
     
-    void ShaderBase::begin(){
-        if( isEnabled() ){
-            mShader->bind();
-            prepare();
-        }
-    }
-    
-    void ShaderBase::end(){
-        if( isEnabled() ){
-            clear();
-            //!!!!!!!! mShader->unbind();
-        }
-    }
-    
-    ci::gl::GlslProgRef ShaderBase::getGlslProgRef(){
+    ci::gl::GlslProgRef ShaderBase::getGlslProg(){
         return mShader;
-    }
-    
-    void ShaderBase::setStrength( float strength ){
-        _strength = strength;
-    }
-    float ShaderBase::getStrength(){
-        return _strength;
-    }
-
-    bool ShaderBase::isEnabled(){
-        return _enabled && 0.0 < _strength;
     }
     
     void ShaderBase::setEnabled(bool enabled){
         _enabled = enabled;
     }
-    
-    // protected
-    
-    void ShaderBase::initShader(string fragmentShader, string vertexShader ){
-        mFragmentShader = fragmentShader;
-        mVertexShader   = vertexShader;
-        cout << "initShader > " << mFragmentShader << ":" << mVertexShader << endl;
+    bool ShaderBase::isEnabled(){
+        return _enabled && 0.0 < _strength;
     }
     
-    DataSourceRef ShaderBase::getVertexShader(){
-        return DataLoader::load(mVertexShader);
-        //return ci::app::loadResource(this->_vertexShader);
+    void  ShaderBase::setStrength( float strength ){
+        _strength = strength;
+    }
+    float ShaderBase::getStrength(){
+        return _strength;
     }
     
-    DataSourceRef ShaderBase::getFragmentShader(){
-        //cout << "getFragmentShader : " << mFragmentShader << endl;
-        return DataLoader::load(mFragmentShader);
-        //return ci::app::loadResource(this->_fragmentShader);
-    }
-        
     // prepare shader, texture, and more. before drawSolidRect to FrameBuffer.
     void ShaderBase::prepare(){
         mShader->uniform("time",(float)ci::app::getElapsedSeconds());
@@ -77,5 +41,29 @@ namespace hrfm { namespace gl{
     
     // clear shader, texture, and more. after drawSolidRect to FrameBuffer.
     void ShaderBase::clear(){}
+    
+    // ----------------------------------------------------------------------------------------------
+    // protected
+    
+    void ShaderBase::initShader( fs::path fragment, fs::path vertex, fs::path geometory, fs::path tessEval, fs::path tessCtrl ){
+        mVertexPath    = vertex;
+        mFragmentPath  = fragment;
+        mGeometoryPath = geometory;
+        mTessEvalPath  = tessEval;
+        mTessCtrlPath  = tessCtrl;
+        mShader = ShaderFactory::create( getVertexShader(), getFragmentShader(), getGeometoryShader(), getTessEvalShader(), getTessCtrlShader() );
+    }
+    std::string loadShader( fs::path srcPath ){
+        if( srcPath != "" ){
+            return ci::loadString( DataLoader::load(srcPath) );
+        }else{
+            return std::string();
+        }
+    }
+    std::string ShaderBase::getVertexShader()   { return this->loadShader( mVertexPath    ); }
+    std::string ShaderBase::getFragmentShader() { return this->loadShader( mFragmentPath  ); }
+    std::string ShaderBase::getGeometoryShader(){ return this->loadShader( mGeometoryPath ); }
+    std::string ShaderBase::getTessEvalShader() { return this->loadShader( mTessEvalPath  ); }
+    std::string ShaderBase::getTessCtrlShader() { return this->loadShader( mTessCtrlPath  ); }
     
 }}

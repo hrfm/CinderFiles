@@ -3,6 +3,6 @@
 namespace hrfm { namespace gl{ namespace filter{
     class EdgeFilter : public FilterBase{
     public:
-        EdgeFilter():FilterBase("EdgeFilter.glsl"){};
+        EdgeFilter():FilterBase(fs::path("EdgeFilter.glsl")){};
     };
 }}}

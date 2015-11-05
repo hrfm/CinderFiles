@@ -3,6 +3,6 @@
 namespace hrfm { namespace gl{ namespace filter{
     class ColorNoiseFilter : public FilterBase{
     public:
-        ColorNoiseFilter():FilterBase("ColorNoiseFilter.glsl"){};
+        ColorNoiseFilter():FilterBase(fs::path("ColorNoiseFilter.glsl")){};
     };
 }}}

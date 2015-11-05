@@ -11,8 +11,8 @@ namespace hrfm { namespace gl{ namespace filter{
     
     void BlurFilter::prepare(){
         FilterBase::prepare();
-        mShader.uniform( "sample_offset", mSampleOffset );
-        mShader.uniform( "attenuation"  , mAttenuation );
+        mShader->uniform( "sample_offset", mSampleOffset );
+        mShader->uniform( "attenuation"  , mAttenuation );
     }
     
     void BlurFilter::clear(){

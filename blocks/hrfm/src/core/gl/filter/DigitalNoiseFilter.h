@@ -9,7 +9,7 @@ namespace hrfm { namespace gl{ namespace filter{
     
     class DigitalNoiseFilter : public FilterBase{
     public:
-        DigitalNoiseFilter():FilterBase("DigitalNoiseFilter.glsl"){
+        DigitalNoiseFilter():FilterBase(fs::path("DigitalNoiseFilter.glsl")){
             isVertical = 0;
         };
         int isVertical;

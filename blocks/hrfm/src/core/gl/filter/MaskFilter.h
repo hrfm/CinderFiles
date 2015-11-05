@@ -1,21 +1,17 @@
 #pragma once
-
 #include "FilterBase.h"
-#include "DataLoader.h"
-
 using namespace hrfm::utils;
-
 namespace hrfm { namespace gl{ namespace filter{
     
     class MaskFilter : public FilterBase{
         
     public:
-        MaskFilter( ci::gl::Texture * tex = NULL ):FilterBase("MaskFilter.glsl"){
+        MaskFilter( ci::gl::TextureRef tex = NULL ):FilterBase(fs::path("MaskFilter.glsl")){
             if( tex != NULL ){
                 setTexture( tex );
             }
         };
-        void setTexture( ci::gl::Texture * tex ){
+        void setTexture( ci::gl::TextureRef tex ){
             _tex = tex;
         };
     protected:
@@ -31,7 +27,7 @@ namespace hrfm { namespace gl{ namespace filter{
             _tex->unbind();
         }
         
-        ci::gl::Texture * _tex;
+        ci::gl::TextureRef _tex;
         
     };
     
