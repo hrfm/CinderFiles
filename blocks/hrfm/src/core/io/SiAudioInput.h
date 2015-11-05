@@ -2,11 +2,12 @@
 
 #include "Singleton.h"
 
+#include "cinder/app/App.h"
+#include "cinder/gl/gl.h"
 #include "cinder/gl/Fbo.h"
 #include "cinder/gl/GlslProg.h"
 #include "cinder/Rand.h"
 
-#include "cinder/app/App.h"
 #include "SiOscInput.h"
 #include "SiKORGMIDIInterface.h"
 

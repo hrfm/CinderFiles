@@ -300,16 +300,16 @@ namespace hrfm{ namespace io{
         float width  = (bounds.x2 - bounds.x1) / ( length - 1 );
         float height = (bounds.y2 - bounds.y1);
         
-        glPushMatrix();
-        glTranslatef( bounds.x1, bounds.y1, 0.0f );
+        ci::gl::pushMatrices();
         {
+            ci::gl::translate( vec3(bounds.x1, bounds.y1, 0.0f) );
             for( int i = 0; i < (length-1); i++ ) {
                 float barY     = _fftValues[i] * height;
                 float nextBarY = _fftValues[i+1] * height;
-                gl::drawLine( vec2( i*width, height-barY ), vec2( (i+1)*width, height - nextBarY ) );
+                ci::gl::drawLine( vec2( i*width, height-barY ), vec2( (i+1)*width, height - nextBarY ) );
             }
         }
-        glPopMatrix();
+        ci::gl::popMatrices();
         
     }
     
@@ -320,17 +320,17 @@ namespace hrfm{ namespace io{
         float width  = (bounds.x2 - bounds.x1) / ( length - 1 );
         float height = (bounds.y2 - bounds.y1);
         
-        glPushMatrix();
-        glTranslatef( bounds.x1, bounds.y1, 0.0f );
+        ci::gl::pushMatrices();
         {
+            ci::gl::translate( vec3(bounds.x1, bounds.y1, 0.0f) );
             for( int i = 0; i < (length-1); i++ ) {
                 float barY = _fftRanged[i] * height;
-                gl::drawStrokedRect(
+                ci::gl::drawStrokedRect(
                     Rectf( i*width, height-barY, (i+1)*width, height )
                 );
             }
         }
-        glPopMatrix();
+        ci::gl::popMatrices();
         
     }
     
@@ -339,19 +339,20 @@ namespace hrfm{ namespace io{
         float width  = bounds.getWidth()  / (float)_bufferLength;
         float height = bounds.getHeight() / 2.0;
         
-        PolyLine<vec2>	leftBufferLine;
         
-        glPushMatrix();
-        glTranslatef( bounds.x1, bounds.y1 + height, 0.0f );
+        PolyLineT<vec2>	leftBufferLine;
+        
+        ci::gl::pushMatrices();
         {
+            ci::gl::translate( vec3( bounds.x1, bounds.y1 + height, 0.0f ) );
             for( int i = 0; i < _bufferLength; i++ ) {
                 float x = i * width;
                 float y = _channels[0][i] * height;
                 leftBufferLine.push_back( vec2( x , y ) );
             }
-            gl::draw( leftBufferLine );
+            ci::gl::draw( leftBufferLine );
         }
-        glPopMatrix();
+        ci::gl::popMatrices();
         
     };
     
