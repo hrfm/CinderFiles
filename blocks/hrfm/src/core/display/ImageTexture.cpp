@@ -9,7 +9,7 @@ namespace hrfm{ namespace display{
     }
     ImageTexture::ImageTexture( ci::fs::path path ){
         ImageTexture();
-        _srcPath = path;
+        setValue("srcPath", path);
         init( ci::loadImage( hrfm::utils::DataLoader::load(path) ) );
     }
     ImageTexture::ImageTexture( ci::ImageSourceRef ref ){

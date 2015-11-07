@@ -4,6 +4,7 @@
 #include "cinder/app/App.h"
 #include "cinder/gl/gl.h"
 #include "EventDispatcher.h"
+#include "DynamicMap.h"
 
 namespace hrfm{ namespace display{
     
@@ -35,7 +36,9 @@ namespace hrfm{ namespace display{
         virtual void setSize( int w, int h );
         virtual void setSize( ci::ivec2 size );
         
-        virtual ci::fs::path getSrcPath();
+        template <class T> void setValue( const string key, T value );
+        template <class T> T getValue( const string key );
+        bool hasValue( const string key );
         
         virtual ci::Rectf getBounds();
         virtual ci::Rectf getDrawBounds();
@@ -70,6 +73,8 @@ namespace hrfm{ namespace display{
         
     protected:
         
+        hrfm::utils::DynamicMap _values;
+        
         //! 指定した要素を children から削除します. 削除された場合 true 存在しない場合は false を返します.
         bool eraseFromChildren( DisplayNode * child );
         
@@ -81,7 +86,6 @@ namespace hrfm{ namespace display{
         
         int _beforeWidth;
         int _beforeHeight;
-        ci::fs::path _srcPath = "";
         
         // Stage control.
         

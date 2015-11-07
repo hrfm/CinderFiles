@@ -132,7 +132,7 @@ namespace hrfm{ namespace signage{ namespace display{
                 ci::gl::setMatricesWindow( _fbo->getWidth(), _fbo->getHeight(), false );
                 {
                     _shader->bindShader();
-                    //!!!!!!! _shader->affect( _currentFbo->getColorTexture(), _nextFbo->getColorTexture(), progress );
+                    _shader->affect( _currentFbo->getColorTexture(), _nextFbo->getColorTexture(), progress );
                     _shader->unbindShader();
                     /*
                     ci::gl::enableAdditiveBlending();

@@ -28,8 +28,14 @@ namespace hrfm{ namespace display{
         setSize( size.x, size.y );
     }
     
-    ci::fs::path DisplayNode::getSrcPath(){
-        return _srcPath;
+    template <class T> void DisplayNode::setValue( const string key, T value ){
+        _values.setValue(key, value);
+    };
+    template <class T> T DisplayNode::getValue( const string key ){
+        return _values.getValue<T>(key);
+    }
+    bool DisplayNode::hasValue( const string key ){
+        return _values.hasValue( key );
     }
     
     Rectf DisplayNode::getBounds(){

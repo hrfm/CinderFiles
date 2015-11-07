@@ -17,7 +17,7 @@ namespace hrfm{ namespace display{
     
     void MovieTexture::init( ci::fs::path filePath ){
         _beforeTime = 0.0f;
-        _srcPath    = filePath;
+        setValue("srcPath", filePath);
         _movieGlRef = ::ci::qtime::MovieGl::create( filePath );
     }
     
