@@ -84,9 +84,7 @@ namespace fl{ namespace display{
         
     public:
         
-        FlFboDisplayObject(){
-            FlDisplayObject();
-        }
+        FlFboDisplayObject():FlDisplayObject(){}
         
         FlFboDisplayObject( AppBase * app, ivec2 fboSize ){
             FlDisplayObject();
@@ -96,31 +94,31 @@ namespace fl{ namespace display{
         virtual void setup( AppBase * app, ivec2 fboSize ){
             FlDisplayObject::setup(app);
             ci::gl::Fbo::Format format;
-            mFbo        = ci::gl::Fbo( fboSize.x, fboSize.y, format );
-            mOutputFbo  = ci::gl::Fbo( fboSize.x, fboSize.y, format );
+            mFbo        = ci::gl::Fbo::create( fboSize.x, fboSize.y, format );
+            mOutputFbo  = ci::gl::Fbo::create( fboSize.x, fboSize.y, format );
             mFboSize    = fboSize;
             mFboAspect  = hrfm::utils::getAspectRatio( fboSize );
             mBounds.set( 0, 0, fboSize.x, fboSize.y );
         }
         
-        virtual ci::gl::Texture getTexture(){
-            return mOutputFbo.getTexture();
+        virtual ci::gl::TextureRef getTexture(){
+            return mOutputFbo->getColorTexture();
         }
         
         virtual void update(){
-            Area viewport = ci::gl::getViewport();
-            ci::gl::setViewport( (Area)mBounds );
+            std::pair<ivec2,ivec2> viewport = ci::gl::getViewport();
+            ci::gl::viewport( ivec2(0), getSize() );
             ci::gl::pushMatrices();
             ci::gl::setMatricesWindow( mFboSize, false );
-            mFbo.bindFramebuffer();
+            mFbo->bindFramebuffer();
             mUpdate();
-            mFbo.unbindFramebuffer();
+            mFbo->unbindFramebuffer();
             mUpdateAfter();
-            mOutputFbo.bindFramebuffer();
+            mOutputFbo->bindFramebuffer();
             mDrawToOutput();
-            mOutputFbo.unbindFramebuffer();
+            mOutputFbo->unbindFramebuffer();
             ci::gl::popMatrices();
-            ci::gl::setViewport(viewport);
+            ci::gl::viewport(viewport);
         }
         
         virtual void draw(){
@@ -139,11 +137,11 @@ namespace fl{ namespace display{
         
         virtual void mDrawToOutput(){
             ci::gl::clear();
-            ci::gl::draw( mFbo.getTexture() );
+            ci::gl::draw( mFbo->getColorTexture() );
         }
         
-        ci::gl::Fbo mFbo;
-        ci::gl::Fbo mOutputFbo;
+        ci::gl::FboRef mFbo;
+        ci::gl::FboRef mOutputFbo;
         ivec2   mFboSize;
         ivec2   mFboAspect;
         

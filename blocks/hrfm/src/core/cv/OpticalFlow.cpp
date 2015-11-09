@@ -19,21 +19,21 @@ namespace hrfm{ namespace cv{
         
     }
     
-    void OpticalFlow::update( gl::TextureRef texture, float bias, float frameRate ){
+    void OpticalFlow::update( ci::gl::TextureRef texture, float bias, float frameRate ){
         
         std::pair<ivec2,ivec2> viewport = ci::gl::getViewport();
         
         mOpticalFlowFBO->bindFramebuffer();
         {
-            gl::pushMatrices();
+            ci::gl::pushMatrices();
             ci::gl::viewport( ivec2(0), mOpticalFlowFBO->getSize() );
             ci::gl::setMatricesWindow( mOpticalFlowFBO->getWidth(), mOpticalFlowBounds.getHeight(), false );
             {
-                gl::clear();
-                gl::color(1.0f,1.0f,1.0f);
-                gl::draw( texture, mOpticalFlowBounds );
+                ci::gl::clear();
+                ci::gl::color(1.0f,1.0f,1.0f);
+                ci::gl::draw( texture, mOpticalFlowBounds );
             }
-            gl::popMatrices();
+            ci::gl::popMatrices();
         }
         mOpticalFlowFBO->unbindFramebuffer();
         
@@ -92,7 +92,7 @@ namespace hrfm{ namespace cv{
         vec2 from, to;
         int  length = features.size();
         
-        gl::lineWidth(2.0);
+        ci::gl::lineWidth(2.0);
         glDisable( GL_TEXTURE_2D );
         
         /*
@@ -126,8 +126,8 @@ namespace hrfm{ namespace cv{
                     to.y *= scaleY;
                     
                     if( distance(from,to) < 40.0 ){
-                        gl::vertex( from );
-                        gl::vertex( to );
+                        ci::gl::vertex( from );
+                        ci::gl::vertex( to );
                     }
                     
                 }
@@ -146,7 +146,7 @@ namespace hrfm{ namespace cv{
         return &mForceMap;
     }
     
-    gl::TextureRef OpticalFlow::getTexture(){
+    ci::gl::TextureRef OpticalFlow::getTexture(){
         return mOpticalFlowFBO->getColorTexture();
     }
     

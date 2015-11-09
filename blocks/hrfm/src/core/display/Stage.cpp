@@ -48,7 +48,7 @@ namespace hrfm{ namespace display{
         
         if( !offscreen ){
             ci::gl::translate( x, y );
-            gl::draw( getTexture(), getDrawBounds() );
+            ci::gl::draw( getTexture(), getDrawBounds() );
         }
         
         ci::gl::disableAlphaBlending();

@@ -24,13 +24,13 @@ namespace hrfm{ namespace matrix{
         
         myFbo->bindFramebuffer();
         {
-            gl::pushMatrices();
-            gl::viewport( ivec2(0), myFbo->getSize() );
-            gl::setMatricesWindow( myFbo->getSize(), false );
+            ci::gl::pushMatrices();
+            ci::gl::viewport( ivec2(0), myFbo->getSize() );
+            ci::gl::setMatricesWindow( myFbo->getSize(), false );
             {
                 // --- フェード処理
-                gl::color(0.0f,0.0f,0.0f,0.02f);
-                gl::drawSolidRect( myFbo->getBounds() );
+                ci::gl::color(0.0f,0.0f,0.0f,0.02f);
+                ci::gl::drawSolidRect( myFbo->getBounds() );
                 // update and draw MatrixLine.
                 vector<MatrixLine*>::iterator it  = myMatrixLines.begin();
                 vector<MatrixLine*>::iterator end = myMatrixLines.end();
@@ -39,7 +39,7 @@ namespace hrfm{ namespace matrix{
                     ++it;
                 }
             }
-            gl::popMatrices();
+            ci::gl::popMatrices();
         }
         myFbo->unbindFramebuffer();
         
@@ -80,12 +80,12 @@ namespace hrfm{ namespace matrix{
         }
         
         myFbo->bindFramebuffer();
-        gl::pushMatrices();
-        gl::setMatricesWindow(ci::app::getWindowSize(),false);
+        ci::gl::pushMatrices();
+        ci::gl::setMatricesWindow(ci::app::getWindowSize(),false);
         
         // フェード処理
-        gl::color(0.0f,0.0f,0.0f,0.08f);
-        gl::drawSolidRect(ci::app::getWindowBounds());
+        ci::gl::color(0.0f,0.0f,0.0f,0.08f);
+        ci::gl::drawSolidRect(ci::app::getWindowBounds());
         
         for( int i = 0; i <= len; i++ ){
             
@@ -114,21 +114,21 @@ namespace hrfm{ namespace matrix{
                 }
             }
             
-            gl::color(0.5f,0.9f,1.0f);
-            gl::drawSolidRect( Rectf( x1, y1, x2, y2 ) );
+            ci::gl::color(0.5f,0.9f,1.0f);
+            ci::gl::drawSolidRect( Rectf( x1, y1, x2, y2 ) );
             
             float alpha = 0.05f;
             y2 += myRowSize;
             while( y2 < mySize.y ){
-                gl::color(0.0f,0.0f,0.0f,alpha);
-                gl::drawSolidRect( Rectf( x1, y2, x2, y2+myRowSize ) );
+                ci::gl::color(0.0f,0.0f,0.0f,alpha);
+                ci::gl::drawSolidRect( Rectf( x1, y2, x2, y2+myRowSize ) );
                 y2 += myRowSize;
                 alpha += 0.08f;
             }
             
         }
         
-        gl::popMatrices();
+        ci::gl::popMatrices();
         myFbo->unbindFramebuffer();
         
     }

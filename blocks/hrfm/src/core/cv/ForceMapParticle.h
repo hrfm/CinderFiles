@@ -20,7 +20,7 @@ namespace hrfm{ namespace cv{
             
             void update( vec2 force ){
                 
-                mBeforePos.set( x, y );
+                mBeforePos = dvec2( x, y );
                 
                 ax += force.x;
                 ay += force.y;
@@ -51,9 +51,10 @@ namespace hrfm{ namespace cv{
                     vy += ( -0.001 - vy ) * 0.002;
                 }
                 
-                mPos.set( x, y );
-                mAccel.set( ax, ay );
-                mVec.set( vx, vy );
+                mPos   = dvec2( x, y );
+                mAccel = dvec2( ax, ay );
+                mVec   = dvec2( vx, vy );
+                
             }
             
             vec2 getPosition(){
@@ -126,7 +127,7 @@ namespace hrfm{ namespace cv{
                 vector<Particle*>::iterator it;
                 const std::vector<Particle*>::const_iterator & end = particles.end();
                 for (it = particles.begin(); it != end; ++it) {
-                    float length = (*it)->getAccel().length();
+                    float length = ci::length((*it)->getAccel());
                     if( 0.000001 < length ){
                         float alpha = length/0.00001;
                         if( alpha < 0.001 ){
@@ -134,7 +135,7 @@ namespace hrfm{ namespace cv{
                         }else if( 0.5 < alpha ){
                             alpha = 0.2;
                         }
-                        glColor4f(1.0,1.0,1.0,alpha);
+                        ci::gl::color( ci::ColorA( 1.0,1.0,1.0,alpha ) );
                         ci::gl::drawSolidCircle( (*it)->getPosition() * vec2(size), particleSize * alpha );
                     }
                 }
@@ -155,7 +156,7 @@ namespace hrfm{ namespace cv{
                     vector<Particle*>::iterator it;
                     const std::vector<Particle*>::const_iterator & end = particles.end();
                     for (it = particles.begin(); it != end; ++it) {
-                        float length = (*it)->getAccel().length();
+                        float length = ci::length( (*it)->getAccel() );
                         if( 0.000001 < length ){
                             float alpha = length/0.00001;
                             if( alpha < 0.001 ){
@@ -163,7 +164,7 @@ namespace hrfm{ namespace cv{
                             }else if( 1.0 < alpha ){
                                 alpha = 1.0;
                             }
-                            glColor4f(1.0,1.0,1.0,alpha);
+                            ci::gl::color( ci::ColorA(1.0,1.0,1.0,alpha) );
                             ci::gl::vertex( (*it)->getBeforePosition()* vec2(size) );
                             ci::gl::vertex( (*it)->getPosition()* vec2(size) );
                         }
@@ -191,14 +192,14 @@ namespace hrfm{ namespace cv{
             
             void setup( ivec2 size ){
                 ci::gl::Fbo::Format format;
-                motionFbo = ci::gl::Fbo( size.x, size.y, format );
+                motionFbo = ci::gl::Fbo::create( size.x, size.y, format );
             }
             
             void update( ForceMap map ){
                 mParticle.update( map );
-                motionFbo.bindFramebuffer();
+                motionFbo->bindFramebuffer();
                     ci::gl::clear();
-                motionFbo.unbindFramebuffer();
+                motionFbo->unbindFramebuffer();
             }
             
             void drawSpark( float alpha = 1.0 ){
@@ -208,14 +209,14 @@ namespace hrfm{ namespace cv{
                 }
                 
                 ci::gl::enableAdditiveBlending();
-                motionFbo.bindFramebuffer();
+                motionFbo->bindFramebuffer();
                     ci::gl::pushMatrices();
                     ci::gl::setMatricesWindow( ci::app::getWindowSize(), false );
-                    glColor4f(1.0,1.0,1.0,alpha);
+                    ci::gl::color( ci::ColorA( 1.0, 1.0, 1.0, alpha ));
                     //captureInput.drawForceMap();
                     mParticle.drawLine( ci::app::getWindowBounds() );
                     ci::gl::popMatrices();
-                motionFbo.unbindFramebuffer();
+                motionFbo->unbindFramebuffer();
                 ci::gl::disableAlphaBlending();
                 
             }
@@ -227,14 +228,14 @@ namespace hrfm{ namespace cv{
                 }
                 
                 ci::gl::enableAdditiveBlending();
-                motionFbo.bindFramebuffer();
+                motionFbo->bindFramebuffer();
                     ci::gl::pushMatrices();
                     ci::gl::setMatricesWindow( ci::app::getWindowSize(), false );
-                    glColor4f(1.0,1.0,1.0,alpha);
+                    ci::gl::color( ci::ColorA( 1.0, 1.0, 1.0, alpha ));
                     //captureInput.drawForceMap();
                     mParticle.draw( ci::app::getWindowBounds(), particleSize );
                     ci::gl::popMatrices();
-                motionFbo.unbindFramebuffer();
+                motionFbo->unbindFramebuffer();
                 ci::gl::disableAlphaBlending();
                 
             }
@@ -246,7 +247,7 @@ namespace hrfm{ namespace cv{
                 }
                 
                 ci::gl::enableAdditiveBlending();
-                motionFbo.bindFramebuffer();
+                motionFbo->bindFramebuffer();
                 
                     ci::gl::pushMatrices();
                     ci::gl::setMatricesWindow( ci::app::getWindowSize(), false );
@@ -256,7 +257,7 @@ namespace hrfm{ namespace cv{
                     vec2 pos    = map.getMaxForcePosition();
                     vec2 center = vec2( pos.x * ci::app::getWindowWidth(), pos.y * ci::app::getWindowHeight() );
                     vec2 force  = map.getAverageForce();
-                    float length = force.length() * audioAverage;
+                float length = ci::length(force) * audioAverage;
                     
                     if( 30.0 < length ){
                         for( int i = 0; i < 20; i++ ){
@@ -270,14 +271,14 @@ namespace hrfm{ namespace cv{
                             ci::gl::lineWidth(randFloat()* 10);
                             float radian = 6.28 * randFloat();
                             vec2 pos = vec2(cos(radian), sin(radian));
-                            ci::gl::drawLine( center + pos * ( 100 + 400.0 * randFloat() ), center + pos * 2000 );
+                            ci::gl::drawLine( center + pos * ( 100.f + 400.0f * randFloat() ), center + pos * 2000.f );
                         }
                     }
                     
                     ci::gl::lineWidth(1);
                 
                     ci::gl::popMatrices();
-                motionFbo.unbindFramebuffer();
+                motionFbo->unbindFramebuffer();
                 ci::gl::disableAlphaBlending();
                 
             }
@@ -289,8 +290,8 @@ namespace hrfm{ namespace cv{
                 }
                 
                 ci::gl::enableAdditiveBlending();
-                motionFbo.bindFramebuffer();
-                
+                motionFbo->bindFramebuffer();
+                {
                     ci::gl::pushMatrices();
                     ci::gl::setMatricesWindow( ci::app::getWindowSize(), false );
                     
@@ -299,7 +300,7 @@ namespace hrfm{ namespace cv{
                     vec2 pos    = map.getMaxForcePosition();
                     vec2 center = vec2( pos.x * ci::app::getWindowWidth(), pos.y * ci::app::getWindowHeight() );
                     vec2 force  = map.getAverageForce();
-                    float length = force.length() * audioAverage;
+                    float length = ci::length(force) * audioAverage;
                 
                     if( 10.0 < length ){
                         for( int i = 0; i < 10; i++ ){
@@ -311,8 +312,8 @@ namespace hrfm{ namespace cv{
                     ci::gl::lineWidth(1);
                     
                     ci::gl::popMatrices();
-                
-                motionFbo.unbindFramebuffer();
+                }
+                motionFbo->unbindFramebuffer();
                 ci::gl::disableAlphaBlending();
                 
             }
@@ -328,13 +329,13 @@ namespace hrfm{ namespace cv{
                 }
             }
         
-            ci::gl::Texture getTexture(){
-                return motionFbo.getTexture();
+            ci::gl::TextureRef getTexture(){
+                return motionFbo->getColorTexture();
             }
         
         private :
         
-            ci::gl::Fbo motionFbo;
+            ci::gl::FboRef motionFbo;
             ParticleController mParticle;
         
     };
