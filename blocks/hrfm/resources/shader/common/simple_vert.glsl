@@ -1,14 +1,15 @@
 #version 150
 
-varying vec4 vColor;
-varying vec3 normal;
+uniform mat4  ciModelViewProjection;
 uniform float time;
+
+in  vec4 ciPosition;
+in  vec4 ciColor;
+out vec4 Color;
+out vec2 TexCoord0;
 
 void main()
 {
-    gl_Position = ftransform();
-    gl_FrontColor  = gl_Color;
-	gl_TexCoord[0] = gl_MultiTexCoord0;
-    normal = gl_NormalMatrix * gl_Normal;
-    vColor = gl_Color;
+    gl_Position = ciModelViewProjection * ciPosition;
+    Color = ciColor;
 }

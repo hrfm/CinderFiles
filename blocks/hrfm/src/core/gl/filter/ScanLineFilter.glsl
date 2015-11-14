@@ -1,9 +1,11 @@
-#version 120
+#version 150
 
 // Textures
 uniform sampler2D tex;
 uniform float time;
 uniform vec2 resolution;
+
+out vec4 oColor;
 
 float sigmoid( float val, float gain ){
     float v = val - 0.5;
@@ -14,10 +16,10 @@ void main(void){
     
     vec2 texCoord = gl_FragCoord.xy / resolution;
     
-    vec4 color = texture2D(tex,mod(texCoord,1.0));
+    vec4 color = texture(tex,mod(texCoord,1.0));
     color *= 1.2 * ( 0.5 + 0.5 * sigmoid( sin( gl_FragCoord.y ), 2 ) );
     
-    gl_FragColor = color;
+    oColor = color;
     
 }
 

@@ -1,7 +1,7 @@
-#version 120
+#version 150
 
-varying vec4 vColor;
-varying vec3 normal;
+in  vec4 Color;
+out vec4 oColor;
 
 // Textures
 uniform sampler2D tex0;
@@ -13,8 +13,8 @@ void main( void ) {
     vec4 outputColor;
     
     vec2 texPos = gl_FragCoord.xy / resolution;
-    vec4 tex0Color = texture2D( tex0, texPos );
-    vec4 tex1Color = texture2D( tex1, texPos );
+    vec4 tex0Color = texture( tex0, texPos );
+    vec4 tex1Color = texture( tex1, texPos );
     
     outputColor.x = tex0Color.x - tex1Color.x;
     outputColor.y = tex0Color.y - tex1Color.y;
@@ -26,6 +26,6 @@ void main( void ) {
         outputColor = vec4(1.0);
     }
     
-    gl_FragColor = outputColor;
+    oColor = outputColor;
     
 }

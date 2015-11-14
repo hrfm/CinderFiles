@@ -11,21 +11,23 @@ namespace hrfm { namespace gl{ namespace filter{
         
     public:
         
-        OrbitalFilter():FilterBase(fs::path("OrbitalFilter.glsl")){
+        OrbitalFilter( ci::ivec2 size = ci::ivec2(256,256) ):FilterBase(fs::path("OrbitalFilter.glsl"),size){
             r_scale = 1.0;
             r_min   = 0.0;
             r_max   = 1.0;
             _speedTex = ci::gl::Texture2d::create( 1, 1 );
         };
         
-        OrbitalFilter( ci::gl::TextureRef tex_speed ):FilterBase(fs::path("OrbitalFilter.glsl")){
+        OrbitalFilter( ci::gl::TextureRef tex_speed, ci::ivec2 size = ci::ivec2(256,256) ):FilterBase(fs::path("OrbitalFilter.glsl"),size){
             r_scale = 1.0;
             r_min   = 0.0;
             r_max   = 1.0;
             _speedTex = tex_speed;
         }
         
-        void setSpeedTex( ci::gl::TextureRef tex_speed );
+        void setSpeedTex( ci::gl::TextureRef tex_speed ){
+            _speedTex = tex_speed;
+        }
         
         float r_min;
         float r_max;
@@ -33,8 +35,16 @@ namespace hrfm { namespace gl{ namespace filter{
         
     protected:
         
-        void prepare();
-        void clear();
+        void prepare(){
+            _speedTex->bind(1);
+            mShader->uniform( "tex_speed", 1 );
+            mShader->uniform( "r_scale", r_scale );
+            mShader->uniform( "r_min", r_min );
+            mShader->uniform( "r_max", r_max );
+        }
+        void clear(){
+            _speedTex->unbind();
+        }
         
     private:
         

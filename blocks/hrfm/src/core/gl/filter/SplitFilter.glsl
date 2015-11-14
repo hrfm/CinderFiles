@@ -1,4 +1,4 @@
-#version 120
+#version 150
 
 // Textures
 uniform sampler2D tex;
@@ -6,6 +6,8 @@ uniform vec2  resolution;
 uniform float cols;
 uniform float rows;
 uniform vec4  cliprect;
+
+out vec4 oColor;
 
 void main(void){
     
@@ -16,8 +18,8 @@ void main(void){
     texCoord.x = cliprect.x + ( cliprect.z - cliprect.x ) * texCoord.x;
     texCoord.y = cliprect.y + ( cliprect.w - cliprect.y ) * texCoord.y;
     
-    vec4 color = texture2D( tex, texCoord );
+    vec4 color = texture( tex, texCoord );
     
-    gl_FragColor = color;
+    oColor = color;
     
 }

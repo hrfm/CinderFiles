@@ -9,13 +9,18 @@ namespace hrfm { namespace gl{ namespace filter{
     
     class DigitalNoiseFilter : public FilterBase{
     public:
-        DigitalNoiseFilter():FilterBase(fs::path("DigitalNoiseFilter.glsl")){
+        DigitalNoiseFilter( ci::ivec2 size = ci::ivec2(256,256) ):FilterBase(fs::path("DigitalNoiseFilter.glsl"),size){
             isVertical = 0;
         };
         int isVertical;
     protected:
-        void prepare();
-        void clear();
+        void prepare(){
+            FilterBase::prepare();
+            mShader->uniform( "vertical", isVertical );
+        }
+        void clear(){
+            FilterBase::clear();
+        }
     };
     
 }}}

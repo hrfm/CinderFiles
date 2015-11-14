@@ -57,7 +57,7 @@ namespace hrfm { namespace gl{
         fs::path mTessCtrlPath;
         
         virtual void initShader( fs::path fragment, fs::path vertex, fs::path geometory, fs::path tessEval, fs::path tessCtrl );
-        virtual std::string loadShader( fs::path );
+        virtual std::string loadShader( fs::path srcPath );
         virtual std::string getVertexShader();
         virtual std::string getFragmentShader();
         virtual std::string getGeometoryShader();

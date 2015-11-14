@@ -7,6 +7,6 @@ using namespace hrfm::utils;
 namespace hrfm { namespace gl{ namespace filter{
     class ScanLineFilter : public FilterBase{
     public:
-        ScanLineFilter():FilterBase(fs::path("ScanLineFilter.glsl")){};
+        ScanLineFilter( ci::ivec2 size = ci::ivec2(256,256) ):FilterBase(fs::path("ScanLineFilter.glsl"),size){};
     };
 }}}

@@ -1,7 +1,7 @@
 #version 120
 
-varying vec4 vColor;
-varying vec3 normal;
+out vec4 vColor;
+out vec3 normal;
 uniform sampler2D tex;
 uniform float alpha;
 

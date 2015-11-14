@@ -156,7 +156,7 @@ namespace hrfm { namespace io{
                 _beforeFrameMap[deviceName] = currentFrame;
                 vector<ci::gl::Texture2dRef> * vec = &_textureCacheVectorMap[deviceName];
                 if( getCaptureRef(deviceName)->checkNewFrame() ){
-                    vec->push_back( ci::gl::Texture2d::create( *getSurface( deviceName ), ci::gl::Texture::Format().loadTopDown() ) );
+                    vec->push_back( ci::gl::Texture::create( *getSurface( deviceName ), ci::gl::Texture::Format().loadTopDown() ) );
                 }else{
                     // Diff 用に取っているが3フレ以上同じだった場合不要な処理
                     vec->push_back( getTexture(deviceName) );
@@ -184,8 +184,6 @@ namespace hrfm { namespace io{
             
             if( 1 < vec->size() ){
                 
-                std::pair<ivec2,ivec2> viewport = ci::gl::getViewport();
-                
                 if( _diffFboMap.find(deviceName) == _diffFboMap.end() ){
                     ci::ivec2 size = getCaptureRef(deviceName)->getSize();
                     ci::gl::Fbo::Format format;
@@ -193,34 +191,26 @@ namespace hrfm { namespace io{
                     _diffFboMap[deviceName] = fbo;
                 }
                 
-                ci::gl::Texture2dRef tex   = getTexture(deviceName);
-                ci::gl::Texture2dRef b4Tex = getTexture(deviceName,1);
-                ci::gl::FboRef       fbo   = _diffFboMap[deviceName];
-                
                 // 前フレームとの差分を取得する.
-                fbo->bindFramebuffer();
                 {
+                    ci::gl::FboRef fbo = _diffFboMap[deviceName];
+                    ci::gl::ScopedFramebuffer fboScp( fbo );
+                    ci::gl::ScopedViewport    viewportScp( ivec2(0), fbo->getSize() );
+                    ci::gl::ScopedGlslProg    shaderScp( _diffShader );
+                    ci::gl::ScopedColor       colorScp( 1.0f, 1.0f, 1.0f );
+                    ci::gl::ScopedTextureBind tex0Scp( getTexture(deviceName,1), 0 );
+                    ci::gl::ScopedTextureBind tex1Scp( getTexture(deviceName), 1 );
                     ci::gl::pushMatrices();
-                    ci::gl::viewport( ivec2(0), fbo->getSize() );
-                    ci::gl::setMatricesWindow( fbo->getSize(), false );
                     {
+                        ci::gl::setMatricesWindow( fbo->getSize(), true );
                         ci::gl::clear();
-                        ci::gl::color(1.0f,1.0f,1.0f);
-                        ci::gl::ScopedGlslProg    scpGlslProg( _diffShader );
-                        ci::gl::ScopedTextureBind scpTexBind0( b4Tex, 0 );
-                        ci::gl::ScopedTextureBind scpTexBind1( tex, 1 );
-                        {
-                            _diffShader->uniform("tex0", 0);
-                            _diffShader->uniform("tex1", 1);
-                            _diffShader->uniform("resolution", vec2(fbo->getSize()) );
-                            ci::gl::drawSolidRect( fbo->getBounds() );
-                        }
+                        _diffShader->uniform("tex0", 0);
+                        _diffShader->uniform("tex1", 1);
+                        _diffShader->uniform("resolution", vec2(fbo->getSize()) );
+                        ci::gl::drawSolidRect( fbo->getBounds() );
                     }
                     ci::gl::popMatrices();
                 }
-                fbo->unbindFramebuffer();
-                
-                ci::gl::viewport(viewport);
                 
             }
             

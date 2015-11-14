@@ -1,7 +1,9 @@
-#version 120
+#version 150
 
 uniform sampler2D tex;
 uniform vec2      resolution;
+
+out vec4 oColor;
 
 void main(){
     
@@ -18,26 +20,26 @@ void main(){
     
     float bias = 0.0;
     
-    color += texture2D( tex, pos).xyz * -8.0;
+    color += texture( tex, pos).xyz * -8.0;
     
-    color += texture2D( tex, pos + vec2( -dX*bias, -dY*bias)).xyz;
-    color += texture2D( tex, pos + vec2( 0.0, -dY)).xyz;
-    color += texture2D( tex, pos + vec2(  dX*bias, -dY*bias)).xyz;
+    color += texture( tex, pos + vec2( -dX*bias, -dY*bias)).xyz;
+    color += texture( tex, pos + vec2( 0.0, -dY)).xyz;
+    color += texture( tex, pos + vec2(  dX*bias, -dY*bias)).xyz;
     
-    color += texture2D( tex, pos + vec2( -dX, 0.0)).xyz;
-    color += texture2D( tex, pos + vec2(  dX, 0.0)).xyz;
+    color += texture( tex, pos + vec2( -dX, 0.0)).xyz;
+    color += texture( tex, pos + vec2(  dX, 0.0)).xyz;
     
-    color += texture2D( tex, pos + vec2( -dX*bias, dY*bias)).xyz;
-    color += texture2D( tex, pos + vec2( 0.0, dY)).xyz;
-    color += texture2D( tex, pos + vec2(  dX*bias, dY*bias)).xyz;
+    color += texture( tex, pos + vec2( -dX*bias, dY*bias)).xyz;
+    color += texture( tex, pos + vec2( 0.0, dY)).xyz;
+    color += texture( tex, pos + vec2(  dX*bias, dY*bias)).xyz;
     
     color = step(0.55, color);
     float chroma = color.x * 0.3 + color.y * 0.59 + color.z * 0.11; // 明るさを計算
     
     if( 0.2 < chroma ){
-        gl_FragColor = vec4( 1.0 );
+        oColor = vec4( 1.0 );
     }else{
-        gl_FragColor = vec4( vec3(0.0), 1.0);
+        oColor = vec4( vec3(0.0), 1.0);
     }
     
     //gl_FragColor = vec4(color, 1.0);

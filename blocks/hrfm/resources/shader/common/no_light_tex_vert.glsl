@@ -1,5 +1,5 @@
-varying vec4 vColor;
-varying vec3 normal;
+out vec4 vColor;
+out vec3 normal;
 uniform float time;
 
 void main()

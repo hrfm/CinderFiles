@@ -1,10 +1,12 @@
-#version 120
+#version 150
 
 // Textures
 uniform sampler2D tex;
 uniform vec2 resolution;
 uniform float scrollX;
 uniform float scrollY;
+
+out vec4 oColor;
 
 void main(void){
     
@@ -15,6 +17,6 @@ void main(void){
     texCoord.y = mod( ( texCoord.y + scrollY ), 1.0 );
     
     // ---------- Color.
-    gl_FragColor = texture2D( tex, texCoord );
+    oColor = texture( tex, texCoord );
     
 }

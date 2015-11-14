@@ -37,7 +37,7 @@ namespace hrfm { namespace gl{
         virtual void setSize( int w, int h );
         virtual void setSize( ivec2 size );
         
-        virtual void affect( ci::gl::TextureRef tex, vec2 windowSize, vec2 resolution, Rectf drawRect );
+        virtual void affect( ci::gl::TextureRef tex, vec2 resolution, Rectf drawRect );
         virtual ci::gl::TextureRef affect( ci::gl::TextureRef tex );
         
         void draw( Rectf bounds );

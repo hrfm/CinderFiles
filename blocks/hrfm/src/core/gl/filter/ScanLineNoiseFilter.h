@@ -5,6 +5,6 @@
 namespace hrfm { namespace gl{ namespace filter{
     class ScanLineNoiseFilter : public FilterBase{
     public:
-        ScanLineNoiseFilter():FilterBase(fs::path("ScanLineNoiseFilter.glsl")){}
+        ScanLineNoiseFilter( ci::ivec2 size = ci::ivec2(256,256) ):FilterBase(fs::path("ScanLineNoiseFilter.glsl"),size){}
     };
 }}}

@@ -1,9 +1,11 @@
-#version 120
+#version 150
 
 // Textures
 uniform sampler2D tex;
 uniform float time;
 uniform vec2 resolution;
+
+out vec4 oColor;
 
 void main(void){
     
@@ -12,7 +14,7 @@ void main(void){
     
     float cycle = mod( time / 10.0, 1.0 );
     
-    vec4 color = texture2D( tex, texCoord );
+    vec4 color = texture( tex, texCoord );
     
     // --- 走査線を追加
     
@@ -29,6 +31,6 @@ void main(void){
     
     // ---------- Color.
     
-    gl_FragColor = color;
+    oColor = color;
     
 }

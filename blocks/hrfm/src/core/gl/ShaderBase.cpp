@@ -53,7 +53,7 @@ namespace hrfm { namespace gl{
         mTessCtrlPath  = tessCtrl;
         mShader = ShaderFactory::create( getVertexShader(), getFragmentShader(), getGeometoryShader(), getTessEvalShader(), getTessCtrlShader() );
     }
-    std::string loadShader( fs::path srcPath ){
+    std::string ShaderBase::loadShader( fs::path srcPath ){
         if( srcPath != "" ){
             return ci::loadString( DataLoader::load(srcPath) );
         }else{
