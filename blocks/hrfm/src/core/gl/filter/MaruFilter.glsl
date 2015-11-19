@@ -1,4 +1,4 @@
-#version 120
+#version 400
 
 // Textures
 uniform sampler2D tex;
@@ -9,6 +9,8 @@ uniform vec2      matrix;
 
 uniform int useTexture;
 uniform sampler2D maskTex;
+
+out vec4 oColor;
 
 float rand(vec2 co){
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
@@ -50,6 +52,6 @@ void main(void){
     
     // - 色を取得する.
     
-    gl_FragColor = color;
+    oColor = color;
     
 }

@@ -1,4 +1,4 @@
-#version 120
+#version 400
 
 // Textures
 uniform sampler2D tex;

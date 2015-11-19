@@ -7,6 +7,8 @@ uniform vec2 resolution;
 uniform sampler2D maskTex;
 uniform float strength;
 
+out vec4 oColor;
+
 void main(void){
     
 	vec2 texCoord = gl_FragCoord.xy / resolution;
@@ -15,6 +17,6 @@ void main(void){
     vec4 color = texture2D( tex, texCoord );
     vec4 maskColor = texture2D( maskTex, texCoord );
     
-    gl_FragColor = color + ( color*maskColor - color ) * strength;
+    oColor = color + ( color*maskColor - color ) * strength;
     
 }

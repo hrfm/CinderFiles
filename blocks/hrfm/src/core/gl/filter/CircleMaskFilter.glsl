@@ -1,9 +1,11 @@
-#version 120
+#version 400
 
 // Textures
 uniform sampler2D tex;
 uniform float time;
 uniform vec2 resolution;
+
+out vec4 oColor;
 
 void main(void){
     
@@ -22,6 +24,6 @@ void main(void){
     }
     
     // ---------- Color.
-    gl_FragColor = color;
+    oColor = color;
     
 }
