@@ -11,7 +11,7 @@
 
 #include "Utils.h"
 
-namespace hrfm{ namespace gl{
+namespace hrfm{ namespace display{
     
     class VboStage : public VboNode{
         

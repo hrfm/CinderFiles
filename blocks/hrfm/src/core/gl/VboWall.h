@@ -5,11 +5,11 @@
 
 namespace hrfm{ namespace gl{
     
-    class VboWall : public VboNode{
+    class VboWall : public hrfm::display::VboNode{
     
     public:
         
-        VboWall():VboNode(){};
+        VboWall():hrfm::display::VboNode(){};
         ~VboWall(){};
         
         virtual void setup( ivec2 segments, bool curve = false, float noise = false );

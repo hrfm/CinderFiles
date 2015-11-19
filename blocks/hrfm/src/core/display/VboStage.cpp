@@ -2,7 +2,7 @@
 
 using namespace ci;
 
-namespace hrfm{ namespace gl{
+namespace hrfm{ namespace display{
     
     float VboStage::getFov(){
         return _fov;

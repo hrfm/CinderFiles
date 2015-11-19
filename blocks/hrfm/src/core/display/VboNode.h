@@ -11,7 +11,7 @@
 #include "EventDispatcher.h"
 #include "ShaderBase.h"
 
-namespace hrfm{ namespace gl{
+namespace hrfm{ namespace display{
     
     class VboStage;
     
