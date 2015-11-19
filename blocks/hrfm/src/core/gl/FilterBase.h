@@ -22,10 +22,10 @@ namespace hrfm { namespace gl{
         
     public:
         
-        FilterBase( ivec2 size = ivec2(256,256) ):ShaderBase(){
+        FilterBase( ivec2 size = ivec2(256,256) ):ShaderBase(fs::path("simple_flag.glsl"),fs::path("filter_vert.glsl")){
             setup( size );
         };
-        FilterBase( fs::path fragment, ivec2 size = ivec2(256,256) ):ShaderBase(fragment){
+        FilterBase( fs::path fragment, ivec2 size = ivec2(256,256) ):ShaderBase(fragment,fs::path("filter_vert.glsl")){
             setup( size );
         };
         FilterBase( fs::path fragment, fs::path vertex, ivec2 size = ivec2(256,256) ):ShaderBase(fragment,vertex){
@@ -37,7 +37,8 @@ namespace hrfm { namespace gl{
         virtual void setSize( int w, int h );
         virtual void setSize( ivec2 size );
         
-        virtual void affect( ci::gl::TextureRef tex, vec2 resolution, Rectf drawRect );
+        virtual void affect( ci::gl::TextureRef tex, vec2 resolution );
+        virtual void affect( ci::gl::TextureRef tex, vec2 resolution, Rectf drawArea );
         virtual ci::gl::TextureRef affect( ci::gl::TextureRef tex );
         
         void draw( Rectf bounds );

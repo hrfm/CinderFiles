@@ -20,12 +20,15 @@ namespace hrfm { namespace gl{
         setSize( size.x, size.y );
     }
     
-    void FilterBase::affect( ci::gl::TextureRef tex, vec2 resolution, Rectf drawRect ){
-        
+    void FilterBase::affect( ci::gl::TextureRef tex, vec2 resolution ){
+        affect( tex, resolution, Rectf( 0, 0, resolution.x, resolution.y ) );
+    }
+    
+    // なんでこれ分かれてるか忘れた・・・
+    void FilterBase::affect( ci::gl::TextureRef tex, vec2 resolution, Rectf drawArea ){
         if( !isEnabled() ){
             return;
         }
-        
         ci::gl::ScopedGlslProg    shaderScp( mShader );
         ci::gl::ScopedTextureBind tex0Scp( tex, 0 );
         prepare();
@@ -33,10 +36,9 @@ namespace hrfm { namespace gl{
             mShader->uniform( "tex"       , 0 );
             mShader->uniform( "time"      , (float)ci::app::getElapsedSeconds() );
             mShader->uniform( "resolution", resolution );
-            ci::gl::drawSolidRect( drawRect );
+            ci::gl::drawSolidRect( drawArea, vec2(0,0), vec2(1,1) );
         }
         clear();
-        
     }
     
     ci::gl::TextureRef FilterBase::affect( ci::gl::TextureRef tex ){
@@ -50,8 +52,8 @@ namespace hrfm { namespace gl{
         ci::gl::pushMatrices();
         {
             ci::gl::clear();
-            ci::gl::setMatricesWindow( ci::app::toPixels( mFbo->getSize() ) );
-            affect( tex, mFbo->getSize(), mFbo->getBounds() );
+            ci::gl::setMatricesWindow( ci::app::toPixels( mFbo->getSize() ), true );
+            affect( tex, mFbo->getSize() );
         }
         ci::gl::popMatrices();
         

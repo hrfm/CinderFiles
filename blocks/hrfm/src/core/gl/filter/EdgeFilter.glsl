@@ -10,7 +10,9 @@ void main(){
     vec4 sum = vec4( 0.0, 0.0, 0.0, 0.0 );
     
     // 各テクスチャ上の色を取得.
-    vec2 pos   = gl_FragCoord.xy / resolution;
+    vec2 pos = gl_FragCoord.xy / resolution;
+    pos.y = 1.0 - pos.y;
+    
     //vec4 color = texture2D( tex, pos );
     
     float dX = 4.0 / resolution.x;

@@ -15,6 +15,7 @@ float sigmoid( float val, float gain ){
 void main(void){
     
     vec2 texCoord = gl_FragCoord.xy / resolution;
+    texCoord.y = 1.0 - texCoord.y;
     
     vec4 color = texture(tex,mod(texCoord,1.0));
     color *= 1.2 * ( 0.5 + 0.5 * sigmoid( sin( gl_FragCoord.y ), 2 ) );

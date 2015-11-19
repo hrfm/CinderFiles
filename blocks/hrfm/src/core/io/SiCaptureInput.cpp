@@ -207,7 +207,7 @@ namespace hrfm { namespace io{
                         _diffShader->uniform("tex0", 0);
                         _diffShader->uniform("tex1", 1);
                         _diffShader->uniform("resolution", vec2(fbo->getSize()) );
-                        ci::gl::drawSolidRect( fbo->getBounds() );
+                        ci::gl::drawSolidRect( fbo->getBounds(), vec2(0,0), vec2(1,1) );
                     }
                     ci::gl::popMatrices();
                 }

@@ -14,6 +14,8 @@ void main(void){
     
     //*
 	vec2 texCoord = gl_FragCoord.xy / resolution;
+    texCoord.y = 1.0 - texCoord.y;
+    
     float cycle = mod( time / 300.0, 1.0 );
     
     float tanValue = tan( (texCoord.y-cycle) * 10.0 * strength * tan(cycle * strength) ) * strength / 100.0;

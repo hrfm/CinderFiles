@@ -51,7 +51,7 @@ namespace hrfm{ namespace gl{
         if( filter->isEnabled() ){
             ci::gl::TextureRef tex = _getTextureClone();
             beginOffscreen(clear);
-            filter->affect( tex, getSize(), getBounds() );
+            filter->affect( tex, getSize() );
         }
         return this;
     }
@@ -59,7 +59,7 @@ namespace hrfm{ namespace gl{
     ExFbo * ExFbo::applyFilter( FilterBase * filter, ci::gl::TextureRef srcTexture, bool clear ){
         if( filter->isEnabled() ){
             beginOffscreen(clear);
-            filter->affect( srcTexture, getSize(), getBounds() );
+            filter->affect( srcTexture, getSize() );
         }
         return this;
     }

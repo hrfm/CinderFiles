@@ -8,6 +8,8 @@ uniform vec2 resolution;
 void main(void){
     
     vec2 texCoord = gl_FragCoord.xy / resolution;
+    texCoord.y = 1.0 - texCoord.y;
+    
     vec4 color    = texture2D( tex, texCoord );
     
     vec2 dist = vec2( texCoord.x - 0.5, texCoord.y - 0.5 );

@@ -12,6 +12,8 @@ out vec4 oColor;
 void main(void){
     
 	vec2 texCoord = gl_FragCoord.xy / resolution;
+    texCoord.y = 1.0 - texCoord.y;
+    
     texCoord.x = mod( texCoord.x * cols, 1.0 );
     texCoord.y = mod( texCoord.y * rows, 1.0 );
     

@@ -6,11 +6,14 @@ uniform float     time;
 uniform vec2      resolution;
 uniform float     strength;
 
+in  vec4 Color;
 out vec4 oColor;
 
 void main(void){
     
 	vec2 texCoord = gl_FragCoord.xy / resolution;
+    texCoord.y = 1.0 - texCoord.y;
+    
     vec4 color    = texture( tex, texCoord );
     
     // --- 白黒っぽく

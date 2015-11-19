@@ -10,6 +10,8 @@ out vec4 oColor;
 void main(void){
     
     vec2 texCoord = gl_FragCoord.xy / resolution;
+    texCoord.y = 1.0 - texCoord.y;
+    
     vec2 texCoord2 = texCoord;
     
     float cycle = mod( time / 10.0, 1.0 );

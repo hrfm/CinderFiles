@@ -1,4 +1,4 @@
-#version 120
+#version 150
 
 // Textures
 uniform sampler2D tex;
@@ -6,10 +6,14 @@ uniform float time;
 uniform vec2 resolution;
 uniform vec3 color;
 
+out vec4 oColor;
+
 void main(void){
     
     vec2 texCoord = gl_FragCoord.xy / resolution;
-    vec4 texColor = texture2D( tex, texCoord );
+    texCoord.y = 1.0 - texCoord.y;
+    
+    vec4 texColor = texture( tex, texCoord );
     
     if( color.r == 0 && color.g == 0 && color.b == 0 ){
         float chroma = texColor.x * 0.3 + texColor.y * 0.59 + texColor.z * 0.11;
@@ -20,6 +24,6 @@ void main(void){
         texColor.b *= color.z;
     }
     
-    gl_FragColor = texColor;
+    oColor = texColor;
     
 }
