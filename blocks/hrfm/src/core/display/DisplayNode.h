@@ -20,10 +20,11 @@ namespace hrfm{ namespace display{
         DisplayNode():hrfm::events::EventDispatcher(){
             x       = 0.0f;
             y       = 0.0f;
+            width   = 1.0f;
+            height  = 1.0f;
+            scale   = ci::vec3(1.0f,1.0f,1.0f);
             colorA  = ci::ColorA(1.0,1.0,1.0,1.0);
             visible = true;
-            width   = 0.0f;
-            height  = 0.0f;
             _beforeWidth  = 0.0f;
             _beforeHeight = 0.0f;
         };
@@ -32,9 +33,16 @@ namespace hrfm{ namespace display{
         virtual void setup();
         virtual void clear();
         
+        virtual ci::vec3 getPosition();
+        virtual void setPosition( ci::vec3 position );
+        
         virtual ci::ivec2 getSize();
         virtual void setSize( int w, int h );
         virtual void setSize( ci::ivec2 size );
+        
+        virtual ci::vec3 getScale();
+        virtual void setScale( float scale );
+        virtual void setScale( ci::vec3 scale );
         
         template <class T> void setValue( const string key, T value );
         template <class T> T getValue( const string key );
@@ -65,9 +73,10 @@ namespace hrfm{ namespace display{
         
         // --- PROPERTY -------------
         std::vector<DisplayNode*> children;
-        float x, y;
-        int   width, height;
-        bool  visible;
+        float x, y, z;
+        int width, height;
+        ci::vec3 scale;
+        bool visible;
         ci::ColorA  colorA;
         // --------------------------
         
@@ -98,7 +107,6 @@ namespace hrfm{ namespace display{
         DisplayNode * _parent = NULL;
         virtual void _setParent( DisplayNode * node );
         virtual void _unsetParent();
-        
         
     };
     

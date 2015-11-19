@@ -1,9 +1,9 @@
 #pragma once
 
+#include "cinder/gl/gl.h"
 #include "cinder/gl/Texture.h"
 #include "SiFboFactory.h"
 #include "ShaderFactory.h"
-#include "VboStage.h"
 
 using namespace std;
 using namespace hrfm::utils;
@@ -19,7 +19,7 @@ namespace hrfm{ namespace gl{
         fbo->bindFramebuffer();
         {
             ci::gl::pushMatrices();
-            //ci::gl::setViewport( fbo->getBounds() );
+            ci::gl::viewport( ci::ivec2(0), fbo->getSize() );
             ci::gl::setMatricesWindow( fbo->getSize(), false );
             {
                 ci::gl::color( Color( 1.0, 1.0, 1.0 ) );
@@ -29,7 +29,7 @@ namespace hrfm{ namespace gl{
         }
         fbo->unbindFramebuffer();
         
-        //ci::gl::setViewport(viewport);
+        ci::gl::viewport( viewport );
         
         return fbo->getColorTexture();
         

@@ -10,10 +10,18 @@ namespace hrfm{ namespace display{
     
     void DisplayNode::clear(){}
     
+    vec3 DisplayNode::getPosition(){
+        return vec3(x,y,z);
+    }
+    void DisplayNode::setPosition( vec3 position ){
+        x = position.x;
+        y = position.y;
+        z = position.z;
+    }
+    
     ivec2 DisplayNode::getSize(){
         return ivec2( width, height );
     }
-    
     void DisplayNode::setSize( int w, int h ){
         width  = w;
         height = h;
@@ -23,9 +31,18 @@ namespace hrfm{ namespace display{
             _beforeHeight = height;
         }
     }
-    
     void DisplayNode::setSize( ivec2 size ){
         setSize( size.x, size.y );
+    }
+    
+    vec3 DisplayNode::getScale(){
+        return this->scale;
+    }
+    void DisplayNode::setScale( float scale ){
+        this->scale = vec3( scale, scale, scale );
+    }
+    void DisplayNode::setScale( vec3 scale ){
+        this->scale = scale;
     }
     
     template <class T> void DisplayNode::setValue( const string key, T value ){
@@ -146,7 +163,7 @@ namespace hrfm{ namespace display{
         }
         ci::gl::pushMatrices();
         {
-            ci::gl::translate( x, y );
+            ci::gl::translate( getPosition() );
             ci::gl::color( c );
             _draw();
             _drawChildren( &c );

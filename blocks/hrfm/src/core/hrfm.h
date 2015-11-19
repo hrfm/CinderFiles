@@ -7,6 +7,7 @@
 #include "ImageTexture.h"
 #include "MovieTexture.h"
 #include "Stage.h"
+#include "VboNode.h"
 
 // --- hrfm::events
 
