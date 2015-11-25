@@ -22,18 +22,29 @@ namespace hrfm{ namespace display{
         _enableWireframe = flag;
     }
     
-    void VboNode::setShader( hrfm::gl::ShaderBase * shader ){
-        _shader = shader;
+    void VboNode::setVboMeshRef( ci::gl::VboMeshRef vboMeshRef ){
+        _vboMeshRef = vboMeshRef;
+        if( _vboMeshRef == NULL ){
+            _batchRef = NULL;
+        }else if( _glslProgRef != NULL ){
+            _batchRef = ci::gl::Batch::create( _vboMeshRef, _glslProgRef );
+        }
+    }
+    ci::gl::VboMeshRef VboNode::getVboMeshRef(){
+        return _vboMeshRef;
     }
     
-    /*!!!!!!!
-    void VboNode::setMaterial( ci::gl::Material * material ){
-        _material = material;
+    void VboNode::setShader( ci::gl::GlslProgRef shader ){
+        _glslProgRef = shader;
+        if( _glslProgRef == NULL ){
+            _batchRef = NULL;
+        }else if( _vboMeshRef != NULL ){
+            _batchRef = ci::gl::Batch::create( _vboMeshRef, _glslProgRef );
+        }
     }
-    ci::gl::Material * VboNode::getMaterial(){
-        return _material;
+    ci::gl::GlslProgRef VboNode::getShader(){
+        return _glslProgRef;
     }
-    //*/
     
     void VboNode::addTexture( ci::gl::TextureRef tex ){
         eraseTextureFromList(tex);
@@ -73,47 +84,29 @@ namespace hrfm{ namespace display{
         
         ci::gl::pushMatrices();
         {
+            
+            if( _enableWireframe  ) ci::gl::enableWireframe();
+            //!!!!!! if( _material != NULL ) _material->apply();
+            
+            if( 0 < _textures.size() ){
+                int texIdx = 0;
+                for( it = _textures.begin(), end = _textures.end(); it!=end; it++ ){
+                    (*it)->bind(texIdx);
+                    if( _glslProgRef != NULL ) _glslProgRef->uniform( "texture"+toString(texIdx), texIdx );
+                }
+            }
+            
             ci::gl::translate( getPosition() );
             //!!!!!! ci::gl::rotate( this->rotation );
             ci::gl::scale( this->scale );
+            _draw();
             
-            if( _enableWireframe  ) ci::gl::enableWireframe();
-            
-            //!!!!!! if( _material != NULL ) _material->apply();
-            
-            if( _shader != NULL ){
-                ci::gl::ScopedGlslProg scpGlsl( _shader->getGlslProg() );
-                _shader->prepare();
-                _shader->getGlslProg()->uniform( "alpha", colorA.a );
-                if( 0 < _textures.size() ){
-                    int texIdx = 0;
-                    for( it = _textures.begin(), end = _textures.end(); it!=end; it++ ){
-                        (*it)->bind(texIdx);
-                        _shader->getGlslProg()->uniform( "texture"+toString(texIdx), texIdx );
-                    }
+            if( 0 < _textures.size() ){
+                for( it = _textures.begin(), end = _textures.end(); it!=end; it++ ){
+                    (*it)->unbind();
                 }
-                _draw();
-                if( 0 < _textures.size() ){
-                    for( it = _textures.begin(), end = _textures.end(); it!=end; it++ ){
-                        (*it)->unbind();
-                    }
-                }
-                _drawChildren(&c);
-                _shader->clear();
-            }else{
-                if( 0 < _textures.size() ){
-                    for( it = _textures.begin(), end = _textures.end(); it!=end; it++ ){
-                        (*it)->bind();
-                    }
-                }
-                _draw();
-                if( 0 < _textures.size() ){
-                    for( it = _textures.begin(), end = _textures.end(); it!=end; it++ ){
-                        (*it)->unbind();
-                    }
-                }
-                _drawChildren(&c);
             }
+            _drawChildren(&c);
             
             if( _enableWireframe  ) ci::gl::disableWireframe();
             
@@ -124,6 +117,39 @@ namespace hrfm{ namespace display{
     }
     
     //! protected:
+    
+    void VboNode::_update(){};
+    
+    void VboNode::_draw(){
+        if( _batchRef != NULL ){
+            _batchRef->draw();
+        }else if( _vboMeshRef != NULL ){
+            ci::gl::draw(this->_vboMeshRef);
+        }
+    };
+    void VboNode::_drawChildren( ColorA * drawColor ){
+        DisplayNode::_drawChildren( drawColor );
+        /*
+        if( numChildren() == 0 ) return;
+        std::vector<DisplayNode*>::iterator it, end;
+        for( it = children.begin(), end = children.end(); it!=end; it++ ){
+            if( *it!=nullptr ){
+                (*it)->draw( drawColor );
+            }
+        }
+        //*/
+    }
+    
+    inline bool VboNode::eraseTextureFromList( ci::gl::TextureRef tex ){
+        auto itr = std::remove_if(_textures.begin(),_textures.end(),[tex](ci::gl::TextureRef t)->bool{
+            return t == tex;
+        });
+        if( itr == _textures.end() ){
+            return false;
+        }
+        _textures.erase( itr, _textures.end() );
+        return true;
+    }
     
     void VboNode::_appendVertex( ci::TriMeshRef m, vec3 v0, vec3 v1, vec3 v2 ){
         
@@ -143,23 +169,13 @@ namespace hrfm{ namespace display{
         
     }
     
-    void VboNode::_update(){};
-    
-    void VboNode::_draw(){
-        ci::gl::draw(this->mesh);
-    };
-    
-    //! protected
-    
-    inline bool VboNode::eraseTextureFromList( ci::gl::TextureRef tex ){
-        auto itr = std::remove_if(_textures.begin(),_textures.end(),[tex](ci::gl::TextureRef t)->bool{
-            return t == tex;
-        });
-        if( itr == _textures.end() ){
-            return false;
-        }
-        _textures.erase( itr, _textures.end() );
-        return true;
-    }
+    /*!!!!!!!
+     void VboNode::setMaterial( ci::gl::Material * material ){
+     _material = material;
+     }
+     ci::gl::Material * VboNode::getMaterial(){
+     return _material;
+     }
+     //*/
     
 }}

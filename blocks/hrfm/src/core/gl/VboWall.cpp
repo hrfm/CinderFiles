@@ -150,7 +150,7 @@ namespace hrfm{ namespace gl{
         
         //*/
         
-        this->mesh = ci::gl::VboMesh::create( *m );
+        this->_vboMeshRef = ci::gl::VboMesh::create( *m );
         
         /*!!!!!!!
         ci::gl::Material * material = new ci::gl::Material();
@@ -181,20 +181,20 @@ namespace hrfm{ namespace gl{
     void VboWall::_draw( ci::CameraPersp * camera ){
         
         hrfm::io::SiKORGMIDIInterface * KORG = &hrfm::io::SiKORGMIDIInterface::getInstance();
+        hrfm::io::SiAudioInput * audio = &hrfm::io::SiAudioInput::getInstance();
         
         if( _texture != NULL ){
             _texture->bind();
-            if( _shader != NULL ){
-                _shader->getGlslProg()->uniform( "tex", 0 );
-                hrfm::io::SiAudioInput * audio = &hrfm::io::SiAudioInput::getInstance();
-                _shader->getGlslProg()->uniform( "strength", KORG->nanoKontrolFader[11] );
-                _shader->getGlslProg()->uniform( "volume", audio->getVolume() );
-                _shader->getGlslProg()->uniform( "wave", audio->getChannelAt(0), 128 );
-                _shader->getGlslProg()->uniform( "basePos", vec3(0.0,0.8,0.0) );
-                _shader->getGlslProg()->uniform( "alpha", colorA.a );
+            if( _glslProgRef != NULL ){
+                _glslProgRef->uniform( "tex", 0 );
+                _glslProgRef->uniform( "strength", KORG->nanoKontrolFader[11] );
+                _glslProgRef->uniform( "volume", audio->getVolume() );
+                _glslProgRef->uniform( "wave", audio->getChannelAt(0), 128 );
+                _glslProgRef->uniform( "basePos", vec3(0.0,0.8,0.0) );
+                _glslProgRef->uniform( "alpha", colorA.a );
             }
         }
-        ci::gl::draw( this->mesh );
+        ci::gl::draw( this->_vboMeshRef );
         if( _texture != NULL ){
             _texture->unbind();
         }

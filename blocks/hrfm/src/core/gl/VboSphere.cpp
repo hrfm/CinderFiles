@@ -122,7 +122,7 @@ namespace hrfm{ namespace gl{
         
         //*/
         
-        this->mesh = ci::gl::VboMesh::create(*m);
+        this->_vboMeshRef = ci::gl::VboMesh::create(*m);
         
         /* !!!!!!!!!
         ci::gl::Material * material = new ci::gl::Material();
