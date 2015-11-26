@@ -26,8 +26,11 @@ namespace hrfm{ namespace display{
         _vboMeshRef = vboMeshRef;
         if( _vboMeshRef == NULL ){
             _batchRef = NULL;
-        }else if( _glslProgRef != NULL ){
-            _batchRef = ci::gl::Batch::create( _vboMeshRef, _glslProgRef );
+        }else{
+            _defBatchRef = ci::gl::Batch::create( _vboMeshRef, ci::gl::getStockShader( ci::gl::ShaderDef() ) );
+            if( _glslProgRef != NULL ){
+                _batchRef = ci::gl::Batch::create( _vboMeshRef, _glslProgRef );
+            }
         }
     }
     ci::gl::VboMeshRef VboNode::getVboMeshRef(){
@@ -63,9 +66,11 @@ namespace hrfm{ namespace display{
     }
     
     void VboNode::draw( ColorA * drawColor ){
+        
         if( visible == false || colorA.a <= 0.0f ){
             return;
         }
+        
         ColorA c = ColorA(colorA.r,colorA.g,colorA.b,colorA.a);
         if( drawColor != NULL ){
             c.r *= drawColor->r;
@@ -73,26 +78,23 @@ namespace hrfm{ namespace display{
             c.b *= drawColor->b;
             c.a *= drawColor->a;
         }
-        //if( c.a < 1.0f ){
-            ci::gl::enableAlphaBlending();
-        //}else{
-            //ci::gl::disableAlphaBlending();
-        //}
+        
+        ci::gl::enableAlphaBlending();
         ci::gl::color( c );
         
         vector<ci::gl::TextureRef>::iterator it, end;
         
-        ci::gl::pushMatrices();
-        {
-            
+        ci::gl::pushModelMatrix();
+        
             if( _enableWireframe  ) ci::gl::enableWireframe();
             //!!!!!! if( _material != NULL ) _material->apply();
             
             if( 0 < _textures.size() ){
-                int texIdx = 0;
+                int texIdx = 3;
                 for( it = _textures.begin(), end = _textures.end(); it!=end; it++ ){
                     (*it)->bind(texIdx);
                     if( _glslProgRef != NULL ) _glslProgRef->uniform( "texture"+toString(texIdx), texIdx );
+                    texIdx++;
                 }
             }
             
@@ -110,10 +112,10 @@ namespace hrfm{ namespace display{
             
             if( _enableWireframe  ) ci::gl::disableWireframe();
             
-        }
-        ci::gl::popMatrices();
+        ci::gl::popModelMatrix();
         
         ci::gl::disableAlphaBlending();
+        
     }
     
     //! protected:
@@ -123,10 +125,15 @@ namespace hrfm{ namespace display{
     void VboNode::_draw(){
         if( _batchRef != NULL ){
             _batchRef->draw();
-        }else if( _vboMeshRef != NULL ){
-            ci::gl::draw(this->_vboMeshRef);
+        }else if( _defBatchRef != NULL ){
+            _defBatchRef->draw();
         }
     };
+    void VboNode::_drawForLights(){
+        if( _defBatchRef != NULL ){
+            _defBatchRef->draw();
+        }
+    }
     void VboNode::_drawChildren( ColorA * drawColor ){
         DisplayNode::_drawChildren( drawColor );
         /*

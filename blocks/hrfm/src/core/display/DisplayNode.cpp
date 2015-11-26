@@ -146,9 +146,11 @@ namespace hrfm{ namespace display{
     }
     
     void DisplayNode::draw( ColorA * drawColor ){
+        
         if( visible == false || colorA.a <= 0.0f ){
             return;
         }
+        
         ColorA c = ColorA(colorA.r,colorA.g,colorA.b,colorA.a);
         if( drawColor != NULL ){
             c.r *= drawColor->r;
@@ -156,21 +158,30 @@ namespace hrfm{ namespace display{
             c.b *= drawColor->b;
             c.a *= drawColor->a;
         }
+        
         if( c.a < 1.0f ){
             ci::gl::enableAlphaBlending();
         }else{
             ci::gl::disableAlphaBlending();
         }
-        ci::gl::pushMatrices();
-        {
+        ci::gl::pushModelMatrix();
             ci::gl::translate( getPosition() );
             ci::gl::color( c );
             _draw();
             _drawChildren( &c );
-        }
-        ci::gl::popMatrices();
+        ci::gl::popModelMatrix();
         ci::gl::disableAlphaBlending();
+        
     }
+    
+    void DisplayNode::drawForLights(){
+        ci::gl::pushModelMatrix();
+            ci::gl::translate( getPosition() );
+            _drawForLights();
+            _drawChildrenForLights();
+        ci::gl::popModelMatrix();
+    }
+
     
     bool DisplayNode::hasParent(){
         return _parent != nullptr && _parent != NULL;
@@ -203,16 +214,13 @@ namespace hrfm{ namespace display{
     
     void DisplayNode::_update(){}
     void DisplayNode::_updateChildren(){
-        
         if( numChildren() == 0 ) return;
-        
         std::vector<DisplayNode*>::iterator it, end;
         for( it = children.begin(), end = children.end(); it!=end; it++ ){
             if( *it!=nullptr ){
                 (*it)->update();
             }
         }
-        
     }
     
     void DisplayNode::_draw(){};
@@ -222,6 +230,19 @@ namespace hrfm{ namespace display{
         for( it = children.begin(), end = children.end(); it!=end; it++ ){
             if( *it!=nullptr ){
                 (*it)->draw( drawColor );
+            }
+        }
+    }
+    
+    void DisplayNode::_drawForLights(){
+        _draw();
+    };
+    void DisplayNode::_drawChildrenForLights(){
+        if( numChildren() == 0 ) return;
+        std::vector<DisplayNode*>::iterator it, end;
+        for( it = children.begin(), end = children.end(); it!=end; it++ ){
+            if( *it!=nullptr ){
+                (*it)->drawForLights();
             }
         }
     }

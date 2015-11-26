@@ -46,7 +46,7 @@ namespace hrfm{ namespace display{
         
         template <class T> void setValue( const string key, T value );
         template <class T> T getValue( const string key );
-        bool hasValue( const string key );
+        virtual bool hasValue( const string key );
         
         virtual ci::Rectf getBounds();
         virtual ci::Rectf getDrawBounds();
@@ -64,6 +64,7 @@ namespace hrfm{ namespace display{
         
         virtual void update();
         virtual void draw( ci::ColorA * drawColor = NULL );
+        virtual void drawForLights();
         
         virtual bool hasParent();
         virtual DisplayNode * getParent();
@@ -92,6 +93,8 @@ namespace hrfm{ namespace display{
         
         virtual void _draw();
         virtual void _drawChildren( ci::ColorA * drawColor = NULL );
+        virtual void _drawForLights();
+        virtual void _drawChildrenForLights();
         
         int _beforeWidth;
         int _beforeHeight;

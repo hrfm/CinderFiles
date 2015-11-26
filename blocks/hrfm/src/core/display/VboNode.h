@@ -24,15 +24,18 @@ namespace hrfm{ namespace display{
     
     public:
         
-        VboNode( ci::gl::VboMeshRef meshRef = NULL, ci::gl::GlslProgRef shader = NULL ):hrfm::display::DisplayNode(){
+        VboNode():hrfm::display::DisplayNode(){
+            this->rotation = mat4();
+        }
+        
+        VboNode( ci::gl::VboMeshRef meshRef, ci::gl::GlslProgRef shader = NULL ):hrfm::display::DisplayNode(){
             this->rotation = mat4();
             this->setVboMeshRef( meshRef );
             if( shader != NULL ){
                 this->setShader( shader );
-            }else{
-                this->setShader( ci::gl::getStockShader( ci::gl::ShaderDef().color() ) );
             }
         };
+        
         ~VboNode(){};
         
         virtual void setup();
@@ -59,7 +62,6 @@ namespace hrfm{ namespace display{
         ci::mat4 rotation;
         // --------------------------
         
-        //virtual void setTextureAt( ci::gl::TextureRef tex, int index );
         //virtual void setMaterial( ci::gl::Material * material );
         //virtual ci::gl::Material * getMaterial();
         
@@ -67,6 +69,7 @@ namespace hrfm{ namespace display{
         
         virtual void _update();
         virtual void _draw();
+        virtual void _drawForLights();
         virtual void _drawChildren( ci::ColorA * drawColor = NULL );
         
         bool eraseTextureFromList( ci::gl::TextureRef tex );
@@ -75,6 +78,7 @@ namespace hrfm{ namespace display{
         bool _enableWireframe = false;
         ci::gl::VboMeshRef  _vboMeshRef  = NULL;
         ci::gl::GlslProgRef _glslProgRef = NULL;
+        ci::gl::BatchRef    _defBatchRef = NULL;
         ci::gl::BatchRef    _batchRef    = NULL;
         vector<ci::gl::TextureRef> _textures;
         //ci::gl::Material * _material = NULL;

@@ -3,12 +3,16 @@
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Fbo.h"
 #include "DisplayNode.h"
+#include "StageLight.h"
 #include "Utils.h"
 
 namespace hrfm{ namespace display{
     
+    class StageLight;
+    
     class Stage : public DisplayNode{
     public:
+        
         Stage( ci::CameraPersp * camera = NULL ):DisplayNode(){
             this->_cameraPersp = camera;
             this->addEventListener( hrfm::events::Event::RESIZE, this, &Stage::_onResize );
@@ -27,18 +31,27 @@ namespace hrfm{ namespace display{
         
         virtual DisplayNode * addChild( DisplayNode * child );
         
-        //!!!!! virtual void addLight( ci::gl::Light * light );
-        //!!!!! virtual void removeLight( ci::gl::Light * light );
+        virtual int  numLights();
+        virtual void addLight( StageLight * light );
+        virtual void removeLight( StageLight * light );
         
         virtual void draw(bool offscreen = false);
         virtual void drawOffscreen();
         
         ci::gl::TextureRef getTexture();
+    
+    protected:
+        
+        friend class StageLight;
         
     private:
         
         void _begin();
         void _end();
+        
+        void _beginLights();
+        void _endLights();
+        
         void _updateCamera();
         void _onResize( hrfm::events::Event * event );
         
@@ -47,8 +60,8 @@ namespace hrfm{ namespace display{
         ci::gl::FboRef _fbo;
         std::pair<ci::ivec2,ci::ivec2> _tmpViewportOnBegin;
         
-        //!!!!! bool eraseLightFromLights( ci::gl::Light * light );
-        //!!!!! vector<ci::gl::Light*> _lights;
+        bool eraseLightFromLights( StageLight * light );
+        vector<StageLight*> _lights;
         
     };
     
