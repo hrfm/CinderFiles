@@ -39,7 +39,6 @@ float sigmoid( float val, float gain ){
 void main(void){
     
     vec2 pos = ( ( gl_FragCoord.xy / windowSize ) * 2.0 ) - ( 0.5 * 2.0 );
-    pos.y = 1.0 - pos.y;
     
     vec2 v = trans(pos);
     

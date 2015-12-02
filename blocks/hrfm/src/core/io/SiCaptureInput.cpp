@@ -156,7 +156,7 @@ namespace hrfm { namespace io{
                 _beforeFrameMap[deviceName] = currentFrame;
                 vector<ci::gl::Texture2dRef> * vec = &_textureCacheVectorMap[deviceName];
                 if( getCaptureRef(deviceName)->checkNewFrame() ){
-                    vec->push_back( ci::gl::Texture::create( *getSurface( deviceName ), ci::gl::Texture::Format().loadTopDown() ) );
+                    vec->push_back( ci::gl::Texture::create( *getSurface( deviceName ) ) );
                 }else{
                     // Diff 用に取っているが3フレ以上同じだった場合不要な処理
                     vec->push_back( getTexture(deviceName) );
@@ -193,23 +193,28 @@ namespace hrfm { namespace io{
                 
                 // 前フレームとの差分を取得する.
                 {
+                    
                     ci::gl::FboRef fbo = _diffFboMap[deviceName];
                     ci::gl::ScopedFramebuffer fboScp( fbo );
-                    ci::gl::ScopedViewport    viewportScp( ivec2(0), fbo->getSize() );
-                    ci::gl::ScopedGlslProg    shaderScp( _diffShader );
-                    ci::gl::ScopedColor       colorScp( 1.0f, 1.0f, 1.0f );
                     ci::gl::ScopedTextureBind tex0Scp( getTexture(deviceName,1), 0 );
                     ci::gl::ScopedTextureBind tex1Scp( getTexture(deviceName), 1 );
+                    ci::gl::ScopedGlslProg    shaderScp( _diffShader );
+                    ci::gl::ScopedColor       colorScp( 1.0f, 1.0f, 1.0f );
+                    
+                    std::pair<ci::ivec2,ci::ivec2> tmpViewport = ci::gl::getViewport();
                     ci::gl::pushMatrices();
                     {
+                        ci::gl::viewport( ivec2(0), fbo->getSize() );
                         ci::gl::setMatricesWindow( fbo->getSize(), true );
                         ci::gl::clear();
                         _diffShader->uniform("tex0", 0);
                         _diffShader->uniform("tex1", 1);
                         _diffShader->uniform("resolution", vec2(fbo->getSize()) );
-                        ci::gl::drawSolidRect( fbo->getBounds(), vec2(0,0), vec2(1,1) );
+                        ci::gl::drawSolidRect( fbo->getBounds() );
                     }
                     ci::gl::popMatrices();
+                    ci::gl::viewport( tmpViewport );
+                    
                 }
                 
             }

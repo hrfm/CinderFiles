@@ -11,7 +11,6 @@ void main(){
     
     // 各テクスチャ上の色を取得.
     vec2 pos = gl_FragCoord.xy / resolution;
-    pos.y = 1.0 - pos.y;
     
     //vec4 color = texture2D( tex, pos );
     

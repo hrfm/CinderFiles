@@ -23,12 +23,10 @@ vec2 stepOfMtx(){
 void main(void){
     
     vec2 posOrigin  = gl_FragCoord.xy / resolution;
-    posOrigin.y = 1.0 - posOrigin.y;
 
     // - matrix 上の所属座標を調べる
     vec2 stepOfMtx = stepOfMtx();
     vec2 posOfMtx  = gl_FragCoord.xy / resolution;
-    posOfMtx.y = 1.0 - posOfMtx.y;
 
     posOfMtx.x = posOfMtx.x - mod( posOfMtx.x, stepOfMtx.x ) + stepOfMtx.x * 0.5;
     posOfMtx.y = posOfMtx.y - mod( posOfMtx.y, stepOfMtx.y ) + stepOfMtx.y * 0.5;

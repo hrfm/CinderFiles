@@ -42,7 +42,6 @@ vec4 sumfnc( vec4 base, vec2 pos, vec2 offset ){
 void main(){
     
     vec2 pos = gl_FragCoord.xy / resolution;
-    pos.y = 1.0 - pos.y;
 
     /*
     

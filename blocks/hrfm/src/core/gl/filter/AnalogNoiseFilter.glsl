@@ -6,6 +6,8 @@ uniform float     time;
 uniform vec2      resolution;
 uniform float     strength;
 
+out vec4 oColor;
+
 float rand(vec2 co){
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453 * time);
 }
@@ -14,7 +16,6 @@ void main(void){
     
     //*
 	vec2 texCoord = gl_FragCoord.xy / resolution;
-    texCoord.y = 1.0 - texCoord.y;
     
     float cycle = mod( time / 300.0, 1.0 );
     
@@ -23,7 +24,7 @@ void main(void){
     
     texCoord.x = mod( texCoord.x + tanValue + sinValue, 1.0 );
     
-    gl_FragColor = texture2D( tex, texCoord );// * rand( gl_FragCoord.xy );
+    oColor = texture( tex, texCoord );// * rand( gl_FragCoord.xy );
     /*/
      
     // ULTRA2015 の時にこっちを使った。
