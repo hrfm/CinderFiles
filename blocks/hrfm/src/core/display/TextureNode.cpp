@@ -15,19 +15,19 @@ namespace hrfm{ namespace display{
     }
     
     void TextureNode::setTexture( ci::fs::path path ){
-        setValue("srcPath", path);
+        values.setValue("srcPath", path);
         _init( ci::gl::Texture::create( ci::loadImage( hrfm::utils::DataLoader::load(path) ) ) );
     }
     void TextureNode::setTexture( ci::ImageSourceRef src ){
-        setValue("srcPath", "__from_source__");
+        values.setValue("srcPath", "__from_source__");
         _init( ci::gl::Texture::create( src ) );
     }
     void TextureNode::setTexture( ci::gl::TextureRef tex ){
-        setValue("srcPath", "__from_texture__");
+        values.setValue("srcPath", "__from_texture__");
         _init( tex );
     }
     void TextureNode::setTexture( ci::gl::FboRef fbo ){
-        setValue("srcPath", "__from_fbo__");
+        values.setValue("srcPath", "__from_fbo__");
         _init( fbo->getColorTexture() );
     }
     

@@ -52,10 +52,6 @@ namespace hrfm{ namespace display{
         virtual void setScale( float scale );
         virtual void setScale( ci::vec3 scale );
         
-        template <class T> void setValue( const string key, T value );
-        template <class T> T getValue( const string key );
-        virtual bool hasValue( const string key );
-        
         virtual ci::Rectf getBounds();
         virtual ci::Rectf getDrawBounds();
         virtual ci::vec2  getAbsolutePosition();
@@ -81,6 +77,7 @@ namespace hrfm{ namespace display{
         virtual Stage * getStage();
         
         // --- PROPERTY -------------
+        hrfm::utils::DynamicMap values;
         std::vector<DisplayNode*> children;
         float x, y, z;
         int width, height;
@@ -90,8 +87,6 @@ namespace hrfm{ namespace display{
         // --------------------------
         
     protected:
-        
-        hrfm::utils::DynamicMap _values;
         
         //! 指定した要素を children から削除します. 削除された場合 true 存在しない場合は false を返します.
         bool eraseFromChildren( DisplayNode * child );
