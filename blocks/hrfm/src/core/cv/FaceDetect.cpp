@@ -36,7 +36,7 @@ namespace hrfm{ namespace cv{
     }
     
     void FaceDetect::update( Surface8uRef surface ){
-        cout << "FaceDetect::update()" << endl;
+        //cout << "FaceDetect::update()" << endl;
         if( pthread_mutex_lock(&_mutex) != 0 ){
             if( surface != NULL ){
                 //!!!!!!!! clone じゃないとあかんかも？
@@ -60,6 +60,8 @@ namespace hrfm{ namespace cv{
     //! private
     
     void FaceDetect::_updateFaces(){
+        
+        return;
         
         ThreadSetup threadSetup;
         
@@ -90,8 +92,9 @@ namespace hrfm{ namespace cv{
                         ::cv::resize( grayCameraImage, smallImg, smallImg.size(), 0, 0, ::cv::INTER_LINEAR );
                         
                         // equalize the histogram
+                        // !!!!!!!!!!!!!
                         ::cv::equalizeHist( smallImg, smallImg );
-                        
+
                         // detect the faces and iterate them, appending them to mFaces
                         vector<::cv::Rect> faces;
                         mFaceCascade.detectMultiScale( smallImg, faces );

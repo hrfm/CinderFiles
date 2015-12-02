@@ -45,6 +45,7 @@ namespace hrfm{ namespace display{
         
         std::vector<StageLight*>::iterator it, end;
         
+        /*
         if( 0 < numLights() ){
             // -----------------------------------------------------------
             // --- 光源から見たdepthMap を描画します.
@@ -54,6 +55,7 @@ namespace hrfm{ namespace display{
                 }
             }
         }
+        //*/
         
         // -----------------------------------------------------------
         // --- 光源なしの描画を行います.
@@ -70,6 +72,7 @@ namespace hrfm{ namespace display{
             ci::gl::draw( getTexture() );
         }
         
+        /*
         {
             ci::gl::ScopedFramebuffer fbo( _fbo );
             ci::gl::pushMatrices();

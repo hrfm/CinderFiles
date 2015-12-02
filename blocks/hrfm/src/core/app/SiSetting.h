@@ -21,9 +21,7 @@ namespace hrfm { namespace app{
         
         friend class hrfm::utils::Singleton<SiSetting>;
         
-        SiSetting(){
-            hrfm::utils::DynamicMap();
-        }
+        SiSetting():hrfm::utils::DynamicMap(){}
         
         XmlTree _xml;
         
