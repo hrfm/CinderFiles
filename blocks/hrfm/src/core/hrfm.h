@@ -4,7 +4,6 @@
 
 #include "DisplayNode.h"
 #include "TextureNode.h"
-#include "ImageTexture.h"
 #include "MovieTexture.h"
 #include "Stage.h"
 #include "VboNode.h"

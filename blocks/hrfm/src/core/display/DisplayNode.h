@@ -18,16 +18,24 @@ namespace hrfm{ namespace display{
     public:
         
         DisplayNode():hrfm::events::EventDispatcher(){
+            
             x       = 0.0f;
             y       = 0.0f;
+            z       = 0.0f;
+            
             width   = 1.0f;
-            height  = 1.0f;
-            scale   = ci::vec3(1.0f,1.0f,1.0f);
-            colorA  = ci::ColorA(1.0,1.0,1.0,1.0);
-            visible = true;
             _beforeWidth  = 0.0f;
+            height  = 1.0f;
             _beforeHeight = 0.0f;
+            
+            scale   = ci::vec3(1.0f,1.0f,1.0f);
+            
+            colorA  = ci::ColorA(1.0,1.0,1.0,1.0);
+            
+            visible = true;
+            
         };
+        
         ~DisplayNode(){};
         
         virtual void setup();

@@ -6,12 +6,6 @@ namespace hrfm{ namespace display{
     
     // public:
     
-    TextureNode::TextureNode(){
-        DisplayNode();
-    }
-    
-    TextureNode::~TextureNode(){}
-    
     bool TextureNode::isDrawable(){
         return ( getTexture() != nullptr && getTexture()->getWidth() != 0 && getTexture()->getHeight() != 0 );
     }
@@ -20,8 +14,21 @@ namespace hrfm{ namespace display{
         _letterbox = flag;
     }
     
+    void TextureNode::setTexture( ci::fs::path path ){
+        setValue("srcPath", path);
+        _init( ci::gl::Texture::create( ci::loadImage( hrfm::utils::DataLoader::load(path) ) ) );
+    }
+    void TextureNode::setTexture( ci::ImageSourceRef src ){
+        setValue("srcPath", "__from_source__");
+        _init( ci::gl::Texture::create( src ) );
+    }
     void TextureNode::setTexture( ci::gl::TextureRef tex ){
-        _texture = tex;
+        setValue("srcPath", "__from_texture__");
+        _init( tex );
+    }
+    void TextureNode::setTexture( ci::gl::FboRef fbo ){
+        setValue("srcPath", "__from_fbo__");
+        _init( fbo->getColorTexture() );
     }
     
     gl::TextureRef TextureNode::getTexture(){
@@ -29,6 +36,16 @@ namespace hrfm{ namespace display{
     }
     
     // protected:
+    
+    void TextureNode::_init( ci::gl::TextureRef texRef ){
+        _texture = texRef;
+        if( width == 0 ){
+            width = _texture->getWidth();
+        }
+        if( height == 0 ){
+            height = _texture->getHeight();
+        }
+    }
     
     void TextureNode::_draw(){
         if( isDrawable() ){

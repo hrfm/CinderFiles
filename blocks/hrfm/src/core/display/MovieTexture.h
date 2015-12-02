@@ -15,22 +15,32 @@ namespace hrfm{ namespace display{
     
     public:
         
-        MovieTexture();
-        MovieTexture( ci::fs::path filePath );
-        ~MovieTexture();
+        MovieTexture():TextureNode(){};
+        MovieTexture( string filePathStr ):TextureNode(){
+            init( filePathStr );
+        };
+        MovieTexture( ci::fs::path filePath ):TextureNode(){
+            init( filePath );
+        };
+        MovieTexture( ci::qtime::MovieGlRef movieGlRef ):TextureNode(){
+            init( movieGlRef );
+        };
+        ~MovieTexture(){};
         
-        void init( ci::fs::path filePath );
+        virtual void init( string filePathStr );
+        virtual void init( ci::fs::path filePath );
+        virtual void init( ci::qtime::MovieGlRef movieGlRef );
         
         virtual ci::qtime::MovieGlRef getMovieGlRef();
         
         virtual void play();
-        virtual void play( ci::fs::path &filePath );
-        virtual void play( string filePath );
-        virtual void play( ci::qtime::MovieGlRef & movieGlRef );
+        virtual void play( string filePathStr );
+        virtual void play( ci::fs::path filePath );
+        virtual void play( ci::qtime::MovieGlRef movieGlRef );
         
         virtual void stop( bool seekToStart = true );
         
-        virtual void setVolume( float volume );
+        virtual void  setVolume( float volume );
         virtual float getVolume();
         
         virtual bool isSilent();
@@ -40,9 +50,11 @@ namespace hrfm{ namespace display{
         
     protected:
         
+        virtual void _init( ci::qtime::MovieGlRef movieGlRef );
         virtual void _update();
         
         float _beforeTime;
+        float _volume   = 1.0f;
         bool  _isSilent = false;
         
     private:

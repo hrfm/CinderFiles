@@ -4,21 +4,20 @@ namespace hrfm{ namespace display{
     
     // public:
     
-    MovieTexture::MovieTexture(){
-        TextureNode();
-    };
-    
-    MovieTexture::MovieTexture( ci::fs::path filePath ){
-        MovieTexture();
-        init( filePath );
-    };
-    
-    MovieTexture::~MovieTexture(){};
-    
+    void MovieTexture::init( string filePathStr ){
+        ci::fs::path path = filePathStr;
+        init( path );
+    }
     void MovieTexture::init( ci::fs::path filePath ){
-        _beforeTime = 0.0f;
         setValue("srcPath", filePath);
-        _movieGlRef = ::ci::qtime::MovieGl::create( filePath );
+        init( ci::qtime::MovieGl::create( filePath ) );
+    }
+    void MovieTexture::init( ::ci::qtime::MovieGlRef movieGlRef ){
+        _init( movieGlRef );
+    }
+    
+    ci::qtime::MovieGlRef MovieTexture::getMovieGlRef(){
+        return _movieGlRef;
     }
     
     void MovieTexture::play(){
@@ -30,21 +29,17 @@ namespace hrfm{ namespace display{
             }
         }
     }
-    
-    void MovieTexture::play( ci::fs::path &filePath ){
-        stop();
-        init( filePath );
-        play();
-    }
-    
-    void MovieTexture::play( string filePath ){
-        ci::fs::path path = filePath;
+    void MovieTexture::play( string filePathStr ){
+        ci::fs::path path = filePathStr;
         play( path );
     }
-    
-    void MovieTexture::play( ::ci::qtime::MovieGlRef & movieGlRef ){
+    void MovieTexture::play( ci::fs::path filePath ){
+        setValue("srcPath", filePath);
+        play( ci::qtime::MovieGl::create( filePath ) );
+    }
+    void MovieTexture::play( ::ci::qtime::MovieGlRef movieGlRef ){
         stop();
-        _movieGlRef = movieGlRef;
+        _init( movieGlRef );
         play();
     }
     
@@ -61,6 +56,7 @@ namespace hrfm{ namespace display{
     }
     
     void  MovieTexture::setVolume( float volume ){
+        _volume = volume;
         if( _isSilent ){
             _movieGlRef->setVolume(0.0);
         }else{
@@ -69,11 +65,7 @@ namespace hrfm{ namespace display{
     }
     
     float MovieTexture::getVolume(){
-        if( _isSilent ){
-            return 0;
-        }else{
-            return _movieGlRef->getVolume();
-        }
+        return _volume;
     }
     
     bool MovieTexture::isSilent(){
@@ -83,15 +75,27 @@ namespace hrfm{ namespace display{
         _isSilent = flag;
         if( _isSilent ){
             _movieGlRef->setVolume(0.0);
+        }else{
+            _movieGlRef->setVolume(_volume);
         }
     }
     
-    ci::qtime::MovieGlRef MovieTexture::getMovieGlRef(){
-        return _movieGlRef;
-    }
-    
+    /*
+    !!!!!!! textureRef の参照を保持しているから大丈夫なはず・・・
     ci::gl::TextureRef MovieTexture::getTexture(){
         return _movieGlRef->getTexture();
+    }
+    //*/
+    
+    void MovieTexture::_init( ci::qtime::MovieGlRef movieGlRef ){
+        _beforeTime = 0.0f;
+        _movieGlRef = movieGlRef;
+        if( isSilent() ){
+            _movieGlRef->setVolume(0.0);
+        }else{
+            _movieGlRef->setVolume(_volume);
+        }
+        _texture = _movieGlRef->getTexture();
     }
     
     void MovieTexture::_update(){

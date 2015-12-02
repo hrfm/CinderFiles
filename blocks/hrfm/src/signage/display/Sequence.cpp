@@ -26,7 +26,7 @@ namespace hrfm{ namespace signage{ namespace display{
         
         if( hrfm::utils::instanceof<::hrfm::display::MovieTexture>(*content) ){
             _type = hrfm::utils::FILE_TYPE_MOV;
-        }else if( hrfm::utils::instanceof<::hrfm::display::ImageTexture>(*content) ){
+        }else if( hrfm::utils::instanceof<::hrfm::display::TextureNode>(*content) ){
             _type = hrfm::utils::FILE_TYPE_PIC;
         }else if( hrfm::utils::instanceof<SequentialContents>(*content) ){
             _type = "seq";

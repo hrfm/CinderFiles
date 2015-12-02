@@ -5,7 +5,6 @@
 #include "cinder/Xml.h"
 
 #include "DisplayNode.h"
-#include "ImageTexture.h"
 #include "MovieTexture.h"
 
 #include "Sequence.h"

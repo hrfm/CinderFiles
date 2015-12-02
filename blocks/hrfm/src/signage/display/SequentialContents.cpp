@@ -192,7 +192,7 @@ namespace hrfm{ namespace signage{ namespace display{
             
             if( type == "pic" ){
                 // 設定されているものが画像の場合
-                hrfm::display::ImageTexture * imgTex = new hrfm::display::ImageTexture(path);
+                hrfm::display::TextureNode * imgTex = new hrfm::display::TextureNode(path);
                 imgTex->setLetterbox(true);
                 return imgTex;
             }else if( type == "mov" ){

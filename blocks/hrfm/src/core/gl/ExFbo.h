@@ -10,8 +10,7 @@ namespace hrfm{ namespace gl{
         
     public:
         
-        ExFbo( int width, int height,
-               ci::CameraPersp * camera = NULL, ci::gl::Fbo::Format format = ci::gl::Fbo::Format() );
+        ExFbo( int width, int height, ci::gl::Fbo::Format format = ci::gl::Fbo::Format(), ci::CameraPersp * camera = NULL );
         
         ~ExFbo(){};
         

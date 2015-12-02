@@ -12,7 +12,6 @@
 #include "SiSetting.h"
 
 #include "Stage.h"
-#include "ImageTexture.h"
 
 #include "SiOscInput.h"
 #include "SiAudioInput.h"

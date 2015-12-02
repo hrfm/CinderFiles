@@ -2,7 +2,6 @@
 
 #include "DisplayNode.h"
 #include "MovieTexture.h"
-#include "ImageTexture.h"
 #include "Event.h"
 #include "SiEventDispatcher.h"
 #include "SequentialContents.h"

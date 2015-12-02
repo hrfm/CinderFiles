@@ -5,7 +5,7 @@ using namespace ci;
 
 namespace hrfm{ namespace gl{
     
-    ExFbo::ExFbo( int width, int height, ci::CameraPersp * camera, ci::gl::Fbo::Format format ){
+    ExFbo::ExFbo( int width, int height, ci::gl::Fbo::Format format, ci::CameraPersp * camera ){
         _fbo = ci::gl::Fbo::create( width, height, format );
     }
     
