@@ -52,6 +52,7 @@
 // --- hrfm::app
 
 #include "AppBase.h"
+#include "SignageAppBase.h"
 
 // --- hrfm::cv
 

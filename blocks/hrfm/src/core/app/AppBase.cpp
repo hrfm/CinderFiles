@@ -110,7 +110,7 @@ namespace hrfm { namespace app{
         if( xml.hasAttribute("fullScreen") && xml.getAttributeValue<string>("fullScreen") == "true" )
         {
             ci::app::setFullScreen(true);
-            system( ("open -a "+ci::app::getAppPath().string()).c_str() );
+            ::system( ("open -a "+ci::app::getAppPath().string()).c_str() );
             if( ci::app::isFullScreen() && _hideCursor ){
                 ci::app::App::hideCursor();
             }else{

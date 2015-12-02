@@ -60,14 +60,15 @@ namespace hrfm{ namespace display{
         
         std::pair<ivec2,ivec2> viewport = ci::gl::getViewport();
         _begin();
-        //_draw();
-        //_drawChildren( &colorA );
+            _draw();
+            _drawChildren( &colorA );
         _end();
+        ci::gl::viewport(viewport);
+        
         if( !offscreen ){
             ci::gl::translate( x, y );
-            ci::gl::draw( getTexture(), getDrawBounds() );
+            ci::gl::draw( getTexture() );
         }
-        ci::gl::viewport(viewport);
         
         {
             ci::gl::ScopedFramebuffer fbo( _fbo );
@@ -82,7 +83,12 @@ namespace hrfm{ namespace display{
             }
             ci::gl::popMatrices();
         }
+        //*/
         
+    }
+    
+    void Stage::drawOffscreen(){
+        draw(true);
     }
     
     void Stage::begin(){
@@ -94,10 +100,6 @@ namespace hrfm{ namespace display{
         ci::gl::viewport( _tmpViewportOnBegin );
     }
     
-    void Stage::drawOffscreen(){
-        draw(true);
-    }
-    
     ci::gl::TextureRef Stage::getTexture(){
         return _fbo->getColorTexture();
     }
@@ -105,8 +107,6 @@ namespace hrfm{ namespace display{
     void Stage::_begin(){
         _fbo->bindFramebuffer();
         ci::gl::enableAlphaBlending();
-        ci::gl::enableDepthWrite();
-        ci::gl::enableDepthRead();
         ci::gl::color( colorA );
         ci::gl::pushMatrices();
         ci::gl::viewport( ivec2(0), getSize() );
@@ -121,8 +121,6 @@ namespace hrfm{ namespace display{
     }
     void Stage::_end(){
         ci::gl::popMatrices();
-        ci::gl::disableDepthRead();
-        ci::gl::disableDepthWrite();
         ci::gl::disableAlphaBlending();
         _fbo->unbindFramebuffer();
     }

@@ -16,9 +16,6 @@ namespace hrfm{ namespace display{
     public:
         
         MovieTexture():TextureNode(){};
-        MovieTexture( string filePathStr ):TextureNode(){
-            init( filePathStr );
-        };
         MovieTexture( ci::fs::path filePath ):TextureNode(){
             init( filePath );
         };
@@ -27,14 +24,12 @@ namespace hrfm{ namespace display{
         };
         ~MovieTexture(){};
         
-        virtual void init( string filePathStr );
         virtual void init( ci::fs::path filePath );
         virtual void init( ci::qtime::MovieGlRef movieGlRef );
         
         virtual ci::qtime::MovieGlRef getMovieGlRef();
         
         virtual void play();
-        virtual void play( string filePathStr );
         virtual void play( ci::fs::path filePath );
         virtual void play( ci::qtime::MovieGlRef movieGlRef );
         
@@ -46,7 +41,7 @@ namespace hrfm{ namespace display{
         virtual bool isSilent();
         virtual void setSilent(bool flag);
         
-        virtual ci::gl::TextureRef getTexture();
+        ci::gl::TextureRef getTexture();
         
     protected:
         

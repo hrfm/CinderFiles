@@ -4,13 +4,9 @@ namespace hrfm{ namespace display{
     
     // public:
     
-    void MovieTexture::init( string filePathStr ){
-        ci::fs::path path = filePathStr;
-        init( path );
-    }
     void MovieTexture::init( ci::fs::path filePath ){
         values.setValue("srcPath", filePath);
-        init( ci::qtime::MovieGl::create( filePath ) );
+        init( ci::qtime::MovieGl::create( hrfm::utils::DataLoader::resolvePath(filePath) ) );
     }
     void MovieTexture::init( ::ci::qtime::MovieGlRef movieGlRef ){
         _init( movieGlRef );
@@ -21,7 +17,7 @@ namespace hrfm{ namespace display{
     }
     
     void MovieTexture::play(){
-        if( _movieGlRef ){
+        if( _movieGlRef != NULL ){
             _beforeTime = 0;
             _movieGlRef->seekToStart();
             if( !_movieGlRef->isPlaying() ){
@@ -29,13 +25,9 @@ namespace hrfm{ namespace display{
             }
         }
     }
-    void MovieTexture::play( string filePathStr ){
-        ci::fs::path path = filePathStr;
-        play( path );
-    }
     void MovieTexture::play( ci::fs::path filePath ){
         values.setValue("srcPath", filePath);
-        play( ci::qtime::MovieGl::create( filePath ) );
+        play( ci::qtime::MovieGl::create( hrfm::utils::DataLoader::resolvePath(filePath) ) );
     }
     void MovieTexture::play( ::ci::qtime::MovieGlRef movieGlRef ){
         stop();
@@ -80,12 +72,12 @@ namespace hrfm{ namespace display{
         }
     }
     
-    /*
-    !!!!!!! textureRef の参照を保持しているから大丈夫なはず・・・
     ci::gl::TextureRef MovieTexture::getTexture(){
+        if( _movieGlRef == NULL ){
+            return NULL;
+        }
         return _movieGlRef->getTexture();
     }
-    //*/
     
     void MovieTexture::_init( ci::qtime::MovieGlRef movieGlRef ){
         _beforeTime = 0.0f;
@@ -95,10 +87,18 @@ namespace hrfm{ namespace display{
         }else{
             _movieGlRef->setVolume(_volume);
         }
-        _texture = _movieGlRef->getTexture();
+        if( width == 0 ){
+            width = _movieGlRef->getWidth();
+        }
+        if( height == 0 ){
+            height = _movieGlRef->getHeight();
+        }
     }
     
     void MovieTexture::_update(){
+        if( _movieGlRef == NULL ){
+            return;
+        }
         float duration    = _movieGlRef->getDuration();
         float currentTime = _movieGlRef->getCurrentTime();
         if( _movieGlRef->isDone() || ( _movieGlRef->isPlaying() && ( currentTime == duration || currentTime < _beforeTime ) ) ){

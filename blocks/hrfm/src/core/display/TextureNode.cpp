@@ -53,7 +53,7 @@ namespace hrfm{ namespace display{
                 Rectf rect = Rectf( 0, 0, getTexture()->getWidth(), getTexture()->getHeight() );
                 rect = hrfm::utils::DisplayUtil::letterBox( rect, getDrawBounds() );
                 ci::gl::draw( getTexture(), rect );
-            }else{ 
+            }else{
                 ci::gl::draw( getTexture(), getDrawBounds() );
             }
         }

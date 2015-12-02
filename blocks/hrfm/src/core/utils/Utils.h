@@ -2,6 +2,7 @@
 
 #include "DisplayUtil.h"
 #include "SiFontUtil.h"
+#include "SiFileManager.h"
 #include "SiTextureMap.h"
 #include "SiTimeUtil.h"
 #include "SiVolumeDetector.h"

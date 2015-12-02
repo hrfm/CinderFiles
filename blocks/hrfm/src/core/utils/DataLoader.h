@@ -25,6 +25,8 @@ namespace hrfm{ namespace utils{
         static DataSourceRef load( ci::fs::path path );
         static DataSourceRef load( ci::fs::path path, ci::UrlOptions::UrlOptions urlOptions );
         
+        static ci::fs::path resolvePath( ci::fs::path path );
+        
     private:
         
     };

@@ -85,10 +85,10 @@ namespace hrfm{ namespace gl{
             if( useAspect ){
                 // 特に使っていない
                 ci::gl::viewport( ivec2(0), getSize() );
-                ci::gl::setMatricesWindow( getAspectSize(), false );
+                ci::gl::setMatricesWindow( getAspectSize(), true );
             }else{
                 ci::gl::viewport( ivec2(0), getSize() );
-                ci::gl::setMatricesWindow( getSize(), false );
+                ci::gl::setMatricesWindow( getSize(), true );
             }
             if( clear == true){
                 ci::gl::clear( ColorA(0.0,0.0,0.0,0.0) );
