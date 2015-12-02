@@ -54,7 +54,7 @@ namespace hrfm{ namespace display{
         virtual void _update();
         
         float _beforeTime;
-        float _volume   = 1.0f;
+        float _volume   = 0.0f;
         bool  _isSilent = false;
         
     private:

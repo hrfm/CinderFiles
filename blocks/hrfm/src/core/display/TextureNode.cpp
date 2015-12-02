@@ -31,7 +31,7 @@ namespace hrfm{ namespace display{
         _init( fbo->getColorTexture() );
     }
     
-    gl::TextureRef TextureNode::getTexture(){
+    ci::gl::TextureRef TextureNode::getTexture(){
         return _texture;
     }
     
@@ -52,9 +52,9 @@ namespace hrfm{ namespace display{
             if( _letterbox ){
                 Rectf rect = Rectf( 0, 0, getTexture()->getWidth(), getTexture()->getHeight() );
                 rect = hrfm::utils::DisplayUtil::letterBox( rect, getDrawBounds() );
-                gl::draw( getTexture(), rect );
+                ci::gl::draw( getTexture(), rect );
             }else{ 
-                gl::draw( getTexture(), getDrawBounds() );
+                ci::gl::draw( getTexture(), getDrawBounds() );
             }
         }
     }
