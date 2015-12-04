@@ -5,9 +5,7 @@ uniform sampler2D tex;
 uniform sampler2D tex_speed;
 
 uniform float time;
-
-uniform vec2 windowSize;
-uniform vec2 resolution;
+uniform vec2  resolution;
 
 uniform float r_scale;
 uniform float r_min;
@@ -38,7 +36,7 @@ float sigmoid( float val, float gain ){
 
 void main(void){
     
-    vec2 pos = ( ( gl_FragCoord.xy / windowSize ) * 2.0 ) - ( 0.5 * 2.0 );
+    vec2 pos = ( ( gl_FragCoord.xy / resolution ) * 2.0 ) - ( 0.5 * 2.0 );
     
     vec2 v = trans(pos);
     
