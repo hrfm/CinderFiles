@@ -7,31 +7,32 @@ namespace hrfm{ namespace cv{
     
     // ========================================================================================= //
     
-    FaceDetect::FaceDetect( ivec2 textureSize, int calcScale ){
+    void FaceDetect::setup( fs::path haarcascade_face, fs::path haarcascade_eye, ivec2 textureSize, int calcScale ){
         
-        cout << endl << "- Setup FaceDetect." << endl;
+        cout << "- hrfm::cv::FaceDetect::setup()" << endl << endl;
         
         _calcScale = calcScale;
         
-        // --- Setup OpenCV
+        // ------------------------------------------------------------------
         
-        //*
-        try{
-            mFaceCascade.load( ci::app::getAssetPath( "haarcascade_frontalface_alt.xml" ).string() );
-            mEyeCascade.load( ci::app::getAssetPath( "haarcascade_eye.xml" ).string() );
-        }catch(...){
-            fs::path path;
-            path = getDocumentsDirectory() / "../Desktop" / "haarcascade_frontalface_alt.xml";
-            mFaceCascade.load( path.string() );
-            path = getDocumentsDirectory() / "../Desktop" / "haarcascade_eye.xml";
-            mEyeCascade.load( path.string() );
+        const string facePathStr = hrfm::utils::DataLoader::resolvePath(haarcascade_face).string();
+        const string eyePathStr  = hrfm::utils::DataLoader::resolvePath(haarcascade_eye).string();
+        
+        cout << "haarcascade_face xml : " << facePathStr <<  endl;
+        if( !mFaceCascade.load( facePathStr ) ){
+            cout << "[ERROR] FaceDetect::setup haarcascade_face load error." << endl;
         }
-        //*/
+        cout << "haarcascade_eye  xml : " << eyePathStr <<  endl;
+        if( !mEyeCascade.load( eyePathStr ) ){
+            cout << "[ERROR] FaceDetect::setup haarcascade_eye load error." << endl;
+        }
         
-        mThread = thread( bind( &FaceDetect::_updateFaces, this ) );
+        // ------------------------------------------------------------------
+        
         recentSec = 0;
+        mThread = thread( bind( &FaceDetect::_updateFaces, this ) );
         
-        cout << "done." << endl << endl;
+        cout << "--- FaceDetect::setup done. ---" << endl << endl;
         
     }
     
@@ -39,7 +40,6 @@ namespace hrfm{ namespace cv{
         //cout << "FaceDetect::update()" << endl;
         if( pthread_mutex_lock(&_mutex) != 0 ){
             if( surface != NULL ){
-                //!!!!!!!! clone じゃないとあかんかも？
                 mCloneSurface = surface;
             }
             pthread_mutex_unlock(&_mutex);
@@ -61,8 +61,6 @@ namespace hrfm{ namespace cv{
     
     void FaceDetect::_updateFaces(){
         
-        return;
-        
         ThreadSetup threadSetup;
         
         while(true){
@@ -73,18 +71,15 @@ namespace hrfm{ namespace cv{
                 
                 if( pthread_mutex_lock(&_mutex) != 0 ){
                     
-                    cout << "updateFaces"<< ci::app::getElapsedSeconds() << endl;
-                    
                     try{
                         
                         const int calcScale = _calcScale; // calculate the image at half scale
                         
-                        // create a grayscale copy of the input image
-                        // ::cv::Mat grayCameraImage( toOcv( &mCloneSurface, CV_8UC1 ) );
-                        //!!!!!! 下にしてみたけど動くか？
-                        ::cv::Mat grayCameraImage( toOcv( *mCloneSurface ) );
-                        
                         //*
+                        
+                        // create a grayscale copy of the input image
+                        ::cv::Mat grayCameraImage( toOcv( *mCloneSurface, CV_8UC1 ) );
+                        
                         // scale it to half size, as dictated by the calcScale constant
                         int scaledWidth  = mCloneSurface->getWidth() / calcScale;
                         int scaledHeight = mCloneSurface->getHeight() / calcScale;
@@ -92,9 +87,8 @@ namespace hrfm{ namespace cv{
                         ::cv::resize( grayCameraImage, smallImg, smallImg.size(), 0, 0, ::cv::INTER_LINEAR );
                         
                         // equalize the histogram
-                        // !!!!!!!!!!!!!
                         ::cv::equalizeHist( smallImg, smallImg );
-
+                        
                         // detect the faces and iterate them, appending them to mFaces
                         vector<::cv::Rect> faces;
                         mFaceCascade.detectMultiScale( smallImg, faces );

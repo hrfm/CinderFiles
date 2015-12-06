@@ -1,9 +1,9 @@
 #pragma once
 
 #include "cinder/app/App.h"
-#include "CinderOpenCV.h"
 #include "DetectRect.h"
 #include "XmlLoader.h"
+#include "CinderOpenCV.h"
 
 using namespace std;
 using namespace ci;
@@ -14,11 +14,19 @@ namespace hrfm{ namespace cv{
         
     public:
         
-        FaceDetect( ivec2 textureSize = ivec2( 320, 240 ), int calcScale = 3 );
+        FaceDetect(){};
         ~FaceDetect();
         
-        void update( Surface8uRef surface );
+        void setup(
+            fs::path haarcascade_face,
+            fs::path haarcascade_eye,
+            ivec2 textureSize = ivec2( 320, 240 ),
+            int calcScale = 3
+        );
+        
         void setCalcScale( int scale );
+        
+        void update( Surface8uRef surface );
         vector<DetectRect> getFaces();
         
     private:
@@ -32,6 +40,7 @@ namespace hrfm{ namespace cv{
         std::thread mThread;
         double recentSec;
         Surface8uRef mCloneSurface = NULL;
+        
         ::cv::CascadeClassifier	mFaceCascade, mEyeCascade;
         vector<DetectRect>      mFaces, mEyes;
         

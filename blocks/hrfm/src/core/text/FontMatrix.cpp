@@ -21,7 +21,7 @@ namespace hrfm{ namespace text{
         
         // --- Setup using Charactors and TextureFont.
         
-        string charList = "1234567890qwertyuiop[]\\';lkjhgfdsazxcvbnm,./@#$%^&*()_+~<>?:\"{}|";
+        string charList = "1234567890qwertyuiop[]\\';lkjhgfdsazxcvbnm,./@#$%^&*()_+~<>?:\"{}| ";
         
         myFontManager.setup( fontSize, charList );
         myFontManager.setFontByName(fontName);
@@ -110,7 +110,7 @@ namespace hrfm{ namespace text{
         
         // -----
         
-        scrollFilter.setUniform( 0, (float)numScroll / (float)_mtxSize.y );
+        scrollFilter.setUniform( 0, -(float)numScroll / (float)_mtxSize.y );
         
         // -----
         

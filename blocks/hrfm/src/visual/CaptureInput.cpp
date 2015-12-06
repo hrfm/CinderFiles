@@ -53,9 +53,10 @@ namespace hrfm{ namespace io{
     //
     // ========================================================================================
     
-    void CaptureInput::setupFaceDetect( ivec2 textureSize ){
+    void CaptureInput::setupFaceDetect( fs::path haarcascade_face, fs::path haarcascade_eye, ivec2 textureSize ){
         if( mFaceDetect == NULL ){
-            mFaceDetect = new FaceDetect( textureSize );
+            mFaceDetect = new FaceDetect();
+            mFaceDetect->setup( haarcascade_face, haarcascade_eye, textureSize);
         }
     }
     
