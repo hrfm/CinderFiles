@@ -7,7 +7,7 @@ namespace hrfm{ namespace cv{
     
     // ========================================================================================= //
     
-    void FaceDetect::setup( fs::path haarcascade_face, fs::path haarcascade_eye, ivec2 textureSize, int calcScale ){
+    void FaceDetect::setup( ci::fs::path haarcascade_face, ci::fs::path haarcascade_eye, ivec2 textureSize, int calcScale ){
         
         cout << "- hrfm::cv::FaceDetect::setup()" << endl << endl;
         
@@ -15,8 +15,8 @@ namespace hrfm{ namespace cv{
         
         // ------------------------------------------------------------------
         
-        const string facePathStr = hrfm::io::DataLoader::resolvePath(haarcascade_face).string();
-        const string eyePathStr  = hrfm::io::DataLoader::resolvePath(haarcascade_eye).string();
+        const string facePathStr = hrfm::fs::resolvePath(haarcascade_face).string();
+        const string eyePathStr  = hrfm::fs::resolvePath(haarcascade_eye).string();
         
         cout << "haarcascade_face xml : " << facePathStr <<  endl;
         if( !mFaceCascade.load( facePathStr ) ){

@@ -75,16 +75,4 @@ namespace hrfm{ namespace io{
         
     }
     
-    ci::fs::path DataLoader::resolvePath( ci::fs::path path ){
-        ci::fs::path resolvedPath;
-        string pathStr = path.string();
-        if( pathStr.find("~/") == 0 ){
-            pathStr.erase(0,2);
-            resolvedPath = getDocumentsDirectory() / ".." / pathStr;
-        }else{
-            resolvedPath = pathStr;
-        }
-        return resolvedPath;
-    }
-    
 }}

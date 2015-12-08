@@ -35,7 +35,7 @@ namespace hrfm { namespace app{
         if( _settingXml.hasChild("setting/log") ){
             XmlTree log = _settingXml.getChild("setting/log");
             if( log.hasAttribute("dest") ){
-                fs::path log_output = hrfm::io::DataLoader::resolvePath( log.getAttributeValue<string>("dest") );
+                ci::fs::path log_output = hrfm::fs::resolvePath( log.getAttributeValue<string>("dest") );
                 LOG_FILE = freopen( log_output.native().c_str(), "w", stdout );
             }
         }

@@ -1,6 +1,9 @@
 #pragma once
 
 #include "cinder/app/App.h"
+
+#include "hrfm.fs.h"
+
 #include "DetectRect.h"
 #include "XmlLoader.h"
 #include "CinderOpenCV.h"

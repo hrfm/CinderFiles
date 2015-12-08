@@ -1,9 +1,11 @@
 #pragma once
 
-#include "TextureNode.h"
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Texture.h"
 #include "cinder/qtime/QuickTimeGl.h"
+
+#include "hrfm.fs.h"
+#include "TextureNode.h"
 
 namespace hrfm{ namespace display{
     

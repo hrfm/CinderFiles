@@ -7,6 +7,8 @@
 #include "cinder/Xml.h"
 #include "cinder/Rand.h"
 
+#include "hrfm.fs.h"
+
 // --- Inputs ---
 
 #include "SiSetting.h"
