@@ -6,7 +6,7 @@
 using namespace ci;
 using namespace std;
 
-namespace hrfm{ namespace utils{
+namespace hrfm{ namespace io{
     
     class XmlLoader{
     

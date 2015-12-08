@@ -3,6 +3,6 @@
 namespace hrfm { namespace gl{ namespace filter{
     class CircleMaskFilter : public FilterBase{
     public:
-        CircleMaskFilter():FilterBase(fs::path("CircleMaskFilter.glsl")){};
+        CircleMaskFilter():FilterBase(ci::fs::path("CircleMaskFilter.glsl")){};
     };
 }}}

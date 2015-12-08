@@ -8,7 +8,7 @@ namespace hrfm { namespace gl{
         
         setInterval( 2.0f );
         
-        init( DataLoader::load("MatrixTransition.glsl") );
+        init( hrfm::io::DataLoader::load("MatrixTransition.glsl") );
         
         _beforeTime = 0.0;
         

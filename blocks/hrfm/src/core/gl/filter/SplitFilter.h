@@ -9,7 +9,7 @@ namespace hrfm { namespace gl{ namespace filter{
     
     class SplitFilter : public FilterBase{
     public:
-        SplitFilter( ivec2 size = ivec2(256,256), float cols = 1.0, float rows = 1.0, vec4 clipRect = vec4(0.0, 0.0, 1.0, 1.0) ):FilterBase( fs::path("SplitFilter.glsl"), size ){
+        SplitFilter( ivec2 size = ivec2(256,256), float cols = 1.0, float rows = 1.0, vec4 clipRect = vec4(0.0, 0.0, 1.0, 1.0) ):FilterBase( ci::fs::path("SplitFilter.glsl"), size ){
             this->cols     = cols;
             this->rows     = rows;
             this->clipRect = clipRect;

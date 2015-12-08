@@ -10,6 +10,10 @@ namespace hrfm{ namespace display{
     
     void DisplayNode::clear(){}
     
+    void DisplayNode::enableAdditiveBlending( bool flag ){
+        _enableAdditiveBlending = flag;
+    }
+    
     vec3 DisplayNode::getPosition(){
         return vec3(x,y,z);
     }
@@ -149,7 +153,9 @@ namespace hrfm{ namespace display{
             c.a *= drawColor->a;
         }
         
-        if( c.a < 1.0f ){
+        if( _enableAdditiveBlending == true ){
+            ci::gl::enableAdditiveBlending();
+        }else if( c.a < 1.0f ){
             ci::gl::enableAlphaBlending();
         }else{
             ci::gl::disableAlphaBlending();

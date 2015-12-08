@@ -8,7 +8,7 @@ namespace hrfm { namespace gl{ namespace filter{
     
     class BlurFilter : public FilterBase{
     public:
-        BlurFilter( ci::vec2 size = ci::vec2(256,256) ):FilterBase(fs::path("BlurFilter.glsl"),size){};
+        BlurFilter( ci::vec2 size = ci::vec2(256,256) ):FilterBase(ci::fs::path("BlurFilter.glsl"),size){};
         void setUniform( vec2 sample_offset, float attenuation ){
             mSampleOffset = sample_offset;
             mAttenuation  = attenuation;

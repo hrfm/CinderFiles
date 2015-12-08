@@ -3,7 +3,7 @@
 using namespace ci;
 using namespace std;
 
-namespace hrfm{ namespace utils{
+namespace hrfm{ namespace io{
     
     XmlTree XmlLoader::load( ci::fs::path filePath ){
         return XmlLoader::load( filePath, ci::UrlOptions::UrlOptions( true, 30.0f ) );

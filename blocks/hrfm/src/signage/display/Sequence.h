@@ -1,12 +1,14 @@
 #pragma once
 
+#include "hrfm.fs.h";
+#include "hrfm.utils.h";
+
 #include "DisplayNode.h"
 #include "MovieTexture.h"
 #include "Event.h"
 #include "SiEventDispatcher.h"
 #include "SequentialContents.h"
 #include "TriggerEvent.h"
-#include "Utils.h"
 
 namespace hrfm{ namespace signage{ namespace display{
     

@@ -16,7 +16,7 @@ namespace hrfm{ namespace display{
     
     void TextureNode::setTexture( ci::fs::path path ){
         values.setValue("srcPath", path);
-        _init( ci::gl::Texture::create( ci::loadImage( hrfm::utils::DataLoader::load(path) ) ) );
+        _init( ci::gl::Texture::create( ci::loadImage( hrfm::io::DataLoader::load(path) ) ) );
     }
     void TextureNode::setTexture( ci::ImageSourceRef src ){
         values.setValue("srcPath", "__from_source__");

@@ -20,8 +20,7 @@
 
 #include "TriggerEvent.h"
 #include "SiEventDispatcher.h"
-
-#include "Utils.h"
+#include "SiTimeUtil.h"
 #include "XmlLoader.h"
 
 using namespace hrfm;
@@ -72,7 +71,6 @@ namespace hrfm{ namespace app{
         virtual void initKORGMIDIInterface( XmlTree &xml );
         
         virtual ivec2 getWindowSize();
-        virtual ivec2 getWindowAspect();
         
         virtual void update();
         virtual void updateIO();

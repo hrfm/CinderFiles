@@ -1,7 +1,7 @@
 #include "ShaderFactory.h"
 
 using namespace ci;
-using namespace hrfm::utils;
+using namespace hrfm::io;
 
 namespace hrfm{ namespace gl{
     

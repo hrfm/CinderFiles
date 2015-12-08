@@ -19,9 +19,6 @@ namespace hrfm{ namespace gl{
         ci::vec2 getSize();
         ci::Rectf getBounds();
         
-        ci::ivec2 getAspectSize();
-        ci::Rectf getAspectBounds();
-        
         ci::gl::TextureRef getTexture();
         
         ExFbo * beginOffscreen( bool clear = false );

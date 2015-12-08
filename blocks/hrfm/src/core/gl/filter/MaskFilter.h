@@ -6,7 +6,7 @@ namespace hrfm { namespace gl{ namespace filter{
     class MaskFilter : public FilterBase{
         
     public:
-        MaskFilter( ci::gl::TextureRef tex = NULL ):FilterBase(fs::path("MaskFilter.glsl")){
+        MaskFilter( ci::gl::TextureRef tex = NULL ):FilterBase(ci::fs::path("MaskFilter.glsl")){
             if( tex != NULL ){
                 setTexture( tex );
             }

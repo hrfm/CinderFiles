@@ -2,6 +2,8 @@
 
 #include "EmittObjectBase.h"
 
+#include "cinder/Rand.h"
+
 using namespace ci;
 using namespace std;
 using namespace hrfm::events;

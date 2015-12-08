@@ -6,14 +6,14 @@
 
 using namespace std;
 
-namespace hrfm{ namespace utils{
+namespace hrfm{ namespace gl{
     
     /*
      
      std::map を拡張し Singleton で何処からでも特定の Texture にアクセス出来るようにするクラスです.
      
      */
-    class SiTextureMap : public Singleton<SiTextureMap>, public std::map<string, ci::gl::TextureRef>{
+    class SiTextureMap : public hrfm::utils::Singleton<SiTextureMap>, public std::map<string, ci::gl::TextureRef>{
         
     public:
         
@@ -25,7 +25,7 @@ namespace hrfm{ namespace utils{
         
     private:
         
-        friend class Singleton<SiTextureMap>;
+        friend class hrfm::utils::Singleton<SiTextureMap>;
         
         SiTextureMap(){
             std::map<string,ci::gl::TextureRef>();

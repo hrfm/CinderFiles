@@ -6,7 +6,7 @@ namespace hrfm{ namespace display{
     
     void MovieTexture::init( ci::fs::path filePath ){
         values.setValue("srcPath", filePath);
-        init( ci::qtime::MovieGl::create( hrfm::utils::DataLoader::resolvePath(filePath) ) );
+        init( ci::qtime::MovieGl::create( hrfm::io::DataLoader::resolvePath(filePath) ) );
     }
     void MovieTexture::init( ::ci::qtime::MovieGlRef movieGlRef ){
         _init( movieGlRef );
@@ -27,7 +27,7 @@ namespace hrfm{ namespace display{
     }
     void MovieTexture::play( ci::fs::path filePath ){
         values.setValue("srcPath", filePath);
-        play( ci::qtime::MovieGl::create( hrfm::utils::DataLoader::resolvePath(filePath) ) );
+        play( ci::qtime::MovieGl::create( hrfm::io::DataLoader::resolvePath(filePath) ) );
     }
     void MovieTexture::play( ::ci::qtime::MovieGlRef movieGlRef ){
         stop();

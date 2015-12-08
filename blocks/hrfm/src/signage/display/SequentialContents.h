@@ -4,11 +4,14 @@
 #include <boost/algorithm/string.hpp>
 #include "cinder/Xml.h"
 
+#include "hrfm.fs.h"
 #include "DisplayNode.h"
 #include "MovieTexture.h"
 
 #include "Sequence.h"
 #include "Transition.h"
+
+#include "XmlLoader.h";
 
 #include "SequenceEvent.h"
 

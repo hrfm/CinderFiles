@@ -18,8 +18,8 @@ namespace hrfm{ namespace cv{
         ~FaceDetect();
         
         void setup(
-            fs::path haarcascade_face,
-            fs::path haarcascade_eye,
+            ci::fs::path haarcascade_face,
+            ci::fs::path haarcascade_eye,
             ivec2 textureSize = ivec2( 320, 240 ),
             int calcScale = 3
         );

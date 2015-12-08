@@ -40,14 +40,23 @@
 #include "SiKORGMIDIInterface.h"
 #include "SiOscInput.h"
 
+#include "DataLoader.h"
+#include "XmlLoader.h"
+
+#include "SiVolumeDetector.h"
+
 // --- hrfm::physics
 
 #include "DeclineWave.h"
 #include "WaveNode.h"
 
+// --- hrfm::structure
+
+#include "ValueMatrix.h"
+
 // --- hrfm::utils
 
-#include "Utils.h"
+#include "DisplayUtil.h"
 
 // --- hrfm::app
 

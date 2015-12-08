@@ -41,6 +41,8 @@ namespace hrfm{ namespace display{
         virtual void setup();
         virtual void clear();
         
+        virtual void enableAdditiveBlending( bool flag = true );
+        
         virtual ci::vec3 getPosition();
         virtual void setPosition( ci::vec3 position );
         
@@ -98,6 +100,8 @@ namespace hrfm{ namespace display{
         virtual void _drawChildren( ci::ColorA * drawColor = NULL );
         virtual void _drawForLights();
         virtual void _drawChildrenForLights();
+        
+        bool _enableAdditiveBlending;
         
         int _beforeWidth;
         int _beforeHeight;

@@ -6,7 +6,6 @@
 #include "cinder/Xml.h"
 #include "SiFboFactory.h"
 #include "ShaderFactory.h"
-#include "Utils.h"
 
 namespace hrfm { namespace gl{
     
@@ -20,13 +19,13 @@ namespace hrfm { namespace gl{
             setSize( 640, 480 );
         };
         
-        TransitionShaderBase( DataSourceRef fragment, DataSourceRef vertex = DataLoader::load("simple_vert.glsl") ){
+        TransitionShaderBase( DataSourceRef fragment, DataSourceRef vertex = hrfm::io::DataLoader::load("simple_vert.glsl") ){
             TransitionShaderBase();
             init( fragment, vertex );
         };
         
         // 最も基本的な初期化を行います.
-        virtual void init( DataSourceRef fragment, DataSourceRef vertex = DataLoader::load("simple_vert.glsl") ){
+        virtual void init( DataSourceRef fragment, DataSourceRef vertex = hrfm::io::DataLoader::load("simple_vert.glsl") ){
             mShader = ShaderFactory::create( vertex, fragment );
         }
         
@@ -36,7 +35,6 @@ namespace hrfm { namespace gl{
         
         virtual void setSize( vec2 size ){
             mSize   = size;
-            mAspect = getAspectRatio( size );
         }
         
         virtual void setInterval( float interval ){
@@ -115,7 +113,6 @@ namespace hrfm { namespace gl{
         
         ci::gl::GlslProgRef mShader;
         vec2 mSize;
-        ivec2 mAspect;
         std::vector<ci::gl::TextureRef> _bindedTex;
         
     private:

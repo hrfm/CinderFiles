@@ -65,7 +65,7 @@ namespace hrfm { namespace io{
         
         SiCaptureInput(){
             hrfm::events::EventDispatcher();
-            _diffShader = hrfm::gl::ShaderFactory::create( fs::path("simple_vert.glsl"), fs::path("diff_frag.glsl") );
+            _diffShader = hrfm::gl::ShaderFactory::create( ci::fs::path("simple_vert.glsl"), ci::fs::path("diff_frag.glsl") );
         }
         
         map<string,ci::CaptureRef> _captureRefMap;

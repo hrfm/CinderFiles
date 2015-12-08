@@ -3,7 +3,7 @@
 using namespace std;
 using namespace hrfm::events;
 
-namespace hrfm{ namespace utils{
+namespace hrfm{ namespace io{
     
     // ======================================================================
     // SiVolumeDetector class.

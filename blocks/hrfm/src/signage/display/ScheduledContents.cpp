@@ -42,7 +42,7 @@ namespace hrfm{ namespace signage{ namespace display{
             for( XmlTree::Iter item = list.begin(); item != list.end(); ++item ){
                 
                 string pathStr = item->getAttribute("src").getValue<string>();
-                fs::path path;
+                ci::fs::path path;
                 
                 if( pathStr.find("~/") == 0 ){
                     pathStr.erase(0,2);
@@ -94,7 +94,7 @@ namespace hrfm{ namespace signage{ namespace display{
                         
                         // 設定されているコンテンツがシーケンスの場合
                         
-                        XmlTree xml = XmlLoader::load( path );
+                        XmlTree xml = hrfm::io::XmlLoader::load( path );
                         hrfm::signage::display::SequentialContents * seq = new SequentialContents( xml );
                         
                         _contentList[time] = seq;

@@ -4,7 +4,6 @@
 #include "cinder/gl/Fbo.h"
 #include "DisplayNode.h"
 #include "StageLight.h"
-#include "Utils.h"
 
 namespace hrfm{ namespace display{
     

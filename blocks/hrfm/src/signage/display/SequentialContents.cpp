@@ -168,8 +168,8 @@ namespace hrfm{ namespace signage{ namespace display{
     }
     
     hrfm::display::DisplayNode * SequentialContents::_createContent( ci::fs::path filepath, bool isLoop, bool isSilent ){
-        string type = hrfm::utils::getFileType( filepath );
-        if( type == hrfm::utils::FILE_TYPE_PIC || type == hrfm::utils::FILE_TYPE_MOV ){
+        string type = hrfm::fs::getFileType( filepath );
+        if( type == hrfm::fs::FILE_TYPE_PIC || type == hrfm::fs::FILE_TYPE_MOV ){
             return _createContent( filepath, type, isLoop, isSilent );
         }else{
             return NULL;
@@ -179,7 +179,7 @@ namespace hrfm{ namespace signage{ namespace display{
     hrfm::display::DisplayNode * SequentialContents::_createContent( ci::fs::path filepath, string type, bool isLoop, bool isSilent ){
         
         string   pathStr = filepath.string();
-        fs::path path;
+        ci::fs::path path;
         
         try{
             
@@ -204,7 +204,7 @@ namespace hrfm{ namespace signage{ namespace display{
                 return mov;
             }else if( type == "seq" ){
                 // 設定されているコンテンツがシーケンスの場合
-                XmlTree xml = XmlLoader::load( path );
+                XmlTree xml = io::XmlLoader::load( path );
                 hrfm::signage::display::SequentialContents * seq = new SequentialContents( xml );
                 //if( isLoop ){ seq->setLoop(); }
                 return seq;

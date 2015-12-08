@@ -15,8 +15,8 @@ namespace hrfm{ namespace cv{
         
         // ------------------------------------------------------------------
         
-        const string facePathStr = hrfm::utils::DataLoader::resolvePath(haarcascade_face).string();
-        const string eyePathStr  = hrfm::utils::DataLoader::resolvePath(haarcascade_eye).string();
+        const string facePathStr = hrfm::io::DataLoader::resolvePath(haarcascade_face).string();
+        const string eyePathStr  = hrfm::io::DataLoader::resolvePath(haarcascade_eye).string();
         
         cout << "haarcascade_face xml : " << facePathStr <<  endl;
         if( !mFaceCascade.load( facePathStr ) ){

@@ -1,6 +1,6 @@
 #include "SiTextureMap.h"
 
-namespace hrfm{ namespace utils{
+namespace hrfm{ namespace gl{
     
     ci::gl::TextureRef SiTextureMap::getTexture( string key ){
         return this->at(key);

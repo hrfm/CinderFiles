@@ -3,7 +3,7 @@
 using namespace ci;
 using namespace std;
 
-namespace hrfm{ namespace utils{
+namespace hrfm{ namespace io{
     
     DataSourceRef DataLoader::load( ci::fs::path filePath ){
         return DataLoader::load( filePath, ci::UrlOptions::UrlOptions( true, 30.0f ) );

@@ -7,8 +7,6 @@ namespace hrfm { namespace gl{
     // 最も基本的な初期化を行います.
     // どのシェーダを使うかはクラスに任せます.
     void FilterBase::setup( ivec2 size ){
-        // Calcurate Aspect Ratio.
-        mAspect = getAspectRatio( size );
         // Create Fbo.
         mFbo = SiFboFactory::getInstance().create( size.x, size.y, false );
     }

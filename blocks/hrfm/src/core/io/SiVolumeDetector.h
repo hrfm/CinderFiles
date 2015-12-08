@@ -9,14 +9,14 @@
 
 using namespace std;
 
-namespace hrfm{ namespace utils{
+namespace hrfm{ namespace io{
     
     /*
      
      /Volumes を監視して USB メモリを検知する処理を行います.
      
      */
-    class SiVolumeDetector : public Singleton<SiVolumeDetector>, public hrfm::events::EventDispatcher{
+    class SiVolumeDetector : public hrfm::utils::Singleton<SiVolumeDetector>, public hrfm::events::EventDispatcher{
         
     public:
         
@@ -35,10 +35,9 @@ namespace hrfm{ namespace utils{
         
     private:
         
-        friend class Singleton<SiVolumeDetector>;
+        friend class hrfm::utils::Singleton<SiVolumeDetector>;
         
-        SiVolumeDetector(){
-            hrfm::events::EventDispatcher();
+        SiVolumeDetector():hrfm::events::EventDispatcher(){
             _path = "";
         }
         

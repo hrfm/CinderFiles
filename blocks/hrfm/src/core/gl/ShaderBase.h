@@ -7,7 +7,6 @@
 #include "cinder/Xml.h"
 #include "SiFboFactory.h"
 #include "ShaderFactory.h"
-#include "Utils.h"
 
 using namespace ci;
 using namespace std;
@@ -25,7 +24,7 @@ namespace hrfm { namespace gl{
         
         ShaderBase();
         ShaderBase( ci::gl::GlslProgRef shader );
-        ShaderBase( fs::path fragment, fs::path vertex="simple_vert.glsl", fs::path geometory="", fs::path tessEval="", fs::path tessCtrl="" );
+        ShaderBase( ci::fs::path fragment, ci::fs::path vertex="simple_vert.glsl", ci::fs::path geometory="", ci::fs::path tessEval="", ci::fs::path tessCtrl="" );
         
         ci::gl::GlslProgRef getGlslProg();
         
@@ -50,14 +49,14 @@ namespace hrfm { namespace gl{
         
         // --------------------------------------------------------------------------------------------
         
-        fs::path mFragmentPath;
-        fs::path mVertexPath;
-        fs::path mGeometoryPath;
-        fs::path mTessEvalPath;
-        fs::path mTessCtrlPath;
+        ci::fs::path mFragmentPath;
+        ci::fs::path mVertexPath;
+        ci::fs::path mGeometoryPath;
+        ci::fs::path mTessEvalPath;
+        ci::fs::path mTessCtrlPath;
         
-        virtual void initShader( fs::path fragment, fs::path vertex, fs::path geometory, fs::path tessEval, fs::path tessCtrl );
-        virtual std::string loadShader( fs::path srcPath );
+        virtual void initShader( ci::fs::path fragment, ci::fs::path vertex, ci::fs::path geometory, ci::fs::path tessEval, ci::fs::path tessCtrl );
+        virtual std::string loadShader( ci::fs::path srcPath );
         virtual std::string getVertexShader();
         virtual std::string getFragmentShader();
         virtual std::string getGeometoryShader();

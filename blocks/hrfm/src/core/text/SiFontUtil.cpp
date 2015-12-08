@@ -30,7 +30,7 @@ namespace hrfm{ namespace text{
                 ) );
             }else{
                 _map.insert( map<string,ci::gl::TextureFontRef>::value_type(
-                    key, ci::gl::TextureFont::create( ci::Font( DataLoader::load(fontName), fontSize ) )
+                    key, ci::gl::TextureFont::create( ci::Font( io::DataLoader::load(fontName), fontSize ) )
                 ) );
             }
         }

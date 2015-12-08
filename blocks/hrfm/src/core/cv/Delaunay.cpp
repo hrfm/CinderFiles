@@ -11,7 +11,7 @@ namespace hrfm{ namespace cv{
         
         // SIFTまたはSURFを使う場合はこれを呼び出す．
         //::cv::initModule_nonfree();
-        this->_detector = ::cv::FeatureDetector::create("FAST");
+        //this->_detector = ::cv::FeatureDetector::create("FAST");
         
         init( size );
         

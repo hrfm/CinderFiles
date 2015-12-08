@@ -7,7 +7,6 @@
 #include "cinder/Xml.h"
 #include "SiFboFactory.h"
 #include "ShaderFactory.h"
-#include "Utils.h"
 #include "ShaderBase.h"
 
 using namespace ci;
@@ -22,13 +21,13 @@ namespace hrfm { namespace gl{
         
     public:
         
-        FilterBase( ivec2 size = ivec2(256,256) ):ShaderBase(fs::path("simple_flag.glsl"),fs::path("filter_vert.glsl")){
+        FilterBase( ivec2 size = ivec2(256,256) ):ShaderBase(ci::fs::path("simple_flag.glsl"),ci::fs::path("filter_vert.glsl")){
             setup( size );
         };
-        FilterBase( fs::path fragment, ivec2 size = ivec2(256,256) ):ShaderBase(fragment,fs::path("filter_vert.glsl")){
+        FilterBase( ci::fs::path fragment, ivec2 size = ivec2(256,256) ):ShaderBase(fragment,ci::fs::path("filter_vert.glsl")){
             setup( size );
         };
-        FilterBase( fs::path fragment, fs::path vertex, ivec2 size = ivec2(256,256) ):ShaderBase(fragment,vertex){
+        FilterBase( ci::fs::path fragment, ci::fs::path vertex, ivec2 size = ivec2(256,256) ):ShaderBase(fragment,vertex){
             setup( size );
         };
         

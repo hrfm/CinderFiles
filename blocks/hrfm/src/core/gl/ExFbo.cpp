@@ -21,14 +21,6 @@ namespace hrfm{ namespace gl{
         return _fbo->getBounds();
     };
     
-    ci::ivec2 ExFbo::getAspectSize(){
-        return getAspectRatio(getSize());
-    }
-    ci::Rectf ExFbo::getAspectBounds(){
-        ivec2 aspect = getAspectSize();
-        return Rectf( 0, 0, aspect.x, aspect.y );
-    }
-    
     ci::gl::TextureRef ExFbo::getTexture(){
         return _fbo->getColorTexture();
     }
@@ -85,7 +77,7 @@ namespace hrfm{ namespace gl{
             if( useAspect ){
                 // 特に使っていない
                 ci::gl::viewport( ivec2(0), getSize() );
-                ci::gl::setMatricesWindow( getAspectSize(), true );
+                ci::gl::setMatricesWindow( _fbo->getSize(), true );
             }else{
                 ci::gl::viewport( ivec2(0), getSize() );
                 ci::gl::setMatricesWindow( getSize(), true );

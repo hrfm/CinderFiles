@@ -5,9 +5,7 @@
 #include "cinder/gl/Texture.h"
 #include "cinder/Rand.h"
 #include "CinderOpenCV.h"
-#include "opencv2/nonfree/nonfree.hpp"
-
-#include "Utils.h"
+//#include "opencv2/nonfree/nonfree.hpp"
 
 using namespace std;
 using namespace ci;

@@ -45,11 +45,11 @@ namespace hrfm{ namespace gl{
         
         // --- From fs::path.
         
-        static ci::gl::GlslProgRef create( fs::path vertex );
-        static ci::gl::GlslProgRef create( fs::path vertex, fs::path fragment );
-        static ci::gl::GlslProgRef create( fs::path vertex, fs::path fragment, fs::path geometry );
-        static ci::gl::GlslProgRef create( fs::path vertex, fs::path fragment, fs::path geometry, fs::path tessEval );
-        static ci::gl::GlslProgRef create( fs::path vertex, fs::path fragment, fs::path geometry, fs::path tessEval, fs::path tessCtrl );
+        static ci::gl::GlslProgRef create( ci::fs::path vertex );
+        static ci::gl::GlslProgRef create( ci::fs::path vertex, ci::fs::path fragment );
+        static ci::gl::GlslProgRef create( ci::fs::path vertex, ci::fs::path fragment, ci::fs::path geometry );
+        static ci::gl::GlslProgRef create( ci::fs::path vertex, ci::fs::path fragment, ci::fs::path geometry, ci::fs::path tessEval );
+        static ci::gl::GlslProgRef create( ci::fs::path vertex, ci::fs::path fragment, ci::fs::path geometry, ci::fs::path tessEval, ci::fs::path tessCtrl );
         
         
     private:

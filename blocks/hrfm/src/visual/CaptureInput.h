@@ -51,7 +51,7 @@ namespace hrfm{ namespace io{
         //
         // ========================================================================================
         
-        void setupFaceDetect( fs::path haarcascade_face, fs::path haarcascade_eye, ivec2 textureSize = ivec2(480,270) );
+        void setupFaceDetect( ci::fs::path haarcascade_face, ci::fs::path haarcascade_eye, ivec2 textureSize = ivec2(480,270) );
         bool faceDetectEnabled();
         vector<DetectRect> getFaces();
         

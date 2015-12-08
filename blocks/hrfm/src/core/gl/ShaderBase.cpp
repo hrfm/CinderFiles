@@ -55,7 +55,7 @@ namespace hrfm { namespace gl{
     }
     std::string ShaderBase::loadShader( fs::path srcPath ){
         if( srcPath != "" ){
-            return ci::loadString( DataLoader::load(srcPath) );
+            return ci::loadString( hrfm::io::DataLoader::load(srcPath) );
         }else{
             return std::string();
         }

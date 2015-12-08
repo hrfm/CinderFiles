@@ -11,6 +11,8 @@
 #include "ExFbo.h"
 #include "SplitFilter.h"
 
+#include "SiTimeUtil.h"
+
 namespace hrfm{ namespace signage{ namespace display{
     
     /*
