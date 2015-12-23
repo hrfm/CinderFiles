@@ -44,6 +44,9 @@ namespace hrfm{ namespace display{
         virtual void enableAdditiveBlending( bool flag = true );
         
         virtual ci::vec3 getPosition();
+        virtual void setPosition( float x, float y );
+        virtual void setPosition( float x, float y, float z );
+        virtual void setPosition( ci::vec2 position );
         virtual void setPosition( ci::vec3 position );
         
         virtual ci::ivec2 getSize();
@@ -72,6 +75,8 @@ namespace hrfm{ namespace display{
         virtual void draw( ci::ColorA * drawColor = NULL );
         virtual void drawForLights();
         
+        virtual bool isResized();
+        
         virtual bool hasParent();
         virtual DisplayNode * getParent();
         
@@ -93,6 +98,8 @@ namespace hrfm{ namespace display{
         //! 指定した要素を children から削除します. 削除された場合 true 存在しない場合は false を返します.
         bool eraseFromChildren( DisplayNode * child );
         
+        virtual void _updatePosition( float x, float y, float z );
+        
         virtual void _update();
         virtual void _updateChildren();
         
@@ -105,6 +112,7 @@ namespace hrfm{ namespace display{
         
         int _beforeWidth;
         int _beforeHeight;
+        bool _resized;
         
         // Stage control.
         

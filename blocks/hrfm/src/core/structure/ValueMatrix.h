@@ -11,9 +11,12 @@ namespace hrfm{ namespace structure{
         
         ValueMatrix(){}
         
-        ValueMatrix
-        ( int col, int row ){
+        ValueMatrix( int col, int row ){
             init( col, row );
+        }
+        
+        ValueMatrix( ivec2 size ){
+            init( size.x, size.y );
         }
         
         void init( int col, int row ){

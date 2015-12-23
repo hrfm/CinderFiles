@@ -17,10 +17,17 @@ namespace hrfm{ namespace display{
     vec3 DisplayNode::getPosition(){
         return vec3(x,y,z);
     }
+    void DisplayNode::setPosition( float x, float y ){
+        _updatePosition( x, y, this->z );
+    }
+    void DisplayNode::setPosition( float x, float y, float z ){
+        _updatePosition( x, y, z );
+    }
+    void DisplayNode::setPosition( vec2 position ){
+        _updatePosition( position.x, position.y, this->z );
+    }
     void DisplayNode::setPosition( vec3 position ){
-        x = position.x;
-        y = position.y;
-        z = position.z;
+        _updatePosition( position.x, position.y, position.z );
     }
     
     ivec2 DisplayNode::getSize(){
@@ -33,6 +40,7 @@ namespace hrfm{ namespace display{
             dispatchEvent( new hrfm::events::Event( hrfm::events::Event::RESIZE ) );
             _beforeWidth  = width;
             _beforeHeight = height;
+            _resized = true;
         }
     }
     void DisplayNode::setSize( ivec2 size ){
@@ -168,6 +176,8 @@ namespace hrfm{ namespace display{
         ci::gl::popModelMatrix();
         ci::gl::disableAlphaBlending();
         
+        _resized = false;
+        
     }
     
     void DisplayNode::drawForLights(){
@@ -178,7 +188,10 @@ namespace hrfm{ namespace display{
         ci::gl::popModelMatrix();
     }
 
-    
+    bool DisplayNode::isResized(){
+        return _resized;
+    }
+
     bool DisplayNode::hasParent(){
         return _parent != nullptr && _parent != NULL;
     }
@@ -206,6 +219,12 @@ namespace hrfm{ namespace display{
         }
         children.erase( itr, children.end() );
         return true;
+    }
+    
+    void DisplayNode::_updatePosition( float x, float y, float z ){
+        this->x = x;
+        this->y = y;
+        this->z = z;
     }
     
     void DisplayNode::_update(){}
