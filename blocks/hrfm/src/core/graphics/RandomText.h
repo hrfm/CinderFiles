@@ -11,7 +11,7 @@ namespace hrfm{ namespace graphics{
         
     public:
         
-        RandomText( string text = "", float fontSize=8.0f, string fontName="OCRAStd" ):hrfm::display::DisplayNode(){
+        RandomText( string text = "", float fontSize=8.0f, string fontName="Monaco" ):hrfm::display::DisplayNode(){
             _init();
             _fontSize = fontSize;
             _fontName = fontName;

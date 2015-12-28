@@ -136,10 +136,17 @@ namespace hrfm{ namespace graphics{
             ci::gl::draw( _vboMesh );
         }else{
         //*/
-            ci::gl::begin(GL_TRIANGLE_STRIP);
-            for( int i=0; i<=_drawStep; i++ ){
-                ci::gl::vertex( _vertices[(i*2)] );
-                ci::gl::vertex( _vertices[(i*2)+1] );
+            if( 1.0 < _thickness ){
+                ci::gl::begin(GL_TRIANGLE_STRIP);
+                for( int i=0; i<=_drawStep; i++ ){
+                    ci::gl::vertex( _vertices[(i*2)] );
+                    ci::gl::vertex( _vertices[(i*2)+1] );
+                }
+            }else{
+                ci::gl::begin(GL_LINE_STRIP);
+                for( int i=0; i<=_drawStep; i++ ){
+                    ci::gl::vertex( _vertices[(i*2)] );
+                }
             }
             ci::gl::end();
         //}

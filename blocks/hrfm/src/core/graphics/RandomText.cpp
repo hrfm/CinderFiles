@@ -5,12 +5,12 @@ namespace hrfm{ namespace graphics{
     string RandomText::_CHAR_LIST = "1234567890qwertyuiop[]\\';lkjhgfdsazxcvbnm,./@#$%^&*()_+~<>?:\"{}| ";
     
     void RandomText::setText( string text ){
-        _text = text;
-        visible = 0 < _text.length();
+        setText(text,_delay);
     }
     
     void RandomText::setText( string text, double delay, double interval ){
-        setText( text );
+        _text = text;
+        visible = 0 < _text.length();
         randomize( delay, interval );
     }
     
@@ -32,7 +32,7 @@ namespace hrfm{ namespace graphics{
         std::mt19937 mt(rnd());
         std::uniform_real_distribution<float> rndm(0.0,1.0);
         
-        if( _delay == 0.0 || (now-_startSec) < _delay ){
+        if( _delay < 0.0 || (now-_startSec) < _delay ){
             _drawText = "";
             for( int i=0; i<_text.length(); i++ ){
                 _drawText += _CHAR_LIST[floor(rndm(mt)*_CHAR_LIST.size())];;
@@ -58,7 +58,7 @@ namespace hrfm{ namespace graphics{
     }
     
     void RandomText::_draw(){
-        SiFontUtil::getInstance().getTextureFontRef(_fontName,_fontSize)->drawString( _drawText, vec2(0.0) );
+        SiFontUtil::getInstance().getTextureFontRef(_fontName,_fontSize)->drawString( _drawText, vec2(0.0,_fontSize) );
     }
     
 }}
