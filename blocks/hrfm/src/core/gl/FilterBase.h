@@ -21,7 +21,7 @@ namespace hrfm { namespace gl{
         
     public:
         
-        FilterBase( ivec2 size = ivec2(256,256) ):ShaderBase(ci::fs::path("simple_flag.glsl"),ci::fs::path("filter_vert.glsl")){
+        FilterBase( ivec2 size = ivec2(256,256) ):ShaderBase(ci::fs::path("simple_frag.glsl"),ci::fs::path("filter_vert.glsl")){
             setup( size );
         };
         FilterBase( ci::fs::path fragment, ivec2 size = ivec2(256,256) ):ShaderBase(fragment,ci::fs::path("filter_vert.glsl")){

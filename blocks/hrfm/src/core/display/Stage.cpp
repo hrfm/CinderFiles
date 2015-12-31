@@ -30,64 +30,17 @@ namespace hrfm{ namespace display{
         return child;
     }
     
-    int Stage::numLights(){
-        return _lights.size();
-    }
-    void Stage::addLight( StageLight * light ){
-        eraseLightFromLights(light);
-        _lights.push_back(light);
-    }
-    void Stage::removeLight( StageLight * light ){
-        eraseLightFromLights(light);
-    }
-    
     void Stage::draw( bool offscreen ){
-        
-        std::vector<StageLight*>::iterator it, end;
-        
-        /*
-        if( 0 < numLights() ){
-            // -----------------------------------------------------------
-            // --- 光源から見たdepthMap を描画します.
-            for( it = _lights.begin(), end = _lights.end(); it!=end; it++ ){
-                if( *it!=nullptr ){
-                    (*it)->renderDepthMap(this);
-                }
-            }
-        }
-        //*/
-        
-        // -----------------------------------------------------------
-        // --- 光源なしの描画を行います.
-        
         std::pair<ivec2,ivec2> viewport = ci::gl::getViewport();
         _begin();
             _draw();
             _drawChildren( &colorA );
         _end();
         ci::gl::viewport(viewport);
-        
         if( !offscreen ){
             ci::gl::translate( x, y );
             ci::gl::draw( getTexture() );
         }
-        
-        /*
-        {
-            ci::gl::ScopedFramebuffer fbo( _fbo );
-            ci::gl::pushMatrices();
-            ci::gl::viewport( ivec2(0), getSize() );
-            ci::gl::ScopedViewport vp( ivec2(0), _fbo->getSize() );
-            ci::gl::color(1.0,1.0,1.0);
-            for( it = _lights.begin(), end = _lights.end(); it!=end; it++ ){
-                if( *it!=nullptr ){
-                    ci::gl::draw((*it)->getDepthTexture(),_fbo->getBounds());
-                }
-            }
-            ci::gl::popMatrices();
-        }
-        //*/
-        
     }
     
     void Stage::drawOffscreen(){
@@ -104,7 +57,7 @@ namespace hrfm{ namespace display{
     }
     
     ci::gl::TextureRef Stage::getTexture(){
-        return _fbo->getColorTexture();
+        return this->_fbo->getColorTexture();
     }
     
     void Stage::_begin(){
@@ -131,21 +84,10 @@ namespace hrfm{ namespace display{
     void Stage::_onResize( hrfm::events::Event * event ){
         cout << "_onResize" << endl;
         ci::gl::Fbo::Format format;
-        _fbo = ci::gl::Fbo::create( width, height, format );
+        this->_fbo = ci::gl::Fbo::create( width, height, format );
         if( _cameraPersp != NULL ){
             _cameraPersp->setAspectRatio( (float)width / (float)height );
         }
-    }
-    
-    inline bool Stage::eraseLightFromLights( StageLight * light ){
-        auto itr = std::remove_if(_lights.begin(),_lights.end(),[light](StageLight* d)->bool{
-            return d == light;
-        });
-        if( itr == _lights.end() ){
-            return false;
-        }
-        _lights.erase( itr, _lights.end() );
-        return true;
     }
     
 }}

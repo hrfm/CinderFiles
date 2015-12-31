@@ -6,12 +6,18 @@
 
 namespace hrfm{ namespace gl{
     
+    typedef std::shared_ptr<class ExFbo> ExFboRef;
+    
     class ExFbo{
         
     public:
         
-        ExFbo( int width, int height, ci::gl::Fbo::Format format = ci::gl::Fbo::Format(), ci::CameraPersp * camera = NULL );
+        static ExFboRef create( int width, int height,
+                                ci::gl::Fbo::Format format = ci::gl::Fbo::Format(), ci::CameraPersp * camera = NULL ) {
+            return ExFboRef( new ExFbo( width, height, format, camera ) );
+        };
         
+        ExFbo( int width, int height, ci::gl::Fbo::Format format = ci::gl::Fbo::Format(), ci::CameraPersp * camera = NULL );
         ~ExFbo(){};
         
         ci::gl::FboRef getFbo();

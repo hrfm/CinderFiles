@@ -97,6 +97,10 @@ namespace hrfm { namespace app{
         
         // ---
         
+        stage = hrfm::display::Stage::create();
+        
+        // ---
+        
         resize();
         
         cout << "------------------------------------------------------------------------" << endl << endl;
@@ -205,17 +209,19 @@ namespace hrfm { namespace app{
     
     void AppBase::updateStage(){
         vector<DisplayNode*>::iterator it;
-        vector<DisplayNode*>::iterator end = stage.children.end();
-        for( it=stage.children.begin(); it!=end; ++it ){
-            (*it)->setSize( getWindowWidth(), getWindowHeight() );
+        vector<DisplayNode*>::iterator end = stage->children.end();
+        for( it=stage->children.begin(); it!=end; ++it ){
+            (*it)->setSize( getWindowSize() );
         }
-        stage.update();
+        stage->update();
+        stage->drawOffscreen();
     }
     
     void AppBase::draw(){
         ci::gl::clear();
-        stage.draw();
+        ci::gl::draw( stage->getTexture() );
         if( _isDebugMode ){
+            cout << "debug" << endl;
             _drawDebug();
         }
     }
@@ -236,7 +242,7 @@ namespace hrfm { namespace app{
     
     void AppBase::resize(){
         camera.setPerspective( 30, getWindowAspectRatio(), 0.1, 100 );
-        stage.setSize( getWindowWidth(), getWindowHeight() );
+        stage->setSize( getWindowWidth(), getWindowHeight() );
     }
     
     void AppBase::keyDown( ci::app::KeyEvent event ){
@@ -260,12 +266,12 @@ namespace hrfm { namespace app{
     //!private
     
     void AppBase::_drawDebug(){
+        ci::gl::color( ColorA( 1.0, 1.0, 1.0, 1.0 ) );
         drawFPS();
         if( useAudio ){
             float w = getWindowWidth();
             float h = getWindowHeight();
             Rectf rect( w - 180, h - 70, w - 20, h - 20 );
-            ci::gl::color( ColorA( 1.0, 1.0, 1.0, 1.0 ) );
             SiAudioInput::getInstance().drawWave( rect );
             SiAudioInput::getInstance().drawFFT( rect );
             SiAudioInput::getInstance().drawFFTRanged( rect );

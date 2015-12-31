@@ -56,7 +56,7 @@ namespace hrfm{ namespace app{
         bool useCapture;
         bool doUpdateCapture;
         
-        hrfm::display::Stage stage;
+        hrfm::display::StageRef stage;
         
         // 以下は必須ではないので最終的に外したい
         

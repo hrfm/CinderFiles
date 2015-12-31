@@ -1,4 +1,4 @@
-#include "VboNode.h"
+#include "BatchNode.h"
 
 using namespace ci;
 
@@ -6,58 +6,37 @@ namespace hrfm{ namespace display{
     
     //! public:
     
-    void VboNode::setup(){}
+    void BatchNode::setup(){}
     
-    void VboNode::clear(){}
+    void BatchNode::clear(){}
     
-    
-    ci::mat4 VboNode::getRotation(){
-        return this->rotation;
+    void BatchNode::setBatchRef( ci::gl::BatchRef batchRef ){
+        _batchRef = batchRef;
     }
-    void VboNode::setRotation( ci::mat4 rotate ){
-        this->rotation = rotation;
+    ci::gl::BatchRef BatchNode::getBatchRef(){
+        return _batchRef;
     }
     
-    void VboNode::setEnableWireframe( bool flag ){
+    void BatchNode::setEnableWireframe( bool flag ){
         _enableWireframe = flag;
     }
     
-    void VboNode::setVboMeshRef( ci::gl::VboMeshRef vboMeshRef ){
-        _vboMeshRef = vboMeshRef;
-        if( _vboMeshRef == NULL ){
-            _batchRef = NULL;
-        }else{
-            _defBatchRef = ci::gl::Batch::create( _vboMeshRef, ci::gl::getStockShader( ci::gl::ShaderDef() ) );
-            if( _glslProgRef != NULL ){
-                _batchRef = ci::gl::Batch::create( _vboMeshRef, _glslProgRef );
-            }
-        }
+    ci::mat4 BatchNode::getRotation(){
+        return this->rotation;
     }
-    ci::gl::VboMeshRef VboNode::getVboMeshRef(){
-        return _vboMeshRef;
+    void BatchNode::setRotation( ci::mat4 rotate ){
+        this->rotation = rotation;
     }
     
-    void VboNode::setShader( ci::gl::GlslProgRef shader ){
-        _glslProgRef = shader;
-        if( _glslProgRef == NULL ){
-            _batchRef = NULL;
-        }else if( _vboMeshRef != NULL ){
-            _batchRef = ci::gl::Batch::create( _vboMeshRef, _glslProgRef );
-        }
-    }
-    ci::gl::GlslProgRef VboNode::getShader(){
-        return _glslProgRef;
-    }
-    
-    void VboNode::addTexture( ci::gl::TextureRef tex ){
+    void BatchNode::addTexture( ci::gl::TextureRef tex ){
         eraseTextureFromList(tex);
         _textures.push_back(tex);
     }
-    void VboNode::removeTexture( ci::gl::TextureRef tex ){
+    void BatchNode::removeTexture( ci::gl::TextureRef tex ){
         eraseTextureFromList(tex);
     }
     
-    void VboNode::update(){
+    void BatchNode::update(){
         if( visible == false || colorA.a <= 0.0f ){
             return;
         }
@@ -65,7 +44,7 @@ namespace hrfm{ namespace display{
         _updateChildren();
     }
     
-    void VboNode::draw( ColorA * drawColor ){
+    void BatchNode::draw( ColorA * drawColor ){
         
         if( visible == false || colorA.a <= 0.0f ){
             return;
@@ -81,19 +60,33 @@ namespace hrfm{ namespace display{
         
         ci::gl::enableAlphaBlending();
         ci::gl::color( c );
+        if( _enableWireframe  ) ci::gl::enableWireframe();
+        
+        ci::gl::enableDepthRead();
+        ci::gl::enableDepthWrite();
+        
+        ci::gl::pushModelMatrix();
+        {
+            ci::gl::translate( getPosition() );
+            //!!!!!! ci::gl::rotate( this->rotation );
+            ci::gl::scale( this->scale );
+            _draw();
+            _drawChildren(&c);
+        }
+        ci::gl::popModelMatrix();
+        
+        /*
         
         vector<ci::gl::TextureRef>::iterator it, end;
         
         ci::gl::pushModelMatrix();
-        
-            if( _enableWireframe  ) ci::gl::enableWireframe();
-            //!!!!!! if( _material != NULL ) _material->apply();
+        {
             
             if( 0 < _textures.size() ){
                 int texIdx = 3;
                 for( it = _textures.begin(), end = _textures.end(); it!=end; it++ ){
                     (*it)->bind(texIdx);
-                    if( _glslProgRef != NULL ) _glslProgRef->uniform( "texture"+toString(texIdx), texIdx );
+                    _batchRef->getGlslProg()->uniform( "texture"+toString(texIdx), texIdx );
                     texIdx++;
                 }
             }
@@ -101,6 +94,7 @@ namespace hrfm{ namespace display{
             ci::gl::translate( getPosition() );
             //!!!!!! ci::gl::rotate( this->rotation );
             ci::gl::scale( this->scale );
+            
             _draw();
             
             if( 0 < _textures.size() ){
@@ -108,33 +102,30 @@ namespace hrfm{ namespace display{
                     (*it)->unbind();
                 }
             }
+            
             _drawChildren(&c);
-            
-            if( _enableWireframe  ) ci::gl::disableWireframe();
-            
+         
+        }
         ci::gl::popModelMatrix();
         
+        //*/
+        
+        if( _enableWireframe  ) ci::gl::disableWireframe();
         ci::gl::disableAlphaBlending();
         
     }
     
     //! protected:
     
-    void VboNode::_update(){};
+    void BatchNode::_update(){};
     
-    void VboNode::_draw(){
+    void BatchNode::_draw(){
         if( _batchRef != NULL ){
             _batchRef->draw();
-        }else if( _defBatchRef != NULL ){
-            _defBatchRef->draw();
         }
     };
-    void VboNode::_drawForLights(){
-        if( _defBatchRef != NULL ){
-            _defBatchRef->draw();
-        }
-    }
-    void VboNode::_drawChildren( ColorA * drawColor ){
+    void BatchNode::_drawForLights(){}
+    void BatchNode::_drawChildren( ColorA * drawColor ){
         DisplayNode::_drawChildren( drawColor );
         /*
         if( numChildren() == 0 ) return;
@@ -147,7 +138,7 @@ namespace hrfm{ namespace display{
         //*/
     }
     
-    inline bool VboNode::eraseTextureFromList( ci::gl::TextureRef tex ){
+    inline bool BatchNode::eraseTextureFromList( ci::gl::TextureRef tex ){
         auto itr = std::remove_if(_textures.begin(),_textures.end(),[tex](ci::gl::TextureRef t)->bool{
             return t == tex;
         });
@@ -158,7 +149,7 @@ namespace hrfm{ namespace display{
         return true;
     }
     
-    void VboNode::_appendVertex( ci::TriMeshRef m, vec3 v0, vec3 v1, vec3 v2 ){
+    void BatchNode::_appendVertex( ci::TriMeshRef m, vec3 v0, vec3 v1, vec3 v2 ){
         
         vec3 v01 = v1-v0;
         vec3 v02 = v2-v0;
@@ -175,14 +166,5 @@ namespace hrfm{ namespace display{
         m->appendTriangle( numberVertices - 3, numberVertices - 2, numberVertices - 1 );
         
     }
-    
-    /*!!!!!!!
-     void VboNode::setMaterial( ci::gl::Material * material ){
-     _material = material;
-     }
-     ci::gl::Material * VboNode::getMaterial(){
-     return _material;
-     }
-     //*/
     
 }}

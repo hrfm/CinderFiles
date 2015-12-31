@@ -37,7 +37,7 @@ namespace hrfm{ namespace app{
     void SignageAppBase::_initScheduled( XmlTree settings ){
         scheduledContents = new hrfm::signage::display::ScheduledContents( settings );
         scheduledContents->addEventListener("moviecomplete", this, &SignageAppBase::onScheduleComplete );
-        stage.addChild( scheduledContents );
+        stage->addChild( scheduledContents );
     }
     
     void SignageAppBase::_initSequential( XmlTree settings ){
@@ -50,7 +50,7 @@ namespace hrfm{ namespace app{
             )
         );
         //*/
-        stage.addChild( sequentialContents );
+        stage->addChild( sequentialContents );
         sequentialContents->play(0);
     }
     
