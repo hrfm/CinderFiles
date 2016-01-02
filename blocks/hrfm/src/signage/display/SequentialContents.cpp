@@ -35,8 +35,8 @@ namespace hrfm{ namespace signage{ namespace display{
         _transition = transition;
     }
     
-    void SequentialContents::addContent( ci::fs::path filepath, float time, string trigger ){
-        hrfm::display::DisplayNode * content = _createContent(filepath);
+    void SequentialContents::addContent( ci::fs::path filepath, float time, string trigger, bool isLoop, bool isSilent ){
+        hrfm::display::DisplayNode * content = _createContent( filepath, isLoop, isSilent );
         if( content != NULL ){
             cout << "SequencialContents[" << numSequence() << "] " << filepath.native() << endl;
             addContent( content, time, trigger );

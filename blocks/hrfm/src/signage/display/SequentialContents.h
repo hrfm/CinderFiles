@@ -43,7 +43,7 @@ namespace hrfm{ namespace signage{ namespace display{
         
         void setTransition( Transition * transition );
         
-        void addContent( ci::fs::path filepath, float time, string trigger = "" );
+        void addContent( ci::fs::path filepath, float time, string trigger = "", bool isLoop = false, bool isSilent = false );
         void addContent( hrfm::display::DisplayNode * content, float time, string trigger = "" );
         
         void play( int index = 0 );
