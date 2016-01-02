@@ -280,7 +280,7 @@ namespace hrfm{ namespace signage{ namespace display{
     //! protected:
     
     void ScheduledContents::_update(){
-        if( _fbo->getSize() != (vec2)getSize() ){
+        if( _fbo->getSize() != getSize() ){
             _fbo = new hrfm::gl::ExFbo( width, height );
         }
         _fbo->beginOffscreen(true);

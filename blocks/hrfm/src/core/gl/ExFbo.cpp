@@ -13,13 +13,10 @@ namespace hrfm{ namespace gl{
         return _fbo;
     }
     
-    ci::vec2 ExFbo::getSize(){
-        return _fbo->getSize();
-    };
-    
-    ci::Rectf ExFbo::getBounds(){
-        return _fbo->getBounds();
-    };
+    int       ExFbo::getWidth() { return _fbo->getWidth(); };
+    int       ExFbo::getHeight(){ return _fbo->getHeight(); };
+    ci::ivec2 ExFbo::getSize()  { return _fbo->getSize(); };
+    ci::Rectf ExFbo::getBounds(){ return _fbo->getBounds(); };
     
     ci::gl::TextureRef ExFbo::getTexture(){
         return _fbo->getColorTexture();

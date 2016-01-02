@@ -34,7 +34,7 @@ namespace hrfm { namespace display{
         
         mCamera.setFov( 30.0f );
         mCamera.setAspectRatio( getWindowAspectRatio() );
-        mCamUi = CameraUi( &mCamera, getWindow() );
+        //mCamUi = CameraUi( &mCamera, getWindow() );
         
     }
     
@@ -42,6 +42,7 @@ namespace hrfm { namespace display{
         
         ci::gl::enableDepthRead();
         ci::gl::enableDepthWrite();
+        
         // Offset to help combat surface acne (self-shadowing)
         ci::gl::enable( GL_POLYGON_OFFSET_FILL );
         glPolygonOffset( mPolygonOffsetFactor, mPolygonOffsetUnits );

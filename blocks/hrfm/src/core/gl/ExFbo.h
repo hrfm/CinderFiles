@@ -22,7 +22,9 @@ namespace hrfm{ namespace gl{
         
         ci::gl::FboRef getFbo();
         
-        ci::vec2 getSize();
+        int getWidth();
+        int getHeight();
+        ci::ivec2 getSize();
         ci::Rectf getBounds();
         
         ci::gl::TextureRef getTexture();

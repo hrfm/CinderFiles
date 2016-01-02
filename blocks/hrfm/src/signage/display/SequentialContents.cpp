@@ -56,16 +56,16 @@ namespace hrfm{ namespace signage{ namespace display{
         cout << "SequentialContents::play(" << index << ")" << endl;
         
         int num = numSequence();
+        
         // シーケンスの設定自体が存在しない場合はリターン.
         if( num == 0 ){ return; }
+        
         // index の値がはみ出ないように丸め込む.
         if( num <= index ){
             _currentIndex = _sequenceList.size() - 1;
         }else if( index < 0 ){
             _currentIndex = 0;
         }
-        
-        cout << "play" << endl;
         
         // Transition の設定の有無に応じて修正.
         if( _transition != NULL ){

@@ -37,7 +37,7 @@ namespace hrfm{ namespace display{
         virtual void drawOffscreen();
         
         ci::gl::TextureRef getTexture();
-    
+        
     protected:
         
         void _begin();

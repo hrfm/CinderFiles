@@ -49,6 +49,7 @@ namespace hrfm{ namespace display{
         
         virtual void _init( ci::qtime::MovieGlRef movieGlRef );
         virtual void _update();
+        virtual void _onRemovedFromStage( hrfm::events::Event * evt );
         
         float _beforeTime;
         float _volume   = 0.0f;

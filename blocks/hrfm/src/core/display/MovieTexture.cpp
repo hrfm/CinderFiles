@@ -7,7 +7,9 @@ namespace hrfm{ namespace display{
     void MovieTexture::init( ci::fs::path filePath ){
         values.setValue("srcPath", filePath);
         init( ci::qtime::MovieGl::create( hrfm::fs::resolvePath(filePath) ) );
+        addEventListener( hrfm::events::Event::REMOVED_FROM_STAGE, this, &MovieTexture::_onRemovedFromStage );
     }
+    
     void MovieTexture::init( ::ci::qtime::MovieGlRef movieGlRef ){
         _init( movieGlRef );
     }
@@ -107,6 +109,11 @@ namespace hrfm{ namespace display{
         }else{
             _beforeTime = currentTime;
         }
+    }
+    
+    
+    void MovieTexture::_onRemovedFromStage( hrfm::events::Event * evt ){
+        stop();
     }
     
 }}

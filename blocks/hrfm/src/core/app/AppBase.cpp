@@ -219,7 +219,7 @@ namespace hrfm { namespace app{
     
     void AppBase::draw(){
         ci::gl::clear();
-        ci::gl::draw( stage->getTexture() );
+        ci::gl::draw( stage->getTexture(), getWindowBounds() );
         if( _isDebugMode ){
             cout << "debug" << endl;
             _drawDebug();
