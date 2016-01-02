@@ -86,6 +86,10 @@ namespace hrfm{ namespace signage{ namespace display{
                             mov->setSilent( true );
                         }
                         
+                        if( item->hasAttribute("volume") ){
+                            mov->setVolume( item->getAttributeValue<float>("volume") );
+                        }
+                        
                         //mov->setLetterbox(true);
                         
                         _contentList[time] = mov;
@@ -217,6 +221,8 @@ namespace hrfm{ namespace signage{ namespace display{
             hrfm::events::SiEventDispatcher::getInstance().dispatchEvent( evt );
         }
         
+        this->dispatchEvent( new hrfm::signage::events::ScheduledContentsEvent( hrfm::signage::events::ScheduledContentsEvent::SCHEDULE_START ) );
+        
     }
     
     void ScheduledContents::playRecentContent(){
@@ -304,7 +310,7 @@ namespace hrfm{ namespace signage{ namespace display{
         }
     }
     
-    void ScheduledContents::_onTimer( events::TimeUtilEvent * event ){
+    void ScheduledContents::_onTimer( hrfm::events::TimeUtilEvent * event ){
         cout << "SequantialContents::_onTimer("+event->type()+")" << endl;
         play(event->type());
     }
@@ -319,7 +325,7 @@ namespace hrfm{ namespace signage{ namespace display{
             _currentContent = NULL;
         }
         _fbo->beginOffscreen(true)->endOffscreen();
-        this->dispatchEvent(new hrfm::events::Event("moviecomplete"));
+        this->dispatchEvent( new hrfm::signage::events::ScheduledContentsEvent( hrfm::signage::events::ScheduledContentsEvent::SCHEDULE_END ) );
     }
     
     //! private

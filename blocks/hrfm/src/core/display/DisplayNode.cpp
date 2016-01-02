@@ -135,9 +135,10 @@ namespace hrfm{ namespace display{
     }
     
     void DisplayNode::update(){
-        if( visible == false || colorA.a <= 0.0f ){
+        if( visible == false || colorA.a <= 0.0f || ++_updateCount < _updateFequency ){
             return;
         }
+        _updateCount = 0;
         if( _beforeWidth != width || _beforeHeight != height ){
             dispatchEvent( new hrfm::events::Event( hrfm::events::Event::RESIZE ) );
             _beforeWidth  = width;
@@ -206,6 +207,13 @@ namespace hrfm{ namespace display{
     
     Stage * DisplayNode::getStage(){
         return _stage;
+    }
+    
+    void DisplayNode::setUpdateFrequency( unsigned int freq ){
+        if( freq <= 0 ){
+            freq = 1;
+        }
+        _updateFequency = _updateCount = freq;
     }
     
     //! protected:

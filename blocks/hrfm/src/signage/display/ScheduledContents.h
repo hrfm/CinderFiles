@@ -13,6 +13,8 @@
 
 #include "SiTimeUtil.h"
 
+#include "ScheduledContentsEvent.h"
+
 namespace hrfm{ namespace signage{ namespace display{
     
     /*

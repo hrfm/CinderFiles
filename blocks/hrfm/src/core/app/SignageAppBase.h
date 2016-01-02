@@ -28,7 +28,9 @@ namespace hrfm{ namespace app{
         virtual void _initSequential( XmlTree settings );
         
         virtual void onTrigger( hrfm::events::TriggerEvent * event );
-        virtual void onScheduleComplete( hrfm::events::Event * event );
+        
+        virtual void onScheduleStart( hrfm::signage::events::ScheduledContentsEvent * event );
+        virtual void onScheduleComplete( hrfm::signage::events::ScheduledContentsEvent * event );
         
     };
     

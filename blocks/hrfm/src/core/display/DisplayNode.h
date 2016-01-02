@@ -93,7 +93,12 @@ namespace hrfm{ namespace display{
         ci::ColorA  colorA;
         // --------------------------
         
+        void setUpdateFrequency( unsigned int freq );
+        
     protected:
+        
+        unsigned int _updateFequency = 1;
+        unsigned int _updateCount    = 0;
         
         //! 指定した要素を children から削除します. 削除された場合 true 存在しない場合は false を返します.
         bool eraseFromChildren( DisplayNode * child );

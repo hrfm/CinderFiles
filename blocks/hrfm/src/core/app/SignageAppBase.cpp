@@ -36,7 +36,8 @@ namespace hrfm{ namespace app{
     
     void SignageAppBase::_initScheduled( XmlTree settings ){
         scheduledContents = new hrfm::signage::display::ScheduledContents( settings );
-        scheduledContents->addEventListener("moviecomplete", this, &SignageAppBase::onScheduleComplete );
+        scheduledContents->addEventListener( hrfm::signage::events::ScheduledContentsEvent::SCHEDULE_START, this, &SignageAppBase::onScheduleStart );
+        scheduledContents->addEventListener( hrfm::signage::events::ScheduledContentsEvent::SCHEDULE_END  , this, &SignageAppBase::onScheduleComplete );
         stage->addChild( scheduledContents );
     }
     
@@ -58,6 +59,7 @@ namespace hrfm{ namespace app{
         cout << event->triggerName() << endl;
     }
     
-    void SignageAppBase::onScheduleComplete( hrfm::events::Event * event ){}
+    void SignageAppBase::onScheduleStart( hrfm::signage::events::ScheduledContentsEvent * event ){}
+    void SignageAppBase::onScheduleComplete( hrfm::signage::events::ScheduledContentsEvent * event ){}
     
 }}
