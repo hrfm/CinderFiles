@@ -1,47 +1,66 @@
 #include "cinder/app/App.h"
 #include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
+#include "cinder/gl/Shader.h"
 #include <list>
 
 #include "hrfm.h"
 #include "hrfm.gl.h"
+#include "VJBase.h"
+
+#include "OscSender.h"
 
 using namespace ci;
 using namespace ci::app;
 using namespace std;
 
 // We'll create a new Cinder Application by deriving from the AppBasic class
-class BasicApp : public hrfm::app::AppBase {
-  public:
-	void mouseDrag( MouseEvent event );
-	void keyDown( KeyEvent event );
-	void draw();
-
-	// This will maintain a list of points which we will draw line segments between
-	list<vec2>		mPoints;
+class BasicApp : public hrfm::vj::app::VJBase {
+public:
+    void setup();
+    void update();
+    void draw();
+    void resize(){}
+    vector<cinder::osc::Sender> sender;
+    vector<string> addresses;
 };
 
-void BasicApp::mouseDrag( MouseEvent event )
-{
-	mPoints.push_back( event.getPos() );
+void BasicApp::setup(){
+    hrfm::vj::app::VJBase::setup();
+    for( int i=0; i<10; i++ ){
+        cinder::osc::Sender s;
+        s.setup("localhost", 10000);
+        sender.push_back(s);
+    }
+    
+    addresses.push_back("test");
+    addresses.push_back("hoge");
+    addresses.push_back("fuga");
+    addresses.push_back("piyo");
+    addresses.push_back("aaaa");
+    addresses.push_back("bbbb");
+    addresses.push_back("cccc");
+    addresses.push_back("dddd");
+    
 }
 
-void BasicApp::keyDown( KeyEvent event )
-{
-	if( event.getChar() == 'f' )
-		setFullScreen( ! isFullScreen() );
+void BasicApp::update(){
+    
+    int index = randInt( sender.size() );
+    
+    string address = "/" + addresses[randInt(addresses.size())];
+    
+    hrfm::vj::app::VJBase::update();
+    ci::osc::Message msg;
+    msg.setAddress(address);
+    msg.addFloatArg(randFloat());
+    
+    sender.at(index).sendMessage(msg);
+    
 }
 
-void BasicApp::draw()
-{
-    ci::gl::clear( Color( 0.1f, 0.1f, 0.15f ) );
-
-	ci::gl::color( 1.0f, 0.5f, 0.25f );
-	ci::gl::begin( GL_LINE_STRIP );
-	for( auto pointIter = mPoints.begin(); pointIter != mPoints.end(); ++pointIter ) {
-		ci::gl::vertex( *pointIter );
-	}
-	ci::gl::end();
+void BasicApp::draw(){
+    hrfm::vj::app::VJBase::draw();
 }
 
 CINDER_APP( BasicApp, RendererGl( RendererGl::Options().msaa( 16 ) ), []( App::Settings *settings ) {

@@ -12,7 +12,11 @@ namespace hrfm { namespace gl{
         mShader = shader;
     };
     ShaderBase::ShaderBase( fs::path fragment, fs::path vertex, fs::path geometory, fs::path tessEval, fs::path tessCtrl ){
-        initShader( fragment, vertex, geometory, tessEval, tessCtrl );
+        try{
+            mShader = initShader( fragment, vertex, geometory, tessEval, tessCtrl );
+        }catch(...){
+            mShader = ci::gl::getStockShader( ci::gl::ShaderDef().color() );
+        }
     };
     
     ci::gl::GlslProgRef ShaderBase::getGlslProg(){
@@ -30,13 +34,35 @@ namespace hrfm { namespace gl{
         _strength = strength;
     }
     float ShaderBase::getStrength(){
-        return _strength;
+        if( _biasMode == BIAS_MODE_NONE ){
+            return _strength;
+        }else{
+            hrfm::io::SiAudioInput * audio = &hrfm::io::SiAudioInput::getInstance();
+            if( _biasMode == BIAS_MODE_FFT ){
+                return  _strength * audio->getFFTRangedAt(_biasFFTIndex) * _biasTimes;
+            }else if( _biasMode == BIAS_MODE_VOLUME ){
+                return  _strength * audio->getVolume() * _biasTimes;
+            }else{
+                return _strength;
+            }
+        }
+    }
+    
+    void ShaderBase::setAudioBiasByFFT( int index, float times ){
+        _biasMode = BIAS_MODE_FFT;
+        _biasTimes = times;
+        _biasFFTIndex = index;
+    }
+    
+    void ShaderBase::setAudioBiasByVolume( float times ){
+        _biasTimes = times;
+        _biasMode = BIAS_MODE_VOLUME;
     }
     
     // prepare shader, texture, and more. before drawSolidRect to FrameBuffer.
     void ShaderBase::prepare(){
         mShader->uniform("time",(float)ci::app::getElapsedSeconds());
-        mShader->uniform("strength",_strength);
+        mShader->uniform("strength",getStrength());
     }
     
     // clear shader, texture, and more. after drawSolidRect to FrameBuffer.
@@ -45,13 +71,17 @@ namespace hrfm { namespace gl{
     // ----------------------------------------------------------------------------------------------
     // protected
     
-    void ShaderBase::initShader( fs::path fragment, fs::path vertex, fs::path geometory, fs::path tessEval, fs::path tessCtrl ){
+    ci::gl::GlslProgRef ShaderBase::initShader( fs::path fragment, fs::path vertex, fs::path geometory, fs::path tessEval, fs::path tessCtrl ){
         mVertexPath    = vertex;
         mFragmentPath  = fragment;
         mGeometoryPath = geometory;
         mTessEvalPath  = tessEval;
         mTessCtrlPath  = tessCtrl;
-        mShader = ShaderFactory::create( getVertexShader(), getFragmentShader(), getGeometoryShader(), getTessEvalShader(), getTessCtrlShader() );
+        try{
+            return ShaderFactory::create( getVertexShader(), getFragmentShader(), getGeometoryShader(), getTessEvalShader(), getTessCtrlShader() );
+        }catch(...){
+            throw;
+        }
     }
     std::string ShaderBase::loadShader( fs::path srcPath ){
         if( srcPath != "" ){

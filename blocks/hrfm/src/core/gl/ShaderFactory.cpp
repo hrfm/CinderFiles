@@ -21,8 +21,10 @@ namespace hrfm{ namespace gl{
         }catch( ci::gl::GlslProgCompileExc &exc ) {
             cout << "Shader compile error: " << endl;
             cout << exc.what();
+            throw exc;
         }catch( ... ) {
             cout << "Unable to load shader" << endl;
+            throw;
         }
         return NULL;
     };
@@ -43,8 +45,10 @@ namespace hrfm{ namespace gl{
         }catch( ci::gl::GlslProgCompileExc &exc ) {
             cout << "Shader compile error: " << endl;
             cout << exc.what();
+            throw exc;
         }catch( ... ) {
             cout << "Unable to load shader" << endl;
+            throw;
         }
         return NULL;
     };

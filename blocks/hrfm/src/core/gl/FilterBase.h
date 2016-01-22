@@ -31,6 +31,8 @@ namespace hrfm { namespace gl{
             setup( size );
         };
         
+        virtual void updateShader(ci::fs::path fragment = ci::fs::path("simple_frag.glsl"), ci::fs::path vertex = ci::fs::path("filter_vert.glsl") );
+        
         virtual void setup( ivec2 size );
         
         virtual void setSize( int w, int h );

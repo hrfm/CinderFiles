@@ -18,6 +18,13 @@ namespace hrfm { namespace gl{
         setSize( size.x, size.y );
     }
     
+    void FilterBase::updateShader( ci::fs::path fragment, ci::fs::path vertex ){
+        try{
+            ci::gl::GlslProgRef tmp = initShader(fragment,vertex);
+            mShader = tmp;
+        }catch(...){}
+    }
+    
     void FilterBase::affect( ci::gl::TextureRef tex, vec2 resolution ){
         affect( tex, resolution, Rectf( 0, 0, resolution.x, resolution.y ) );
     }

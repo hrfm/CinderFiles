@@ -7,6 +7,7 @@
 #include "cinder/Xml.h"
 #include "SiFboFactory.h"
 #include "ShaderFactory.h"
+#include "SiAudioInput.h"
 
 using namespace ci;
 using namespace std;
@@ -19,6 +20,10 @@ namespace hrfm { namespace gl{
     class ShaderBase{
         
     public:
+        
+        static const int BIAS_MODE_NONE   = 0;
+        static const int BIAS_MODE_FFT    = 1;
+        static const int BIAS_MODE_VOLUME = 2;
         
         // --------------------------------------------------------------------------------------------
         
@@ -34,12 +39,19 @@ namespace hrfm { namespace gl{
         virtual void  setStrength( float strength );
         virtual float getStrength();
         
+        virtual void setAudioBiasByFFT( int index, float times = 1.0f );
+        virtual void setAudioBiasByVolume( float times = 1.0f );
+        
         // prepare shader, texture, and more. before drawSolidRect to FrameBuffer.
         virtual void prepare();
         // clear shader, texture, and more. after drawSolidRect to FrameBuffer.
         virtual void clear();
         
     protected:
+        
+        int   _biasMode     = 0;
+        float _biasTimes    = 1.0f;
+        int   _biasFFTIndex = 0;
         
         // --------------------------------------------------------------------------------------------
         
@@ -55,7 +67,7 @@ namespace hrfm { namespace gl{
         ci::fs::path mTessEvalPath;
         ci::fs::path mTessCtrlPath;
         
-        virtual void initShader( ci::fs::path fragment, ci::fs::path vertex, ci::fs::path geometory, ci::fs::path tessEval, ci::fs::path tessCtrl );
+        ci::gl::GlslProgRef initShader( ci::fs::path fragment, ci::fs::path vertex="simple_vert.glsl", ci::fs::path geometory="", ci::fs::path tessEval="", ci::fs::path tessCtrl="" );
         virtual std::string loadShader( ci::fs::path srcPath );
         virtual std::string getVertexShader();
         virtual std::string getFragmentShader();
