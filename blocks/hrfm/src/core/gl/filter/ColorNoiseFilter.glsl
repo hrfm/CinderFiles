@@ -5,6 +5,7 @@ uniform sampler2D tex;
 uniform float     time;
 uniform vec2      resolution;
 uniform float     strength;
+uniform vec2      direction;
 
 out vec4 oColor;
 
@@ -18,11 +19,14 @@ void main(void){
     
     //*
     
-    texCoord2.x = texCoord.x + strength / 10;
+    texCoord2.x = texCoord.x + strength / 10 * direction.x;
+    texCoord2.y = texCoord.y + strength / 10 * direction.y;
     color.x = texture( tex, texCoord2 ).x;
     
-    texCoord2.x = texCoord.x - strength / 10;
+    texCoord2.x = texCoord.x - strength / 10 * direction.x;
+    texCoord2.y = texCoord.y - strength / 10 * direction.y;
     color.z = texture( tex, texCoord2 ).z;
+    
     /*/
     
     texCoord2.x = texCoord.x + strength / 10;

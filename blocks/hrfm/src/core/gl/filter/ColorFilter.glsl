@@ -1,12 +1,15 @@
 #version 400
 
-// Textures
 uniform sampler2D tex;
-uniform float time;
-uniform vec2 resolution;
-uniform vec3 color;
-uniform int mode;
-uniform int inverse;
+uniform float     time;
+uniform vec2      resolution;
+
+uniform sampler2D colorTex;
+uniform int       useColorTex;
+
+uniform vec3      color;
+uniform int       mode;
+uniform int       inverse;
 
 out vec4 oColor;
 
@@ -42,6 +45,10 @@ void main(void){
         }else if( texColor.b < 0.0 ){
             texColor.b = 0.0;
         }
+    }
+    
+    if( useColorTex == 1 ){
+        texColor.rgb *= texture( colorTex, texCoord ).rgb;
     }
     
     if( inverse == 1 ){

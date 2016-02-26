@@ -53,6 +53,9 @@ namespace hrfm{ namespace graphics{
             {
                 
                 vec3  center = vec3( width / 2.0f, height / 2.0f, 0.0f );
+                if( drawFromCenter ){
+                    center = vec3(0.0);
+                }
                 float radius = width / 2.0f;
                 
                 _vertices.empty();

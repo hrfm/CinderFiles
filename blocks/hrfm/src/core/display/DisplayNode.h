@@ -91,6 +91,7 @@ namespace hrfm{ namespace display{
         ci::vec3 scale;
         bool visible;
         ci::ColorA  colorA;
+        float rotate = 0.0;
         // --------------------------
         
         void setUpdateFrequency( unsigned int freq );

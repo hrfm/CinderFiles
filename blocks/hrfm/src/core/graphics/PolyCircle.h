@@ -22,6 +22,8 @@ namespace hrfm{ namespace graphics{
         
         void setThickness( float thickness );
         
+        bool drawFromCenter = false;
+        
         // vboMode を使うと 描画を VBO にして高速化できる。
         // だがその代わり、更新が重くなる。というようにしたい。
         //void setVboMode( bool flag );

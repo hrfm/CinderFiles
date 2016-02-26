@@ -135,7 +135,7 @@ namespace hrfm{ namespace display{
     }
     
     void DisplayNode::update(){
-        if( visible == false || colorA.a <= 0.0f || ++_updateCount < _updateFequency ){
+        if( visible == false || ++_updateCount < _updateFequency ){
             return;
         }
         _updateCount = 0;
@@ -171,6 +171,7 @@ namespace hrfm{ namespace display{
         }
         ci::gl::pushModelMatrix();
             ci::gl::translate( getPosition() );
+            ci::gl::rotate( rotate );
             ci::gl::color( c );
             _draw();
             _drawChildren( &c );
