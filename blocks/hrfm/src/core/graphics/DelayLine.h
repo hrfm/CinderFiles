@@ -58,8 +58,11 @@ namespace hrfm{ namespace graphics{
         virtual void _update();
         virtual void _draw();
         
-        double _startTime;
+        bool   _reached;
+        int    _reachedCount;
         bool   _completed;
+        
+        double _startTime;
         int    _index = 0;
         std::vector<DelayLinePoint*> _points;
         hrfm::graphics::PolyLine * _line;

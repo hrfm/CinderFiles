@@ -11,11 +11,13 @@ namespace hrfm{ namespace graphics{
     }
     
     void DelayLines::addPoint( DelayLinePoint * point ){
-        if( this->_points.size()-1 == _index ){
+        if( this->_points.size()-1 == _index || _completed ){
             _startTime = ci::app::getElapsedSeconds();
         }
         this->_points.push_back( point );
-        _completed = false;
+        _reached      = false;
+        _reachedCount = 0;
+        _completed    = false;
     }
     
     vec3 DelayLines::getEndPosition(){
@@ -46,6 +48,7 @@ namespace hrfm{ namespace graphics{
             if( 1.0 <= p ){
                 p = 1.0;
                 _index++;
+                _reachedCount = 0;
                 _startTime = ci::app::getElapsedSeconds();
             }
             
@@ -58,13 +61,24 @@ namespace hrfm{ namespace graphics{
         }
         _line->points[_line->points.size()-1] = pos;
         
-    };
-        
-    void DelayLines::_draw(){
-        if( !_completed && _points.size()-1 <= _index ){
-            _completed = true;
-            dispatchEvent( new hrfm::graphics::DelayLinesEvent("end") );
+        if( _points.size()-1 <= _index ){
+            if( !_reached ){
+                _reached = true;
+                dispatchEvent( new hrfm::graphics::DelayLinesEvent("reached") );
+            }
+            if( !_completed && _line->points.size() <= ++_reachedCount ){
+                auto last = this->_points.at( this->_points.size()-1 );
+                this->_points.empty();
+                this->_points.clear();
+                this->_points.push_back(last);
+                _index = 0;
+                _completed = true;
+                dispatchEvent( new hrfm::graphics::DelayLinesEvent("end") );
+            }
         }
+        
     };
+    
+    void DelayLines::_draw(){};
     
 }}

@@ -4,8 +4,23 @@ namespace hrfm{ namespace graphics{
     
     void PolyLine::_update(){
         
+        // --------------------------------------
+        // ポイントの整理.
+        
+        vector<vec3> pList;
+        pList.push_back( points.at(0) );
+        for( int i=0; i<points.size()-1; i++ ){
+            auto p0 = points.at(i);
+            auto p1 = points.at(i+1);
+            if( p0 != p1 && 1.0 <= distance(p0,p1) ){
+                pList.push_back(p1);
+            }
+        }
+        
+        // --------------------------------------
+        
         double t   = this->thickness / 2.0;
-        int    len = points.size();
+        int    len = pList.size();
         
         _vertices.empty();
         _vertices.clear();
@@ -18,8 +33,8 @@ namespace hrfm{ namespace graphics{
         
         // points[head] ----
         
-        p0  = points.at(0);
-        p1  = points.at(1);
+        p0  = pList.at(0);
+        p1  = pList.at(1);
         rad = atan2( p1.y-p0.y, p1.x-p0.x );
         
         _vertices.push_back( vec3( p0.x + t*cos(rad+PI2), p0.y + t*sin(rad+PI2), 0.0 ) );
@@ -33,28 +48,24 @@ namespace hrfm{ namespace graphics{
             vec2 v0, v1;
             vec3 p0, po, p1;
             
-            for( int i=1; i<len-1; i++ ){
+            for( int i=1; i<len-2; i++ ){
                 
-                p0 = points.at(i-1);
-                po = points.at(i);
-                p1 = points.at(i+1);
-                
-                if( p0 == po || po == p1 || p0 == p1 ){ continue; }
-                
+                p0 = pList.at(i-1);
+                po = pList.at(i);
+                p1 = pList.at(i+1);
                 v0 = vec2( p0.x-po.x, p0.y-po.y );
                 v1 = vec2( p1.x-po.x, p1.y-po.y );
                 
                 // どちらを先にプロットするか、向きで調べる
                 auto rot = (p1.x-po.x)*(p0.y-po.y)-(p0.x-po.x)*(p1.y-po.y);
                 
-                if( rot == 0 ){
+                if( rot <= 1.0 ){
                     
                     rad = atan2( po.y-p0.y, po.x-p0.x );
                     _vertices.push_back( vec3( p1.x + t*cos(rad+PI2), p1.y + t*sin(rad+PI2), 0.0 ) );
                     _vertices.push_back( vec3( p1.x + t*cos(rad-PI2), p1.y + t*sin(rad-PI2), 0.0 ) );
                     
                 }else{
-                    
                     
                     // マイター処理の長さ.
                     cosTheta = dot(v0,v1) / (length(v0)*length(v1));
@@ -83,8 +94,8 @@ namespace hrfm{ namespace graphics{
         
         // points[tail] ----
         
-        p0  = points.at(len-2);
-        p1  = points.at(len-1);
+        p0  = pList.at(len-2);
+        p1  = pList.at(len-1);
         rad = atan2( p1.y-p0.y, p1.x-p0.x );
         
         _vertices.push_back( vec3( p1.x + t*cos(rad+PI2), p1.y + t*sin(rad+PI2), 0.0 ) );
