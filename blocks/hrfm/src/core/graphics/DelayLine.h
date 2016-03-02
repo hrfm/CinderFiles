@@ -45,6 +45,8 @@ namespace hrfm{ namespace graphics{
                 _line->points.push_back( this->_points.at(0)->position );
             }
             this->addChild(_line);
+            _reached   = true;
+            _completed = true;
         };
         ~DelayLines(){};
         

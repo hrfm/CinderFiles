@@ -26,6 +26,10 @@ namespace hrfm{ namespace graphics{
     
     void DelayLines::_update(){
         
+        if( _completed ){
+            return;
+        }
+        
         vec3 pos;
         
         if( _points.size() == 1 ){
