@@ -8,16 +8,13 @@ namespace hrfm{ namespace graphics{
     class PolyLine:public DisplayNode{
     public:
         
-        PolyLine(float thickness = 2.0):DisplayNode(){
+        PolyLine( float thickness = 2.0 ):DisplayNode(){
             this->thickness = thickness;
         }
         ~PolyLine();
         
         float        thickness;
         vector<vec3> points;
-        
-        //void closePath();
-        //bool _isPathClosed;
         
     protected:
         

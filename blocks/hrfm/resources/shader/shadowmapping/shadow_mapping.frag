@@ -158,7 +158,7 @@ void main()
 	}
 	
 	fragColor.rgb = mix( ( ( D + S ) * shadow + A ) * vColor.rgb, vec3(shadow), float(uOnlyShadowmap) );
-	fragColor.a = 1.0;
+	fragColor.a = vColor.a;
     
     fragColor *= uLightStrength;
     
