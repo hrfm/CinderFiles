@@ -31,12 +31,12 @@ namespace hrfm{ namespace display{
     }
     
     void Stage::draw( bool offscreen ){
-        std::pair<ivec2,ivec2> viewport = ci::gl::getViewport();
-        _begin();
+        this->begin();
+        {
             _draw();
             _drawChildren( &colorA );
-        _end();
-        ci::gl::viewport(viewport);
+        }
+        this->end();
         if( !offscreen ){
             ci::gl::translate( x, y );
             ci::gl::draw( getTexture() );
@@ -65,7 +65,6 @@ namespace hrfm{ namespace display{
         ci::gl::enableAlphaBlending();
         ci::gl::color( colorA );
         ci::gl::pushMatrices();
-        ci::gl::viewport( ivec2(0), getSize() );
         if( _autoClear == true ){
             ci::gl::clear();
         }
@@ -74,6 +73,7 @@ namespace hrfm{ namespace display{
         }else{
             ci::gl::setMatricesWindow( width, height );
         }
+        ci::gl::viewport( getSize() );
     }
     void Stage::_end(){
         ci::gl::popMatrices();

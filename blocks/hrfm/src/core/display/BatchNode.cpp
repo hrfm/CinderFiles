@@ -67,7 +67,8 @@ namespace hrfm{ namespace display{
         
         ci::gl::pushModelMatrix();
         {
-            ci::gl::translate( getPosition() );
+            ci::gl::multModelMatrix(this->transform);
+            ci::gl::translate( vec3( this->x, this->y, this->z ) );
             //!!!!!! ci::gl::rotate( this->rotation );
             ci::gl::scale( this->scale );
             _draw();

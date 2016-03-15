@@ -6,7 +6,9 @@
 #include "TextureNode.h"
 #include "MovieTexture.h"
 #include "Stage.h"
+
 #include "BatchNode.h"
+#include "VertBatchNode.h"
 
 // --- hrfm::events
 

@@ -18,10 +18,10 @@ namespace hrfm { namespace display{
         mLight.distanceRadius	= 100.0f;
         mLight.viewpoint		= vec3( mLight.distanceRadius );
         mLight.fov				= 10.0f;
-        mLight.target			= vec3( 0 );
+        mLight.target			= vec3( 0.0 );
         mLight.toggleViewpoint	= false;
         
-        mShadowTechnique		= 1;
+        mShadowTechnique		= 3;
         mDepthBias				= -0.0005f;
         mRandomOffset			= 1.2f;
         mNumRandomSamples		= 32;
@@ -70,16 +70,22 @@ namespace hrfm { namespace display{
             ci::gl::ScopedGlslProg bind( mShadowShader );
             ci::gl::ScopedTextureBind texture( mShadowMap->getTexture() );
             
+            // ShadowMap Texture.
             mShadowShader->uniform( "uShadowMap", 0 );
+            
+            // 光源の強さ.
+            mShadowShader->uniform( "uLightStrength", lightStrength );
+            mShadowShader->uniform( "uLightPos", vec3( ci::gl::getModelView() * vec4( mLight.viewpoint, 1.0 ) ) );
+            
             mShadowShader->uniform( "uShadowMatrix", mLight.camera.getProjectionMatrix() * mLight.camera.getViewMatrix() );
-            mShadowShader->uniform( "uShadowTechnique", mShadowTechnique );
             mShadowShader->uniform( "uDepthBias", mDepthBias );
+            
+            mShadowShader->uniform( "uShadowTechnique", mShadowTechnique );
+            
             mShadowShader->uniform( "uOnlyShadowmap", mOnlyShadowmap );
             mShadowShader->uniform( "uRandomOffset", mRandomOffset );
             mShadowShader->uniform( "uNumRandomSamples", mNumRandomSamples );
             mShadowShader->uniform( "uEnableNormSlopeOffset", mEnableNormSlopeOffset );
-            mShadowShader->uniform( "uLightPos", vec3( ci::gl::getModelView() * vec4( mLight.viewpoint, 1.0 ) ) );
-            mShadowShader->uniform( "uLightStrength", lightStrength );
             
             _drawScene( mShadowShader );
             
@@ -94,11 +100,14 @@ namespace hrfm { namespace display{
     }
     
     void ShadowMappingNode::_drawScene( const ci::gl::GlslProgRef& shadowGlsl ){
-        for( auto it = std::begin(mObjectList); it != std::end(mObjectList); it++ ){
-            (*it)->update();
-            if( shadowGlsl ){
+        if( shadowGlsl ){
+            for( auto it = std::begin(mObjectList); it != std::end(mObjectList); it++ ){
+                (*it)->update();
                 (*it)->drawShadowed( shadowGlsl );
-            }else{
+            }
+        }else{
+            for( auto it = std::begin(mObjectList); it != std::end(mObjectList); it++ ){
+                (*it)->update();
                 (*it)->draw();
             }
         }

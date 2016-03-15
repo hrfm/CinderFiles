@@ -18,23 +18,33 @@ namespace hrfm{ namespace display{
         return _movieGlRef;
     }
     
-    void MovieTexture::play(){
+    void MovieTexture::play( bool enableUpdateByTime ){
+        _enableUpdateByTime = enableUpdateByTime;
         if( _movieGlRef != NULL ){
+            
             _beforeTime = 0;
+            _timeForUpdateByTime = 0.0;
+            
             _movieGlRef->seekToStart();
+            /*
             if( !_movieGlRef->isPlaying() ){
                 _movieGlRef->play();
             }
+            */
+            if( _enableUpdateByTime ){
+                _movieGlRef->stop();
+            }
+            
         }
     }
-    void MovieTexture::play( ci::fs::path filePath ){
+    void MovieTexture::play( ci::fs::path filePath, bool enableUpdateByTime ){
         values.setValue("srcPath", filePath);
-        play( ci::qtime::MovieGl::create( hrfm::fs::resolvePath(filePath) ) );
+        play( ci::qtime::MovieGl::create( hrfm::fs::resolvePath(filePath) ), enableUpdateByTime );
     }
-    void MovieTexture::play( ::ci::qtime::MovieGlRef movieGlRef ){
+    void MovieTexture::play( ::ci::qtime::MovieGlRef movieGlRef, bool enableUpdateByTime ){
         stop();
         _init( movieGlRef );
-        play();
+        play( enableUpdateByTime );
     }
     
     void MovieTexture::stop( bool seekToStart ){
@@ -84,31 +94,70 @@ namespace hrfm{ namespace display{
     void MovieTexture::_init( ci::qtime::MovieGlRef movieGlRef ){
         _beforeTime = 0.0f;
         _movieGlRef = movieGlRef;
+        // --- Set Sound volume.
         if( isSilent() ){
             _movieGlRef->setVolume(0.0);
         }else{
             _movieGlRef->setVolume(_volume);
         }
+        // --- Update Aspects.
         if( width == 0 ){
             width = _movieGlRef->getWidth();
         }
         if( height == 0 ){
             height = _movieGlRef->getHeight();
         }
+        // --- Save properties.
+        _duration    = _movieGlRef->getDuration();
+        _secPerFrame = 1.0 / _movieGlRef->getFramerate();
+        _totalFrames = _duration / _secPerFrame;
+        
     }
     
     void MovieTexture::_update(){
+        
         if( _movieGlRef == NULL ){
             return;
         }
-        float duration    = _movieGlRef->getDuration();
-        float currentTime = _movieGlRef->getCurrentTime();
-        if( _movieGlRef->isDone() || ( _movieGlRef->isPlaying() && ( currentTime == duration || currentTime < _beforeTime ) ) ){
-            _beforeTime = 0;
-            dispatchEvent( new hrfm::events::Event( hrfm::events::Event::COMPLETE ) );
+        
+        if( _enableUpdateByTime ){
+            
+            // TODO ちょっと強引なので修正が必要かも？
+            
+            int previousFrame = _timeForUpdateByTime / _secPerFrame;
+            _timeForUpdateByTime += hrfm::app::SiAppInfo::getInstance().getElapsedSecondsFromBeforeUpdate();
+            if( _duration < _timeForUpdateByTime ){
+                _timeForUpdateByTime = _duration;
+            }
+            int nextFrame = _timeForUpdateByTime / _secPerFrame;
+            
+            while( previousFrame < nextFrame ){
+                _movieGlRef->stepForward();
+                previousFrame++;
+            }
+            
+            if( _timeForUpdateByTime == _duration ){
+                _beforeTime = 0;
+                dispatchEvent( new hrfm::events::Event( hrfm::events::Event::COMPLETE ) );
+                return;
+            }
+            
+            _beforeTime = _timeForUpdateByTime;
+            
         }else{
+            
+            float currentTime = _movieGlRef->getCurrentTime();
+            
+            if( _movieGlRef->isDone() || ( _movieGlRef->isPlaying() && ( currentTime == _duration || currentTime < _beforeTime ) ) ){
+                _beforeTime = 0;
+                dispatchEvent( new hrfm::events::Event( hrfm::events::Event::COMPLETE ) );
+                return;
+            }
+            
             _beforeTime = currentTime;
+            
         }
+        
     }
     
     

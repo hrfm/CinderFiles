@@ -13,32 +13,35 @@ namespace hrfm{ namespace animation{
             _totalTimeScale = 0.0;
         }
         
-        void add( float timeScale, std::function<void(float)> func ){
-            _totalTimeScale += timeScale;
-            _list.push_back( std::pair<float,std::function<void(float)>>( timeScale, func ) );
-        }
+        /**
+         * 設定されているアニメーションの数かえします
+         * @return int
+         */
+        int numAnimation();
         
-        void animate( float timeScale ){
-            
-            if( timeScale < 0.0f || 1.0f < timeScale){
-                return;
-            }
-            
-            float start = 0.0;
-            for( auto it = std::begin(_list); it != std::end(_list); ++it ){
-                auto ts  = (*it).first;
-                auto fnc = (*it).second;
-                auto s   = start / _totalTimeScale;
-                auto e   = (start+ts) / _totalTimeScale;
-                //cout << s << ":" << e << "  =  " << timeScale << endl;
-                if( s <= timeScale && timeScale < e ){
-                    fnc((timeScale-s)/(e-s));
-                    return;
-                }
-                start += ts;
-            }
-            
-        }
+        /**
+         * アニメーションを追加します
+         * @param timeScale アニメーションのタイムスケール.
+         * @param func      実行する関数
+         */
+        void add( float timeScale, std::function<void(float)> func );
+        
+        /**
+         * 追加されたアニメーションの全体の実行時間を 1.0 とし
+         * timeScale で指定した位置のアニメーション関数を実行します.
+         * @param timeScale
+         */
+        void animate( float timeScale );
+        
+        /**
+         * idx で指定した順番に設定してあるアニメーションを timeScale で実行します.
+         * @param idx
+         * @param timeScale
+         */
+        void animateAt( int idx, float timeScale );
+        
+        // タイムスケールを気にせずとにかく実行する.
+        //void animateAt( ind idx );
         
     protected:
         

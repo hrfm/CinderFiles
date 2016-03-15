@@ -8,8 +8,6 @@ namespace hrfm{ namespace display{
     
     typedef std::shared_ptr<class Stage> StageRef;
     
-    class StageLight;
-    
     class Stage : public DisplayNode{
     public:
         

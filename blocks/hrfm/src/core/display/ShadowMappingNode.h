@@ -15,20 +15,38 @@ using namespace ci;
 using namespace ci::app;
 using namespace std;
 
+/*
+ 
+ シャドウマッピングを実現するために作った Node.
+ 
+ 
+ 
+ */
+
 namespace hrfm { namespace display{
     
     namespace shadowmap{
         
+        /*
+         シャドウマップを描画するクラス.
+         Texture2d と FBO を用いてデプスを描画する.
+         */
         typedef std::shared_ptr<class ShadowMap> ShadowMapRef;
         class ShadowMap {
         public:
+            
             static ShadowMapRef create( int size ) { return ShadowMapRef( new ShadowMap{ size } ); }
+            
             ShadowMap( int size ){
                 reset( size );
             }
             void reset( int size ){
                 
+                // -----------------------------------------------------------------
+                // Create Texture2d for Depth.
+                
                 ci::gl::Texture2d::Format depthFormat;
+                
                 depthFormat.setInternalFormat( GL_DEPTH_COMPONENT32F );
                 depthFormat.setMagFilter( GL_LINEAR );
                 depthFormat.setMinFilter( GL_LINEAR );
@@ -36,6 +54,9 @@ namespace hrfm { namespace display{
                 depthFormat.setCompareMode( GL_COMPARE_REF_TO_TEXTURE );
                 depthFormat.setCompareFunc( GL_LEQUAL );
                 mTextureShadowMap = ci::gl::Texture2d::create( size, size, depthFormat );
+                
+                // -----------------------------------------------------------------
+                // Create FBO for Depth.
                 
                 ci::gl::Fbo::Format fboFormat;
                 fboFormat.attachment( GL_DEPTH_ATTACHMENT, mTextureShadowMap );
@@ -50,10 +71,14 @@ namespace hrfm { namespace display{
             ivec2 getSize() const { return mShadowMap->getSize(); }
             
         private:
+            
             ci::gl::FboRef				mShadowMap;
             ci::gl::Texture2dRef		mTextureShadowMap;
         };
         
+        /*
+         シャドウマップで用いる光源処理のために必要な値を保持する構造体.
+         */
         struct LightData {
             bool        toggleViewpoint;
             float       distanceRadius;
@@ -68,6 +93,10 @@ namespace hrfm { namespace display{
     // =======================================================================================
     // ---
     
+    /*
+     ShadowMappingNode 内で使用する.
+     カメラからと光源からを別々に描画してくれるオブジェクト.
+     */
     class ShadowMappingObject{
         
     public:
@@ -81,10 +110,13 @@ namespace hrfm { namespace display{
         
         virtual void update(){}
         
+        // 通常の描画を行うための処理.特に特殊なことはしない.
         virtual void draw(){
             _draw( mBatch );
         }
         
+        // 影を書き込む処理. shadowGlsl は既に bind された状態で実行される.
+        // 自分用に uniform 等を指定したい場合に参照を利用する.
         virtual void drawShadowed( const ci::gl::GlslProgRef& shadowGlsl ){
             _draw( mShadowedBatch, shadowGlsl );
         }
@@ -129,6 +161,9 @@ namespace hrfm { namespace display{
         // -----
         
         virtual void _draw();
+        
+        // 引数に深度描画用のシェーダが渡されたかどうかによって
+        // 通常の描画とデプスの描画を切り分けて描画する関数.
         virtual void _drawScene( const ci::gl::GlslProgRef& shadowGlsl = nullptr );
         
         CameraPersp  mCamera;

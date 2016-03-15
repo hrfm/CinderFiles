@@ -12,6 +12,7 @@
 // --- Inputs ---
 
 #include "SiSetting.h"
+#include "SiAppInfo.h"
 
 #include "Stage.h"
 

@@ -34,18 +34,14 @@ namespace hrfm { namespace gl{
         _strength = strength;
     }
     float ShaderBase::getStrength(){
-        if( _biasMode == BIAS_MODE_NONE ){
-            return _strength;
-        }else{
-            hrfm::io::SiAudioInput * audio = &hrfm::io::SiAudioInput::getInstance();
-            if( _biasMode == BIAS_MODE_FFT ){
-                return  _strength * audio->getFFTRangedAt(_biasFFTIndex) * _biasTimes;
-            }else if( _biasMode == BIAS_MODE_VOLUME ){
-                return  _strength * audio->getVolume() * _biasTimes;
-            }else{
-                return _strength;
-            }
+        float s = _strength;
+        hrfm::io::SiAudioInput * audio = &hrfm::io::SiAudioInput::getInstance();
+        if( _biasMode == BIAS_MODE_FFT ){
+            s *= audio->getFFTRangedAt(_biasFFTIndex) * _biasTimes;
+        }else if( _biasMode == BIAS_MODE_VOLUME ){
+            s *= audio->getVolume() * _biasTimes;
         }
+        return s;
     }
     
     void ShaderBase::setAudioBiasByFFT( int index, float times ){

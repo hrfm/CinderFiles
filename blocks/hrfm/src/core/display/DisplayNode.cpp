@@ -170,6 +170,7 @@ namespace hrfm{ namespace display{
             ci::gl::disableAlphaBlending();
         }
         ci::gl::pushModelMatrix();
+            ci::gl::multModelMatrix(this->transform);
             ci::gl::translate( getPosition() );
             ci::gl::rotate( rotate );
             ci::gl::color( c );

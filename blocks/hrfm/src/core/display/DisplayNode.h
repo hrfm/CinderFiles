@@ -5,6 +5,7 @@
 #include "cinder/gl/gl.h"
 #include "EventDispatcher.h"
 #include "DynamicMap.h"
+#include "SiAppInfo.h"
 
 namespace hrfm{ namespace display{
     
@@ -22,6 +23,8 @@ namespace hrfm{ namespace display{
             x       = 0.0f;
             y       = 0.0f;
             z       = 0.0f;
+            
+            transform = ci::mat4{};
             
             width   = 1.0f;
             _beforeWidth  = 0.0f;
@@ -86,12 +89,16 @@ namespace hrfm{ namespace display{
         // --- PROPERTY -------------
         hrfm::utils::DynamicMap values;
         std::vector<DisplayNode*> children;
-        float x, y, z;
-        int width, height;
-        ci::vec3 scale;
+        
         bool visible;
         ci::ColorA  colorA;
-        float rotate = 0.0;
+        
+        int width, height;
+        
+        ci::mat4 transform;
+        float    x, y, z;
+        ci::vec3 scale;
+        float    rotate = 0.0;
         // --------------------------
         
         void setUpdateFrequency( unsigned int freq );

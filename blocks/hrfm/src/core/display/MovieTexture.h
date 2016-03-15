@@ -31,9 +31,9 @@ namespace hrfm{ namespace display{
         
         virtual ci::qtime::MovieGlRef getMovieGlRef();
         
-        virtual void play();
-        virtual void play( ci::fs::path filePath );
-        virtual void play( ci::qtime::MovieGlRef movieGlRef );
+        virtual void play( bool enableUpdateByTime = false );
+        virtual void play( ci::fs::path filePath, bool enableUpdateByTime = false );
+        virtual void play( ci::qtime::MovieGlRef movieGlRef, bool enableUpdateByTime = false );
         
         virtual void stop( bool seekToStart = true );
         
@@ -51,9 +51,15 @@ namespace hrfm{ namespace display{
         virtual void _update();
         virtual void _onRemovedFromStage( hrfm::events::Event * evt );
         
-        float _beforeTime;
-        float _volume   = 0.0f;
-        bool  _isSilent = false;
+        float  _beforeTime;
+        float  _volume   = 0.0f;
+        bool   _isSilent = false;
+        int    _totalFrames;
+        float  _secPerFrame;
+        float  _duration;
+        
+        bool  _enableUpdateByTime  = false;
+        float _timeForUpdateByTime = 0.0;
         
     private:
         

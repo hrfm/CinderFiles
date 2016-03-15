@@ -204,6 +204,7 @@ namespace hrfm { namespace app{
         
         // --- Update Time. ---
         hrfm::utils::SiTimeUtil::getInstance().update();
+        hrfm::app::SiAppInfo::getInstance().update();
         
     }
     
