@@ -40,6 +40,8 @@ namespace hrfm{ namespace display{
         virtual void  setVolume( float volume );
         virtual float getVolume();
         
+        virtual void setLoop();
+        
         virtual bool isSilent();
         virtual void setSilent(bool flag);
         
@@ -60,6 +62,8 @@ namespace hrfm{ namespace display{
         
         bool  _enableUpdateByTime  = false;
         float _timeForUpdateByTime = 0.0;
+        
+        bool  _isLoop;
         
     private:
         

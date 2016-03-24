@@ -62,8 +62,7 @@ namespace hrfm{ namespace display{
         ci::gl::color( c );
         if( _enableWireframe  ) ci::gl::enableWireframe();
         
-        ci::gl::enableDepthRead();
-        ci::gl::enableDepthWrite();
+        //ci::gl::ScopedDepth depth( false, true );
         
         ci::gl::pushModelMatrix();
         {
@@ -125,7 +124,6 @@ namespace hrfm{ namespace display{
             _batchRef->draw();
         }
     };
-    void BatchNode::_drawForLights(){}
     void BatchNode::_drawChildren( ColorA * drawColor ){
         DisplayNode::_drawChildren( drawColor );
         /*
@@ -150,6 +148,7 @@ namespace hrfm{ namespace display{
         return true;
     }
     
+    /*
     void BatchNode::_appendVertex( ci::TriMeshRef m, vec3 v0, vec3 v1, vec3 v2 ){
         
         vec3 v01 = v1-v0;
@@ -167,5 +166,6 @@ namespace hrfm{ namespace display{
         m->appendTriangle( numberVertices - 3, numberVertices - 2, numberVertices - 1 );
         
     }
+    //*/
     
 }}

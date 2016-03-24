@@ -10,6 +10,8 @@
 #include "BatchNode.h"
 #include "VertBatchNode.h"
 
+#include "TessellationPlane.h"
+
 // --- hrfm::events
 
 #include "Event.h"

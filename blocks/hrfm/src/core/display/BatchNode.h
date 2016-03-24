@@ -58,7 +58,6 @@ namespace hrfm{ namespace display{
         
         virtual void _update();
         virtual void _draw();
-        virtual void _drawForLights();
         virtual void _drawChildren( ci::ColorA * drawColor = NULL );
         
         bool eraseTextureFromList( ci::gl::TextureRef tex );
@@ -70,7 +69,7 @@ namespace hrfm{ namespace display{
         // --------------------------
         
         // Util に移動したい.
-        virtual void _appendVertex( ci::TriMeshRef m, vec3 v0, vec3 v1, vec3 v2 );
+        //virtual void _appendVertex( ci::TriMeshRef m, vec3 v0, vec3 v1, vec3 v2 );
         
     };
     

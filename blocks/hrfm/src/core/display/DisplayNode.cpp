@@ -183,14 +183,6 @@ namespace hrfm{ namespace display{
         
     }
     
-    void DisplayNode::drawForLights(){
-        ci::gl::pushModelMatrix();
-            ci::gl::translate( getPosition() );
-            _drawForLights();
-            _drawChildrenForLights();
-        ci::gl::popModelMatrix();
-    }
-
     bool DisplayNode::isResized(){
         return _resized;
     }
@@ -255,19 +247,6 @@ namespace hrfm{ namespace display{
         for( it = children.begin(), end = children.end(); it!=end; it++ ){
             if( *it!=nullptr ){
                 (*it)->draw( drawColor );
-            }
-        }
-    }
-    
-    void DisplayNode::_drawForLights(){
-        _draw();
-    };
-    void DisplayNode::_drawChildrenForLights(){
-        if( numChildren() == 0 ) return;
-        std::vector<DisplayNode*>::iterator it, end;
-        for( it = children.begin(), end = children.end(); it!=end; it++ ){
-            if( *it!=nullptr ){
-                (*it)->drawForLights();
             }
         }
     }

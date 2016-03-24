@@ -11,6 +11,5 @@ out vec4 oColor;
 void main(void){
     vec2 texCoord = gl_FragCoord.xy / resolution;
     vec4 color = texture( tex, texCoord );
-    //oColor = vColor;
     oColor = color;
 }

@@ -19,10 +19,9 @@ namespace hrfm { namespace gl{
     }
     
     void FilterBase::updateShader( ci::fs::path fragment, ci::fs::path vertex ){
-        try{
-            ci::gl::GlslProgRef tmp = initShader(fragment,vertex);
-            mShader = tmp;
-        }catch(...){}
+        _needUpdateShader = true;
+        _updateFragment   = fragment;
+        _updateVertex     = vertex;
     }
     
     void FilterBase::affect( ci::gl::TextureRef tex, vec2 resolution ){
@@ -31,9 +30,19 @@ namespace hrfm { namespace gl{
     
     // なんでこれ分かれてるか忘れた・・・
     void FilterBase::affect( ci::gl::TextureRef tex, vec2 resolution, Rectf drawArea ){
+        
         if( !isEnabled() ){
             return;
         }
+        
+        if( _needUpdateShader ){
+            cout << "Update Filter : " << _updateFragment << ", " << _updateVertex << endl;
+            try{
+                //mShader = hrfm::gl::ShaderFactory::create(_updateVertex,_updateFragment);
+            }catch(...){}
+            _needUpdateShader = false;
+        }
+        
         ci::gl::ScopedGlslProg    shaderScp( mShader );
         ci::gl::ScopedTextureBind tex0Scp( tex, 0 );
         prepare();
@@ -44,6 +53,7 @@ namespace hrfm { namespace gl{
             ci::gl::drawSolidRect( drawArea, vec2(0,0), vec2(1,1) );
         }
         clear();
+        
     }
     
     ci::gl::TextureRef FilterBase::affect( ci::gl::TextureRef tex ){

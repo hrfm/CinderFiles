@@ -28,4 +28,5 @@ void main( void )
 
 	Color.rgb = ( Diffuse * Shadow + Ambient ) * vColor.rgb;
 	Color.a	= 1.0;
+    
 }

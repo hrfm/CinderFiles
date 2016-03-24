@@ -60,6 +60,10 @@ namespace hrfm { namespace gl{
         // clear shader, texture, and more. after drawSolidRect to FrameBuffer.
         virtual void clear();
         
+        bool _needUpdateShader = false;
+        ci::fs::path _updateFragment = "";
+        ci::fs::path _updateVertex   = "";
+        
         float mCycle;
         ivec2 mAspect;
         ci::gl::FboRef mFbo;

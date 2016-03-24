@@ -76,7 +76,6 @@ namespace hrfm{ namespace display{
         
         virtual void update();
         virtual void draw( ci::ColorA * drawColor = NULL );
-        virtual void drawForLights();
         
         virtual bool isResized();
         
@@ -118,8 +117,6 @@ namespace hrfm{ namespace display{
         
         virtual void _draw();
         virtual void _drawChildren( ci::ColorA * drawColor = NULL );
-        virtual void _drawForLights();
-        virtual void _drawChildrenForLights();
         
         bool _enableAdditiveBlending;
         

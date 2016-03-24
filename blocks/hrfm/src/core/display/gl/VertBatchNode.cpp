@@ -98,6 +98,7 @@ namespace hrfm{ namespace display{
                         texIdx++;
                     }
                 }
+                ci::gl::ScopedLineWidth lw(10.0);
                 _batchRef->draw();
                 if( 0 < _textures.size() ){
                     for( it = _textures.begin(), end = _textures.end(); it!=end; it++ ){

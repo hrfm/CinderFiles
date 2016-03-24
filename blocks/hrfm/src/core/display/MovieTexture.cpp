@@ -68,6 +68,10 @@ namespace hrfm{ namespace display{
         }
     }
     
+    void MovieTexture::setLoop(){
+        _isLoop = true;
+    }
+    
     float MovieTexture::getVolume(){
         return _volume;
     }
@@ -131,14 +135,16 @@ namespace hrfm{ namespace display{
             }
             int nextFrame = _timeForUpdateByTime / _secPerFrame;
             
-            while( previousFrame < nextFrame ){
+            while( previousFrame++ < nextFrame ){
                 _movieGlRef->stepForward();
-                previousFrame++;
             }
             
             if( _timeForUpdateByTime == _duration ){
                 _beforeTime = 0;
                 dispatchEvent( new hrfm::events::Event( hrfm::events::Event::COMPLETE ) );
+                if( _isLoop ){
+                    play(true);
+                }
                 return;
             }
             
