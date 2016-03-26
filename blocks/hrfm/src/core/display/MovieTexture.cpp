@@ -26,13 +26,11 @@ namespace hrfm{ namespace display{
             _timeForUpdateByTime = 0.0;
             
             _movieGlRef->seekToStart();
-            /*
-            if( !_movieGlRef->isPlaying() ){
-                _movieGlRef->play();
-            }
-            */
+            
             if( _enableUpdateByTime ){
                 _movieGlRef->stop();
+            }else if( !_movieGlRef->isPlaying() ){
+                _movieGlRef->play();
             }
             
         }

@@ -11,7 +11,7 @@ uniform float uNumTexture;
 uniform sampler2D uTex[16];
 
 uniform float shadowDistanceFrom = 5.0;
-uniform float shadowDistance = 23.0;
+uniform float shadowDistance = 35.0;
 
 in  float gId;
 in  vec4  gColor;

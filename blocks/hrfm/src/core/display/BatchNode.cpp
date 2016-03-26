@@ -21,6 +21,10 @@ namespace hrfm{ namespace display{
         _enableWireframe = flag;
     }
     
+    void BatchNode::setEnableDepthCheck( bool flag ){
+        _enableDepthCheck = flag;
+    }
+    
     ci::mat4 BatchNode::getRotation(){
         return this->rotation;
     }
@@ -62,7 +66,9 @@ namespace hrfm{ namespace display{
         ci::gl::color( c );
         if( _enableWireframe  ) ci::gl::enableWireframe();
         
-        //ci::gl::ScopedDepth depth( false, true );
+        if( _enableDepthCheck ){
+            ci::gl::ScopedDepth depth( false );
+        }
         
         ci::gl::pushModelMatrix();
         {

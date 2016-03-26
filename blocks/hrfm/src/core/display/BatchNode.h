@@ -40,6 +40,7 @@ namespace hrfm{ namespace display{
         virtual ci::gl::BatchRef getBatchRef();
         
         virtual void setEnableWireframe( bool flag );
+        virtual void setEnableDepthCheck( bool flag );
         
         virtual ci::mat4 getRotation();
         virtual void setRotation( ci::mat4 rotation );
@@ -61,6 +62,8 @@ namespace hrfm{ namespace display{
         virtual void _drawChildren( ci::ColorA * drawColor = NULL );
         
         bool eraseTextureFromList( ci::gl::TextureRef tex );
+        
+        bool _enableDepthCheck = false;
         
         // --- PROPERTY -------------
         bool _enableWireframe = false;
