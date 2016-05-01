@@ -5,8 +5,13 @@ using namespace ci;
 
 namespace hrfm{ namespace gl{
     
-    ExFbo::ExFbo( int width, int height, ci::gl::Fbo::Format format, ci::CameraPersp * camera ){
+    ExFbo::ExFbo( int width, int height, ci::gl::Fbo::Format format, ci::Camera * camera ){
         _fbo = ci::gl::Fbo::create( width, height, format );
+        setCamera(camera);
+    }
+    
+    void ExFbo::setCamera( ci::Camera * camera ){
+        _camera = camera;
     }
     
     ci::gl::FboRef ExFbo::getFbo(){
@@ -58,7 +63,7 @@ namespace hrfm{ namespace gl{
     ci::gl::TextureRef ExFbo::_getTextureClone(){
         ci::gl::FboRef fbo = hrfm::gl::SiFboFactory::getInstance().create(_fbo->getWidth(),_fbo->getHeight());
         _beginOffscreen(fbo,true);
-            ci::gl::draw(_fbo->getColorTexture());
+            ci::gl::draw( getTexture() );
         _endOffscreen();
         return fbo->getColorTexture();
     }
@@ -71,15 +76,13 @@ namespace hrfm{ namespace gl{
             mTmpViewport = ci::gl::getViewport();
             fbo->bindFramebuffer();
             ci::gl::pushMatrices();
-            if( useAspect ){
-                // 特に使っていない
-                ci::gl::viewport( ivec2(0), getSize() );
-                ci::gl::setMatricesWindow( _fbo->getSize(), true );
+            if( _camera != NULL ){
+                ci::gl::setMatrices( *_camera );
             }else{
-                ci::gl::viewport( ivec2(0), getSize() );
                 ci::gl::setMatricesWindow( getSize(), true );
             }
-            if( clear == true){
+            ci::gl::viewport( ivec2(0), getSize() );
+            if( clear == true ){
                 ci::gl::clear( ColorA(0.0,0.0,0.0,0.0) );
             }
             _bindedFbo = fbo;

@@ -2,7 +2,6 @@
 
 namespace hrfm{ namespace display{
     
-    
     void GridInstanced::setTexture( ci::gl::TextureRef tex ){
         _useTexture = true;
         _tex = tex;

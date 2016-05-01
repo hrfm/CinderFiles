@@ -10,8 +10,8 @@ namespace hrfm{ namespace display{
         
         if( shader == nullptr ){
             _shader = ci::gl::GlslProg::create( ci::gl::GlslProg::Format()
-                                               .vertex  ( DataLoader::load( "InstancedVboMesh_vert.glsl" ) )
-                                               .fragment( DataLoader::load( "InstancedVboMesh_frag.glsl" ) )
+                                               .vertex  ( hrfm::io::DataLoader::load( "InstancedVboMesh_vert.glsl" ) )
+                                               .fragment( hrfm::io::DataLoader::load( "InstancedVboMesh_frag.glsl" ) )
                                                );
         }else{
             _shader = shader;
@@ -56,8 +56,7 @@ namespace hrfm{ namespace display{
     };
     
     void InstancedVboMesh::_draw(){
-        //ci::gl::ScopedDepth depth( false, true );
-        ci::gl::ScopedDepthTest depth( true, GL_LEQUAL );
+        ci::gl::ScopedDepth depth( false );
         _mBatch->drawInstanced( _numInstances );
     };
     

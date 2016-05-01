@@ -5,12 +5,16 @@ using namespace ci;
 namespace hrfm{ namespace display{
     
     
-    void Stage::setCameraPersp( ci::CameraPersp * cameraPersp ){
-        _cameraPersp = cameraPersp;
+    void Stage::setCamera( ci::Camera * camera ){
+        _camera = camera;
     }
     
-    ci::CameraPersp * Stage::getCameraPersp(){
-        return _cameraPersp;
+    void Stage::setCameraPersp( ci::CameraPersp * cameraPersp ){
+        setCamera( cameraPersp );
+    }
+    
+    ci::Camera * Stage::getCamera(){
+        return _camera;
     }
     
     void Stage::setAutoClear( bool flag ){
@@ -66,10 +70,10 @@ namespace hrfm{ namespace display{
         ci::gl::color( colorA );
         ci::gl::pushMatrices();
         if( _autoClear == true ){
-            ci::gl::clear();
+            ci::gl::clear( ColorA(0.0,0.0,0.0,0.0) );
         }
-        if( _cameraPersp != NULL ){
-            ci::gl::setMatrices( *_cameraPersp );
+        if( _camera != NULL ){
+            ci::gl::setMatrices( *_camera );
         }else{
             ci::gl::setMatricesWindow( width, height );
         }
@@ -85,8 +89,8 @@ namespace hrfm{ namespace display{
         cout << "_onResize" << endl;
         ci::gl::Fbo::Format format;
         this->_fbo = ci::gl::Fbo::create( width, height, format );
-        if( _cameraPersp != NULL ){
-            _cameraPersp->setAspectRatio( (float)width / (float)height );
+        if( _camera != NULL ){
+            _camera->setAspectRatio( (float)width / (float)height );
         }
     }
     

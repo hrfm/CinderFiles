@@ -13,11 +13,15 @@ namespace hrfm{ namespace gl{
     public:
         
         static ExFboRef create( int width, int height,
-                                ci::gl::Fbo::Format format = ci::gl::Fbo::Format(), ci::CameraPersp * camera = NULL ) {
+                                ci::gl::Fbo::Format format = ci::gl::Fbo::Format(), ci::Camera * camera = NULL ) {
             return ExFboRef( new ExFbo( width, height, format, camera ) );
         };
         
-        ExFbo( int width, int height, ci::gl::Fbo::Format format = ci::gl::Fbo::Format(), ci::CameraPersp * camera = NULL );
+        static ExFboRef create( int width, int height, ci::Camera * camera ) {
+            return ExFboRef( new ExFbo( width, height, ci::gl::Fbo::Format(), camera ) );
+        };
+        
+        ExFbo( int width, int height, ci::gl::Fbo::Format format = ci::gl::Fbo::Format(), ci::Camera * camera = NULL );
         ~ExFbo(){};
         
         ci::gl::FboRef getFbo();
@@ -26,6 +30,8 @@ namespace hrfm{ namespace gl{
         int getHeight();
         ci::ivec2 getSize();
         ci::Rectf getBounds();
+        
+        void setCamera( ci::Camera * camera );
         
         ci::gl::TextureRef getTexture();
         
@@ -43,9 +49,10 @@ namespace hrfm{ namespace gl{
         
         ci::gl::FboRef _fbo;
         ci::gl::FboRef _bindedFbo = NULL;
+        ci::Camera * _camera = NULL;
         
-        bool      isBeginOffscreen;
-        bool      isBeginFilter;
+        bool isBeginOffscreen;
+        bool isBeginFilter;
         std::pair<ivec2,ivec2> mTmpViewport;
         
     };

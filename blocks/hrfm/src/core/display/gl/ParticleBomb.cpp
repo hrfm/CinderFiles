@@ -10,6 +10,8 @@ namespace hrfm { namespace display{
                                            .fragment( DataLoader::load( "bomb_frag.glsl" ) )
                                            );
         
+        _fadeOut = fadeOut;
+        
         this->setBatchRef( ci::gl::Batch::create( vboMesh, _shader ) );
         _shader->uniform( "uBias", bias );
         _shader->uniform( "uFadeOut", fadeOut );
@@ -30,6 +32,10 @@ namespace hrfm { namespace display{
         _textures.push_back(tex);
     }
     
+    void ParticleBomb::setBias( vec3 bias ){
+        _shader->uniform( "uBias", bias );
+    }
+    
     void ParticleBomb::setParticleScale( vec3 scale ){
         _shader->uniform( "uParticleScale", scale );
     }
@@ -47,6 +53,9 @@ namespace hrfm { namespace display{
         if( 0.0 <= _startSec ){
             double sec = hrfm::app::SiAppInfo::getInstance().getElapsedSeconds();
             _shader->uniform( "uTime", float(sec-_startSec) );
+            if( _fadeOut + 1.0 < sec-_startSec ){
+                this->removeOwn();
+            }
         }else{
             _shader->uniform( "uTime", 0.0f );
         }
@@ -63,7 +72,8 @@ namespace hrfm { namespace display{
         }
         _shader->uniform( "uNumTexture", float(_textures.size()) );
         
-        ci::gl::enableAdditiveBlending();
+        ci::gl::disableDepthRead();
+        ci::gl::enableAlphaBlending();
         BatchNode::_draw();
         
         for( it = _textures.begin(), end = _textures.end(); it!=end; it++ ){

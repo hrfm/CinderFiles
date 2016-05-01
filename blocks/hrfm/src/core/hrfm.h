@@ -9,8 +9,10 @@
 
 #include "BatchNode.h"
 #include "VertBatchNode.h"
-
 #include "TessellationPlane.h"
+#include "InstancedVboMesh.h"
+#include "GridInstanced.h"
+#include "ParticleBomb.h"
 
 // --- hrfm::events
 

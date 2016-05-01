@@ -66,17 +66,18 @@ namespace hrfm{ namespace display{
         ci::gl::color( c );
         if( _enableWireframe  ) ci::gl::enableWireframe();
         
-        if( _enableDepthCheck ){
-            ci::gl::ScopedDepth depth( false );
-        }
-        
         ci::gl::pushModelMatrix();
         {
             ci::gl::multModelMatrix(this->transform);
             ci::gl::translate( vec3( this->x, this->y, this->z ) );
             //!!!!!! ci::gl::rotate( this->rotation );
             ci::gl::scale( this->scale );
-            _draw();
+            if( _enableDepthCheck ){
+                ci::gl::ScopedDepthTest depth( true );
+                _draw();
+            }else{
+                _draw();
+            }
             _drawChildren(&c);
         }
         ci::gl::popModelMatrix();

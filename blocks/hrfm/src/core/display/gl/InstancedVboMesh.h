@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hrfm.h"
+#include "DisplayNode.h"
 #include "cinder/gl/gl.h"
 
 namespace hrfm{ namespace display{

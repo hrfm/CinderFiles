@@ -11,16 +11,17 @@ namespace hrfm{ namespace display{
     class Stage : public DisplayNode{
     public:
         
-        static StageRef create( ci::CameraPersp * camera = NULL ){ return StageRef( new Stage(camera) ); }
+        static StageRef create( ci::Camera * camera = NULL ){ return StageRef( new Stage(camera) ); }
         
-        Stage( ci::CameraPersp * camera = NULL ):DisplayNode(){
-            this->_cameraPersp = camera;
+        Stage( ci::Camera * camera = NULL ):DisplayNode(){
+            this->_camera = camera;
             this->addEventListener( hrfm::events::Event::RESIZE, this, &Stage::_onResize );
         };
         ~Stage(){};
         
+        void setCamera( ci::Camera * camera );
         void setCameraPersp( ci::CameraPersp * cameraPersp );
-        ci::CameraPersp * getCameraPersp();
+        ci::Camera * getCamera();
         
         virtual void setAutoClear( bool flag = true );
         
@@ -45,7 +46,7 @@ namespace hrfm{ namespace display{
         void _onResize( hrfm::events::Event * event );
         
         bool  _autoClear = true;
-        ci::CameraPersp * _cameraPersp;
+        ci::Camera * _camera;
         ci::gl::FboRef _fbo;
         std::pair<ci::ivec2,ci::ivec2> _tmpViewportOnBegin;
         

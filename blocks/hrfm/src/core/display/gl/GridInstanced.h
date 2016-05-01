@@ -1,11 +1,10 @@
 #pragma once
 
-
 #include "InstancedVboMesh.h"
 
 namespace hrfm{ namespace display{
     
-    class GridInstanced : public hrfm::display::InstancedVboMesh{
+    class GridInstanced : public InstancedVboMesh{
         
     public:
         
@@ -17,9 +16,9 @@ namespace hrfm{ namespace display{
             _numSegments = numSegments;
             
             auto shader = ci::gl::GlslProg::create( ci::gl::GlslProg::Format()
-                                                   .vertex  ( DataLoader::load("InstancedVboMesh_vert.glsl") )
+                                                   .vertex  ( hrfm::io::DataLoader::load("InstancedVboMesh_vert.glsl") )
                                                    //.geometry(DataLoader::load("geo.glsl"))
-                                                   .fragment( DataLoader::load( "grid_frag.glsl" ) )
+                                                   .fragment( hrfm::io::DataLoader::load( "grid_frag.glsl" ) )
                                                    );
             shader->uniform("shadowDistanceFrom",1.0f);
             shader->uniform("shadowDistance",4.0f);
