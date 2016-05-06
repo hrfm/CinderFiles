@@ -47,6 +47,21 @@ namespace hrfm{ namespace io{
                 throw;
             }
             
+        }else if( pathStr.find(":") != string::npos ){
+            
+            pathStr.erase(0,pathStr.find_first_of(":")+1);
+            filePath = pathStr;
+            pathStr = filePath.native();
+            
+            cout << "DataLoader::loadFile(" << pathStr << ")" << endl;
+            
+            try{
+                return loadFile( pathStr );
+            }catch(...){
+                cout << "Data [ " << pathStr << " ] is not found." << endl;
+                throw;
+            }
+            
         }else{
             
             // 読み込む Data がファイルパス指定だった場合.

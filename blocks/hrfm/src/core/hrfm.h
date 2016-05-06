@@ -47,6 +47,7 @@
 #include "SiOscInput.h"
 
 #include "DataLoader.h"
+//#include "TextureLoader.h"
 #include "XmlLoader.h"
 
 #include "SiVolumeDetector.h"

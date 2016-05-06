@@ -92,6 +92,10 @@ namespace hrfm{ namespace display{
         return true;
     }
     
+    ci::Camera * DisplayNode::getCamera(){
+        return camera;
+    }
+    
     DisplayNode * DisplayNode::addChild( DisplayNode * child ){
         eraseFromChildren(child);
         if( hasStage() ){ child->_setStage(_stage); }
@@ -169,14 +173,43 @@ namespace hrfm{ namespace display{
         }else{
             ci::gl::disableAlphaBlending();
         }
+        
         ci::gl::pushModelMatrix();
-            ci::gl::multModelMatrix(this->transform);
-            ci::gl::translate( getPosition() );
-            ci::gl::rotate( rotate );
-            ci::gl::color( c );
-            _draw();
-            _drawChildren( &c );
+            
+            if( camera != NULL ){
+                
+                ci::gl::setMatrices( *camera );
+                ci::gl::ScopedViewport vpt( getSize() );
+                
+                ci::gl::multModelMatrix(this->transform);
+                ci::gl::translate( getPosition() );
+                ci::gl::rotate( rotate );
+                ci::gl::color( c );
+                
+                ci::gl::ScopedDepth dpt( true );
+                
+                ci::gl::enableDepthWrite();
+                ci::gl::enableDepthRead();
+                
+                _draw();
+                _drawChildren( &c );
+                
+                ci::gl::disableDepthRead();
+                ci::gl::disableDepthWrite();
+                
+            }else{
+                
+                ci::gl::multModelMatrix(this->transform);
+                ci::gl::translate( getPosition() );
+                ci::gl::rotate( rotate );
+                ci::gl::color( c );
+                _draw();
+                _drawChildren( &c );
+                
+            }
+        
         ci::gl::popModelMatrix();
+        
         ci::gl::disableAlphaBlending();
         
         _resized = false;

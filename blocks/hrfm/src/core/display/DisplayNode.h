@@ -68,6 +68,8 @@ namespace hrfm{ namespace display{
         virtual int  numChildren();
         virtual bool hasChildOf( DisplayNode * child );
         
+        virtual ci::Camera * getCamera();
+        
         virtual DisplayNode * addChild( DisplayNode * child );
         virtual DisplayNode * addChildAt( DisplayNode * child, int index );
         virtual DisplayNode * removeChild( DisplayNode * child );
@@ -88,6 +90,8 @@ namespace hrfm{ namespace display{
         // --- PROPERTY -------------
         hrfm::utils::DynamicMap values;
         std::vector<DisplayNode*> children;
+        
+        ci::Camera * camera = NULL;
         
         bool visible;
         ci::ColorA  colorA;

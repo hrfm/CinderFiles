@@ -45,7 +45,8 @@ namespace hrfm{ namespace graphics{
                     rect.y1 = bounds.y1 + y*size.y + _spacing.y * y;
                     rect.x2 = rect.x1 + size.x;
                     rect.y2 = rect.y1 + size.y;
-                    ci::gl::color( color );
+                    ci::gl::ScopedColor colr( color );
+                    ci::gl::ScopedDepth dpth(false);
                     ci::gl::drawSolidRect(rect);
                 }
             }
