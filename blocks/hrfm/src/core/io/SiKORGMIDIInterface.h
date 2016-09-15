@@ -22,14 +22,25 @@ namespace hrfm { namespace io{
         friend class hrfm::utils::Singleton<SiKORGMIDIInterface>;
         
         SiKORGMIDIInterface(){
-            
             hrfm::events::EventDispatcher();
-            
             for( int i=0; i< 16;i++ ){
-                nanoKontrolFader[i] = 1.0;
+                nanoKontrolFader[i] = 0.0;
             }
-            
         }
+        
+        // -------------
+        
+        void _onSlider( hrfm::events::OscInputEvent * event ){
+            int idx = event->message.getArgAsInt32(0);
+            nanoKontrolFader[idx] = event->message.getArgAsInt32(1) / 127.0f;
+        }
+        
+        void _onKnob( hrfm::events::OscInputEvent * event ){
+            int idx = event->message.getArgAsInt32(0);
+            nanoKontrolFader[idx+8] = event->message.getArgAsInt32(1) / 127.0f;
+        }
+        
+        // -------------
         
         void _onReceiveOscMessage( hrfm::events::OscInputEvent * event ){
             for( int i = 0; i < event->message.getNumArgs(); i++ ){

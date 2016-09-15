@@ -222,7 +222,7 @@ namespace hrfm { namespace app{
         ci::gl::clear();
         ci::gl::draw( stage->getTexture(), getWindowBounds() );
         if( _isDebugMode ){
-            cout << "debug" << endl;
+            //cout << "debug" << endl;
             _drawDebug();
         }
     }

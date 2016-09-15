@@ -2,28 +2,150 @@
 
 namespace hrfm{ namespace graphics{
     
+    void PolyLine::addPoint( vec3 point )
+    {
+        points.push_back(point);
+        int size = points.size();
+        if( 2 <= size ){
+            
+            vec3 p0 = points.at( size-2 );
+            vec3 p1 = points.at( size-1 );
+            
+            float dist = ci::distance(p1,p0);
+            _totalLength += dist;
+            _lengthList.push_back(_totalLength);
+            
+        }
+    }
+    
+    void PolyLine::clear(){
+        points.clear();
+        _totalLength = 0;
+    }
+    
+    void PolyLine::setThickness( float thickness ){
+        this->thickness = thickness;
+    }
+    
+    void PolyLine::setDrawRange(float from, float to){
+        if( from < 0 ){
+            from = 0;
+        }else if( 1.0 < from ){
+            from = 1.0;
+        }
+        if( to < from ){
+            to = from;
+        }else if( 1.0 < to ){
+            to = 1.0;
+        }
+        _drawFrom = from;
+        _drawTo   = to;
+        cout << _drawFrom << "-" << _drawTo << endl;
+    }
+    
+    void PolyLine::setPointScale( vec3 scale ){
+        _pointScale = scale;
+        if( _pointScale.x != 1.0 || _pointScale.y != 1.0 || _pointScale.z != 1.0 )
+        {
+            _usePointScale = true;
+        }else{
+            _usePointScale = false;
+        }
+    }
+    
+    void PolyLine::setPointScale( vec3 scale, vec3 pivot ){
+        _pointScalePivot = pivot;
+        setPointScale(scale);
+    }
+    
+    void PolyLine::setPointScalePivot( vec3 pivot ){
+        _pointScalePivot = pivot;
+    }
+    
     void PolyLine::_update(){
         
         _vertices.empty();
         _vertices.clear();
         
-        if( points.size() <= 1 ){ return; }
+        if( points.size() <= 1 || _drawFrom == _drawTo || _totalLength == 0 ){
+            return;
+        }
         
         // --------------------------------------
         // ポイントの整理.
         
         vector<vec3> pList;
-        pList.push_back( points.at(0) );
-        for( int i=1; i<points.size()-1; i++ ){
-            auto p0 = points.at(i-1);
-            auto po = points.at(i);
-            auto p1 = points.at(i+1);
-            if( abs( atan2( po.y-p0.y, po.x-p0.x ) - atan2( p1.y-p0.y, p1.x-p0.x ) ) < 0.001 || p0 == po ){
-                continue;
+        
+        if( _drawFrom == 0.0 ){
+            auto po  = points.at(0);
+            if( _usePointScale ){
+                po = _pointScalePivot + (po-_pointScalePivot)*_pointScale;
             }
-            pList.push_back(po);
+            pList.push_back( po );
         }
-        pList.push_back( points.at(points.size()-1) );
+        
+        if( _drawTo < _lengthList.at(1) / _totalLength ){
+            
+            auto po  = points.at(0);
+            auto p1  = points.at(1);
+            
+            if( _usePointScale ){
+                po = _pointScalePivot + (po-_pointScalePivot)*_pointScale;
+                p1 = _pointScalePivot + (p1-_pointScalePivot)*_pointScale;
+            }
+            
+            auto len = _lengthList.at(1) / _totalLength;
+            
+            pList.push_back( po + (p1-po)*(_drawTo/len) );
+            
+        }else{
+            
+            for( int i=1; i<points.size()-1; i++ ){
+                
+                auto p0 = points.at(i-1);
+                auto po = points.at(i);
+                auto p1 = points.at(i+1);
+                
+                if( abs( atan2( po.y-p0.y, po.x-p0.x ) - atan2( p1.y-p0.y, p1.x-p0.x ) ) < 0.0001 || p0 == po ){
+                    continue;
+                }
+                
+                if( _usePointScale ){
+                    p0 = _pointScalePivot + (p0-_pointScalePivot)*_pointScale;
+                    po = _pointScalePivot + (po-_pointScalePivot)*_pointScale;
+                    p1 = _pointScalePivot + (p1-_pointScalePivot)*_pointScale;
+                }
+                
+                float len0 = _lengthList.at(i-1) / _totalLength;
+                float leno = _lengthList.at(i)   / _totalLength;
+                float len1 = _lengthList.at(i+1) / _totalLength;
+                
+                if( _drawFrom < leno && leno < _drawTo ){
+                    if( len0 < _drawFrom ){
+                        pList.push_back( p0 + (po-p0)*((_drawFrom-len0)/(leno-len0)) );
+                    }
+                    pList.push_back(po);
+                    if( _drawTo < len1 ){
+                        pList.push_back( po + (p1-po)*((_drawTo-leno)/(len1-leno)) );
+                        break;
+                    }
+                }
+                
+            }
+            
+            if( _drawTo == 1.0 ){
+                auto po  = points.at(points.size()-1);
+                if( _usePointScale ){
+                    po = _pointScalePivot + (po-_pointScalePivot)*_pointScale;
+                }
+                pList.push_back( po );
+            }
+            
+        }
+        
+        if( pList.size() < 2 ){
+            return;
+        }
         
         // --------------------------------------
         
