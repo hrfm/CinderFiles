@@ -139,17 +139,25 @@ namespace hrfm{ namespace display{
     }
     
     void DisplayNode::update(){
-        if( visible == false || ++_updateCount < _updateFequency ){
+        
+        uint32_t elapsedFrame = ci::app::getElapsedFrames();
+        
+        if( visible == false || elapsedFrame < _beforeUpdateFrame || ++_updateCount < _updateFequency ){
             return;
         }
+        
         _updateCount = 0;
+        _beforeUpdateFrame = elapsedFrame;
+        
         if( _beforeWidth != width || _beforeHeight != height ){
             dispatchEvent( new hrfm::events::Event( hrfm::events::Event::RESIZE ) );
             _beforeWidth  = width;
             _beforeHeight = height;
         }
+        
         _update();
         _updateChildren();
+        
     }
     
     void DisplayNode::draw( ColorA * drawColor ){
@@ -160,6 +168,7 @@ namespace hrfm{ namespace display{
         
         ColorA c = ColorA(colorA.r,colorA.g,colorA.b,colorA.a);
         if( drawColor != NULL ){
+            
             c.r *= drawColor->r;
             c.g *= drawColor->g;
             c.b *= drawColor->b;

@@ -23,10 +23,12 @@ namespace hrfm{ namespace graphics{
         _totalLength = 0;
     }
     
+    // 線の太さ
     void PolyLine::setThickness( float thickness ){
         this->thickness = thickness;
     }
     
+    // 0.0 - 1.0 の範囲でどこまで描画するか
     void PolyLine::setDrawRange(float from, float to){
         if( from < 0 ){
             from = 0;
@@ -40,9 +42,9 @@ namespace hrfm{ namespace graphics{
         }
         _drawFrom = from;
         _drawTo   = to;
-        cout << _drawFrom << "-" << _drawTo << endl;
     }
     
+    // 線を引く座標の Pivot を基点としたスケール.
     void PolyLine::setPointScale( vec3 scale ){
         _pointScale = scale;
         if( _pointScale.x != 1.0 || _pointScale.y != 1.0 || _pointScale.z != 1.0 )
@@ -53,16 +55,22 @@ namespace hrfm{ namespace graphics{
         }
     }
     
+    // 線を引く座標の Pivot を基点としたスケール. Pivot も同時指定.
     void PolyLine::setPointScale( vec3 scale, vec3 pivot ){
         _pointScalePivot = pivot;
         setPointScale(scale);
     }
     
+    // 線を引く座標の Pivot を指定.
     void PolyLine::setPointScalePivot( vec3 pivot ){
         _pointScalePivot = pivot;
     }
     
     void PolyLine::_update(){
+        
+        if( _animate ){
+            _animate( this, 0.0f );
+        }
         
         _vertices.empty();
         _vertices.clear();

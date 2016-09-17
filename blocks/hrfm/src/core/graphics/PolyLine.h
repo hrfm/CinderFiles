@@ -26,6 +26,8 @@ namespace hrfm{ namespace graphics{
         float        thickness;
         vector<vec3> points;
         
+        std::function<void(PolyLine*,float)> _animate;
+        
     protected:
         
         virtual void _update();

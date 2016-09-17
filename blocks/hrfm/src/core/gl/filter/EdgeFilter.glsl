@@ -3,6 +3,8 @@
 uniform sampler2D tex;
 uniform vec2      resolution;
 
+uniform float     strength;
+
 out vec4 oColor;
 
 void main(){
@@ -14,8 +16,8 @@ void main(){
     
     //vec4 color = texture2D( tex, pos );
     
-    float dX = 4.0 / resolution.x;
-    float dY = 4.0 / resolution.y;
+    float dX = ( 4.0 * strength ) / resolution.x;
+    float dY = ( 4.0 * strength ) / resolution.y;
     
     vec3 color = vec3(0.5, 0.5, 0.5);
     

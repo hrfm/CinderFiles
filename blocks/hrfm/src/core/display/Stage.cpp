@@ -4,25 +4,35 @@ using namespace ci;
 
 namespace hrfm{ namespace display{
     
-    
-    void Stage::setCamera( ci::Camera * camera ){
-        _camera = camera;
+    void Stage::addFbo( ci::gl::FboRef fbo, ci::Camera* camera ){
+        _fbo[_numFbo] = fbo;
+        if( camera != NULL ){
+            _camera[_numFbo] = camera;
+        }
+        _numFbo++;
+    }
+
+    void Stage::setCamera( ci::Camera * camera, int index ){
+        _camera[index] = camera;
     }
     
-    void Stage::setCameraPersp( ci::CameraPersp * cameraPersp ){
-        setCamera( cameraPersp );
+    void Stage::setCameraPersp( ci::CameraPersp * cameraPersp, int index ){
+        setCamera( cameraPersp, index );
     }
     
-    ci::Camera * Stage::getCamera(){
-        return _camera;
+    ci::Camera * Stage::getCamera( int index ){
+        return _camera[index];
     }
     
     void Stage::setAutoClear( bool flag ){
         _autoClear = flag;
         if( _autoClear == false ){
-            _fbo->bindFramebuffer();
-            ci::gl::clear();
-            _fbo->unbindFramebuffer();
+            std::map<int,ci::gl::FboRef>::iterator it, end;
+            for( it = _fbo.begin(), end = _fbo.end(); it!=end; it++ ){
+                it->second->bindFramebuffer();
+                ci::gl::clear();
+                it->second->unbindFramebuffer();
+            }
         }
     }
     
@@ -34,8 +44,8 @@ namespace hrfm{ namespace display{
         return child;
     }
     
-    void Stage::draw( bool offscreen ){
-        this->begin();
+    void Stage::draw( bool offscreen, int index ){
+        this->begin(index);
         {
             _draw();
             _drawChildren( &colorA );
@@ -48,50 +58,90 @@ namespace hrfm{ namespace display{
     }
     
     void Stage::drawOffscreen(){
-        draw(true);
+        std::map<int,ci::gl::FboRef>::iterator it, end;
+        for( it = _fbo.begin(), end = _fbo.end(); it!=end; it++ ){
+            draw(true, it->first);
+        }
     }
     
-    void Stage::begin(){
+    void Stage::drawOffscreen( int index ){
+        draw(true, index);
+    }
+    
+    void Stage::begin( int index ){
         _tmpViewportOnBegin = ci::gl::getViewport();
-        _begin();
+        _begin( index );
     }
     void Stage::end(){
         _end();
         ci::gl::viewport( _tmpViewportOnBegin );
     }
     
-    ci::gl::TextureRef Stage::getTexture(){
-        return this->_fbo->getColorTexture();
+    ci::gl::TextureRef Stage::getTexture(int index){
+        return this->_fbo[index]->getColorTexture();
     }
     
-    void Stage::_begin(){
-        _fbo->bindFramebuffer();
+    void Stage::_begin( int index ){
+        
+        // 既に何か begin している場合は何もしない.
+        if( 0 <= _beginIndex ){
+            return;
+        }
+        
+        _fbo[index]->bindFramebuffer();
+        
+        _beginIndex = index;
+        
         ci::gl::enableAlphaBlending();
         ci::gl::color( colorA );
         ci::gl::pushMatrices();
+        
         if( _autoClear == true ){
             ci::gl::clear( ColorA(0.0,0.0,0.0,0.0) );
         }
-        if( _camera != NULL ){
-            ci::gl::setMatrices( *_camera );
+        
+        if( _camera.find(index) != _camera.end() ){
+            ci::gl::setMatrices( *_camera[index] );
         }else{
             ci::gl::setMatricesWindow( width, height );
         }
+        
         ci::gl::viewport( getSize() );
+        
     }
+    
     void Stage::_end(){
+        
+        if( _beginIndex < 0 || _fbo.size() <= _beginIndex ){
+            return;
+        }
+        
         ci::gl::popMatrices();
         ci::gl::disableAlphaBlending();
-        _fbo->unbindFramebuffer();
+        
+        _fbo[_beginIndex]->unbindFramebuffer();
+        
+        _beginIndex = -1;
+        
     }
     
     void Stage::_onResize( hrfm::events::Event * event ){
+        
         cout << "_onResize" << endl;
+        
         ci::gl::Fbo::Format format;
-        this->_fbo = ci::gl::Fbo::create( width, height, format );
-        if( _camera != NULL ){
-            _camera->setAspectRatio( (float)width / (float)height );
+        
+        _fbo.clear();
+        _fbo[0] = ci::gl::Fbo::create( width, height, format );
+        if( _numFbo < 1 ){
+            _numFbo = 1;
         }
+        
+        // --- Update Camera Aspect Ratio.
+        for( std::map<int,ci::Camera*>::iterator it=_camera.begin(); it!=_camera.end(); ++it ){
+            it->second->setAspectRatio((float)width / (float)height);
+        }
+        
     }
     
 }}

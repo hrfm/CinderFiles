@@ -20,16 +20,16 @@ namespace hrfm{ namespace display{
         
         DisplayNode():hrfm::events::EventDispatcher(){
             
-            x       = 0.0f;
-            y       = 0.0f;
-            z       = 0.0f;
+            x = 0.0f;
+            y = 0.0f;
+            z = 0.0f;
+            
+            width  = 1.0f;
+            height = 1.0f;
+            _beforeWidth  = 0.0f;
+            _beforeHeight = 0.0f;
             
             transform = ci::mat4{};
-            
-            width   = 1.0f;
-            _beforeWidth  = 0.0f;
-            height  = 1.0f;
-            _beforeHeight = 0.0f;
             
             scale   = ci::vec3(1.0f,1.0f,1.0f);
             
@@ -90,14 +90,10 @@ namespace hrfm{ namespace display{
         // --- PROPERTY -------------
         hrfm::utils::DynamicMap values;
         std::vector<DisplayNode*> children;
-        
         ci::Camera * camera = NULL;
-        
         bool visible;
         ci::ColorA  colorA;
-        
         int width, height;
-        
         ci::mat4 transform;
         float    x, y, z;
         ci::vec3 scale;
@@ -108,8 +104,9 @@ namespace hrfm{ namespace display{
         
     protected:
         
-        unsigned int _updateFequency = 1;
-        unsigned int _updateCount    = 0;
+        unsigned int _updateFequency    = 1;
+        unsigned int _updateCount       = 0;
+        uint32_t     _beforeUpdateFrame = 0;
         
         //! 指定した要素を children から削除します. 削除された場合 true 存在しない場合は false を返します.
         bool eraseFromChildren( DisplayNode * child );
@@ -133,6 +130,9 @@ namespace hrfm{ namespace display{
         friend class Stage;
         
         Stage * _stage = NULL;
+        
+        std::vector<Stage*> _stages;
+        
         virtual void _setStage( Stage * node );
         virtual void _unsetStage();
         
