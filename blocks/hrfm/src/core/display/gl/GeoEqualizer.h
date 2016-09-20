@@ -49,14 +49,13 @@ protected:
         auto sec = hrfm::app::SiAppInfo::getInstance().getElapsedSeconds();
         
         hrfm::io::SiAudioInput * audio = &hrfm::io::SiAudioInput::getInstance();
-        
         _shader->uniform( "uWave"  , audio->getChannelAt(0), 64 );
         _shader->uniform( "uFFT"  , audio->getFFTNormalized(), 16 );
         _shader->uniform( "uVolume", audio->getVolume() );
         _shader->uniform( "uTime"  , float(sec) );
         
-        this->transform = ci::translate(vec3(0.0,0.0,6.0))
-                            * ci::rotate( -3.41592f/2.0f, vec3(1.0,0.0,0.0) )
+        this->transform = ci::translate(vec3(0.0,0.0,2.0))
+                            * ci::rotate( -3.41592f/2.0f, vec3(1.0,0.3,0.8) )
                             * ci::rotate( float(sec), vec3(0.0,1.0,0.0) )
         ;
         

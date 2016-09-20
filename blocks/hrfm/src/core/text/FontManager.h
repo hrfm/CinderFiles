@@ -41,16 +41,12 @@ namespace hrfm{ namespace text{
         
         // 改行が起こった場合 true
         string setGlyphByNextText();
-        bool isLineHead();
+        bool   isLineHead();
         
-        void draw( Rectf bounds );
-        void draw( string text, Rectf bounds );
-        
-        void draw( Rectf bounds, float r, float g, float b );
-        void draw( string text, Rectf bounds, float r, float g, float b );
+        void draw( Rectf bounds, float r = 1.0f, float g = 1.0f, float b = 1.0f );
+        void draw( string text, Rectf bounds, float r = 1.0f, float g = 1.0f, float b = 1.0f );
         
         vector<string>	mFontNames;
-        
         Font            mFont;
         TextureFontRef  mTextureFont;
         

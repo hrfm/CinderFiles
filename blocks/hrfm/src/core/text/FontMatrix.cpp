@@ -19,6 +19,9 @@ namespace hrfm{ namespace text{
         _fontSize = fontSize;
         _text     = text;
         
+        
+        cout << fboSize << ":" << fontSize << endl;
+        
         // --- Setup using Charactors and TextureFont.
         
         string charList = "1234567890qwertyuiop[]\\';lkjhgfdsazxcvbnm,./@#$%^&*()_+~<>?:\"{}| ";
@@ -42,6 +45,8 @@ namespace hrfm{ namespace text{
                 break;
             }
         }
+        _fontRealWidth = _measureX / length;
+        
         _mtxSize  = ivec2( length, ceil( _fboSize.y / fontSize ) );
         
         // --- Generate random text.
@@ -110,20 +115,20 @@ namespace hrfm{ namespace text{
         
         // -----
         
-        scrollFilter.setUniform( 0, -(float)numScroll / (float)_mtxSize.y );
+        scrollFilter.setUniform( 0, - ( (float)numScroll / (float)_mtxSize.y ) );
         
         // -----
         
         fbo->beginOffscreen()->applyFilter(&scrollFilter);
         // draw font.
         for( line = 0; line < numScroll; line++ ){
-            loop   = true;
-            text   = "";
+            loop = true;
+            text = "";
             y = ( _mtxSize.y - numScroll + line ) * _fontSize;
             filled.push_back( y );
             while( loop ){
                 text += myFontManager.setGlyphByNextText();
-                if( _fboSize.x <= ++col * (_fontSize*0.7) || myFontManager.isLineHead() ){
+                if( _fboSize.x <= (++col+1) * _fontRealWidth || myFontManager.isLineHead() ){
                     col = 0;
                     if( _mtxSize.y < ++row ){
                         row = 0;
@@ -136,21 +141,6 @@ namespace hrfm{ namespace text{
         _currentCol = col;
         _currentRow = row;
         fbo->endOffscreen();
-        
-        // -----
-        
-        fadeFbo->beginOffscreen()->applyFilter( &scrollFilter );
-        // draw
-        ci::gl::color(0.0f,0.0f,0.0f,0.08f);
-        ci::gl::drawSolidRect(getFboBounds());
-        ci::gl::color( 1.0, 1.0, 1.0, 1.0 );
-        vector<int>::iterator it = filled.begin();
-        while( it != filled.end() ){
-            float y = (*it);
-            ci::gl::drawSolidRect( Rectf( 0, y, _fboSize.x, y+_fontSize ) );
-            it++;
-        }
-        fadeFbo->endOffscreen();
         
     }
     
@@ -174,13 +164,6 @@ namespace hrfm{ namespace text{
         fbo->endOffscreen();
         
     }
-    
-    
-    
-    
-    
-    
-    
     
     void FontMatrix::update( int numUpdateRow, bool random ){
         update( numUpdateRow, random, _mtxSize.x );
@@ -211,7 +194,7 @@ namespace hrfm{ namespace text{
                     filled.push_back( currentCol );
                     while( loop ){
                         myFontManager.setRandomGlyph();
-                        x = currentCol * _fontSize;
+                        x = currentCol * _fontRealWidth;
                         y = currentRow * _fontSize;
                         myFontManager.draw( Rectf(x,y,x+_fontSize,y+_fontSize), 1.0, 1.0, 1.0 );
                         if( _mtxSize.y < ++currentRow ){

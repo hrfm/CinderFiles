@@ -81,6 +81,10 @@ namespace hrfm{ namespace display{
         return this->_fbo[index]->getColorTexture();
     }
     
+    ci::gl::FboRef Stage::getFbo( int index ){
+        return this->_fbo.at(index);
+    }
+
     void Stage::_begin( int index ){
         
         // 既に何か begin している場合は何もしない.

@@ -48,7 +48,7 @@ namespace hrfm{ namespace display{
     
     void GridInstanced::_draw(){
         
-        ci::gl::ScopedDepth(true);
+        ci::gl::ScopedDepth scp(true);
         ci::gl::disableAlphaBlending();
         
         if( _useTexture ){

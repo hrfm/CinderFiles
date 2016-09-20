@@ -43,6 +43,7 @@ namespace hrfm{ namespace display{
         virtual void drawOffscreen( int index );
         
         ci::gl::TextureRef getTexture( int index = 0 );
+        ci::gl::FboRef getFbo( int index =0 );
         
     protected:
         

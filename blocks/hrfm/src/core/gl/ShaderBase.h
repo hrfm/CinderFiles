@@ -37,8 +37,10 @@ namespace hrfm { namespace gl{
         virtual bool  isEnabled();
         
         virtual void  setStrength( float strength );
+        virtual void  setStrength( float * strength );
         virtual float getStrength();
         
+        virtual void clearAudioBias();
         virtual void setAudioBiasByFFT( int index, float times = 1.0f );
         virtual void setAudioBiasByVolume( float times = 1.0f );
         
@@ -57,6 +59,7 @@ namespace hrfm { namespace gl{
         
         ci::gl::GlslProgRef mShader;
         float _strength = 1.0;
+        float * _strengthPtr = NULL;
         bool  _enabled   = true;
         
         // --------------------------------------------------------------------------------------------

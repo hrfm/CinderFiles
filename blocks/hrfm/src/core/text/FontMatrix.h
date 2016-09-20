@@ -52,11 +52,12 @@ namespace hrfm{ namespace text{
         string _text;
         float _measureX;
         
-        ivec2 _fboSize;
-        int   _fontSize;
-        ivec2 _mtxSize;
-        int   _currentCol;
-        int   _currentRow;
+        ivec2  _fboSize;
+        int    _fontSize;
+        double _fontRealWidth;
+        ivec2  _mtxSize;
+        int    _currentCol;
+        int    _currentRow;
         
         vector<string> _randomTextList;
         

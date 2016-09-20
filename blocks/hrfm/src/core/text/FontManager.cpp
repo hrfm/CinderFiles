@@ -15,8 +15,8 @@ namespace hrfm { namespace text{
     }
     
     void FontManager::setup( int size, string glyphs ){
-        _glyphs   = glyphs;
         _fontSize = size;
+        _glyphs   = glyphs;
         setText(" ");
         setRandomFont();
         setRandomGlyph();
@@ -108,28 +108,23 @@ namespace hrfm { namespace text{
         return myCurrentLineIndex == 0;
     }
     
-    void FontManager::draw( Rectf bounds ){
-        draw( _glyph, bounds, 1.0f, 1.0f, 1.0f );
-    }
-    
-    void FontManager::draw( string text, Rectf bounds ){
-        draw( text, bounds, 1.0f, 1.0f, 1.0f );
-    }
-    
     void FontManager::draw( Rectf bounds, float r, float g, float b ){
         draw( _glyph, bounds, r, g, b );
     }
     
     void FontManager::draw( string text, Rectf bounds, float r, float g, float b ){
-        ci::gl::color(0.0f,0.0f,0.0f);
+        
+        ci::gl::color(0.0f,0.0f,0.0f,1.0f);
         ci::gl::drawSolidRect( bounds );
-        ci::gl::color( r, g, b );
+        
+        ci::gl::color( r, g, b, 1.0f );
         try{
             _textureFontRef->drawString( text, bounds );
             //vec2(bounds.x1+(fontSize*(1/3)),bounds.y1+(fontSize*0.8)));
         }catch(...){
             cout << "error" << endl;
         }
+        
     }
     
 }}
