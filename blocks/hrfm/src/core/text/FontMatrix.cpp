@@ -240,9 +240,9 @@ namespace hrfm{ namespace text{
     }
     
     void FontMatrix::_draw(){
-        ci::gl::enableAdditiveBlending();
+        //ci::gl::enableAdditiveBlending();
         ci::gl::draw( fbo->getTexture(), getDrawBounds() );
-        ci::gl::disableAlphaBlending();
+        //ci::gl::disableAlphaBlending();
     }
     
 }}

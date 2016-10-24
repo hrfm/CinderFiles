@@ -20,21 +20,8 @@ in  vec4 gPosition;
 out vec4 oColor;
 
 void main(void){
-    
-    vec4 color = gColor;
-    
-    if( mod( gPosition.y, 0.01 ) < 0.002 ){
-        oColor = vec4(1.0);
-    }else
-    {
-        oColor = vec4(0.0);
-    }
-    
-    //oColor = color;// * gPosition.z;
-    
-    return;
-    
     vec4 p      = ciModelViewProjection * gPosition;
-    vec3 normal = gNormal;
-    
+    vec3  invLight = normalize( inverse(ciModel) * vec4(vec3(1.0,0.0,1.0)-p.xyz, 0.0)).xyz;
+    float diffuse  = clamp(dot(gNormal, invLight), 0.1, 1.0);
+    oColor         = vec4(1.0) * vec4(vec3(diffuse), 1.0);
 }

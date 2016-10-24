@@ -11,16 +11,24 @@ namespace hrfm{ namespace display{
         
     public:
         
-        TessellationPlane( float tessLevel = 50.0 ):hrfm::display::DisplayNode(){
-            setup( tessLevel );
+        TessellationPlane( float tessLevel = 50.0f, float segmentX = 4.0f, float segmentY = 1.0f ):hrfm::display::DisplayNode(){
+            setup( tessLevel, segmentX, segmentY );
         }
         
-        void setup( float tessLevel ){
+        TessellationPlane( ci::gl::TextureRef tex, float tessLevel = 50.0f, float segmentX = 1.0f, float segmentY = 1.0f ):hrfm::display::DisplayNode(){
+            setup( tessLevel, segmentX, segmentY );
+            setTexture(tex);
+        }
+        
+        TessellationPlane( hrfm::gl::ExFboRef fbo, float tessLevel = 50.0f, float segmentX = 1.0f, float segmentY = 1.0f ):hrfm::display::DisplayNode(){
+            setup( tessLevel, segmentX, segmentY );
+            setTexture(fbo);
+        }
+        
+        void setup( float tessLevel, float numX, float numY ){
             
             // ---------------subdivisions-----------------------------------------------------
             
-            float numX = 4.0;
-            float numY = 4.0;
             _batch = ci::gl::VertBatch::create( GL_PATCHES );
             float w = 1.0 / numX;
             float h = 1.0 / numY;
@@ -45,8 +53,8 @@ namespace hrfm{ namespace display{
                                               .fragment        ( io::DataLoader::load( "Ts_frag.glsl" ) )
                                               );
             
-            //_shader->uniform( "uTessLevelInner", tessLevel );
-            //_shader->uniform( "uTessLevelOuter", tessLevel );
+            _shader->uniform( "uTessLevelInner", tessLevel );
+            _shader->uniform( "uTessLevelOuter", tessLevel );
             
             _batchNode = new hrfm::display::VertBatchNode( _batch, _shader );
             
@@ -65,7 +73,10 @@ namespace hrfm{ namespace display{
         
     protected:
         
-        void _update(){}
+        void _update(){
+        
+            this->x = sin(ci::app::getElapsedSeconds());
+        }
         
         void _draw(){
             

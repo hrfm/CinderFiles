@@ -23,6 +23,10 @@ namespace hrfm{ namespace gl{
     ci::ivec2 ExFbo::getSize()  { return _fbo->getSize(); };
     ci::Rectf ExFbo::getBounds(){ return _fbo->getBounds(); };
     
+    float ExFbo::getAspectRatio(){
+        return _fbo->getAspectRatio();
+    }
+    
     ci::gl::TextureRef ExFbo::getTexture(){
         return _fbo->getColorTexture();
     }

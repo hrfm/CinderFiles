@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<setting>
+    
+    <!-- log Settings. -->
+    
+    <!--
+    <log
+        dest = "~/Documents/log.txt"
+    />
+    -->
+    
+    <!-- prepare Settings. -->
+    
+    <prepare
+        frameRate     = "60"
+        windowWidth   = "640"
+        windowHeight  = "640"
+    />
+    
+    <!-- setup Settings. -->
+    
+    <setup>
+        <window
+            fullScreen = "false"
+            hideCursor = "true"
+        />
+        <audio
+            bandSize="64"
+        />
+        <capture
+            width  = "640"
+            height = "480"
+            deviceName = "*"
+        />
+    </setup>
+    
+</setting>

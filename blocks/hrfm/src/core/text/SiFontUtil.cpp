@@ -23,14 +23,18 @@ namespace hrfm{ namespace text{
         
         string key = fontName + "_" + to_string(fontSize);
         
+        auto format = ci::gl::TextureFont::Format();
+        
         if( _map.find(key) == _map.end() ){
             if( fontName.find(".") == string::npos ){
                 _map.insert( map<string,ci::gl::TextureFontRef>::value_type(
-                    key, ci::gl::TextureFont::create( ci::Font( fontName, fontSize ) )
+                    key, ci::gl::TextureFont::create( ci::Font( fontName, fontSize ), format )
                 ) );
             }else{
                 _map.insert( map<string,ci::gl::TextureFontRef>::value_type(
-                    key, ci::gl::TextureFont::create( ci::Font( io::DataLoader::load(fontName), fontSize ) )
+                    key, ci::gl::TextureFont::create(
+                        ci::Font( io::DataLoader::load(fontName), fontSize ), format
+                    )
                 ) );
             }
         }

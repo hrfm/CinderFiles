@@ -162,7 +162,7 @@ namespace hrfm{ namespace display{
     
     void DisplayNode::draw( ColorA * drawColor ){
         
-        if( visible == false || colorA.a <= 0.0f ){
+        if( visible == false || colorA.a <= 0.0f || ( drawColor != NULL && drawColor->a <= 0.0f ) ){
             return;
         }
         
@@ -175,16 +175,8 @@ namespace hrfm{ namespace display{
             c.a *= drawColor->a;
         }
         
-        if( _enableAdditiveBlending == true ){
-            ci::gl::enableAdditiveBlending();
-        }else if( c.a < 1.0f ){
-            ci::gl::enableAlphaBlending();
-        }else{
-            ci::gl::disableAlphaBlending();
-        }
-        
         ci::gl::pushModelMatrix();
-            
+        {
             if( camera != NULL ){
                 
                 ci::gl::setMatrices( *camera );
@@ -193,14 +185,21 @@ namespace hrfm{ namespace display{
                 ci::gl::multModelMatrix(this->transform);
                 ci::gl::translate( getPosition() );
                 ci::gl::rotate( rotate );
-                ci::gl::color( c );
                 
                 ci::gl::ScopedDepth dpt( true );
-                
                 ci::gl::enableDepthWrite();
                 ci::gl::enableDepthRead();
                 
+                if( _enableAdditiveBlending == true ){
+                    ci::gl::enableAdditiveBlending();
+                }else if( c.a < 1.0f ){
+                    ci::gl::enableAlphaBlendingPremult();
+                }
+                ci::gl::color( c );
                 _draw();
+                ci::gl::disableAlphaBlending();
+                ci::gl::color(1.0,1.0,1.0);
+                
                 _drawChildren( &c );
                 
                 ci::gl::disableDepthRead();
@@ -211,15 +210,22 @@ namespace hrfm{ namespace display{
                 ci::gl::multModelMatrix(this->transform);
                 ci::gl::translate( getPosition() );
                 ci::gl::rotate( rotate );
+                
                 ci::gl::color( c );
+                if( _enableAdditiveBlending == true ){
+                    ci::gl::enableAdditiveBlending();
+                }else if( c.a < 1.0f ){
+                    ci::gl::enableAlphaBlendingPremult();
+                }
                 _draw();
+                ci::gl::disableAlphaBlending();
+                ci::gl::color(1.0,1.0,1.0);
+                
                 _drawChildren( &c );
                 
             }
-        
+        }
         ci::gl::popModelMatrix();
-        
-        ci::gl::disableAlphaBlending();
         
         _resized = false;
         

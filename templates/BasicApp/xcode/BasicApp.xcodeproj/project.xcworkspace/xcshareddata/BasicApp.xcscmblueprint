@@ -1,0 +1,51 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "A396AFBDA61902409A7388B51ADD2D0CC1E7CFF8",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "86A60850E696156FE11C356A14AE79927E9A2312" : 0,
+    "AD4B458D0D225ED63FAE0155615993B7D3ECE020" : 0,
+    "A396AFBDA61902409A7388B51ADD2D0CC1E7CFF8" : 0,
+    "13ED2DB2218D31D19E00B8DBCB4B28EB222D573A" : 0,
+    "2E437647A80AC024259004EEA740D2C71A4A66DD" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "FE3492BB-F285-4272-8AA5-C6D4FBAE9932",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "86A60850E696156FE11C356A14AE79927E9A2312" : "cpplib\/",
+    "AD4B458D0D225ED63FAE0155615993B7D3ECE020" : "..\/cinder\/Cinder",
+    "A396AFBDA61902409A7388B51ADD2D0CC1E7CFF8" : "CinderFiles\/",
+    "13ED2DB2218D31D19E00B8DBCB4B28EB222D573A" : "CinderVJ\/",
+    "2E437647A80AC024259004EEA740D2C71A4A66DD" : "..\/cinder\/Cinder-OpenCV3"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "BasicApp",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "templates\/BasicApp\/xcode\/BasicApp.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:hrfm\/CinderVJ.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "13ED2DB2218D31D19E00B8DBCB4B28EB222D573A"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:cinder\/Cinder-OpenCV3.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "2E437647A80AC024259004EEA740D2C71A4A66DD"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:hrfm\/cpplib.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "86A60850E696156FE11C356A14AE79927E9A2312"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:hrfm\/CinderFiles.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "A396AFBDA61902409A7388B51ADD2D0CC1E7CFF8"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/cinder\/Cinder.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "AD4B458D0D225ED63FAE0155615993B7D3ECE020"
+    }
+  ]
+}

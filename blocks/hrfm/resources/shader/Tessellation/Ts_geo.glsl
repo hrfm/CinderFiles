@@ -114,17 +114,18 @@ void emittVert( vec4 vert[3], vec4 mg, vec3 norm ){
     
     vec4 oVec[3];
     for(int i = 0; i < 3; ++i){
-        int idx = getID(vert[i]);
+        int idx      = getID(vert[i]);
+        vec4 color   = vColor[i];
+        float chroma = color.x * 0.3 + color.y * 0.59 + color.z * 0.11;
         oVec[i] = vec4( (mg+vPos[i]).xyz, 1.0 );
+        oVec[i] = vec4( oVec[i].xyz + norm * chroma * 0.6, 1.0 );
     }
     
     gNormal = normalize(cross( oVec[2].xyz - oVec[0].xyz, oVec[1].xyz - oVec[0].xyz ));
     
     for(int i = 0; i < 3; ++i){
-        vec4 color = vColor[i];
-        float chroma = color.x * 0.3 + color.y * 0.59 + color.z * 0.11;
-        gColor      = color;
-        gPosition   = vec4( oVec[i].xyz + gNormal * chroma * 0.1, 1.0 );
+        gColor      = vColor[i];
+        gPosition   = oVec[i];
         gl_Position = ciModelViewProjection * gPosition;
         EmitVertex();
     }

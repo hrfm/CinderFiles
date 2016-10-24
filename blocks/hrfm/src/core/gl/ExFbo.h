@@ -30,6 +30,7 @@ namespace hrfm{ namespace gl{
         int getHeight();
         ci::ivec2 getSize();
         ci::Rectf getBounds();
+        float getAspectRatio();
         
         void setCamera( ci::Camera * camera );
         
