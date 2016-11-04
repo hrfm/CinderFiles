@@ -108,10 +108,10 @@ namespace hrfm{ namespace signage{ namespace display{
         }
     }
     
-    void Sequence::setSize( float width, float height ){
+    void Sequence::setSize( vec2 size ){
         if(_content)
         {
-            _content->setSize( width, height );
+            _content->size = size;
         }
     }
     

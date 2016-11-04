@@ -13,7 +13,7 @@ namespace hrfm{ namespace display{
         
         virtual DisplayNode * addChild( DisplayNode * child ){
             eraseFromChildren(child);
-            child->_setStage(this);
+            //child->_setStage(this);
             child->_setParent(this);
             children.push_back(child);
             return child;

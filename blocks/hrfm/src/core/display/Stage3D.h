@@ -28,10 +28,11 @@ namespace hrfm{ namespace display{
             ci::gl::pushMatrices();
             {
                 ci::gl::ScopedFramebuffer fbo( this->_fboRef );
-                ci::gl::ScopedViewport viewport( vec2( 0.0f ), this->_fboRef->getSize() );
                 if( clear == true ){
                     ci::gl::clear( ci::Color::black() );
                 }
+                ci::gl::ScopedViewport viewport( vec2( 0.0f ), this->_fboRef->getSize() );
+                ci::gl::ScopedColor color(ci::Color::white());
                 ci::gl::setMatrices(this->_cameraPersp);
                 _drawChildren();
             }
@@ -51,15 +52,15 @@ namespace hrfm{ namespace display{
         virtual void _initialize( ci::CameraPersp camera, ivec2 size, ci::gl::Fbo::Format format ){
             this->_cameraPersp = camera;
             this->_fboFormat   = format;
-            this->setSize( size );
+            this->size = size;
             this->addEventListener( hrfm::events::Event::RESIZE, this, &Stage3D::_onResize );
         }
         
         void _onResize( hrfm::events::Event * event ){
             cout << "Stage3D::_onResize" << endl;
-            _fboRef = ci::gl::Fbo::create( this->width, this->height, this->_fboFormat );
+            _fboRef = ci::gl::Fbo::create( this->size.x, this->size.y, this->_fboFormat );
             // --- Update Camera Aspect Ratio.
-            this->_cameraPersp.setAspectRatio( (float)this->width / (float)this->height );
+            this->_cameraPersp.setAspectRatio( (float)this->size.x / (float)this->size.y );
         }
         
         ci::CameraPersp     _cameraPersp;

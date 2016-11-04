@@ -37,7 +37,7 @@ namespace hrfm{ namespace graphics{
             }
             vector<pair<uint16_t,vec2>> placements = _fontRef->getGlyphPlacements(sample);
             
-            width = placements.at( placements.size()-1 ).second.x;
+            this->size.x = placements.at( placements.size()-1 ).second.x;
             
         }
         

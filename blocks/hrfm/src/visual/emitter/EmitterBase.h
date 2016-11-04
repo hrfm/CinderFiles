@@ -18,16 +18,16 @@ namespace hrfm{ namespace visual{ namespace emitter{
         }
         
         virtual void init(){
-            this->baseX = x;
-            this->baseY = y;
+            this->baseX = this->position.x;
+            this->baseY = this->position.y;
         }
         
         // @param object     emitt する EmittBaseObject
         // @param forceEmitt stage に所属していなくても emitt するか
         void emitt( EmitterBase * object, bool forceEmitt = false ){
-            if( forceEmitt || hasStage() ){
-                object->baseX = baseX + x;
-                object->baseY = baseY + y;
+            if( forceEmitt ){
+                object->baseX = baseX + this->position.x;
+                object->baseY = baseY + this->position.y;
                 addChild( object );
             }
         }

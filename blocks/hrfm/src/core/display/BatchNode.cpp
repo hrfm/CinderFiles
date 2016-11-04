@@ -69,7 +69,7 @@ namespace hrfm{ namespace display{
         ci::gl::pushModelMatrix();
         {
             ci::gl::multModelMatrix(this->transform);
-            ci::gl::translate( vec3( this->x, this->y, this->z ) );
+            ci::gl::translate( this->position );
             //!!!!!! ci::gl::rotate( this->rotation );
             ci::gl::scale( this->scale );
             if( _enableDepthCheck ){
@@ -131,18 +131,6 @@ namespace hrfm{ namespace display{
             _batchRef->draw();
         }
     };
-    void BatchNode::_drawChildren( ColorA * drawColor ){
-        DisplayNode::_drawChildren( drawColor );
-        /*
-        if( numChildren() == 0 ) return;
-        std::vector<DisplayNode*>::iterator it, end;
-        for( it = children.begin(), end = children.end(); it!=end; it++ ){
-            if( *it!=nullptr ){
-                (*it)->draw( drawColor );
-            }
-        }
-        //*/
-    }
     
     inline bool BatchNode::eraseTextureFromList( ci::gl::TextureRef tex ){
         auto itr = std::remove_if(_textures.begin(),_textures.end(),[tex](ci::gl::TextureRef t)->bool{

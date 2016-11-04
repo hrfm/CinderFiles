@@ -65,7 +65,7 @@ namespace hrfm { namespace display{
         {
             
             ci::gl::setMatrices( mLight.toggleViewpoint ? mLight.camera : mCamera );
-            ci::gl::ScopedViewport viewport( toPixels( getSize() ) );
+            ci::gl::ScopedViewport viewport( toPixels( this->size ) );
             
             ci::gl::ScopedGlslProg bind( mShadowShader );
             ci::gl::ScopedTextureBind texture( mShadowMap->getTexture() );

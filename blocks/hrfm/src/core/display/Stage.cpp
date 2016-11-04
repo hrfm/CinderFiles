@@ -40,11 +40,11 @@ namespace hrfm{ namespace display{
         this->begin(index);
         {
             _draw();
-            _drawChildren( &colorA );
+            _drawChildren();
         }
         this->end();
         if( !offscreen ){
-            ci::gl::translate( x, y );
+            ci::gl::translate( this->position.x, this->position.y );
             ci::gl::draw( getTexture() );
         }
     }
@@ -99,10 +99,10 @@ namespace hrfm{ namespace display{
         if( _camera.find(index) != _camera.end() ){
             ci::gl::setMatrices( *_camera[index] );
         }else{
-            ci::gl::setMatricesWindow( width, height );
+            ci::gl::setMatricesWindow( this->size.x, this->size.y );
         }
         
-        ci::gl::viewport( getSize() );
+        ci::gl::viewport( this->size );
         
     }
     
@@ -128,14 +128,14 @@ namespace hrfm{ namespace display{
         ci::gl::Fbo::Format format;
         
         _fbo.clear();
-        _fbo[0] = ci::gl::Fbo::create( width, height, format );
+        _fbo[0] = ci::gl::Fbo::create( this->size.x, this->size.y, format );
         if( _numFbo < 1 ){
             _numFbo = 1;
         }
         
         // --- Update Camera Aspect Ratio.
         for( std::map<int,ci::Camera*>::iterator it=_camera.begin(); it!=_camera.end(); ++it ){
-            it->second->setAspectRatio((float)width / (float)height);
+            it->second->setAspectRatio(this->size.x/this->size.y);
         }
         
     }

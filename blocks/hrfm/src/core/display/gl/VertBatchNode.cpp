@@ -69,11 +69,11 @@ namespace hrfm{ namespace display{
         ci::gl::pushModelMatrix();
         {
             ci::gl::multModelMatrix(this->transform);
-            ci::gl::translate( getPosition() );
+            ci::gl::translate( this->position );
             //!!!!!! ci::gl::rotate( this->rotation );
             ci::gl::scale( this->scale );
             _draw();
-            _drawChildren(&c);
+            _drawChildren();
         }
         ci::gl::popModelMatrix();
         

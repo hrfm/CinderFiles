@@ -27,7 +27,7 @@ namespace hrfm{ namespace signage{ namespace display{
         
         string getType();
         
-        void setSize( float width, float height );
+        void setSize( vec2 size );
         
         /**
          * Set trigger when triggered on play.

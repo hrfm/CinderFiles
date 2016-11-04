@@ -39,11 +39,11 @@ namespace hrfm{ namespace display{
     
     void TextureNode::_init( ci::gl::TextureRef texRef ){
         _texture = texRef;
-        if( width == 0 ){
-            width = _texture->getWidth();
+        if( this->size.x == 0 ){
+            this->size.x = _texture->getWidth();
         }
-        if( height == 0 ){
-            height = _texture->getHeight();
+        if( this->size.y == 0 ){
+            this->size.y = _texture->getHeight();
         }
     }
     

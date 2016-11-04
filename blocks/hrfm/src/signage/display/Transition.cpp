@@ -107,8 +107,8 @@ namespace hrfm{ namespace signage{ namespace display{
                 _next->update();
                 ci::gl::pushMatrices();
                 {
-                    ci::gl::viewport( ivec2(0), _next->getSize() );
-                    ci::gl::setMatricesWindow( _next->width, _next->height, false );
+                    ci::gl::viewport( ivec2(0), _next->size );
+                    ci::gl::setMatricesWindow( _next->size.x, _next->size.y, false );
                     {
                         ci::gl::color( ColorA( 1.0, 1.0, 1.0, 1.0 ) );
                         _next->draw();

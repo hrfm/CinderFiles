@@ -35,7 +35,7 @@ namespace hrfm{ namespace visual{ namespace emitter{
         EmittObjectBase::_update();
         
         if( _forceMap ){
-            vec2 pow = _forceMap->getForceAtf( ( baseX + x ) / (float)ci::app::getWindowWidth(), ( baseY + y ) / (float)ci::app::getWindowHeight() );
+            vec2 pow = _forceMap->getForceAtf( ( baseX + this->position.x ) / (float)ci::app::getWindowWidth(), ( baseY + this->position.y ) / (float)ci::app::getWindowHeight() );
             _forceX -= pow.x;
             _forceY -= pow.y;
         }
@@ -52,7 +52,7 @@ namespace hrfm{ namespace visual{ namespace emitter{
         
         ci::gl::color( colorA );
         
-        vec2 center = vec2( baseX + x, baseY + y );
+        vec2 center = vec2( baseX + this->position.x, baseY + this->position.y );
         
         int num = 10;
         

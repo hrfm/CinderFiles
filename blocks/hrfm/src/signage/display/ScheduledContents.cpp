@@ -286,13 +286,13 @@ namespace hrfm{ namespace signage{ namespace display{
     //! protected:
     
     void ScheduledContents::_update(){
-        if( _fbo->getSize() != getSize() ){
-            _fbo = new hrfm::gl::ExFbo( width, height );
+        if( _fbo->getSize() != ivec2(this->size.x,this->size.y) ){
+            _fbo = new hrfm::gl::ExFbo( this->size.x, this->size.y );
         }
         _fbo->beginOffscreen(true);
         {
             if( _currentContent ){
-                _currentContent->setSize( width, height);
+                _currentContent->size = this->size;
                 _currentContent->update();
                 _currentContent->draw();
             }
@@ -301,8 +301,8 @@ namespace hrfm{ namespace signage{ namespace display{
     }
     
     void ScheduledContents::_draw(){
-        float w = width / (float)mtx.x;
-        float h = height / (float)mtx.y;
+        float w = this->size.x / (float)mtx.x;
+        float h = this->size.y / (float)mtx.y;
         for( int i=0; i<mtx.x; i++ ){
             for( int j=0; j<mtx.y; j++ ){
                 ci::gl::draw( _fbo->getTexture(), Rectf( w*i, h*j, w*(i+1), h*(j+1) ) );

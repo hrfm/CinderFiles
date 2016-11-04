@@ -209,7 +209,7 @@ namespace hrfm { namespace app{
         vector<DisplayNode*>::iterator it;
         vector<DisplayNode*>::iterator end = stage->children.end();
         for( it=stage->children.begin(); it!=end; ++it ){
-            (*it)->setSize( getWindowSize() );
+            (*it)->size = getWindowSize();
         }
         stage->update();
         stage->drawOffscreen();
@@ -240,7 +240,7 @@ namespace hrfm { namespace app{
     
     void AppBase::resize(){
         camera.setPerspective( 30, getWindowAspectRatio(), 0.1, 100 );
-        stage->setSize( getWindowWidth(), getWindowHeight() );
+        stage->size = getWindowSize();
     }
     
     void AppBase::keyDown( ci::app::KeyEvent event ){

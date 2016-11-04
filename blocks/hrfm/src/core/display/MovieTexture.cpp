@@ -103,11 +103,11 @@ namespace hrfm{ namespace display{
             _movieGlRef->setVolume(_volume);
         }
         // --- Update Aspects.
-        if( width == 0 ){
-            width = _movieGlRef->getWidth();
+        if( this->size.x == 0 ){
+            this->size.x = _movieGlRef->getWidth();
         }
-        if( height == 0 ){
-            height = _movieGlRef->getHeight();
+        if( this->size.y == 0 ){
+            this->size.y = _movieGlRef->getHeight();
         }
         // --- Save properties.
         _duration    = _movieGlRef->getDuration();
