@@ -7,7 +7,7 @@ namespace hrfm { namespace io{
     
     // --- OSC Manager. ---
     
-    class SiOscInput : public hrfm::utils::Singleton<SiOscInput>, public hrfm::events::EventDispatcher{
+    class SiOscInput : public hrfm::utils::Singleton<SiOscInput>{
     
     public:
         
@@ -19,17 +19,15 @@ namespace hrfm { namespace io{
         //! 指定したポート番号で OSC の受信を監視しているかどうかを取得します.
         bool listening( int port );
         
-        void update();
+        void setListener( const std::string &address, ci::osc::ReceiverUdp::ListenerFn listener );
         
     private:
         
         friend class hrfm::utils::Singleton<SiOscInput>;
         
-        SiOscInput(){
-            hrfm::events::EventDispatcher();
-        }
+        SiOscInput(){}
         
-        map<int,ci::osc::Listener*> _listenerMap;
+        map<int,ci::osc::ReceiverUdp*> _listenerMap;
         
     };
     

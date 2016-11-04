@@ -1,4 +1,6 @@
 #include "SiOscInput.h"
+#include "cinder/Log.h"
+#include "cinder/osc/Osc.h"
 
 using namespace hrfm::events;
 
@@ -6,8 +8,25 @@ namespace hrfm { namespace io{
     
     void SiOscInput::addListenPort( int port ){
         if( ! listening(port) ){
-            ci::osc::Listener * listener = new ci::osc::Listener();
-            listener->setup(port);
+            cout << "bind:" << port << endl;
+            ci::osc::ReceiverUdp * listener = new ci::osc::ReceiverUdp(port);
+            try {
+                // Bind the receiver to the endpoint. This function may throw.
+                listener->bind();
+            }
+            catch( const ci::osc::Exception &ex ) {
+                CI_LOG_E( "Error binding: " << ex.what() << " val: " << ex.value() );
+                return;
+            }
+            listener->listen(
+            []( asio::error_code error, asio::ip::udp::endpoint endpoint ) -> bool {
+                if( error ) {
+                    CI_LOG_E( "Error Listening: " << error.message() << " val: " << error.value() << " endpoint: " << endpoint );
+                    return false;
+                }else{
+                    return true;
+                }
+            });
             _listenerMap[port] = listener;
         }
     };
@@ -20,16 +39,9 @@ namespace hrfm { namespace io{
         return _listenerMap.find( port ) != _listenerMap.end();
     }
     
-    void SiOscInput::update(){
-        // --- update OSC. ---
-        // Iterate through all functions in the event, from high proproty to low
-        for( std::map<int,ci::osc::Listener*>::iterator it=_listenerMap.begin(); it!=_listenerMap.end(); ++it ){
-            ci::osc::Listener * listener = it->second;
-            while( listener->hasWaitingMessages() ) {
-                ci::osc::Message message;
-                listener->getNextMessage( &message );
-                dispatchEvent( new OscInputEvent( message.getAddress(), message ) );
-            }
+    void SiOscInput::setListener( const std::string &address, ci::osc::ReceiverUdp::ListenerFn listener ){
+        for( auto it = _listenerMap.begin(); it != _listenerMap.end(); ++it ){
+            it->second->setListener( address, listener );
         }
     }
     

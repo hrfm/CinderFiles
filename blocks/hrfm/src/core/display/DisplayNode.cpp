@@ -247,7 +247,7 @@ namespace hrfm{ namespace display{
         return _stage != nullptr && _stage != NULL;
     }
     
-    Stage * DisplayNode::getStage(){
+    IStage * DisplayNode::getStage(){
         return _stage;
     }
     
@@ -317,7 +317,7 @@ namespace hrfm{ namespace display{
         }
     }
     
-    void DisplayNode::_setStage( Stage * stage ){
+    void DisplayNode::_setStage( IStage * stage ){
         if( !hasStage() ){
             _stage = stage;
             dispatchEvent( new hrfm::events::Event(hrfm::events::Event::ADDED_TO_STAGE) );

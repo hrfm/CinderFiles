@@ -277,8 +277,12 @@ namespace hrfm{ namespace io{
     }
     
     void SiAudioInput::useAudioManager(){
-        hrfm::io::SiOscInput::getInstance().addEventListener( "/audio/gain", this, &SiAudioInput::onAudioGain );
-        hrfm::io::SiOscInput::getInstance().addEventListener( "/audio/fft/average", this, &SiAudioInput::onFFTAverage );
+        hrfm::io::SiOscInput::getInstance().setListener("/audio/gain", [&]( const ci::osc::Message &msg ){
+            _audioGain = msg.getArgFloat(0);
+        });
+        hrfm::io::SiOscInput::getInstance().setListener( "/audio/fft/average", [&]( const ci::osc::Message &msg ){
+            _fftAverage = msg.getArgFloat(0);
+        });
     }
     
     float SiAudioInput::getAudioManagerGain(){
@@ -355,15 +359,5 @@ namespace hrfm{ namespace io{
         ci::gl::popMatrices();
         
     };
-    
-    //! protected:
-    
-    void SiAudioInput::onFFTAverage( OscInputEvent * event){
-        _fftAverage = event->message.getArgAsFloat(0);
-    }
-    
-    void SiAudioInput::onAudioGain( OscInputEvent * event){
-        _audioGain  = event->message.getArgAsFloat(0);
-    }
     
 }}

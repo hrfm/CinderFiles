@@ -6,6 +6,7 @@
 #include "TextureNode.h"
 #include "MovieTexture.h"
 #include "Stage.h"
+#include "Stage3D.h"
 
 #include "BatchNode.h"
 #include "VertBatchNode.h"

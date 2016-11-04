@@ -189,10 +189,6 @@ namespace hrfm { namespace app{
         
         // --- Update Inputs. ---
         
-        if( SiOscInput::getInstance().listening() ){
-            SiOscInput::getInstance().update();
-        }
-        
         if( useAudio ){
             SiAudioInput::getInstance().update();
         }
@@ -203,6 +199,7 @@ namespace hrfm { namespace app{
         }
         
         // --- Update Time. ---
+        
         hrfm::utils::SiTimeUtil::getInstance().update();
         hrfm::app::SiAppInfo::getInstance().update();
         

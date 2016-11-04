@@ -74,9 +74,6 @@ namespace hrfm{ namespace io{
             _audioGain  = 0.0f;
         }
         
-        void onFFTAverage( OscInputEvent * event);
-        void onAudioGain( OscInputEvent * event);
-        
         float _waveBias;
         float _fftBias;
         bool _enabled;

@@ -36,14 +36,6 @@ namespace hrfm{ namespace display{
         }
     }
     
-    DisplayNode * Stage::addChild( DisplayNode * child ){
-        eraseFromChildren(child);
-        child->_setStage(this);
-        child->_setParent(this);
-        children.push_back(child);
-        return child;
-    }
-    
     void Stage::draw( bool offscreen, int index ){
         this->begin(index);
         {

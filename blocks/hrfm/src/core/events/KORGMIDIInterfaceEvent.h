@@ -1,6 +1,6 @@
 #pragma once
 
-#include "OscListener.h"
+#include "Osc.h"
 #include "EventDispatcher.h"
 
 namespace hrfm { namespace events{

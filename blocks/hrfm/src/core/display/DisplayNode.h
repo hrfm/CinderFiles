@@ -9,7 +9,7 @@
 
 namespace hrfm{ namespace display{
     
-    class Stage;
+    class IStage;
     
     /**
      DisplayNode is base of managed display objects likes Flash.
@@ -85,7 +85,7 @@ namespace hrfm{ namespace display{
         virtual DisplayNode * getParent();
         
         virtual bool hasStage();
-        virtual Stage * getStage();
+        virtual IStage * getStage();
         
         // --- PROPERTY -------------
         hrfm::utils::DynamicMap values;
@@ -127,13 +127,10 @@ namespace hrfm{ namespace display{
         
         // Stage control.
         
-        friend class Stage;
+        friend class IStage;
         
-        Stage * _stage = NULL;
-        
-        std::vector<Stage*> _stages;
-        
-        virtual void _setStage( Stage * node );
+        IStage * _stage = NULL;
+        virtual void _setStage( IStage * node );
         virtual void _unsetStage();
         
         DisplayNode * _parent = NULL;

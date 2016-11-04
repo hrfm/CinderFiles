@@ -2,18 +2,18 @@
 
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Fbo.h"
-#include "DisplayNode.h"
+#include "IStage.h"
 
 namespace hrfm{ namespace display{
     
     typedef std::shared_ptr<class Stage> StageRef;
     
-    class Stage : public DisplayNode{
+    class Stage : public IStage{
     public:
         
         static StageRef create( ci::Camera * camera = NULL ){ return StageRef( new Stage(camera) ); }
         
-        Stage( ci::Camera * camera = NULL ):DisplayNode(){
+        Stage( ci::Camera * camera = NULL ):IStage(){
             if( camera != NULL )
             {
                 _camera[0] = camera;
@@ -34,8 +34,6 @@ namespace hrfm{ namespace display{
         // 必ず end をセットで呼ぶこと!
         virtual void begin( int index = 0 );
         virtual void end();
-        
-        virtual DisplayNode * addChild( DisplayNode * child );
         
         virtual void draw(bool offscreen = false, int index = 0 );
         
