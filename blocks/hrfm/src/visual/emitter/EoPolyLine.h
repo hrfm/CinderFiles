@@ -78,7 +78,7 @@ namespace hrfm{ namespace visual{ namespace emitter{
             
             ci::gl::color( colorA );
             
-            vec2 center = vec2( baseX + this->position.x, baseY + this->position.y );
+            vec2 center = vec2( baseX + this->x(), baseY + this->y() );
             
             ci::gl::begin( GL_TRIANGLE_STRIP );
             {

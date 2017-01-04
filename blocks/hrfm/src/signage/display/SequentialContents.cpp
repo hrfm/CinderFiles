@@ -18,7 +18,7 @@ namespace hrfm{ namespace signage{ namespace display{
     }
     
     void SequentialContents::setSize( int w, int h ){
-        this->size = vec2( w, h );
+        this->size(vec2(w,h));
         if( _transition ){
             _transition->setSize( w, h );
         }
@@ -84,7 +84,7 @@ namespace hrfm{ namespace signage{ namespace display{
             // 次に表示をするコンテンツを設定し Transition に委譲する.Transition が完了するまで addChild はしない.
             _currentSequence = _sequenceList.at(index);
             if( _currentSequence ){
-                _currentSequence->setSize( this->size );
+                _currentSequence->setSize( this->size() );
                 _currentSequence->addEventListener( hrfm::events::Event::COMPLETE, this, &SequentialContents::_onComplete );
                 _currentSequence->play();
                 _transition->setNext( _currentSequence->getContentRef() );
@@ -106,7 +106,7 @@ namespace hrfm{ namespace signage{ namespace display{
             _currentSequence = _sequenceList.at(index);
             
             if( _currentSequence ){
-                _currentSequence->setSize( this->size );
+                _currentSequence->setSize( this->size() );
                 _currentSequence->addEventListener( hrfm::events::Event::COMPLETE, this, &SequentialContents::_onComplete );
                 _currentSequence->play();
                 addChild( _currentSequence->getContentRef() );
@@ -150,7 +150,7 @@ namespace hrfm{ namespace signage{ namespace display{
     
     void SequentialContents::_update(){
         if( _currentSequence ){
-            _currentSequence->setSize( this->size );
+            _currentSequence->setSize( this->size() );
             _currentSequence->setVolume( _volume );
         }
         if( _transition && _transition->running() ){

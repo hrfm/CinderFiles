@@ -75,7 +75,7 @@ namespace hrfm{ namespace display{
         
         void _update(){
         
-            this->position.x = sin(ci::app::getElapsedSeconds());
+            this->x(sin(ci::app::getElapsedSeconds()));
         }
         
         void _draw(){

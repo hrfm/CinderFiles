@@ -64,12 +64,12 @@ namespace hrfm{ namespace graphics{
         for(auto it=std::begin(_currentData); it!=std::end(_currentData); it++ ){
             int len = it->second.size();
             if( 1 < len ){
-                float w = this->size.x / (float)(len-1);
+                float w = this->width() / (float)(len-1);
                 PolyLineT<vec2>	line;
                 for( int i = 0; i < len; i++ ) {
                     float x = (float)i * w;
-                    float y = it->second.at(i) * this->size.y;
-                    line.push_back( vec2( x , this->size.y - y ) );
+                    float y = it->second.at(i) * this->height();
+                    line.push_back( vec2( x , this->height() - y ) );
                 }
                 ci::gl::draw( line );
             }

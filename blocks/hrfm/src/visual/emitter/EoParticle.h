@@ -42,8 +42,8 @@ namespace hrfm{ namespace visual{ namespace emitter{
             
             EoForceMapParticle::_update();
             
-            this->position.x += _vecX;
-            this->position.y += _vecY;
+            this->x( this->x()+_vecX);
+            this->y(this->y()+_vecY);
             
             _vecX   *= 0.96;
             _vecY   *= 0.96;
@@ -63,7 +63,7 @@ namespace hrfm{ namespace visual{ namespace emitter{
             
             ci::gl::color( colorA );
             
-            vec2 center = vec2( baseX + this->position.x, baseY + this->position.y );
+            vec2 center = vec2( baseX + this->x(), baseY + this->y() );
             
             int num = 10;
             

@@ -10,7 +10,7 @@ namespace hrfm{ namespace graphics{
     
     void RandomText::setText( string text, double delay, double interval ){
         _text = text;
-        visible = 0 < _text.length();
+        visible( 0 < _text.length() );
         randomize( delay, interval );
     }
     

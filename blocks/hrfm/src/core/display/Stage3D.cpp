@@ -34,15 +34,15 @@ namespace hrfm{ namespace display{
     void Stage3D::_initialize( ci::CameraPersp camera, ivec2 size, ci::gl::Fbo::Format format ){
         this->_cameraPersp = camera;
         this->_fboFormat   = format;
-        this->size = size;
+        this->size(size);
         this->addEventListener( hrfm::events::Event::RESIZE, this, &Stage3D::_onResize );
     }
     
     void Stage3D::_onResize( hrfm::events::Event * event ){
         cout << "Stage3D::_onResize" << endl;
-        _fboRef = ci::gl::Fbo::create( this->size.x, this->size.y, this->_fboFormat );
+        _fboRef = ci::gl::Fbo::create( this->width(), this->height(), this->_fboFormat );
         // --- Update Camera Aspect Ratio.
-        this->_cameraPersp.setAspectRatio( (float)this->size.x / (float)this->size.y );
+        this->_cameraPersp.setAspectRatio( (float)this->width() / (float)this->height() );
     }
     
 }}

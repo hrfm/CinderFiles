@@ -18,22 +18,22 @@ namespace hrfm{ namespace visual{ namespace emitter{
         }
         
         virtual void init(){
-            this->baseX = this->position.x;
-            this->baseY = this->position.y;
+            this->baseX = this->x();
+            this->baseY = this->y();
         }
         
         // @param object     emitt する EmittBaseObject
         // @param forceEmitt stage に所属していなくても emitt するか
         void emitt( EmitterBase * object, bool forceEmitt = false ){
             if( forceEmitt ){
-                object->baseX = baseX + this->position.x;
-                object->baseY = baseY + this->position.y;
+                object->baseX = baseX + this->x();
+                object->baseY = baseY + this->y();
                 addChild( object );
             }
         }
         
         virtual void draw(){
-            if( visible == false || colorA.a <= 0.0f ){
+            if( visible() == false || colorA.a <= 0.0f ){
                 return;
             }
             _draw();

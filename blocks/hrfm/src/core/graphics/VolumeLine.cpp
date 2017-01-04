@@ -44,7 +44,7 @@ namespace hrfm{ namespace graphics{
         _vertices.empty();
         _vertices.clear();
         
-        this->position = _fromPos;
+        this->position(_fromPos);
         
         float radian = _getRadian();
         float step = 3.14159265 / 12.0;

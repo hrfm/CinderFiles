@@ -11,11 +11,12 @@ namespace hrfm{ namespace display{
     void DisplayNode::clear(){}
     
     Rectf DisplayNode::getBounds(){
-        return Rectf( this->position.x, this->position.y, this->position.x+this->size.x, this->position.y+this->size.y );
+        return this->_bounds;
     }
     
     Rectf DisplayNode::getDrawBounds(){
-        return Rectf( 0, 0, this->size.x, this->size.y );
+        cout << "getDrawBounds : " << this->_drawBounds << endl;
+        return this->_drawBounds;
     }
     
     ci::vec3 DisplayNode::getAbsolutePosition(){
@@ -24,9 +25,9 @@ namespace hrfm{ namespace display{
     
     ci::vec3 DisplayNode::getGlobalPosition(){
         if( this->hasParent() ){
-            return this->position + this->getParent()->getGlobalPosition();
+            return this->position() + this->getParent()->getGlobalPosition();
         }else{
-            return this->position;
+            return this->position();
         }
     }
     
@@ -35,6 +36,10 @@ namespace hrfm{ namespace display{
     }
     void DisplayNode::disableAdditiveBlending(){
         this->_enableAdditiveBlending = false;
+    }
+    
+    bool DisplayNode::isResized(){
+        return this->_resized;
     }
     
     int DisplayNode::numChildren(){
@@ -49,6 +54,31 @@ namespace hrfm{ namespace display{
             return false;
         }
         return true;
+    }
+    
+    bool DisplayNode::hasParent(){
+        return this->_parent != nullptr && this->_parent != NULL;
+    }
+    DisplayNode * DisplayNode::getParent(){
+        return this->_parent;
+    }
+    
+    bool DisplayNode::isRootNode(){
+        return !this->hasParent();
+    }
+    DisplayNode * DisplayNode::getRootNode(){
+        if( this->isRootNode() ){
+            return this;
+        }else{
+            return this->getParent()->getRootNode();
+        }
+    }
+    
+    bool DisplayNode::hasStage(){
+        return this->_stage != nullptr && this->_stage != NULL;
+    }
+    IStage * DisplayNode::getStage(){
+        return this->_stage;
     }
     
     DisplayNode * DisplayNode::addChild( DisplayNode * child ){
@@ -93,21 +123,23 @@ namespace hrfm{ namespace display{
         return this;
     }
     
+    void DisplayNode::setUpdateFrequency( unsigned int freq ){
+        this->_updateFrequency = this->_updateCount = freq;
+    }
+    
     void DisplayNode::update(){
-        if( !this->visible ){
+        if( !this->visible() ){
             return;
         }
         uint32_t elapsedFrame = ci::app::getElapsedFrames();
-        if( 1 < this->_updateFrequency ){
-            if( elapsedFrame < this->_beforeUpdateFrame || ++this->_updateCount < this->_updateFrequency ){
-                return;
-            }
+        if( elapsedFrame - this->_beforeUpdateFrame < this->_updateFrequency ){
+            return;
         }
-        this->_updateCount = 0;
         this->_beforeUpdateFrame = elapsedFrame;
-        if( this->_beforeSize.x != this->size.x || this->_beforeSize.y != this->size.y ){
+        // TODO 毎回呼ぶのはちょっと回数が多そう
+        if( this->_beforeSize.x != this->width() || this->_beforeSize.y != this->height() ){
             this->_resized = true;
-            this->_beforeSize = size;
+            this->_beforeSize = this->_size;
             this->dispatchEvent( new hrfm::events::Event( hrfm::events::Event::RESIZE ) );
         }
         this->_update();
@@ -115,18 +147,16 @@ namespace hrfm{ namespace display{
     }
     
     void DisplayNode::draw(){
-        
-        if( this->visible == false || this->colorA.a <= 0.0f ){
+        if( !this->visible() || this->colorA.a == 0.0f ){
             return;
         }
-        
         ci::gl::pushModelMatrix();
         {
             ci::gl::ScopedColor color( this->colorA );
-            ci::gl::multModelMatrix(this->transform);
-            ci::gl::translate( this->position );
-            ci::gl::rotate( rotation.w, rotation.x, rotation.y, rotation.z );
-            ci::gl::scale( scale );
+            //ci::gl::multModelMatrix(this->transform);
+            //ci::gl::translate( this->position() );
+            //ci::gl::rotate( this->rotation.w, this->rotation.x, this->rotation.y, this->rotation.z );
+            //ci::gl::scale( this->scale );
             if( this->_enableAdditiveBlending ){
                 ci::gl::enableAlphaBlending();
                 _draw();
@@ -137,6 +167,7 @@ namespace hrfm{ namespace display{
                 _drawChildren();
             }
             /*
+            // この機能は Stage3Dに委譲する
             if( camera != NULL ){
                 
                 ci::gl::setMatrices( *camera );
@@ -191,47 +222,6 @@ namespace hrfm{ namespace display{
         
         this->_resized = false;
         
-    }
-    
-    bool DisplayNode::isResized(){
-        return this->_resized;
-    }
-
-    bool DisplayNode::hasParent(){
-        return this->_parent != nullptr && this->_parent != NULL;
-    }
-    
-    DisplayNode * DisplayNode::getParent(){
-        return this->_parent;
-    }
-    
-    bool DisplayNode::isRootNode(){
-        return !this->hasParent();
-    }
-    
-    DisplayNode * DisplayNode::getRootNode(){
-        if( this->isRootNode() ){
-            return this;
-        }else{
-            return this->getParent()->getRootNode();
-        }
-    }
-
-    
-    
-    bool DisplayNode::hasStage(){
-        return this->_stage != nullptr && this->_stage != NULL;
-    }
-    
-    IStage * DisplayNode::getStage(){
-        return this->_stage;
-    }
-    
-    void DisplayNode::setUpdateFrequency( unsigned int freq ){
-        if( freq <= 0 ){
-            freq = 1;
-        }
-        this->_updateFrequency = this->_updateCount = freq;
     }
     
     //! protected:

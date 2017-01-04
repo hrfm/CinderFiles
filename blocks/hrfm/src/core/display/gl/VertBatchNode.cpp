@@ -38,7 +38,7 @@ namespace hrfm{ namespace display{
     }
     
     void VertBatchNode::update(){
-        if( visible == false || colorA.a <= 0.0f ){
+        if( visible() == false || colorA.a <= 0.0f ){
             return;
         }
         _update();
@@ -47,7 +47,7 @@ namespace hrfm{ namespace display{
     
     void VertBatchNode::draw( ColorA * drawColor ){
         
-        if( visible == false || colorA.a <= 0.0f ){
+        if( visible() == false || colorA.a <= 0.0f ){
             return;
         }
         
@@ -69,7 +69,7 @@ namespace hrfm{ namespace display{
         ci::gl::pushModelMatrix();
         {
             ci::gl::multModelMatrix(this->transform);
-            ci::gl::translate( this->position );
+            ci::gl::translate( this->position() );
             //!!!!!! ci::gl::rotate( this->rotation );
             ci::gl::scale( this->scale );
             _draw();

@@ -32,8 +32,8 @@ namespace hrfm{ namespace graphics{
         int row = _mtx->getRow();
         
         vec2 size = vec2(
-            ( this->size.x - (_spacing.x*(float)(col-1))-_spacing.x) / (float)col,
-            ( this->size.y - (_spacing.y*(float)(row-1))) / (float)row
+            ( this->width() - (_spacing.x*(float)(col-1))-_spacing.x) / (float)col,
+            ( this->height() - (_spacing.y*(float)(row-1))) / (float)row
         );
         
         for( int y=0; y<row; y++ ){

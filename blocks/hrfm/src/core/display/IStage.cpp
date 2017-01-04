@@ -16,8 +16,8 @@ namespace hrfm{ namespace display{
             ci::gl::pushViewport();
             ci::gl::pushMatrices();
             {
-                ci::gl::setMatricesWindow( this->size, true );
-                ci::gl::viewport( ivec2(0), this->size );
+                ci::gl::setMatricesWindow( this->size(), true );
+                ci::gl::viewport( ivec2(0), this->size() );
                 if( clear == true ){
                     ci::gl::clear( ci::Color::black() );
                 }
@@ -39,12 +39,12 @@ namespace hrfm{ namespace display{
     }
     
     void IStage::updateFboSize(){
-        _fboRef = ci::gl::Fbo::create( this->size.x, this->size.y, this->_fboFormat );
+        _fboRef = ci::gl::Fbo::create( this->width(), this->height(), this->_fboFormat );
     }
     
     void IStage::_initialize( ivec2 size, ci::gl::Fbo::Format format ){
         this->_fboFormat   = format;
-        this->size = size;
+        this->size(size);
         this->addEventListener( hrfm::events::Event::RESIZE, this, &IStage::_onResize );
     }
     
