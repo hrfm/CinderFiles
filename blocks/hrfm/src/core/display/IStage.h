@@ -2,6 +2,7 @@
 
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Fbo.h"
+#include "cinder/params/Params.h"
 #include "DisplayNode.h"
 
 namespace hrfm{ namespace display{
@@ -9,15 +10,29 @@ namespace hrfm{ namespace display{
     class IStage : public DisplayNode{
     public:
         
-        IStage():DisplayNode(){}
+        IStage( ivec2 size = ivec2(1024,1024), ci::gl::Fbo::Format format = ci::gl::Fbo::Format() ):DisplayNode(){
+            this->_initialize( size, format );
+        };
+        ~IStage(){};
         
-        virtual DisplayNode * addChild( DisplayNode * child ){
-            eraseFromChildren(child);
-            //child->_setStage(this);
-            child->_setParent(this);
-            children.push_back(child);
-            return child;
-        }
+        virtual DisplayNode * addChild( DisplayNode * child );
+        
+        virtual void draw( bool clear = true );
+        
+        ci::gl::TextureRef getTexture();
+        
+        ci::gl::FboRef getFbo();
+        
+        void updateFboSize();
+        
+    protected:
+        
+        virtual void _initialize( ivec2 size, ci::gl::Fbo::Format format );
+        virtual void _onResize( hrfm::events::Event * event );
+        
+        ci::gl::Fbo::Format _fboFormat;
+        ci::gl::FboRef      _fboRef;
+        
     };
     
 }}

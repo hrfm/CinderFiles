@@ -30,6 +30,13 @@ namespace hrfm{ namespace display{
         }
     }
     
+    void DisplayNode::enableAdditiveBlending(){
+        this->_enableAdditiveBlending = true;
+    }
+    void DisplayNode::disableAdditiveBlending(){
+        this->_enableAdditiveBlending = false;
+    }
+    
     int DisplayNode::numChildren(){
         return this->children.size();
     }
@@ -120,8 +127,15 @@ namespace hrfm{ namespace display{
             ci::gl::translate( this->position );
             ci::gl::rotate( rotation.w, rotation.x, rotation.y, rotation.z );
             ci::gl::scale( scale );
-            _draw();
-            _drawChildren();
+            if( this->_enableAdditiveBlending ){
+                ci::gl::enableAlphaBlending();
+                _draw();
+                _drawChildren();
+                ci::gl::disableAlphaBlending();
+            }else{
+                _draw();
+                _drawChildren();
+            }
             /*
             if( camera != NULL ){
                 

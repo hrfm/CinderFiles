@@ -212,7 +212,7 @@ namespace hrfm { namespace app{
             (*it)->size = getWindowSize();
         }
         stage->update();
-        stage->drawOffscreen();
+        stage->draw();
     }
     
     void AppBase::draw(){

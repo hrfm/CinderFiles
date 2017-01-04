@@ -2,65 +2,57 @@
 #include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
 #include "cinder/gl/Shader.h"
+#include "cinder/ImageIo.h"
+#include "cinder/Utilities.h"
 #include <list>
 
 #include "hrfm.h"
 #include "hrfm.gl.h"
-#include "VJBase.h"
-
-#include "OscSender.h"
 
 using namespace ci;
 using namespace ci::app;
 using namespace std;
 
 // We'll create a new Cinder Application by deriving from the AppBasic class
-class BasicApp : public hrfm::vj::app::VJBase {
+class BasicApp : public ci::app::App {
 public:
     void setup();
     void update();
     void draw();
     void resize(){}
-    vector<cinder::osc::Sender> sender;
-    vector<string> addresses;
+    
+    hrfm::gl::ExFboRef _fbo;
+    hrfm::gl::FilterBase * _filter;
+    ci::gl::TextureRef _tex;
+    
 };
 
 void BasicApp::setup(){
-    hrfm::vj::app::VJBase::setup();
-    for( int i=0; i<10; i++ ){
-        cinder::osc::Sender s;
-        s.setup("localhost", 10000);
-        sender.push_back(s);
-    }
-    
-    addresses.push_back("test");
-    addresses.push_back("hoge");
-    addresses.push_back("fuga");
-    addresses.push_back("piyo");
-    addresses.push_back("aaaa");
-    addresses.push_back("bbbb");
-    addresses.push_back("cccc");
-    addresses.push_back("dddd");
-    
+    _fbo = hrfm::gl::ExFbo::create(8000, 4000);
+    _filter = new hrfm::gl::FilterBase("pano.frag");
+    //_tex = ci::gl::Texture::create(ci::loadImage( hrfm::io::DataLoader::load("minnanokaigo-logo-tex.png") ));
+    _tex = ci::gl::Texture::create(ci::loadImage( hrfm::io::DataLoader::load("minnanokaigo-logo-tex.png") ));
 }
 
 void BasicApp::update(){
-    
-    int index = randInt( sender.size() );
-    
-    string address = "/" + addresses[randInt(addresses.size())];
-    
-    hrfm::vj::app::VJBase::update();
-    ci::osc::Message msg;
-    msg.setAddress(address);
-    msg.addFloatArg(randFloat());
-    
-    sender.at(index).sendMessage(msg);
-    
+    _fbo->beginOffscreen(true);
+    {
+        ci::gl::enableAlphaBlending();
+        ci::gl::draw(_tex,_fbo->getBounds());
+    }
+    _fbo->endOffscreen();
+    _fbo->applyFilter(_filter);
 }
 
+int ii = 0;
+
 void BasicApp::draw(){
-    hrfm::vj::app::VJBase::draw();
+    ci::gl::clear( ci::ColorA(0.0f,0.0f,0.0f,0.0f) );
+    ci::gl::draw(_fbo->getTexture(),getWindowBounds());
+    if( ii == 0 ){
+        writeImage( getHomeDirectory()/"Desktop"/"logo-layer.png", _fbo->getTexture()->createSource() );
+        ii = 1;
+    }
 }
 
 CINDER_APP( BasicApp, RendererGl( RendererGl::Options().msaa( 16 ) ), []( App::Settings *settings ) {

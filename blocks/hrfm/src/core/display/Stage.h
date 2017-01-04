@@ -11,55 +11,12 @@ namespace hrfm{ namespace display{
     class Stage : public IStage{
     public:
         
-        static StageRef create( ci::Camera * camera = NULL ){ return StageRef( new Stage(camera) ); }
+        static StageRef create( ivec2 size = ivec2(1024,1024), ci::gl::Fbo::Format format = ci::gl::Fbo::Format() ){ return StageRef( new Stage(size,format) ); }
         
-        Stage( ci::Camera * camera = NULL ):IStage(){
-            if( camera != NULL )
-            {
-                _camera[0] = camera;
-            }
-            this->addEventListener( hrfm::events::Event::RESIZE, this, &Stage::_onResize );
-        };
+        Stage( ivec2 size = ivec2(1024,1024), ci::gl::Fbo::Format format = ci::gl::Fbo::Format() ):IStage(size,format){};
         ~Stage(){};
         
-        void addFbo( ci::gl::FboRef fbo, ci::Camera* camera = NULL );
-        
-        void setCamera( ci::Camera * camera, int index = 0 );
-        void setCameraPersp( ci::CameraPersp * cameraPersp, int index = 0 );
-        ci::Camera * getCamera( int index = 0 );
-        
-        virtual void setAutoClear( bool flag = true );
-        
-        // 描画対象を Stage に外部からしたい時の処理.
-        // 必ず end をセットで呼ぶこと!
-        virtual void begin( int index = 0 );
-        virtual void end();
-        
-        virtual void draw(bool offscreen = false, int index = 0 );
-        
-        virtual void drawOffscreen();
-        virtual void drawOffscreen( int index );
-        
-        ci::gl::TextureRef getTexture( int index = 0 );
-        ci::gl::FboRef getFbo( int index =0 );
-        
     protected:
-        
-        void _begin( int index);
-        void _end();
-        
-        void _updateCamera();
-        void _onResize( hrfm::events::Event * event );
-        
-        bool  _autoClear = true;
-        
-        int _numFbo;
-        int _beginIndex = -1;
-        std::map<int,ci::gl::FboRef> _fbo;
-        
-        std::map<int,ci::Camera*> _camera;
-        
-        std::pair<ci::ivec2,ci::ivec2> _tmpViewportOnBegin;
         
     };
     

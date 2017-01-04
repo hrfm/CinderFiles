@@ -50,6 +50,7 @@ namespace hrfm{ namespace gl{
             ci::gl::TextureRef tex = _getTextureClone();
             beginOffscreen(clear);
             filter->affect( tex, getSize() );
+            endOffscreen();
         }
         return this;
     }
@@ -58,6 +59,7 @@ namespace hrfm{ namespace gl{
         if( filter->isEnabled() ){
             beginOffscreen(clear);
             filter->affect( srcTexture, getSize() );
+            endOffscreen();
         }
         return this;
     }

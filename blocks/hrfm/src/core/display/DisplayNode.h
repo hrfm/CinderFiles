@@ -41,6 +41,9 @@ namespace hrfm{ namespace display{
         
         virtual bool isResized();
         
+        virtual void enableAdditiveBlending();
+        virtual void disableAdditiveBlending();
+        
         // ---------------------------------------------------------------
         // --- Manage Child Nodes.
         
@@ -104,6 +107,7 @@ namespace hrfm{ namespace display{
         
         vec2 _beforeSize;
         bool _resized;
+        bool _enableAdditiveBlending;
         
         // Stage control.
         
