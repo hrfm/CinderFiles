@@ -2,13 +2,12 @@
 
 #include "hrfm.h"
 #include "hrfm.gl.h"
-#include "hrfm.signage.h"
 
 using namespace ci;
 using namespace ci::app;
 using namespace std;
 
-namespace hrfm{ namespace app{
+namespace hrfm{ namespace signage{ namespace app{
     
     class SignageAppBase : public hrfm::app::AppBase{
     
@@ -34,4 +33,4 @@ namespace hrfm{ namespace app{
         
     };
     
-}}
+}}}

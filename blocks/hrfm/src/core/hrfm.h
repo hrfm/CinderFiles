@@ -1,5 +1,9 @@
 #pragma once
 
+// --- hrfm::app
+
+#include "AppBase.h"
+
 // --- hrfm::display
 
 #include "DisplayNode.h"
@@ -65,12 +69,3 @@
 // --- hrfm::utils
 
 #include "DisplayUtil.h"
-
-// --- hrfm::app
-
-#include "AppBase.h"
-#include "SignageAppBase.h"
-
-// --- hrfm::cv
-
-#include "Delaunay.h"

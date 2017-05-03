@@ -153,11 +153,13 @@ namespace hrfm { namespace app{
             if( xml.hasAttribute("deviceName") ){
                 string deviceName = xml.getAttributeValue<string>("deviceName");
                 cout << "- Setup CaptureInput [" + deviceName + "] with sized " << captureSize << endl;
-                captureInput.setup( captureSize.x, captureSize.y, deviceName, cacheLength );
+                SiCaptureInput::getInstance().setDefaultDeviceName(deviceName);
             }else{
                 cout << "- Setup CaptureInput with sized " << captureSize << endl;
-                captureInput.setup( captureSize.x, captureSize.y, "*", cacheLength );
+                SiCaptureInput::getInstance().setDefaultDeviceName("*");
             }
+            
+            capture = SiCaptureInput::getInstance().createRef(captureSize.x,captureSize.y);
             
         }
         
@@ -195,7 +197,6 @@ namespace hrfm { namespace app{
         
         if( useCapture ){
             SiCaptureInput::getInstance().update();
-            captureInput.update();
         }
         
         // --- Update Time. ---

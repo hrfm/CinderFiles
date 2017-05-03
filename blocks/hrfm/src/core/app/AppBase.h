@@ -19,7 +19,7 @@
 #include "SiOscInput.h"
 #include "SiAudioInput.h"
 #include "SiKORGMIDIInterface.h"
-#include "CaptureInput.h"
+#include "SiCaptureInput.h"
 
 #include "TriggerEvent.h"
 #include "SiEventDispatcher.h"
@@ -58,10 +58,10 @@ namespace hrfm{ namespace app{
         bool doUpdateCapture;
         
         hrfm::display::StageRef stage;
+        ci::CaptureRef capture;
         
         // 以下は必須ではないので最終的に外したい
         
-        hrfm::io::CaptureInput captureInput;
         CameraPersp camera;
         
         // ===========================================================================

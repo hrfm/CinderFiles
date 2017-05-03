@@ -1,6 +1,6 @@
 #include "SignageAppBase.h"
 
-namespace hrfm{ namespace app{
+namespace hrfm{ namespace signage{ namespace app{
     
     void SignageAppBase::setup(){
         
@@ -62,4 +62,4 @@ namespace hrfm{ namespace app{
     void SignageAppBase::onScheduleStart( hrfm::signage::events::ScheduledContentsEvent * event ){}
     void SignageAppBase::onScheduleComplete( hrfm::signage::events::ScheduledContentsEvent * event ){}
     
-}}
+}}}
