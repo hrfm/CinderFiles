@@ -9,7 +9,7 @@ namespace hrfm{ namespace display{
         children.push_back(child);
         return child;
     }
-        
+    
     void IStage::draw( bool clear ){
         this->_fboRef->bindFramebuffer();
         {

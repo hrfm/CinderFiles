@@ -43,8 +43,9 @@ namespace hrfm{ namespace display{
         
         virtual bool isResized();
         
+        virtual void enableAlphaBlending();
         virtual void enableAdditiveBlending();
-        virtual void disableAdditiveBlending();
+        virtual void disableAlphaBlending();
         
         // ---------------------------------------------------------------
         // --- Manage Child Nodes.
@@ -191,7 +192,7 @@ namespace hrfm{ namespace display{
         bool _resized;
         
         // 描画処理用のフラグ.
-        bool _enableAdditiveBlending;
+        int _blendMode = 0;
         
         // 更新頻度を変更する用.
         unsigned int _updateFrequency   = 1;

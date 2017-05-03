@@ -37,6 +37,7 @@ namespace hrfm{ namespace gl{
         ci::gl::TextureRef getTexture();
         
         ExFbo * beginOffscreen( bool clear = false );
+        ExFbo * beginOffscreen( ColorA clearColor );
         ExFbo * endOffscreen();
         
         ExFbo * applyFilter( FilterBase * filter, bool clear = true );
@@ -45,7 +46,7 @@ namespace hrfm{ namespace gl{
     protected:
         
         ci::gl::TextureRef _getTextureClone();
-        void _beginOffscreen( ci::gl::FboRef fbo, bool clear = false, bool useAspect = false );
+        void _beginOffscreen( ci::gl::FboRef fbo, bool clear = false, ColorA clearColor = ColorA(0.0,0.0,0.0,0.0) );
         void _endOffscreen();
         
         ci::gl::FboRef _fbo;

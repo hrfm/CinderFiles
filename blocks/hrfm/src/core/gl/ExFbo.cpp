@@ -35,6 +35,10 @@ namespace hrfm{ namespace gl{
         _beginOffscreen( _fbo, clear );
         return this;
     }
+    ExFbo * ExFbo::beginOffscreen( ColorA clearColor ){
+        _beginOffscreen( _fbo, true, clearColor );
+        return this;
+    }
     
     ExFbo * ExFbo::endOffscreen(){
         _endOffscreen();
@@ -74,7 +78,7 @@ namespace hrfm{ namespace gl{
         return fbo->getColorTexture();
     }
     
-    void ExFbo::_beginOffscreen( ci::gl::FboRef fbo, bool clear, bool useAspect ){
+    void ExFbo::_beginOffscreen( ci::gl::FboRef fbo, bool clear, ColorA clearColor ){
         if( _bindedFbo != NULL && _bindedFbo != fbo ){
             _endOffscreen();
         }
@@ -89,7 +93,7 @@ namespace hrfm{ namespace gl{
             }
             ci::gl::viewport( ivec2(0), getSize() );
             if( clear == true ){
-                ci::gl::clear( ColorA(0.0,0.0,0.0,0.0) );
+                ci::gl::clear( clearColor );
             }
             _bindedFbo = fbo;
         }

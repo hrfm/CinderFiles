@@ -1,6 +1,6 @@
 #include "SiOscInput.h"
 #include "cinder/Log.h"
-#include "cinder/osc/Osc.h"
+#include "Osc.h"
 
 using namespace hrfm::events;
 

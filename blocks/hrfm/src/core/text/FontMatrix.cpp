@@ -19,7 +19,6 @@ namespace hrfm{ namespace text{
         _fontSize = fontSize;
         _text     = text;
         
-        
         cout << fboSize << ":" << fontSize << endl;
         
         // --- Setup using Charactors and TextureFont.
@@ -119,7 +118,8 @@ namespace hrfm{ namespace text{
         
         // -----
         
-        fbo->beginOffscreen()->applyFilter(&scrollFilter);
+        fbo->applyFilter(&scrollFilter);
+        fbo->beginOffscreen();
         // draw font.
         for( line = 0; line < numScroll; line++ ){
             loop = true;
@@ -136,6 +136,7 @@ namespace hrfm{ namespace text{
                     loop = false;
                 }
             }
+            ci::gl::color(ColorA(1.0,1.0,1.0,1.0));
             myFontManager.draw( text, Rectf( 0, y, _fboSize.x, y+_fontSize ), 1.0, 1.0, 1.0 );
         }
         _currentCol = col;
@@ -186,7 +187,7 @@ namespace hrfm{ namespace text{
             string text;
             vector<int> filled;
             
-            fbo->beginOffscreen();
+            fbo->beginOffscreen(true);
             {
                 // draw font.
                 for( int line = 0; line < numUpdateRow; line++ ){
@@ -240,9 +241,7 @@ namespace hrfm{ namespace text{
     }
     
     void FontMatrix::_draw(){
-        //ci::gl::enableAdditiveBlending();
         ci::gl::draw( fbo->getTexture(), getDrawBounds() );
-        //ci::gl::disableAlphaBlending();
     }
     
 }}

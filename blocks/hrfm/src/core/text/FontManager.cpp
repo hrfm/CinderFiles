@@ -113,10 +113,8 @@ namespace hrfm { namespace text{
     }
     
     void FontManager::draw( string text, Rectf bounds, float r, float g, float b ){
-        
-        ci::gl::color(0.0f,0.0f,0.0f,1.0f);
+        ci::gl::color(ColorA(0.0f,0.0f,0.0f,1.0f));
         ci::gl::drawSolidRect( bounds );
-        
         ci::gl::color( r, g, b, 1.0f );
         try{
             _textureFontRef->drawString( text, bounds );
@@ -124,7 +122,6 @@ namespace hrfm { namespace text{
         }catch(...){
             cout << "error" << endl;
         }
-        
     }
     
 }}

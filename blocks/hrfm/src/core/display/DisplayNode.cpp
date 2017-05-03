@@ -15,7 +15,6 @@ namespace hrfm{ namespace display{
     }
     
     Rectf DisplayNode::getDrawBounds(){
-        cout << "getDrawBounds : " << this->_drawBounds << endl;
         return this->_drawBounds;
     }
     
@@ -31,11 +30,14 @@ namespace hrfm{ namespace display{
         }
     }
     
-    void DisplayNode::enableAdditiveBlending(){
-        this->_enableAdditiveBlending = true;
+    void DisplayNode::enableAlphaBlending(){
+        this->_blendMode = 1;
     }
-    void DisplayNode::disableAdditiveBlending(){
-        this->_enableAdditiveBlending = false;
+    void DisplayNode::enableAdditiveBlending(){
+        this->_blendMode = 2;
+    }
+    void DisplayNode::disableAlphaBlending(){
+        this->_blendMode = 0;
     }
     
     bool DisplayNode::isResized(){
@@ -152,20 +154,24 @@ namespace hrfm{ namespace display{
         }
         ci::gl::pushModelMatrix();
         {
+            
             ci::gl::ScopedColor color( this->colorA );
-            //ci::gl::multModelMatrix(this->transform);
-            //ci::gl::translate( this->position() );
-            //ci::gl::rotate( this->rotation.w, this->rotation.x, this->rotation.y, this->rotation.z );
-            //ci::gl::scale( this->scale );
-            if( this->_enableAdditiveBlending ){
+            ci::gl::multModelMatrix(this->transform);
+            ci::gl::translate( this->position() );
+            ci::gl::rotate( this->rotation.w, this->rotation.x, this->rotation.y, this->rotation.z );
+            ci::gl::scale( this->scale );
+            
+            if( this->_blendMode == 1 || this->colorA.a < 1.0f ){
                 ci::gl::enableAlphaBlending();
-                _draw();
-                _drawChildren();
-                ci::gl::disableAlphaBlending();
+            }else if( this->_blendMode == 2 ){
+                ci::gl::enableAdditiveBlending();
             }else{
-                _draw();
-                _drawChildren();
+                ci::gl::disableAlphaBlending();
             }
+            _draw();
+            _drawChildren();
+            ci::gl::disableAlphaBlending();
+            
             /*
             // この機能は Stage3Dに委譲する
             if( camera != NULL ){

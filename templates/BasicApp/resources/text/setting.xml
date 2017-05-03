@@ -24,6 +24,7 @@
             fullScreen = "false"
             hideCursor = "true"
         />
+        <!--
         <audio
             bandSize="64"
         />
@@ -32,6 +33,7 @@
             height = "480"
             deviceName = "*"
         />
+        -->
     </setup>
     
 </setting>

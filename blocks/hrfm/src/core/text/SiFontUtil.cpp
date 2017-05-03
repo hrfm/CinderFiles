@@ -22,7 +22,6 @@ namespace hrfm{ namespace text{
     ci::gl::TextureFontRef SiFontUtil::getTextureFontRef( string fontName, int fontSize ){
         
         string key = fontName + "_" + to_string(fontSize);
-        
         auto format = ci::gl::TextureFont::Format();
         
         if( _map.find(key) == _map.end() ){

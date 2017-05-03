@@ -109,6 +109,7 @@ namespace hrfm{ namespace io{
     }
     
     void SiAudioInput::setWaveBias( float bias ){
+        cout <<  "setWaveBias" << bias << endl;
         _waveBias = bias;
     }
     
