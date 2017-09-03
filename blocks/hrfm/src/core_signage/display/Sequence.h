@@ -1,0 +1,75 @@
+#pragma once
+
+#include "hrfm.fs.h";
+#include "hrfm.utils.h";
+
+#include "DisplayNode.h"
+#include "MovieTexture.h"
+#include "Event.h"
+#include "SiEventDispatcher.h"
+#include "SequentialContents.h"
+#include "TriggerEvent.h"
+
+namespace hrfm{ namespace signage{ namespace display{
+    
+    /*
+     
+     Sequence of ScheduledContents or SequentialContents.
+     
+     */
+    class Sequence : public hrfm::events::EventDispatcher{
+        
+    public:
+        
+        Sequence();
+        Sequence( hrfm::display::DisplayNode * content, float duration );
+        ~Sequence();
+        
+        string getType();
+        
+        void setSize( vec2 size );
+        
+        /**
+         * Set trigger when triggered on play.
+         * @param trigger
+         */
+        void setTrigger( string trigger );
+        
+        /**
+         * Get reference of contents.
+         * @return hrfm::display::DisplayNode
+         */
+        hrfm::display::DisplayNode * getContentRef();
+        
+        /**
+         * Play this sequence
+         */
+        void play();
+        
+        /**
+         * Stop (Pause) this sequence.
+         */
+        void stop();
+        
+        void  setVolume( float volume );
+        float getVolume();
+        
+        void update();
+        
+    protected:
+        
+        void _onContentComplete( hrfm::events::Event * event );
+        
+        hrfm::display::DisplayNode * _content = NULL;
+        
+        float  _duration;
+        float  _startedAt;
+        
+        string _type;
+        string _trigger;
+        
+        float _volume = 1.0;
+        
+    };
+
+}}}

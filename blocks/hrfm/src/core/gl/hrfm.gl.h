@@ -10,6 +10,14 @@ using namespace hrfm::utils;
 
 namespace hrfm{ namespace gl{
     
+    static void coutGLInfo(){
+        cout << "Vendor : " << glGetString(GL_VENDOR)     << '\n';
+        cout << "GPU : " << glGetString(GL_RENDERER)   << '\n';
+        cout << "OpenGL ver. " << glGetString(GL_VERSION) << '\n';
+        cout << "Extensions : " << endl;
+        cout << glGetString(GL_EXTENSIONS) << endl;
+    }
+    
     static ci::gl::Texture2dRef resizeTexture( ci::gl::Texture2dRef texture, ivec2 size ){
         
         ci::gl::FboRef fbo = hrfm::gl::SiFboFactory::getInstance().create( size.x, size.y );
