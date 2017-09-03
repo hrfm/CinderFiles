@@ -25,9 +25,9 @@ namespace hrfm{ namespace structure{
             _data = std::vector<T>(_col*_row);
         }
         
-        int getCol(){ return _col; }
-        int getRow(){ return _row; };
-        int getLength(){ return _data.size(); };
+        int numCols(){ return _col; }
+        int numRows(){ return _row; };
+        int numValues(){ return _data.size(); };
         
         T getValue( int index ){ return _data[index]; }
         T getValue( int col, int row ){ return _data[(row*_col)+col]; }

@@ -28,8 +28,8 @@ namespace hrfm{ namespace graphics{
         
         Rectf bounds = getDrawBounds();
         
-        int col = _mtx->getCol();
-        int row = _mtx->getRow();
+        int col = _mtx->numCols();
+        int row = _mtx->numRows();
         
         vec2 size = vec2(
             ( this->width() - (_spacing.x*(float)(col-1))-_spacing.x) / (float)col,
