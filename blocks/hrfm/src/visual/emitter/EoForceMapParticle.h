@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hrfm.h"
+#include "ForceMap.h"
 #include "EmittObjectBase.h"
 
 using namespace ci;

@@ -11,9 +11,9 @@ namespace hrfm{ namespace display{
     class Stage : public IStage{
     public:
         
-        static StageRef create( ivec2 size = ivec2(1024,1024), ci::gl::Fbo::Format format = ci::gl::Fbo::Format() ){ return StageRef( new Stage(size,format) ); }
+        static StageRef create( ivec2 initSize = ivec2(1024,1024), ci::gl::Fbo::Format format = ci::gl::Fbo::Format() ){ return StageRef( new Stage(initSize,format) ); }
         
-        Stage( ivec2 size = ivec2(1024,1024), ci::gl::Fbo::Format format = ci::gl::Fbo::Format() ):IStage(size,format){};
+        Stage( ivec2 initSize = ivec2(1024,1024), ci::gl::Fbo::Format format = ci::gl::Fbo::Format() ):IStage(initSize,format){};
         ~Stage(){};
         
     protected:

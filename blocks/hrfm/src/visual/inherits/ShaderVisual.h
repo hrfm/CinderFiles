@@ -40,7 +40,7 @@ namespace hrfm{ namespace visual{
                 cout << "addVisual : " << fragment << endl;
                 try {
                     gl::GlslProg shader = gl::GlslProg(
-                                                       loadResource("../resources/vert.glsl"),
+                                                       loadResource("vert.glsl"),
                                                        loadResource(fragment)
                                                        );
                     mShaders.push_back( shader );

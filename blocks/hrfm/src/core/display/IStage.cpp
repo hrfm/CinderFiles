@@ -42,9 +42,9 @@ namespace hrfm{ namespace display{
         _fboRef = ci::gl::Fbo::create( this->width(), this->height(), this->_fboFormat );
     }
     
-    void IStage::_initialize( ivec2 size, ci::gl::Fbo::Format format ){
+    void IStage::_initialize( ivec2 initSize, ci::gl::Fbo::Format format ){
         this->_fboFormat   = format;
-        this->size(size);
+        this->size(initSize);
         this->addEventListener( hrfm::events::Event::RESIZE, this, &IStage::_onResize );
     }
     

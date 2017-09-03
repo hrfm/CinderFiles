@@ -4,7 +4,7 @@
 
 using namespace hrfm::events;
 
-namespace hrfm { namespace io{
+namespace hrfm { namespace io{ namespace osc{
     
     void SiOscInput::addListenPort( int port ){
         if( ! listening(port) ){
@@ -45,4 +45,4 @@ namespace hrfm { namespace io{
         }
     }
     
-}}
+}}}

@@ -70,10 +70,6 @@ namespace hrfm { namespace io{
         
         map<string,ci::CaptureRef> _captureRefMap;
         
-        int _beforeFrame;
-        map<string,int> _beforeFrameMap;
-        map<string,int> _beforeTextureBeforeFrameMap;
-        
         map<string,int>                          _textureCacheLengthMap;
         map<string,vector<ci::gl::Texture2dRef>> _textureCacheVectorMap;
         

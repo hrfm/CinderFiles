@@ -23,7 +23,7 @@ namespace hrfm{ namespace io{
         /*
          指定したパスのデータを読み込みます.
          http から始まるファイルパスを指定した場合はネット上から取得します.
-         ファイル名のみを指定した場合はローカルのファイルを ../resources/ から読み込みます.
+         ファイル名のみを指定した場合はローカルのファイルを Resources ディレクトリから読み込みます.
          */
         static ci::gl::TextureRef load( ci::fs::path path, bool useCache = true );
         static ci::gl::TextureRef load( ci::fs::path path, ci::UrlOptions::UrlOptions urlOptions, bool useCache = true );

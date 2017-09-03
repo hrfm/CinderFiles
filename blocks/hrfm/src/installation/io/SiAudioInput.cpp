@@ -278,10 +278,10 @@ namespace hrfm{ namespace io{
     }
     
     void SiAudioInput::useAudioManager(){
-        hrfm::io::SiOscInput::getInstance().setListener("/audio/gain", [&]( const ci::osc::Message &msg ){
+        hrfm::io::osc::SiOscInput::getInstance().setListener("/audio/gain", [&]( const ci::osc::Message &msg ){
             _audioGain = msg.getArgFloat(0);
         });
-        hrfm::io::SiOscInput::getInstance().setListener( "/audio/fft/average", [&]( const ci::osc::Message &msg ){
+        hrfm::io::osc::SiOscInput::getInstance().setListener( "/audio/fft/average", [&]( const ci::osc::Message &msg ){
             _fftAverage = msg.getArgFloat(0);
         });
     }

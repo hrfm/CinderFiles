@@ -4,7 +4,7 @@
 #include "Singleton.h"
 #include "KORGMIDIInterfaceEvent.h"
 
-namespace hrfm { namespace io{
+namespace hrfm { namespace io{ namespace midi{
     
     // TODO 別アプリで OSC 経由で受信しているが.
     // 最終的には MIDI で直接やりとりするようにする.
@@ -30,4 +30,4 @@ namespace hrfm { namespace io{
         
     };
     
-}}
+}}}

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hrfm.h"
+#include "ScheduledContents.h"
 #include "hrfm.gl.h"
 
 using namespace ci;

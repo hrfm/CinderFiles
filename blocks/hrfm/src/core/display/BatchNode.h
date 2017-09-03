@@ -59,7 +59,7 @@ namespace hrfm{ namespace display{
         
         virtual void _update();
         virtual void _draw();
-        virtual void _drawChildren( ci::ColorA * drawColor = NULL );
+        //virtual void _drawChildren( ci::ColorA * drawColor = NULL );
         
         bool eraseTextureFromList( ci::gl::TextureRef tex );
         

@@ -34,7 +34,8 @@ namespace hrfm{ namespace io{
             // 読み込む Data がファイル名のみの指定だった場合.
             // ../resources/ から読み込みます.
             
-            filePath = "../resources/" + pathStr;
+            //filePath = "../resources/" + pathStr;
+            filePath = pathStr;
             
             pathStr = filePath.native();
             

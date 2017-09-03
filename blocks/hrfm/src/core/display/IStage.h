@@ -10,8 +10,8 @@ namespace hrfm{ namespace display{
     class IStage : public DisplayNode{
     public:
         
-        IStage( ivec2 size = ivec2(1024,1024), ci::gl::Fbo::Format format = ci::gl::Fbo::Format() ):DisplayNode(){
-            this->_initialize( size, format );
+        IStage( ivec2 initSize = ivec2(1024,1024), ci::gl::Fbo::Format format = ci::gl::Fbo::Format() ):DisplayNode(){
+            this->_initialize( initSize, format );
         };
         ~IStage(){};
         
@@ -27,7 +27,7 @@ namespace hrfm{ namespace display{
         
     protected:
         
-        virtual void _initialize( ivec2 size, ci::gl::Fbo::Format format );
+        virtual void _initialize( ivec2 initSize, ci::gl::Fbo::Format format );
         virtual void _onResize( hrfm::events::Event * event );
         
         ci::gl::Fbo::Format _fboFormat;

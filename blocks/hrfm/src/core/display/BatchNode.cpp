@@ -78,7 +78,8 @@ namespace hrfm{ namespace display{
             }else{
                 _draw();
             }
-            _drawChildren(&c);
+            //_drawChildren(&c);
+            _drawChildren();
         }
         ci::gl::popModelMatrix();
         

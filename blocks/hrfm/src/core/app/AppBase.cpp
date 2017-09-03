@@ -169,7 +169,7 @@ namespace hrfm { namespace app{
         if( xml.hasAttribute("listen") ){
             int listenPort = xml.getAttributeValue<int>("listen");
             cout << "- Setup KORGMIDIInterface with listen port " << listenPort << endl;
-            SiKORGMIDIInterface::getInstance().listen( listenPort );
+            io::midi::SiKORGMIDIInterface::getInstance().listen( listenPort );
             cout << endl;
         }
     }

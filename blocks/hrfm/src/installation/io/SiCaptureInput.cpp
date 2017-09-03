@@ -23,11 +23,16 @@ namespace hrfm { namespace io{
         
         try {
             
+            if( deviceName == "" ){
+                deviceName = _defaultDeviceName;
+            }
+            
             if( deviceName == "*" ){
                 ref = ci::Capture::create( width, height );
             }else{
                 ref = ci::Capture::create( width, height, ci::Capture::findDeviceByName(deviceName) );
             }
+            
             ref->start();
             
             _captureRefMap[deviceName] = ref;
@@ -36,7 +41,7 @@ namespace hrfm { namespace io{
             
             _textureCacheLengthMap[deviceName] = max( 2, cacheLength );
             _textureCacheVectorMap[deviceName] = vector<ci::gl::Texture2dRef>();
-            _textureCacheVectorMap[deviceName].push_back( ci::gl::Texture2d::create(1, 1) );
+            _textureCacheVectorMap[deviceName].emplace_back( ci::gl::Texture2d::create(1, 1) );
             
         }catch( ... ) {
             cout << "Failed to initialize capture" << std::endl;
@@ -147,79 +152,57 @@ namespace hrfm { namespace io{
     //! protected
     
     ci::gl::Texture2dRef SiCaptureInput::_updateTexture( string deviceName ){
-        if( _beforeFrameMap.find(deviceName) == _beforeFrameMap.end() ){
-            _beforeFrameMap[deviceName] = 0;
+        vector<ci::gl::Texture2dRef> * vec = &_textureCacheVectorMap[deviceName];
+        if( getCaptureRef(deviceName)->checkNewFrame() ){
+            vec->emplace_back( ci::gl::Texture::create( *getSurface( deviceName ) ) );
         }else{
-            int currentFrame = ci::app::getElapsedFrames();
-            int beforeFrame  = _beforeFrameMap[deviceName];
-            if( beforeFrame < currentFrame ){
-                _beforeFrameMap[deviceName] = currentFrame;
-                vector<ci::gl::Texture2dRef> * vec = &_textureCacheVectorMap[deviceName];
-                if( getCaptureRef(deviceName)->checkNewFrame() ){
-                    vec->push_back( ci::gl::Texture::create( *getSurface( deviceName ) ) );
-                }else{
-                    // Diff 用に取っているが3フレ以上同じだった場合不要な処理
-                    vec->push_back( getTexture(deviceName) );
-                }
-                if( _textureCacheLengthMap[deviceName] < vec->size() ){
-                    vec->erase(vec->begin());
-                }
-            }
+            // Diff 用に取っているが3フレ以上同じだった場合不要な処理
+            vec->emplace_back( getTexture(deviceName) );
+        }
+        if( _textureCacheLengthMap[deviceName] < vec->size() ){
+            vec->erase(vec->begin());
         }
         return getTexture(deviceName);
     }
     
     ci::gl::Texture2dRef SiCaptureInput::_updateDiffTexture( string deviceName ){
         
-        if( _beforeTextureBeforeFrameMap.find(deviceName) == _beforeTextureBeforeFrameMap.end() ){
-            _beforeTextureBeforeFrameMap[deviceName] = 0;
-        }
-        
-        int currentFrame = ci::app::getElapsedFrames();
-        int beforeFrame  = _beforeTextureBeforeFrameMap[deviceName];
-        
         vector<ci::gl::Texture2dRef> * vec = &_textureCacheVectorMap[deviceName];
-        
-        if( beforeFrame != currentFrame ){
+    
+        if( 1 < vec->size() ){
             
-            if( 1 < vec->size() ){
-                
-                if( _diffFboMap.find(deviceName) == _diffFboMap.end() ){
-                    ci::ivec2 size = getCaptureRef(deviceName)->getSize();
-                    ci::gl::Fbo::Format format;
-                    ci::gl::FboRef fbo = ci::gl::Fbo::create( size.x, size.y, format );
-                    _diffFboMap[deviceName] = fbo;
-                }
-                
-                // 前フレームとの差分を取得する.
-                {
-                    
-                    ci::gl::FboRef fbo = _diffFboMap[deviceName];
-                    ci::gl::ScopedFramebuffer fboScp( fbo );
-                    ci::gl::ScopedTextureBind tex0Scp( getTexture(deviceName,1), 0 );
-                    ci::gl::ScopedTextureBind tex1Scp( getTexture(deviceName), 1 );
-                    ci::gl::ScopedGlslProg    shaderScp( _diffShader );
-                    ci::gl::ScopedColor       colorScp( 1.0f, 1.0f, 1.0f );
-                    
-                    std::pair<ci::ivec2,ci::ivec2> tmpViewport = ci::gl::getViewport();
-                    ci::gl::pushMatrices();
-                    {
-                        ci::gl::viewport( ivec2(0), fbo->getSize() );
-                        ci::gl::setMatricesWindow( fbo->getSize(), true );
-                        ci::gl::clear();
-                        _diffShader->uniform("tex0", 0);
-                        _diffShader->uniform("tex1", 1);
-                        _diffShader->uniform("resolution", vec2(fbo->getSize()) );
-                        ci::gl::drawSolidRect( fbo->getBounds() );
-                    }
-                    ci::gl::popMatrices();
-                    ci::gl::viewport( tmpViewport );
-                    
-                }
-                
+            if( _diffFboMap.find(deviceName) == _diffFboMap.end() ){
+                ci::ivec2 size = getCaptureRef(deviceName)->getSize();
+                ci::gl::Fbo::Format format;
+                ci::gl::FboRef fbo = ci::gl::Fbo::create( size.x, size.y, format );
+                _diffFboMap[deviceName] = fbo;
             }
             
-            _beforeTextureBeforeFrameMap[deviceName] = currentFrame;
+            // 前フレームとの差分を取得する.
+            {
+                
+                ci::gl::FboRef fbo = _diffFboMap[deviceName];
+                ci::gl::ScopedFramebuffer fboScp( fbo );
+                ci::gl::ScopedTextureBind tex0Scp( getTexture(deviceName,1), 0 );
+                ci::gl::ScopedTextureBind tex1Scp( getTexture(deviceName), 1 );
+                ci::gl::ScopedGlslProg    shaderScp( _diffShader );
+                ci::gl::ScopedColor       colorScp( 1.0f, 1.0f, 1.0f );
+                
+                std::pair<ci::ivec2,ci::ivec2> tmpViewport = ci::gl::getViewport();
+                ci::gl::pushMatrices();
+                {
+                    ci::gl::viewport( ivec2(0), fbo->getSize() );
+                    ci::gl::setMatricesWindow( fbo->getSize(), true );
+                    ci::gl::clear();
+                    _diffShader->uniform("tex0", 0);
+                    _diffShader->uniform("tex1", 1);
+                    _diffShader->uniform("resolution", vec2(fbo->getSize()) );
+                    ci::gl::drawSolidRect( fbo->getBounds() );
+                }
+                ci::gl::popMatrices();
+                ci::gl::viewport( tmpViewport );
+                
+            }
             
         }
         

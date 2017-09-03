@@ -3,7 +3,7 @@
 #include "OscEvent.h"
 #include "Singleton.h"
 
-namespace hrfm { namespace io{
+namespace hrfm { namespace io{ namespace osc{
     
     // --- OSC Manager. ---
     
@@ -31,4 +31,4 @@ namespace hrfm { namespace io{
         
     };
     
-}}
+}}}
