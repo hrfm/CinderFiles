@@ -84,7 +84,6 @@ namespace hrfm{ namespace app{
         
         // for debug
         virtual void drawFPS( vec2 position = vec2(20.0f,20.0f) );
-        void coutGLInfo();
         
         // === Event Listener. =======================================================
         

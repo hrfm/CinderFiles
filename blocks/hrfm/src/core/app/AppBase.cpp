@@ -229,14 +229,6 @@ namespace hrfm { namespace app{
         ci::gl::drawString( "FPS = " + toString(getAverageFps()) , position, Color::white(), ___font___ );
     }
     
-    void AppBase::coutGLInfo(){
-        cout << "Vendor : " << glGetString(GL_VENDOR)     << '\n';
-        cout << "GPU : " << glGetString(GL_RENDERER)   << '\n';
-        cout << "OpenGL ver. " << glGetString(GL_VERSION) << '\n';
-        cout << "Extensions : " << endl;
-        cout << glGetString(GL_EXTENSIONS) << endl;
-    }
-    
     // === Event Listener. =======================================================
     
     void AppBase::resize(){
