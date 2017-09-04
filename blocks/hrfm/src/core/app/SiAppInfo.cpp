@@ -34,8 +34,8 @@ namespace hrfm { namespace app{
         return _elapsedFrames;
     }
     
-    SiSetting & SiAppInfo::getSetting(){
-        return SiSetting::getInstance();
+    SiAppSettings & SiAppInfo::getAppSettings(){
+        return SiAppSettings::getInstance();
     }
     
 }}

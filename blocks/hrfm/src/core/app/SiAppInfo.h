@@ -2,7 +2,7 @@
 
 #include "cinder/app/App.h"
 #include "Singleton.h"
-#include "SiSetting.h"
+#include "SiAppSettings.hpp"
 
 namespace hrfm { namespace app{
     
@@ -14,7 +14,7 @@ namespace hrfm { namespace app{
         
         void update();
         
-        SiSetting & getSetting();
+        SiAppSettings & getAppSettings();
         
         double   getElapsedSeconds();
         double   getBeforeElapsedSeconds();
