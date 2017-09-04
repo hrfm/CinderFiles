@@ -6,6 +6,8 @@
 
 namespace hrfm { namespace app{
     
+    class SiAppSettings;
+    
     class SiAppInfo : public hrfm::utils::Singleton<SiAppInfo>{
         
     public:

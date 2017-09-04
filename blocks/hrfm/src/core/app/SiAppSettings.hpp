@@ -1,10 +1,11 @@
 #pragma once
 
 #include "cinder/Xml.h"
+
+#include "App.hpp"
 #include "DynamicMap.h"
 #include "Singleton.h"
 #include "XmlLoader.h"
-#include "App.hpp"
 
 using namespace ci;
 

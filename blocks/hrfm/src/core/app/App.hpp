@@ -31,7 +31,7 @@ namespace hrfm { namespace app {
         
         virtual void update() override;
         virtual void draw() override;
-        virtual void drawFPS( vec2 position = vec2(20.0f,20.0f) );
+        virtual void drawFPS( ci::vec2 position = ci::vec2(20.0f,20.0f) );
         
         virtual void keyDown( ci::app::KeyEvent event ) override;
         
